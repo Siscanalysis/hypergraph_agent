@@ -153,5 +153,18 @@ change any P1 contrast.
 processes started at commit `a79d840` and kept executing that code while
 later commits changed only playback, documentation and the decision count of
 unrecorded evaluation episodes; some of their manifests therefore name
-`d4a9865` or `6c44ec1`. From the provenance commit on, manifests record the
-commit and a hash of the source loaded when the process started.
+`d4a9865` or `6c44ec1`, or a later commit or working-tree patch (A4). From the
+provenance commit on, manifests record the commit and a hash of the source
+loaded when the process started. All pilot processes of this session executed
+the training code of `a79d840`, except the post-hoc gated diagnostic (A2),
+which ran at `070252b`.
+
+**A4 (2026-10-07, post pilot: fragment mining).** Inspecting the P3 pilot
+showed that the only admitted level-2 skill (`achieve[bell]/L2`) pinned the
+level-1 skill with the same target: a wrapper, not a composition. The cause
+was a mining flaw: window boundaries were reset at every item achievement,
+including items produced by a called skill, so a window could never contain
+"call a skill, then use its product". Mining now (i) keeps skill-produced
+items inside the next window and (ii) skips fragments whose achievement is
+already produced by a called skill with the same target. A test covers both.
+The recorded pilot ran with the old miner and is reported as it ran.

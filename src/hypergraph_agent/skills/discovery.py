@@ -33,7 +33,7 @@ import torch
 
 from ..agents.policy import ActorCritic
 from ..envs.generator import TaskConfig, derive_seed, make_task
-from ..envs.public_schema import CRAFT
+from ..envs.public_schema import CRAFT, SKILL
 from ..envs.recipequest import RecipeQuestEnv
 from ..envs.vocabulary import TYPE_NAMES, is_base
 from ..representations.features import build_structure
@@ -56,6 +56,11 @@ class Fragment:
     decisions: tuple  # decision indices of the window
 
 
+def _skill_target(ref) -> str:
+    """Target type name of a canonical skill key ``achieve[<type>]/L<level>``."""
+    return ref[0].split("[", 1)[1].split("]", 1)[0]
+
+
 def mine_fragments(records, min_primitives: int = 2, max_len: int = 6, max_children: int = 3,
                    max_level: int = 3) -> list[Fragment]:
     out = []
@@ -74,9 +79,13 @@ def mine_fragments(records, min_primitives: int = 2, max_len: int = 6, max_child
             steps = tuple((w["kind"], w["ttype"]) for w in window)
             if prims >= min_primitives:
                 for t in (new_items or [e["ttype"]]):
+                    if any(_skill_target(c) == TYPE_NAMES[t] for c in children):
+                        continue  # achieved by a called skill with the same target: not a new composition
                     out.append(Fragment(f"{rec.task_key}:{k}", t, level, children, steps,
                                         bool(new_items), ri, tuple(range(lo, k + 1))))
-            if new_items:
+            if new_items and e["kind"] != SKILL:
+                # an item produced by a called skill stays inside the next window,
+                # where it is an input of a possible composition
                 boundary = k
     return out
 

@@ -89,6 +89,19 @@ def test_mining_is_deterministic_and_role_canonical():
     assert disc.propose(a, lib, 1) == []  # nothing is proposed twice
 
 
+def test_same_target_wrappers_are_not_mined_as_compositions():
+    lib, ingot, key = ingot_key_library()
+    ex, _ = executor(lib)
+    pol = ScriptedPolicy(["skill:achieve[ingot]", "activate:fmould_ready", "craft:r1_", "submit"])
+    rec = run_episode(pol, ex, task(chain_world(), "key", CHAIN_FACTS), 0)
+    assert rec.success and rec.n_skill_calls == 1
+    frags = disc.mine_fragments([rec])
+    # ingot was produced by the ingot skill itself: no level-2 ingot candidate;
+    # key was crafted after calling it: a genuine level-2 composition
+    assert not any(f.target_type == T["ingot"] and f.level == 2 for f in frags)
+    assert any(f.target_type == T["key"] and f.level == 2 and f.children == (ingot.ref,) for f in frags)
+
+
 def test_deferred_candidates_are_reproposed_with_the_same_id():
     recs = _scripted_records()
     frags = disc.mine_fragments(recs)
