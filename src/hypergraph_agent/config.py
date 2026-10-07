@@ -38,7 +38,7 @@ DEFAULTS: dict = {
             "profile": "known_structure", "depth_min": 1, "depth_max": 4,
             "n_distractor_rules": 1, "n_distractor_base": 1, "p_init_base": 0.0,
             "p_init_item": 0.0, "failure_prob": 0.0, "budget_factor": 1.0, "budget_slack": 2,
-            "max_budget": 256,
+            "max_budget": 256, "observe_items": "all",
         },
     },
     "eval": {

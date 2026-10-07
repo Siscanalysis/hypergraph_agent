@@ -151,6 +151,31 @@ Failure criteria: if `optimistic` does not reach a lower cost ratio than
 `maximal` at budget factor 1.0, the claim "walking the hypergraph graph saves
 interactions on these tasks" fails for Stage A.
 
+### W-B: Stage B (frozen after Stage A, before any Stage B run)
+
+Profile: hidden prerequisites with intermediate items unobserved
+(`observe_items: goal_only`), deterministic, persistent worlds. Hypotheses no
+longer factorize by recipe, and the joint space of a world's attempted recipes
+(about 41 to the power 6 after a few episodes) cannot be enumerated, so the
+`exact` arm is not run (it would silently fall back to the focused walk);
+exactness is covered by unit tests on small evidence only.
+
+Per seed (0, 1): a `local_focused` collector plays 8 training worlds x 8
+episodes (at most 1,500 interactions, charged logically to the learned arm);
+the edit policy is trained on internal search problems from that evidence
+(1,500 searches, at most 400 evaluations each); then `local_uniform`,
+`local_focused` and `learned` each play 5 unseen worlds x 8 episodes (40 tasks,
+budget factor 1.0). Bounds `maximal` and `reference` play the same tasks once.
+
+Primary contrast: offline, on the held-out evidence of the `local_focused`
+arm, paired start nodes (5 per problem): mean hypothesis evaluations to a
+consistent node, `learned` versus `local_focused`. Secondary: the same for
+`local_focused` versus `local_uniform`; online success and cost ratio of the
+three walkers against the bounds. Failure criterion: if `learned` does not need
+fewer evaluations than `local_focused`, the claim "a learned walk improves on
+the focused heuristic" fails. The online contrasts are descriptive (5 worlds,
+2 seeds).
+
 ## Amendments
 
 - 2026-10-07, A2 (post hoc, after the shallow diagnostic and P1 were

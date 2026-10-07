@@ -1,0 +1,34 @@
+# Walker study, Stage B bounds: the full-pool node and the privileged optimal
+# plan on the same 5 unseen worlds x 8 episodes (goal-only observation).
+run:
+  name: walk-b-bounds
+  phase: walker_b
+  allocation: walker_b
+  seeds: [0]
+  ledger: runs/walker-ledger.json
+budget:
+  ledger_allocations: {pre_plan_development: 4377, walker_a: 17000, walker_b: 10600}
+  ledger_adaptive_cap: 32000
+  ledger_reporting_cap: 8000
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only}
+eval:
+  namespace: val
+  n_tasks: 40
+  track: inference
+  n_worlds: 5
+  episodes_per_world: 8
+walker:
+  per_run_cap: 800
+  collector: local_focused
+  collector_episodes_per_world: 8
+  collector_interactions: 1500
+  benchmark_source: local_focused
+  benchmark_starts: 5
+  policy: {iters: 1500, lr: 0.003, hidden: 32}
+arms:
+  - {id: maximal, strategy: maximal}
+  - {id: reference, strategy: reference}

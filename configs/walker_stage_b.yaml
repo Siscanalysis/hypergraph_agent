@@ -1,0 +1,39 @@
+# Walker study, Stage B (docs/EXPERIMENT_PLAN.md, addendum W-B): intermediate
+# items unobserved, so hypotheses do not factorize by recipe. Per seed, a
+# focused walker collects evidence in 8 training worlds (8 episodes each); the
+# edit policy is trained offline on search problems from that evidence; every
+# arm then plays 5 unseen worlds x 8 episodes. A paired offline benchmark of
+# the walks uses the held-out evidence of the focused arm.
+run:
+  name: walk-b
+  phase: walker_b
+  allocation: walker_b
+  seeds: [0, 1]
+  ledger: runs/walker-ledger.json
+budget:
+  ledger_allocations: {pre_plan_development: 4377, walker_a: 17000, walker_b: 10600}
+  ledger_adaptive_cap: 32000
+  ledger_reporting_cap: 8000
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only}
+eval:
+  namespace: val
+  n_tasks: 40
+  track: inference
+  n_worlds: 5
+  episodes_per_world: 8
+walker:
+  per_run_cap: 800
+  collector: local_focused
+  collector_episodes_per_world: 8
+  collector_interactions: 1500
+  benchmark_source: local_focused
+  benchmark_starts: 5
+  policy: {iters: 1500, lr: 0.003, hidden: 32}
+arms:
+  - {id: local_uniform, strategy: local_uniform}
+  - {id: local_focused, strategy: local_focused}
+  - {id: learned, strategy: learned}
