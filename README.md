@@ -10,9 +10,21 @@ growing libraries of reusable closed-loop skills.
 > skills and conjunctive prerequisite relations, and does that improve transfer
 > to longer compositions beyond topology adaptation or skill discovery alone?
 
-Status: research code at the development-pilot stage. Results are in
-[docs/RESULTS.md](docs/RESULTS.md) once runs exist; nothing here establishes a
-performance or novelty claim.
+Status: research code at the development-pilot stage; nothing here
+establishes a performance or novelty claim. The first development session
+([docs/RESULTS.md](docs/RESULTS.md)) ran all three phases under one
+160,000-interaction ledger:
+
+- the mechanisms run end to end, and 125 deterministic tests pass;
+- public evidence produced logged, evidence-linked revisions of the
+  prerequisite structure (P2);
+- skills mined from the agent's own trajectories were trained, passed held-out
+  validation, were admitted and were then invoked by a trained manager (P3);
+  weak candidates were rejected;
+- the pre-registered shallow learning check failed for the token-attention
+  baseline; a post-hoc repeat with the gated encoder learned;
+- no pilot arm transferred to longer compositions, and two seeds per contrast
+  support no comparative conclusion.
 
 ## The game
 

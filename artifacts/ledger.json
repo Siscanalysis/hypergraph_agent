@@ -1,0 +1,733 @@
+{
+ "adaptive_cap": 160000,
+ "reporting_cap": 20000,
+ "allocations": {
+  "pre_plan_development": 37000,
+  "smoke": 2500,
+  "diagnostics": 8000,
+  "p1": 27000,
+  "p2": 27000,
+  "p3": 58000
+ },
+ "adaptive_total": 159400,
+ "reporting_total": 16066,
+ "by_allocation": {
+  "pre_plan_development": 37000,
+  "smoke": 2400,
+  "diagnostics": 8000,
+  "p2": 27000,
+  "p3": 58000,
+  "p1": 27000
+ },
+ "runs": {
+  "pre-plan-development": {
+   "allocation": "pre_plan_development",
+   "run_cap": 37000,
+   "used": 40452,
+   "by_purpose": {
+    "external": 40452
+   },
+   "started": 1791365882.5444133,
+   "meta": {
+    "external": true,
+    "note": "plumbing 3,500 and tuning/learning checks 33,500 before the protocol freeze; executed in a separate development ledger (DECISIONS A1)"
+   }
+  },
+  "smoke-set-s0-20261007-113812": {
+   "allocation": "smoke",
+   "run_cap": 600,
+   "used": 600,
+   "by_purpose": {
+    "exploration": 600
+   },
+   "started": 1791365892.4417734,
+   "meta": {
+    "phase": "smoke",
+    "arm": "set",
+    "seed": 0
+   }
+  },
+  "smoke-set-s0-20261007-113812:eval": {
+   "allocation": "smoke",
+   "used": 78,
+   "by_purpose": {
+    "reporting_eval": 78
+   }
+  },
+  "smoke-incidence-s0-20261007-113823": {
+   "allocation": "smoke",
+   "run_cap": 600,
+   "used": 600,
+   "by_purpose": {
+    "exploration": 600
+   },
+   "started": 1791365904.1530461,
+   "meta": {
+    "phase": "smoke",
+    "arm": "incidence",
+    "seed": 0
+   }
+  },
+  "smoke-incidence-s0-20261007-113823:eval": {
+   "allocation": "smoke",
+   "used": 78,
+   "by_purpose": {
+    "reporting_eval": 78
+   }
+  },
+  "smoke-gated-s0-20261007-113833": {
+   "allocation": "smoke",
+   "run_cap": 600,
+   "used": 600,
+   "by_purpose": {
+    "exploration": 600
+   },
+   "started": 1791365914.134099,
+   "meta": {
+    "phase": "smoke",
+    "arm": "gated",
+    "seed": 0
+   }
+  },
+  "smoke-gated-s0-20261007-113833:eval": {
+   "allocation": "smoke",
+   "used": 78,
+   "by_purpose": {
+    "reporting_eval": 78
+   }
+  },
+  "smoke-p2-adaptive_incidence-s0-20261007-113848": {
+   "allocation": "smoke",
+   "run_cap": 600,
+   "used": 600,
+   "by_purpose": {
+    "exploration": 600
+   },
+   "started": 1791365928.7213116,
+   "meta": {
+    "phase": "smoke",
+    "arm": "adaptive_incidence",
+    "seed": 0
+   }
+  },
+  "smoke-p2-adaptive_incidence-s0-20261007-113848:eval": {
+   "allocation": "smoke",
+   "used": 69,
+   "by_purpose": {
+    "reporting_eval": 69
+   }
+  },
+  "diag-shallow-set-s0-20261007-113914": {
+   "allocation": "diagnostics",
+   "run_cap": 4000,
+   "used": 4000,
+   "by_purpose": {
+    "exploration": 4000
+   },
+   "started": 1791365954.6638086,
+   "meta": {
+    "phase": "diagnostic",
+    "arm": "set",
+    "seed": 0
+   }
+  },
+  "p2-pilot-evidence_set-s0-20261007-113916": {
+   "allocation": "p2",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791365956.5171247,
+   "meta": {
+    "phase": "p2",
+    "arm": "evidence_set",
+    "seed": 0
+   }
+  },
+  "p3-pilot-pretrain-s0-20261007-113917": {
+   "allocation": "p3",
+   "run_cap": 9000,
+   "used": 9000,
+   "by_purpose": {
+    "pretraining": 5162,
+    "skill_practice": 3600,
+    "candidate_validation": 238
+   },
+   "started": 1791365958.282528,
+   "meta": {
+    "phase": "p3",
+    "arm": "pretrain"
+   }
+  },
+  "diag-shallow-set-s0-20261007-113914:eval": {
+   "allocation": "diagnostics",
+   "used": 400,
+   "by_purpose": {
+    "reporting_eval": 400
+   }
+  },
+  "eval-diag-shallow-random-20261007-114141": {
+   "allocation": "diagnostics",
+   "used": 400,
+   "by_purpose": {
+    "reporting_eval": 400
+   }
+  },
+  "p1-pilot-set-s0-20261007-114149": {
+   "allocation": "p1",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366110.0863273,
+   "meta": {
+    "phase": "p1",
+    "arm": "set",
+    "seed": 0
+   }
+  },
+  "p2-pilot-evidence_set-s0-20261007-113916:eval": {
+   "allocation": "p2",
+   "used": 500,
+   "by_purpose": {
+    "reporting_eval": 500
+   }
+  },
+  "p2-pilot-fixed_supergraph-s0-20261007-114215": {
+   "allocation": "p2",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366135.9037144,
+   "meta": {
+    "phase": "p2",
+    "arm": "fixed_supergraph",
+    "seed": 0
+   }
+  },
+  "p1-pilot-set-s0-20261007-114149:eval": {
+   "allocation": "p1",
+   "used": 400,
+   "by_purpose": {
+    "reporting_eval": 400
+   }
+  },
+  "p1-pilot-incidence-s0-20261007-114452": {
+   "allocation": "p1",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366293.1662982,
+   "meta": {
+    "phase": "p1",
+    "arm": "incidence",
+    "seed": 0
+   }
+  },
+  "p2-pilot-fixed_supergraph-s0-20261007-114215:eval": {
+   "allocation": "p2",
+   "used": 500,
+   "by_purpose": {
+    "reporting_eval": 500
+   }
+  },
+  "p2-pilot-adaptive_incidence-s0-20261007-114535": {
+   "allocation": "p2",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366336.4440465,
+   "meta": {
+    "phase": "p2",
+    "arm": "adaptive_incidence",
+    "seed": 0
+   }
+  },
+  "p1-pilot-incidence-s0-20261007-114452:eval": {
+   "allocation": "p1",
+   "used": 400,
+   "by_purpose": {
+    "reporting_eval": 400
+   }
+  },
+  "p1-pilot-gated-s0-20261007-114726": {
+   "allocation": "p1",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366446.5889,
+   "meta": {
+    "phase": "p1",
+    "arm": "gated",
+    "seed": 0
+   }
+  },
+  "p3-pilot-F0-s0-20261007-113917": {
+   "allocation": "p3",
+   "run_cap": 5000,
+   "used": 5000,
+   "by_purpose": {
+    "exploration": 5000
+   },
+   "started": 1791366475.3057294,
+   "meta": {
+    "phase": "p3",
+    "arm": "F0"
+   }
+  },
+  "p2-pilot-adaptive_incidence-s0-20261007-114535:eval": {
+   "allocation": "p2",
+   "used": 500,
+   "by_purpose": {
+    "reporting_eval": 500
+   }
+  },
+  "p2-pilot-evidence_set-s1-20261007-114828": {
+   "allocation": "p2",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366509.0847044,
+   "meta": {
+    "phase": "p2",
+    "arm": "evidence_set",
+    "seed": 1
+   }
+  },
+  "p1-pilot-gated-s0-20261007-114726:eval": {
+   "allocation": "p1",
+   "used": 400,
+   "by_purpose": {
+    "reporting_eval": 400
+   }
+  },
+  "p1-pilot-set-s1-20261007-115021": {
+   "allocation": "p1",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366621.774212,
+   "meta": {
+    "phase": "p1",
+    "arm": "set",
+    "seed": 1
+   }
+  },
+  "p2-pilot-evidence_set-s1-20261007-114828:eval": {
+   "allocation": "p2",
+   "used": 500,
+   "by_purpose": {
+    "reporting_eval": 500
+   }
+  },
+  "p2-pilot-fixed_supergraph-s1-20261007-115112": {
+   "allocation": "p2",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366673.2860484,
+   "meta": {
+    "phase": "p2",
+    "arm": "fixed_supergraph",
+    "seed": 1
+   }
+  },
+  "p3-pilot-F0-s0-20261007-113917:eval-test": {
+   "allocation": "p3",
+   "used": 384,
+   "by_purpose": {
+    "reporting_eval": 384
+   }
+  },
+  "p3-pilot-F0-s0-20261007-113917:eval-val": {
+   "allocation": "p3",
+   "used": 309,
+   "by_purpose": {
+    "reporting_eval": 309
+   }
+  },
+  "p3-pilot-F1-s0-20261007-113917": {
+   "allocation": "p3",
+   "run_cap": 5000,
+   "used": 5000,
+   "by_purpose": {
+    "exploration": 5000
+   },
+   "started": 1791366685.158671,
+   "meta": {
+    "phase": "p3",
+    "arm": "F1"
+   }
+  },
+  "p1-pilot-set-s1-20261007-115021:eval": {
+   "allocation": "p1",
+   "used": 400,
+   "by_purpose": {
+    "reporting_eval": 400
+   }
+  },
+  "p1-pilot-incidence-s1-20261007-115247": {
+   "allocation": "p1",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366767.4332316,
+   "meta": {
+    "phase": "p1",
+    "arm": "incidence",
+    "seed": 1
+   }
+  },
+  "p2-pilot-fixed_supergraph-s1-20261007-115112:eval": {
+   "allocation": "p2",
+   "used": 500,
+   "by_purpose": {
+    "reporting_eval": 500
+   }
+  },
+  "p2-pilot-adaptive_incidence-s1-20261007-115352": {
+   "allocation": "p2",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366833.2333617,
+   "meta": {
+    "phase": "p2",
+    "arm": "adaptive_incidence",
+    "seed": 1
+   }
+  },
+  "p3-pilot-F1-s0-20261007-113917:eval-test": {
+   "allocation": "p3",
+   "used": 391,
+   "by_purpose": {
+    "reporting_eval": 391
+   }
+  },
+  "p3-pilot-F1-s0-20261007-113917:eval-val": {
+   "allocation": "p3",
+   "used": 294,
+   "by_purpose": {
+    "reporting_eval": 294
+   }
+  },
+  "p3-pilot-G0-s0-20261007-113917": {
+   "allocation": "p3",
+   "run_cap": 5000,
+   "used": 5000,
+   "by_purpose": {
+    "exploration": 3748,
+    "skill_practice": 1200,
+    "candidate_validation": 52
+   },
+   "started": 1791366896.2905805,
+   "meta": {
+    "phase": "p3",
+    "arm": "G0"
+   }
+  },
+  "p1-pilot-incidence-s1-20261007-115247:eval": {
+   "allocation": "p1",
+   "used": 400,
+   "by_purpose": {
+    "reporting_eval": 400
+   }
+  },
+  "p1-pilot-gated-s1-20261007-115518": {
+   "allocation": "p1",
+   "run_cap": 4500,
+   "used": 4500,
+   "by_purpose": {
+    "exploration": 4500
+   },
+   "started": 1791366918.9447813,
+   "meta": {
+    "phase": "p1",
+    "arm": "gated",
+    "seed": 1
+   }
+  },
+  "p2-pilot-adaptive_incidence-s1-20261007-115352:eval": {
+   "allocation": "p2",
+   "used": 500,
+   "by_purpose": {
+    "reporting_eval": 500
+   }
+  },
+  "p1-pilot-gated-s1-20261007-115518:eval": {
+   "allocation": "p1",
+   "used": 400,
+   "by_purpose": {
+    "reporting_eval": 400
+   }
+  },
+  "p3-pilot-G0-s0-20261007-113917:eval-test": {
+   "allocation": "p3",
+   "used": 396,
+   "by_purpose": {
+    "reporting_eval": 396
+   }
+  },
+  "p3-pilot-G0-s0-20261007-113917:eval-val": {
+   "allocation": "p3",
+   "used": 310,
+   "by_purpose": {
+    "reporting_eval": 310
+   }
+  },
+  "p3-pilot-G1-s0-20261007-113917": {
+   "allocation": "p3",
+   "run_cap": 5000,
+   "used": 5000,
+   "by_purpose": {
+    "exploration": 3734,
+    "skill_practice": 1200,
+    "candidate_validation": 66
+   },
+   "started": 1791367121.6794915,
+   "meta": {
+    "phase": "p3",
+    "arm": "G1"
+   }
+  },
+  "diag-shallow-gated-gated-s0-20261007-120040": {
+   "allocation": "diagnostics",
+   "run_cap": 4000,
+   "used": 4000,
+   "by_purpose": {
+    "exploration": 4000
+   },
+   "started": 1791367240.6278589,
+   "meta": {
+    "phase": "diagnostic",
+    "arm": "gated",
+    "seed": 0
+   }
+  },
+  "p3-pilot-G1-s0-20261007-113917:eval-test": {
+   "allocation": "p3",
+   "used": 396,
+   "by_purpose": {
+    "reporting_eval": 396
+   }
+  },
+  "p3-pilot-G1-s0-20261007-113917:eval-val": {
+   "allocation": "p3",
+   "used": 308,
+   "by_purpose": {
+    "reporting_eval": 308
+   }
+  },
+  "p3-pilot-pretrain-s1-20261007-113917": {
+   "allocation": "p3",
+   "run_cap": 9000,
+   "used": 9000,
+   "by_purpose": {
+    "pretraining": 5160,
+    "skill_practice": 3600,
+    "candidate_validation": 240
+   },
+   "started": 1791367340.0207534,
+   "meta": {
+    "phase": "p3",
+    "arm": "pretrain"
+   }
+  },
+  "diag-shallow-gated-gated-s0-20261007-120040:eval": {
+   "allocation": "diagnostics",
+   "used": 391,
+   "by_purpose": {
+    "reporting_eval": 391
+   }
+  },
+  "p3-pilot-F0-s1-20261007-113917": {
+   "allocation": "p3",
+   "run_cap": 5000,
+   "used": 5000,
+   "by_purpose": {
+    "exploration": 5000
+   },
+   "started": 1791367623.1050887,
+   "meta": {
+    "phase": "p3",
+    "arm": "F0"
+   }
+  },
+  "p3-pilot-F0-s1-20261007-113917:eval-test": {
+   "allocation": "p3",
+   "used": 404,
+   "by_purpose": {
+    "reporting_eval": 404
+   }
+  },
+  "p3-pilot-F0-s1-20261007-113917:eval-val": {
+   "allocation": "p3",
+   "used": 332,
+   "by_purpose": {
+    "reporting_eval": 332
+   }
+  },
+  "p3-pilot-F1-s1-20261007-113917": {
+   "allocation": "p3",
+   "run_cap": 5000,
+   "used": 5000,
+   "by_purpose": {
+    "exploration": 5000
+   },
+   "started": 1791367750.283763,
+   "meta": {
+    "phase": "p3",
+    "arm": "F1"
+   }
+  },
+  "p3-pilot-F1-s1-20261007-113917:eval-test": {
+   "allocation": "p3",
+   "used": 404,
+   "by_purpose": {
+    "reporting_eval": 404
+   }
+  },
+  "p3-pilot-F1-s1-20261007-113917:eval-val": {
+   "allocation": "p3",
+   "used": 332,
+   "by_purpose": {
+    "reporting_eval": 332
+   }
+  },
+  "p3-pilot-G0-s1-20261007-113917": {
+   "allocation": "p3",
+   "run_cap": 5000,
+   "used": 5000,
+   "by_purpose": {
+    "exploration": 3740,
+    "skill_practice": 1200,
+    "candidate_validation": 60
+   },
+   "started": 1791367869.7623725,
+   "meta": {
+    "phase": "p3",
+    "arm": "G0"
+   }
+  },
+  "p3-pilot-G0-s1-20261007-113917:eval-test": {
+   "allocation": "p3",
+   "used": 403,
+   "by_purpose": {
+    "reporting_eval": 403
+   }
+  },
+  "p3-pilot-G0-s1-20261007-113917:eval-val": {
+   "allocation": "p3",
+   "used": 332,
+   "by_purpose": {
+    "reporting_eval": 332
+   }
+  },
+  "p3-pilot-G1-s1-20261007-113917": {
+   "allocation": "p3",
+   "run_cap": 5000,
+   "used": 5000,
+   "by_purpose": {
+    "exploration": 3728,
+    "skill_practice": 1200,
+    "candidate_validation": 72
+   },
+   "started": 1791368008.9821656,
+   "meta": {
+    "phase": "p3",
+    "arm": "G1"
+   }
+  },
+  "p3-pilot-G1-s1-20261007-113917:eval-test": {
+   "allocation": "p3",
+   "used": 393,
+   "by_purpose": {
+    "reporting_eval": 393
+   }
+  },
+  "p3-pilot-G1-s1-20261007-113917:eval-val": {
+   "allocation": "p3",
+   "used": 332,
+   "by_purpose": {
+    "reporting_eval": 332
+   }
+  }
+ },
+ "logical_charges": [
+  {
+   "run_id": "p3-pilot-F0-s0-20261007-113917",
+   "source_run": "p3-pilot-pretrain-s0-20261007-113917",
+   "n": 9000,
+   "note": "shared P3 pretraining prefix"
+  },
+  {
+   "run_id": "p3-pilot-F1-s0-20261007-113917",
+   "source_run": "p3-pilot-pretrain-s0-20261007-113917",
+   "n": 9000,
+   "note": "shared P3 pretraining prefix"
+  },
+  {
+   "run_id": "p3-pilot-G0-s0-20261007-113917",
+   "source_run": "p3-pilot-pretrain-s0-20261007-113917",
+   "n": 9000,
+   "note": "shared P3 pretraining prefix"
+  },
+  {
+   "run_id": "p3-pilot-G1-s0-20261007-113917",
+   "source_run": "p3-pilot-pretrain-s0-20261007-113917",
+   "n": 9000,
+   "note": "shared P3 pretraining prefix"
+  },
+  {
+   "run_id": "p3-pilot-F0-s1-20261007-113917",
+   "source_run": "p3-pilot-pretrain-s1-20261007-113917",
+   "n": 9000,
+   "note": "shared P3 pretraining prefix"
+  },
+  {
+   "run_id": "p3-pilot-F1-s1-20261007-113917",
+   "source_run": "p3-pilot-pretrain-s1-20261007-113917",
+   "n": 9000,
+   "note": "shared P3 pretraining prefix"
+  },
+  {
+   "run_id": "p3-pilot-G0-s1-20261007-113917",
+   "source_run": "p3-pilot-pretrain-s1-20261007-113917",
+   "n": 9000,
+   "note": "shared P3 pretraining prefix"
+  },
+  {
+   "run_id": "p3-pilot-G1-s1-20261007-113917",
+   "source_run": "p3-pilot-pretrain-s1-20261007-113917",
+   "n": 9000,
+   "note": "shared P3 pretraining prefix"
+  }
+ ],
+ "amendments": [
+  {
+   "allocation": "diagnostics",
+   "add": 3400,
+   "note": "A2 post hoc: gated shallow diagnostic after the set diagnostic failed and P1 scored zero"
+  }
+ ]
+}

@@ -68,11 +68,12 @@ termination; two seeds per pilot; tuning only on the gated encoder.
 |---|---|---|---|---|
 | 1 | The environment, public boundary and reference solver behave as specified | deterministic tests | `tests/test_env.py`, `tests/test_information_boundary.py` | supported (mechanism) |
 | 2 | Incidence message passing equals the two-stage hypergraph update | output and gradient equality | `tests/test_representation.py` | supported (mechanism) |
-| 3 | The shared PPO core learns shallow tasks | shallow diagnostic versus random agent | pending (diagnostic run) | unresolved |
-| 4 | The context gate improves success over a matched ungated encoder (P1) | 10+ seed blocks, paired intervals | 2-seed pilot only | unresolved |
-| 5 | Public evidence produces logged structural revisions (P2) | `structural_incidence_edit` events with evidence ids | pending (P2 pilot) | unresolved |
-| 6 | Belief-driven routing beats the same beliefs in a fixed supergraph (P2) | study-scale contrast plus the mask-as-feature control | not run | unresolved |
-| 7 | A non-scripted controller is learned, admitted and used by the manager (P3) | event chain: evidence, candidate, controller, validation, admission, invocation | pending (P3 pretraining) | unresolved |
-| 8 | Growth with revision transfers better than growth without revision (P3) | study-scale G1 - G0 on held-out longer compositions | 2-seed pilot only | unresolved |
-| 9 | Revision and growth interact | interaction contrast with intervals | 2-seed pilot only | unresolved |
+| 3 | The shared PPO core learns shallow tasks | shallow diagnostic versus random agent | pre-registered `set` diagnostic failed (1/26 vs random 2/26); post-hoc `gated` diagnostic 22/30 (RESULTS 3.1) | unresolved (post hoc, one seed) |
+| 4 | The context gate improves success over a matched ungated encoder (P1) | 10+ seed blocks, paired intervals | 2-seed pilot at floor (all 0/20) | unresolved |
+| 5 | Public evidence produces logged structural revisions (P2) | `structural_incidence_edit` events with evidence ids | 34 and 27 edits in the adaptive runs (RESULTS 3.2) | supported (mechanism) |
+| 6 | Belief-driven routing beats the same beliefs in a fixed supergraph (P2) | study-scale contrast plus the mask-as-feature control | 2-seed pilot near floor; control not implemented | unresolved |
+| 7 | A non-scripted controller is learned, admitted and used by the manager (P3) | event chain: evidence, candidate, controller, validation, admission, invocation | 4 admissions, 2 rejections, manager invocations (RESULTS 3.3), diagnostic profile | supported (mechanism, provisional) |
+| 7b | Learned skills compose (a level-2 controller using a different lower-level skill) | admitted level-2 skill with distinct children, used by the manager | only same-target wrappers were admitted; miner fixed afterwards (DECISIONS A4) | not supported |
+| 8 | Growth with revision transfers better than growth without revision (P3) | study-scale G1 - G0 on held-out longer compositions | 2-seed pilot, -0.025 (-0.10 to 0.075) | unresolved |
+| 9 | Revision and growth interact | interaction contrast with intervals | 2-seed pilot, 0.0 (-0.10 to 0.125) | unresolved |
 | 10 | Any novelty claim | method-level comparison with MSGI, CODE-SHARP, OHCAM and others | audit at abstract or methods depth | unresolved |
