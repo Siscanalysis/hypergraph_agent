@@ -20,7 +20,7 @@ relation-local memory, goal-conditioned primitive-policy control,
 library-transplant diagnostic, credible-set-mask-as-feature control, learned
 proposals or termination (docs/DECISIONS.md, docs/ROADMAP.md).
 
-Test suite: 148 deterministic tests pass (`python -m pytest -q`), covering the
+Test suite: 149 deterministic tests pass (`python -m pytest -q`), covering the
 items listed in docs/METHODS.md (environment semantics, information boundary,
 equivariance and padding, incidence and hypergraph equivalence, topology
 updates and rollback, executor semantics, library lifecycle, duration-aware

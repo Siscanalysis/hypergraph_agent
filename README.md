@@ -15,7 +15,7 @@ establishes a performance or novelty claim. The first development session
 ([docs/RESULTS.md](docs/RESULTS.md)) ran all three phases under one
 160,000-interaction ledger:
 
-- the mechanisms run end to end, and 148 deterministic tests pass;
+- the mechanisms run end to end, and 149 deterministic tests pass;
 - public evidence produced logged, evidence-linked revisions of the
   prerequisite structure (P2);
 - skills mined from the agent's own trajectories were trained, passed held-out
