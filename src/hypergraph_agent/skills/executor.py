@@ -55,6 +55,7 @@ class DecisionTrace:
     final_value: float = 0.0
     tau_total: int = 0
     n_skill_calls: int = 0
+    n_decisions: int = 0  # counted whether or not the trace is recorded
 
 
 def contract_support(spec: SkillSpec, task: PublicTaskSpec, topo_snapshot, live: bool):
@@ -287,6 +288,7 @@ class Executor:
                 tr.status, tr.terminal = "budget_exhausted", False
                 break
             tau = self.n_primitive - start
+            tr.n_decisions += 1
             if target is not None:
                 R = 1.0 if self.obs.present[target] else 0.0
             else:

@@ -39,6 +39,8 @@ def test_frozen_evaluation_leaves_training_state_untouched():
                     action_gen=torch.Generator().manual_seed(0), dyn_rng=np.random.default_rng(0),
                     topo=topo)
     assert len(rows) == 3 and topo.state_dict() == before and not topo.pending
+    # unrecorded evaluation episodes still count their decisions
+    assert all(r["manager_decisions"] == r["primitive_length"] for r in rows)
 
 
 def test_inference_track_resets_at_new_worlds():

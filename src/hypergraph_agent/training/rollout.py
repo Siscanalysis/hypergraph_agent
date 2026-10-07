@@ -54,9 +54,12 @@ class EpisodeRecord:
     trace: list = field(default_factory=list)
     extra: dict = field(default_factory=dict)
 
+    n_decisions_executed: int = 0
+
     @property
     def n_decisions(self) -> int:
-        return len(self.actions)
+        """Completed decisions (also when the trace was not recorded for training)."""
+        return max(self.n_decisions_executed, int(sum(1 for v in self.valid if v)))
 
     def advantages(self, gamma: float, lam: float):
         k = len(self.valid)
@@ -105,7 +108,7 @@ def make_record(task, ex: Executor, struct: GraphStructure, tr: DecisionTrace, *
         choice_keys=list(tr.choice_keys),
         snapshot_id=struct.meta.get("snapshot_id"),
         library_id=ex.lib_snapshot.library_id if ex.lib_snapshot is not None else None,
-        target=target, spec=ex.spec, trace=list(tr.events),
+        target=target, spec=ex.spec, trace=list(tr.events), n_decisions_executed=tr.n_decisions,
     )
 
 
