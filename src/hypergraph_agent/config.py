@@ -48,6 +48,15 @@ DEFAULTS: dict = {
     },
     "topology": {"credible_mass": 0.9, "max_size": 3},
     "skills": {},
+    "walker": {
+        "max_evals": 400, "temperature": 0.5, "restart_after": 80, "exact_cap": 20_000,
+        "plan_cap": 4096, "per_run_cap": 2000, "warmup_interactions": 0, "eval_variants": [],
+        "collector": "local_focused", "collector_episodes_per_world": 8,
+        "collector_interactions": 1500, "benchmark_source": "local_focused", "benchmark_starts": 5,
+        # shared-world studies: world seed = train.shared_world_seed + run seed (as in the P3 pilot)
+        "shared_world_offset_by_seed": False,
+        "policy": {"iters": 1500, "lr": 0.003, "hidden": 32},
+    },
     "arms": [{"id": "gated", "encoder": "gated", "graph_mode": "known", "topology": "none",
               "use_posterior": True}],
 }
@@ -55,13 +64,15 @@ DEFAULTS: dict = {
 ARM_DEFAULTS = {"encoder": "gated", "graph_mode": "known", "topology": "none",
                 "use_posterior": True,
                 # P3 only: library growth after the fork, dependency/contract revision
-                "growth": False, "revision": False}
+                "growth": False, "revision": False,
+                # walker studies only: agents.walker strategy or "reference"
+                "strategy": None}
 
 
 def _merge(base: dict, over: dict, path: str = "") -> dict:
     out = copy.deepcopy(base)
     for k, v in over.items():
-        if k not in base and path not in ("eval.tasks", "skills"):
+        if k not in base and path not in ("eval.tasks", "skills", "walker.eval_variants"):
             raise KeyError(f"unknown config key {path + '.' + k if path else k}")
         if isinstance(v, dict) and isinstance(base.get(k), dict):
             out[k] = _merge(base[k], v, f"{path}.{k}" if path else k)

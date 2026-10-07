@@ -163,12 +163,17 @@ class TaskConfig:
     budget_factor: float = 1.0
     budget_slack: int = 2
     max_budget: int = 256
+    # "all": every fact is observed; "goal_only": base facts and the goal are
+    # observed, intermediate items and the outcome of crafting them are not
+    observe_items: str = "all"
 
     def __post_init__(self):
         if self.profile not in PROFILES:
             raise ValueError(f"unknown profile {self.profile!r}")
         if not 0.0 <= self.failure_prob < 1.0:
             raise ValueError("failure_prob must be in [0, 1)")
+        if self.observe_items not in ("all", "goal_only"):
+            raise ValueError("observe_items must be 'all' or 'goal_only'")
 
 
 @dataclass(frozen=True)
@@ -189,6 +194,7 @@ class Task:
     initial_true: frozenset[int]  # type ids
     budget: int
     failure_prob: float
+    observe_items: str = "all"
 
     def fact_index(self, type_id: int) -> int:
         return self.fact_types.index(type_id)
@@ -286,6 +292,7 @@ def make_task(
         initial_true=frozenset(initial),
         budget=budget,
         failure_prob=cfg.failure_prob,
+        observe_items=cfg.observe_items,
     )
 
 

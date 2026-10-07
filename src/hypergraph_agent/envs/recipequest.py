@@ -14,6 +14,9 @@ Semantics
 * Reward is exactly 1 on successful submission, else 0. Exhausting the budget
   is an unsuccessful terminal (``termination == "deadline"``). The environment
   never truncates by itself; truncation is reserved for external interruption.
+* With ``observe_items == "goal_only"`` intermediate items are reported as
+  absent and the outcome of crafting them is ``None``; base facts and the goal
+  stay observable.
 
 Observations are ``PublicObservation`` objects. ``info`` carries only public
 outcome data.
@@ -27,7 +30,7 @@ from gymnasium import spaces
 from .generator import Task
 from .public_schema import (
     ACTIVATE, CRAFT, GATHER, KIND_NAMES, SUBMIT,
-    PublicObservation, PublicTaskSpec, public_view,
+    PublicObservation, PublicTaskSpec, observable, public_view,
 )
 from .vocabulary import TYPE_NAMES
 
@@ -116,6 +119,8 @@ class RecipeQuestEnv(gym.Env):
             terminated = True
             reason = "deadline"
         self._done = terminated
+        if desc.kind == CRAFT and not observable(task, task.rules[desc.rule].effect):
+            changed = None  # the outcome of crafting an unobserved item is not revealed
         self._last = (a, changed)
         return self._obs(), reward, terminated, False, {"termination": reason, "changed": changed}
 
@@ -131,7 +136,7 @@ class RecipeQuestEnv(gym.Env):
 
     def _obs(self) -> PublicObservation:
         task = self._task
-        present = tuple(self._present[ft] for ft in task.fact_types)
+        present = tuple(self._present[ft] and observable(task, ft) for ft in task.fact_types)
         return PublicObservation(present, self._budget_left, self._t, *self._last)
 
     def debug_view(self) -> str:

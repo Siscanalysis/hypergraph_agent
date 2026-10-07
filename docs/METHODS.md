@@ -238,6 +238,48 @@ exploration, skill practice, candidate validation, pretraining, evaluation used
 for selection, reporting evaluation. The P3 prefix is charged physically once
 and logically to every arm. Unit tests use in-memory ledgers.
 
+## 11. Hypergraph walkers (`agents/walker.py`, `agents/edit_policy.py`, `evaluation/walkers.py`)
+
+A second family of agents moves on a graph whose nodes are complete dependency
+hypergraphs: one hypothesized base requirement for every recipe with a hidden
+one. Two nodes are adjacent when they differ by one single-incidence edit inside
+the hypothesis class (add, remove or swap one candidate base fact), the kind of
+edit a `TopologyDelta` records. The graph is implicit.
+
+A walker commits to a node, plans on it with the derivation planner
+(`envs/derivations.py`, shared with the evaluator's reference solver but given
+the walker's own hypothesis), executes the plan, and moves when public
+evidence contradicts the node. Moves cost no environment interactions; every
+hypothesis evaluation is counted as search work. Node choice:
+
+- `maximal`: the full-pool node (every candidate required); no inference.
+- `sample`: a draw from the factorized posterior of Section 5 (Thompson sampling).
+- `optimistic`: per recipe, the hypothesis still supported by the posterior that
+  needs the fewest base facts not yet held.
+- `local_uniform`, `local_focused`, `learned`: a Metropolis walk (temperature
+  0.5, restart after 80 evaluations without improvement, at most 400
+  evaluations per replan) towards a node with no violated observation, with
+  uniformly proposed edits, edits that address a violated observation, or edits
+  proposed by a trained policy.
+- `exact`: enumeration of the joint space of the attempted recipes (up to 20,000
+  nodes), returning the cheapest consistent node.
+
+Episodic evidence: each episode is logged as its sequence of actions with the
+observed goal after every step and, when items are observable, each craft's
+observed effect. A node's violations are the mismatches when the episode is
+replayed under it. With `observe_items: goal_only`, intermediate items and the
+outcome of crafting them are hidden, so a failed goal can be explained by any
+recipe of the chain and the posterior no longer factorizes.
+
+Learned edit policy: an MLP scores every candidate edit from 12 public
+features (edit type; how many violated observations it addresses; the
+recipe's share of the blame; current requirement size; how often the recipe
+was attempted; how often each base fact was present when the recipe was
+crafted in episodes that reached the goal; whether the edit undoes the
+previous move). It is trained with REINFORCE on internal search problems built
+from evidence collected in training worlds; the return is minus the normalized
+number of evaluations to a consistent node, minus 1 when none is found.
+
 ## 10. Cost per decision
 
 With `F` facts, `R` relation nodes, `E` incidences, `C` candidates, width `d`

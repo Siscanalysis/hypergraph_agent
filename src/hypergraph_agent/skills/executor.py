@@ -137,8 +137,8 @@ class Executor:
         obs, r, term, _, info = self.env.step(a)
         if self.topo is not None and desc.kind == CRAFT:
             self.topo.record(self.spec, desc.rule, before, obs.present)
-        if desc.kind != WAIT and not info["changed"] and not (desc.kind == SUBMIT and r > 0):
-            self.n_noop += 1
+        if desc.kind != WAIT and info["changed"] is False and not (desc.kind == SUBMIT and r > 0):
+            self.n_noop += 1  # unobserved outcomes (None) are not counted
         self.obs = obs
         self.n_primitive += 1
         self.rewards.append(r)

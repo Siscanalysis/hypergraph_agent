@@ -1,0 +1,31 @@
+# Walker study, Stage A (docs/EXPERIMENT_PLAN.md, walker addendum).
+# The P2 pilot's evaluation tasks (unseen worlds, 5 worlds x 6 episodes,
+# beliefs from the prior in each world): deterministic bounds, one seed.
+run:
+  name: walk-a-p2-bounds
+  phase: walker_a
+  allocation: walker_a
+  seeds: [0]
+  ledger: runs/walker-ledger.json
+budget:
+  ledger_allocations: {pre_plan_development: 4377, walker_a: 17000, walker_b: 10600}
+  ledger_adaptive_cap: 32000
+  ledger_reporting_cap: 8000
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0}
+eval:
+  namespace: val
+  n_tasks: 30
+  track: inference
+  n_worlds: 5
+  episodes_per_world: 6
+walker:
+  per_run_cap: 600
+  eval_variants:
+    - {name: budget1.0, tasks: {budget_factor: 1.0}}
+    - {name: budget0.6, tasks: {budget_factor: 0.6}}
+arms:
+  - {id: maximal, strategy: maximal}
+  - {id: reference, strategy: reference}

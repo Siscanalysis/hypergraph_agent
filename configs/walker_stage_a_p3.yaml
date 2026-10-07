@@ -1,0 +1,34 @@
+# Walker study, Stage A, P3 pilot worlds: the same shared world per seed block
+# as the P3 pilot (seed 3000 + seed), failure probability 0.1 (public). Each
+# walker first acts for 1,500 interactions on training tasks (goal levels 1-3),
+# then plays the P3 pilot's test tasks (levels 5-6) with beliefs kept.
+run:
+  name: walk-a-p3
+  phase: walker_a
+  allocation: walker_a
+  seeds: [0, 1]
+  ledger: runs/walker-ledger.json
+budget:
+  ledger_allocations: {pre_plan_development: 4377, walker_a: 17000, walker_b: 10600}
+  ledger_adaptive_cap: 32000
+  ledger_reporting_cap: 8000
+train:
+  world_mode: shared
+  shared_world_seed: 3000
+  goal_levels: [1, 2, 3]
+  tasks: {profile: unknown_prerequisites, failure_prob: 0.1, p_init_base: 0.3, p_init_item: 0.2,
+          n_distractor_base: 0}
+eval:
+  namespace: test
+  n_tasks: 20
+  track: inference
+  goal_levels: [5, 6]
+walker:
+  per_run_cap: 700
+  warmup_interactions: 1500
+  shared_world_offset_by_seed: true
+arms:
+  - {id: sample, strategy: sample}
+  - {id: optimistic, strategy: optimistic}
+  - {id: maximal, strategy: maximal}
+  - {id: reference, strategy: reference}

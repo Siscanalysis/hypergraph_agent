@@ -114,6 +114,43 @@ revised after an assessment of development variability.
 `configs/study.yaml`, `configs/ablations/*` and the transfer configs are
 runnable but not launched. The continual-adaptation track is not implemented.
 
+## Addendum W: hypergraph-walker study (2026-10-07)
+
+A second, separately budgeted study: agents that move on a graph whose nodes
+are complete dependency hypergraphs and whose edges are single-incidence edits
+(docs/METHODS.md, Section 11). Ledger `runs/walker-ledger.json`: 40,000
+interactions in total (32,000 adaptive, 8,000 reporting), of which 4,377
+adaptive were spent on plumbing checks before this addendum was written and
+are recorded as `pre_plan_development`.
+
+### W-A: Stage A (frozen before any Stage A run)
+
+Question: does choosing a node of the hypergraph graph from public evidence and
+planning on it solve the pilot tasks with fewer interactions than the
+brute-force node, and how does that compare with the pilot policies?
+
+| Part | Tasks | Arms | Seeds |
+|---|---|---|---|
+| P2 tasks | the P2 pilot's evaluation set (5 unseen worlds x 6 episodes, beliefs from the prior per world) at budget factor 1.0 (as in the pilot) and 0.6 | `sample`, `optimistic`, `local_focused`; bounds `maximal`, `reference` (privileged) | walkers 0, 1, 2; bounds 0 |
+| P3 worlds | the P3 pilot's shared world per seed block (failure probability 0.1), 1,500 interactions on training tasks (levels 1-3), then the pilot's 20 test tasks (levels 5-6) | `sample`, `optimistic`, `maximal`, `reference` | 0, 1 |
+| P1 tasks | the P1 pilot's evaluation set (known structure) | planner on the supplied structure | 0 |
+
+Endpoints: success rate; cost ratio = total primitive steps / total optimal
+steps over all episodes of a run; the cost ratio by episode index within a
+world. Primary contrast: `optimistic` versus `maximal` on the cost ratio of
+the P2 tasks at budget factor 1.0. Secondary: `sample` versus `optimistic`;
+`local_focused` (a local walk on the meta-graph) versus `optimistic` (exact
+factorized inference), which asks whether the walk recovers what exact
+inference finds when the space factorizes. Walkers are planners on a
+hypothesized structure, not learned policies, so the comparison with the pilot
+policies is across agent classes and is reported descriptively. Tasks are
+fixed and shared by all arms; worlds are the only independent units (5 for P2,
+2 for P3), so no interval is interpreted.
+
+Failure criteria: if `optimistic` does not reach a lower cost ratio than
+`maximal` at budget factor 1.0, the claim "walking the hypergraph graph saves
+interactions on these tasks" fails for Stage A.
+
 ## Amendments
 
 - 2026-10-07, A2 (post hoc, after the shallow diagnostic and P1 were

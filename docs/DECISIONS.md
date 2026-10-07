@@ -114,6 +114,38 @@ during development (overfit diagnostic); fixed before the plan was frozen.
 **D18. Evaluation by sampling.** Every arm is evaluated with its stochastic
 policy, so no arm benefits from a greedy decoding that another lacks.
 
+## Hypergraph walkers
+
+**W1. The graph of hypergraphs is implicit.** A node is one complete
+hypothesis (a base requirement for every recipe with a hidden one); edges are
+single-incidence edits inside the 41-hypothesis class (add, remove, swap).
+Neighbours are generated on demand; nothing is materialized.
+
+**W2. The public budget admits a brute-force plan.** The task budget is the
+constructive upper bound "gather every base fact, craft every item, submit",
+so in deterministic profiles the full-pool node (`maximal`) always succeeds
+(a test checks this). Success alone therefore cannot distinguish walkers; the
+walker study reports the cost ratio to the optimum and adds a tighter public
+budget (factor 0.6) as a variant. The pilot policies' near-zero success means
+they did not learn even the brute-force plan.
+
+**W3. Optimism.** Episodic walks start from single-candidate requirements and
+`exact` returns the cheapest consistent node; `optimistic` picks the cheapest
+node still supported by the factorized posterior. Under deterministic
+elimination a wrong optimistic node is refuted by its own failed attempt.
+
+**W4. Episodic evidence.** Walkers that use episode logs replay a hypothesis
+over each logged episode and count mismatches with every observed fact (the
+goal always; a craft's effect only when items are observable). This is valid
+when intermediate items are hidden, where per-recipe updates are not. It
+assumes deterministic dynamics and items absent at reset, both declared.
+
+**W5. Goal-only observation profile.** `observe_items: goal_only` hides
+intermediate items and the outcome of crafting them (observation, `last_changed`
+and `info`), so the posterior over hypotheses no longer factorizes by recipe.
+The factorized updater refuses this profile rather than reading masked items
+as absent.
+
 ## Not implemented (raise or are absent by design)
 
 Within-episode hard routing; relation-local recurrent memory; the continual

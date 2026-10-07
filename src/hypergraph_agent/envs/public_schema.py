@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from .generator import PROFILE_KNOWN, Task
-from .vocabulary import KIND_FACILITY, KIND_RESOURCE, kind_of
+from .vocabulary import KIND_FACILITY, KIND_RESOURCE, is_base, kind_of
 
 GATHER = 0
 ACTIVATE = 1
@@ -59,6 +59,7 @@ class PublicTaskSpec:
     goal: int  # fact index
     budget: int
     failure_prob: float  # declared noise of the known-noise profile
+    items_observable: bool = True  # False: only base facts and the goal are observed
 
     def fact_by_type(self) -> dict[int, int]:
         return {f.type_id: i for i, f in enumerate(self.facts)}
@@ -124,9 +125,14 @@ def public_view(task: Task) -> PublicTaskSpec:
         goal=index[task.goal],
         budget=task.budget,
         failure_prob=task.failure_prob,
+        items_observable=task.observe_items == "all",
     )
 
 
+def observable(task: Task, type_id: int) -> bool:
+    return task.observe_items == "all" or is_base(type_id) or type_id == task.goal
+
+
 def initial_observation(task: Task) -> PublicObservation:
-    present = tuple(ft in task.initial_true for ft in task.fact_types)
+    present = tuple(ft in task.initial_true and observable(task, ft) for ft in task.fact_types)
     return PublicObservation(present, task.budget, 0, None, None)

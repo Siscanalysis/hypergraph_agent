@@ -19,8 +19,10 @@ from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass
-from itertools import product
 
+from .derivations import (
+    Derivation, StructRecipe, crafting_order, enumerate_derivations, lower_bound_crafts, plan_cost,
+)
 from .generator import Task
 from .public_schema import build_actions
 from .vocabulary import is_base
@@ -37,91 +39,39 @@ class ReferenceResult:
     work: int
 
 
-Derivation = tuple[frozenset, frozenset]  # ({(item, rule_idx)}, {base types})
+def true_structure(task: Task) -> list[StructRecipe]:
+    return [StructRecipe(r.effect, r.item_inputs, r.true_base) for r in task.rules]
 
 
-def _derive(task: Task, item: int, cap: int, memo: dict, stats: dict) -> list[Derivation]:
-    if item in memo:
-        return memo[item]
-    if item in task.initial_true:
-        memo[item] = [(frozenset(), frozenset())]
-        return memo[item]
-    out: dict[tuple, Derivation] = {}
-    for ridx, recipe in enumerate(task.rules):
-        if recipe.effect != item:
-            continue
-        own_bases = frozenset(b for b in recipe.true_base if b not in task.initial_true)
-        child_sets = [_derive(task, x, cap, memo, stats) for x in recipe.item_inputs]
-        for combo in product(*child_sets):
-            choice: dict[int, int] = {item: ridx}
-            bases = set(own_bases)
-            consistent = True
-            for pairs, cb in combo:
-                for it, r in pairs:
-                    if choice.setdefault(it, r) != r:
-                        consistent = False
-                        break
-                if not consistent:
-                    break
-                bases |= cb
-            stats["work"] += 1
-            if not consistent:
-                continue
-            d = (frozenset(choice.items()), frozenset(bases))
-            out[(d[0], d[1])] = d
-    ranked = sorted(out.values(), key=lambda d: (len(d[0]) + len(d[1]), sorted(d[0]), sorted(d[1])))
-    if len(ranked) > cap:
-        stats["truncated"] = True
-        ranked = ranked[:cap]
-    memo[item] = ranked
-    return ranked
-
-
-def _lower_crafts(task: Task, item: int, memo: dict) -> int:
-    if item in memo:
-        return memo[item]
-    if item in task.initial_true:
-        memo[item] = 0
-        return 0
-    best = None
-    for recipe in task.rules:
-        if recipe.effect == item:
-            inner = max((_lower_crafts(task, x, memo) for x in recipe.item_inputs), default=0)
-            best = inner if best is None else min(best, inner)
-    memo[item] = (best + 1) if best is not None else 10 ** 6
-    return memo[item]
-
-
-def _plan_from(task: Task, derivation: Derivation) -> tuple[str, ...]:
+def _plan_from(task: Task, recipes, derivation: Derivation) -> tuple[str, ...]:
     actions = build_actions(task)
     by_fact = {a.fact: a.key for a in actions if a.fact is not None}
     by_rule = {a.rule: a.key for a in actions if a.rule is not None}
     pairs, bases = derivation
     plan = [by_fact[task.fact_index(b)] for b in sorted(bases, key=task.fact_index)]
-    level = task.world.level_of
-    for it, ridx in sorted(pairs, key=lambda p: (level(p[0]), task.fact_index(p[0]))):
-        plan.append(by_rule[ridx])
+    plan += [by_rule[ridx] for _, ridx in crafting_order(pairs, recipes)]
     plan.append("submit")
     return tuple(plan)
 
 
 def reference_solve(task: Task, max_derivations: int = 4096) -> ReferenceResult:
-    stats = {"work": 0, "truncated": False}
-    derivations = _derive(task, task.goal, max_derivations, {}, stats)
-    lower = 1 + _lower_crafts(task, task.goal, {})
+    recipes = true_structure(task)
+    held = frozenset(task.initial_true)
+    derivations, truncated, work = enumerate_derivations(recipes, held, task.goal, max_derivations)
+    lower = 1 + lower_bound_crafts(recipes, held, task.goal)
     if not derivations:
-        return ReferenceResult("unsolvable", True, None, lower, None, (), stats["work"])
+        return ReferenceResult("unsolvable", True, None, lower, None, (), work)
     best = derivations[0]
-    length = len(best[0]) + len(best[1]) + 1
-    exact = not stats["truncated"]
+    length = plan_cost(best)
+    exact = not truncated
     return ReferenceResult(
         status="optimal" if exact else "upper_bound",
         exact=exact,
         length=length,
         lower_bound=length if exact else min(lower, length),
         upper_bound=length,
-        plan=_plan_from(task, best),
-        work=stats["work"],
+        plan=_plan_from(task, recipes, best),
+        work=work,
     )
 
 

@@ -1,0 +1,21 @@
+# Walker study, Stage A, P1 tasks (known structure): planning on the supplied
+# hypergraph, a sanity bound showing what P1 asks of a learner.
+run:
+  name: walk-a-p1
+  phase: walker_a
+  allocation: walker_a
+  seeds: [0]
+  ledger: runs/walker-ledger.json
+budget:
+  ledger_allocations: {pre_plan_development: 4377, walker_a: 17000, walker_b: 10600}
+  ledger_adaptive_cap: 32000
+  ledger_reporting_cap: 8000
+train:
+  tasks: {profile: known_structure, depth_min: 1, depth_max: 4, n_distractor_base: 0}
+eval:
+  namespace: val
+  n_tasks: 30
+walker:
+  per_run_cap: 400
+arms:
+  - {id: planner, strategy: maximal}

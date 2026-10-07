@@ -192,6 +192,8 @@ def evidence_from_transition(spec, rule_index: int, present_before, present_afte
     rule = spec.rules[rule_index]
     if rule.known_base is not None:
         return None  # nothing hidden to infer
+    if not spec.items_observable:
+        return None  # item states are hidden: single attempts are not identifiable (walker evidence instead)
     if present_before[rule.effect]:
         return None  # repeated acquisition cannot identify eligibility
     types = frozenset(spec.facts[i].type_id for i, p in enumerate(present_before) if p)
