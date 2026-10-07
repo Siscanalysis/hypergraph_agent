@@ -6,12 +6,12 @@
   "walker_a": 17000,
   "walker_b": 10600
  },
- "adaptive_total": 22948,
+ "adaptive_total": 26147,
  "reporting_total": 3196,
  "by_allocation": {
   "pre_plan_development": 4377,
   "walker_a": 13416,
-  "walker_b": 5155
+  "walker_b": 8354
  },
  "runs": {
   "walker-pre-plan-development": {
@@ -557,6 +557,84 @@
     "strategy": "reference",
     "variant": "default"
    }
+  },
+  "walk-c-local_focused-default-s0-20261007-160511": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 525,
+   "by_purpose": {
+    "exploration": 525
+   },
+   "started": 1791381911.539641,
+   "meta": {
+    "strategy": "local_focused",
+    "variant": "default"
+   }
+  },
+  "walk-c-focused_sample-default-s0-20261007-160511": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 519,
+   "by_purpose": {
+    "exploration": 519
+   },
+   "started": 1791381912.4270804,
+   "meta": {
+    "strategy": "focused_sample",
+    "variant": "default"
+   }
+  },
+  "walk-c-learned_sample-default-s0-20261007-160511": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 488,
+   "by_purpose": {
+    "exploration": 488
+   },
+   "started": 1791381927.4801154,
+   "meta": {
+    "strategy": "learned_sample",
+    "variant": "default"
+   }
+  },
+  "walk-c-local_focused-default-s1-20261007-160511": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 560,
+   "by_purpose": {
+    "exploration": 560
+   },
+   "started": 1791381928.802002,
+   "meta": {
+    "strategy": "local_focused",
+    "variant": "default"
+   }
+  },
+  "walk-c-focused_sample-default-s1-20261007-160511": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 530,
+   "by_purpose": {
+    "exploration": 530
+   },
+   "started": 1791381929.3675458,
+   "meta": {
+    "strategy": "focused_sample",
+    "variant": "default"
+   }
+  },
+  "walk-c-learned_sample-default-s1-20261007-160511": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 577,
+   "by_purpose": {
+    "exploration": 577
+   },
+   "started": 1791381940.526318,
+   "meta": {
+    "strategy": "learned_sample",
+    "variant": "default"
+   }
   }
  },
  "logical_charges": [
@@ -568,6 +646,18 @@
   },
   {
    "run_id": "walk-b-learned-default-s1-20261007-141613",
+   "source_run": "walk-b-collector-s1-20261007-141613",
+   "n": 867,
+   "note": "evidence collected to train the edit policy"
+  },
+  {
+   "run_id": "walk-c-learned_sample-default-s0-20261007-160511",
+   "source_run": "walk-b-collector-s0-20261007-141613",
+   "n": 852,
+   "note": "evidence collected to train the edit policy"
+  },
+  {
+   "run_id": "walk-c-learned_sample-default-s1-20261007-160511",
    "source_run": "walk-b-collector-s1-20261007-141613",
    "n": 867,
    "note": "evidence collected to train the edit policy"

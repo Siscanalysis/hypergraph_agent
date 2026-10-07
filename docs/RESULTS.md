@@ -20,7 +20,7 @@ relation-local memory, goal-conditioned primitive-policy control,
 library-transplant diagnostic, credible-set-mask-as-feature control, learned
 proposals or termination (docs/DECISIONS.md, docs/ROADMAP.md).
 
-Test suite: 144 deterministic tests pass (`python -m pytest -q`), covering the
+Test suite: 148 deterministic tests pass (`python -m pytest -q`), covering the
 items listed in docs/METHODS.md (environment semantics, information boundary,
 equivariance and padding, incidence and hypergraph equivalence, topology
 updates and rollback, executor semantics, library lifecycle, duration-aware
@@ -168,9 +168,9 @@ Observations, not claims:
 
 ## 4.4 Hypergraph-walker study (addendum W of the plan)
 
-Separate ledger `runs/walker-ledger.json`: 22,948 of 32,000 adaptive
+Separate ledger `runs/walker-ledger.json`: 26,147 of 32,000 adaptive
 interactions (4,377 plumbing before the addendum, 13,416 Stage A, 5,155 Stage
-B) and 3,196 of 8,000 reporting. Evidence in `artifacts/walker/`; the figure
+B, 3,199 Stage C) and 3,196 of 8,000 reporting. Evidence in `artifacts/walker/`; the figure
 `walker_cost_by_episode.png` plots cost relative to the optimum by episode
 index within each world. Walkers are planners on hypothesized structures, not
 learned policies; the worlds are the only independent units (5 for P2 tasks,
@@ -257,6 +257,36 @@ arm, 35 problems x 5 paired start nodes per seed, at most 400 evaluations):
   policy is rewarded for reaching any consistent node quickly, not for reaching
   one that is cheap or informative to act on.
 
+**Stage C, sampling among consistent hypotheses** (same 40 goal-only tasks
+and seeds; 3,199 interactions; the learned arm reuses Stage B's edit policy
+per seed, its original 852 and 867 collection interactions charged logically):
+
+| Arm | Success (s0 / s1) | Steps / optimal (s0 / s1) | Cheaper than `maximal` in worlds |
+|---|---|---|---|
+| `maximal` (Stage B) | 1.00 | 1.82 | - |
+| `local_focused` (Stage B, reproduced exactly in Stage C) | 0.78 / 0.72 | 1.90 / 2.03 | 2 of 5 |
+| `focused_sample` | 0.95 / 0.82 | 1.88 / 1.92 | 2 of 5 |
+| `learned` (Stage B) | 0.60 / 0.68 | 2.24 / 2.14 | 1 of 5 |
+| `learned_sample` | 0.90 / 0.78 | 1.77 / 2.09 | 2 of 5 |
+
+- **Primary contrast failed.** `learned_sample` is cheaper than the brute-force
+  node in seed 0 (1.77) but not in seed 1 (2.09). No graph walk beats
+  brute force in both seeds when only goal outcomes are observed.
+- Sampling among consistent nodes raised success for both walks (focused
+  +0.17 and +0.10, learned +0.30 and +0.10) and lowered the learned walk's cost,
+  consistent with Stage A, where sampling beat the cheapest-guess rule.
+- The walks are still improving at the end of a world: in the eighth episode
+  `learned_sample` costs 1.50 and `maximal` 1.80 (pooled). Eight episodes do not
+  amortize the early exploration; longer streams per world were not tested.
+- The offline search advantage of the learned walk did not replicate on this
+  evidence: 24.8 versus 26.1 mean evaluations for the focused walk in seed 0,
+  and 22.4 versus 13.6 in seed 1.
+- Sampling costs about ten times more hypothesis evaluations per run (about
+  5,900 against 370-540): computation, not environment interactions.
+
+Walker ledger after Stage C: 26,147 of 32,000 adaptive and 3,196 of 8,000
+reporting interactions.
+
 ## 5. What the session shows and does not show
 
 Shows: the mechanisms run end to end under one interaction ledger; public
@@ -276,8 +306,10 @@ the pilot policies could not, including the P3 pilot's longer test tasks after
 1,500 interactions; posterior sampling over nodes beats the brute-force node on
 cost when items are observable; the optimistic rule does not (the frozen
 primary contrast failed) and breaks under noise. When intermediate items are
-hidden, a learned walk finds consistent nodes with fewer evaluations on average
-than a focused heuristic, but no walker beats the brute-force node at acting.
+hidden, a learned walk found consistent nodes with fewer evaluations on average
+than a focused heuristic in Stage B (not replicated on Stage C's evidence), and
+no walker beats the brute-force node at acting in both seeds, even after
+sampling among consistent nodes (Stage C), which did raise success.
 
 ## 6. Known issues in the recorded runs
 

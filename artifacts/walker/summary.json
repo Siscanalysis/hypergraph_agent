@@ -854,11 +854,138 @@
    "eval_success": 0.75,
    "other_eval": {},
    "library": null
+  },
+  {
+   "run_id": "walk-c-focused_sample-default-s0-20261007-160511",
+   "phase": "walker_c",
+   "arm": "focused_sample",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 519,
+    "warmup": 0,
+    "evaluation": 519,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.95,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-c-focused_sample-default-s1-20261007-160511",
+   "phase": "walker_c",
+   "arm": "focused_sample",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 530,
+    "warmup": 0,
+    "evaluation": 530,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.825,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-c-learned_sample-default-s0-20261007-160511",
+   "phase": "walker_c",
+   "arm": "learned_sample",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 488,
+    "warmup": 0,
+    "evaluation": 488,
+    "kind": "adaptive",
+    "logical_policy_evidence": 852
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.9,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-c-learned_sample-default-s1-20261007-160511",
+   "phase": "walker_c",
+   "arm": "learned_sample",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 577,
+    "warmup": 0,
+    "evaluation": 577,
+    "kind": "adaptive",
+    "logical_policy_evidence": 867
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.775,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-c-local_focused-default-s0-20261007-160511",
+   "phase": "walker_c",
+   "arm": "local_focused",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 525,
+    "warmup": 0,
+    "evaluation": 525,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.775,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-c-local_focused-default-s1-20261007-160511",
+   "phase": "walker_c",
+   "arm": "local_focused",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 560,
+    "warmup": 0,
+    "evaluation": 560,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.725,
+   "other_eval": {},
+   "library": null
   }
  ],
  "contrasts": {
   "walker_a": {},
-  "walker_b": {}
+  "walker_b": {},
+  "walker_c": {}
  },
  "figures": [
   "success_vs_cost.png",
