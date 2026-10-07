@@ -24,6 +24,21 @@ control and a cost estimate before it is built.
 5. **Variance assessment before the full study.** Use development variability
    to size the seed count of `configs/study.yaml` instead of assuming ten.
 
+## Hypergraph walkers
+
+6a. **Train the walk for acting, not only for consistency.** The learned edit
+    policy reached consistent nodes faster but acted worse; reward the walk for
+    the cost (or expected information) of the plan its node implies.
+6b. **Optimism with a support threshold.** Under noise no hypothesis is
+    eliminated, so the cheapest supported node never changes; require posterior
+    support above a threshold before treating a node as plausible.
+6c. **Longer streams per world and an exact goal-only reference.** Eight
+    episodes did not amortize exploration when only goals are observed; a
+    constraint solver over connected groups of recipes would give an exact
+    reference where enumeration is infeasible.
+6d. **Start walks from the brute-force node** and remove requirements as evidence
+    allows, instead of starting from single-candidate guesses.
+
 ## Later extensions
 
 6. **Learned proposals and termination.** Replace fragment mining and

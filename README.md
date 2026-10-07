@@ -15,7 +15,7 @@ establishes a performance or novelty claim. The first development session
 ([docs/RESULTS.md](docs/RESULTS.md)) ran all three phases under one
 160,000-interaction ledger:
 
-- the mechanisms run end to end, and 125 deterministic tests pass;
+- the mechanisms run end to end, and 144 deterministic tests pass;
 - public evidence produced logged, evidence-linked revisions of the
   prerequisite structure (P2);
 - skills mined from the agent's own trajectories were trained, passed held-out
@@ -25,6 +25,15 @@ establishes a performance or novelty claim. The first development session
   baseline; a post-hoc repeat with the gated encoder learned;
 - no pilot arm transferred to longer compositions, and two seeds per contrast
   support no comparative conclusion.
+
+A follow-up study treats the hypotheses themselves as a graph: each node is a
+complete dependency hypergraph, each edge a single-incidence edit, and
+"hypergraph walkers" move on it from public evidence and plan on the node they
+choose (`python -m hypergraph_agent.walk`). Posterior sampling over nodes
+solved the tasks the learned policies could not, at fewer steps than a
+brute-force plan; when intermediate items are hidden, a learned walk found
+consistent hypotheses with fewer evaluations than a focused heuristic but did
+not act more cheaply ([docs/RESULTS.md](docs/RESULTS.md), Section 4.4).
 
 ## The game
 
@@ -76,6 +85,8 @@ python -m hypergraph_agent.train --config configs/phase3_pilot.yaml
 python -m hypergraph_agent.train --config configs/study.yaml --dry-run
 python -m hypergraph_agent.evaluate --checkpoint runs/<run> --config configs/transfer_frozen.yaml
 python -m hypergraph_agent.summarize --runs runs --out artifacts
+python -m hypergraph_agent.walk --config configs/walker_stage_a.yaml
+python -m hypergraph_agent.walk --config configs/walker_stage_b.yaml
 python -m hypergraph_agent.ledger show
 ```
 

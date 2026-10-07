@@ -28,7 +28,8 @@ EVIDENCE_EVENTS = {"structural_incidence_edit", "topology_commit", "topology_rol
                    "freeze_dependency_revision", "skill_proposed", "skill_reproposed",
                    "skill_deferred", "skill_rejected", "skill_admitted", "skill_retired",
                    "skill_validation", "skill_practice_batch", "discovery_round",
-                   "discovery_summary", "context_weight", "batch"}
+                   "discovery_summary", "context_weight", "batch", "search_benchmark",
+                   "edit_policy_training"}
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -193,6 +194,44 @@ def figures(runs: list[dict], out_dir: Path) -> list[str]:
     fig.savefig(out_dir / "mechanism_diagnostics.png", dpi=120)
     plt.close(fig)
     made.append("mechanism_diagnostics.png")
+
+    # 4: walkers: cost relative to the optimum by episode index within a world
+    colors = {"reference": "tab:purple", "maximal": "tab:red", "sample": "tab:blue",
+              "optimistic": "tab:green", "local_uniform": "tab:gray", "local_focused": "tab:orange",
+              "learned": "tab:brown", "exact": "tab:pink"}
+    groups = defaultdict(dict)  # panel -> strategy -> ep -> sums
+    for r in done:
+        if not str(r["phase"]).startswith("walker"):
+            continue
+        cfg_path = Path(r["_dir"]) / "config.json"
+        study = json.loads(cfg_path.read_text())["run"]["name"] if cfg_path.exists() else r["phase"]
+        study = study.replace("-bounds", "")
+        for row in eval_rows(r).get("eval", []):
+            variant = row.get("variant", "")
+            panel = f"{study}: training worlds" if variant == "collection" else f"{study} {variant}".strip()
+            g = groups[panel].setdefault(row["strategy"], {})
+            s = g.setdefault(row["world_episode"], [0, 0, 0])
+            s[0] += row["primitive_length"]
+            s[1] += row["reference_length"] or 0
+            s[2] += 1
+    # panels need several episodes per world (fresh-world-per-task studies have one)
+    groups = {p: g for p, g in groups.items() if any(len(eps) > 1 for eps in g.values())}
+    if groups:
+        panels = sorted(groups)
+        fig, axes = plt.subplots(1, len(panels), figsize=(4.2 * len(panels), 3.6), squeeze=False)
+        for ax, panel in zip(axes[0], panels):
+            for strat, eps in sorted(groups[panel].items()):
+                xs = sorted(eps)
+                ax.plot(xs, [eps[x][0] / max(eps[x][1], 1) for x in xs], marker="o", markersize=3,
+                        color=colors.get(strat), label=f"{strat} (episodes={sum(eps[x][2] for x in xs)})")
+            ax.set_title(panel, fontsize=8)
+            ax.set_xlabel("episode index within an unseen world")
+            ax.set_ylabel("primitive steps / optimal steps")
+            ax.legend(fontsize=6)
+        fig.tight_layout()
+        fig.savefig(out_dir / "walker_cost_by_episode.png", dpi=120)
+        plt.close(fig)
+        made.append("walker_cost_by_episode.png")
     return made
 
 

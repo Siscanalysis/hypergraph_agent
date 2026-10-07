@@ -129,3 +129,37 @@ Note on (e): the absence of language models is not itself new (R4, R9 and R14 us
 - (c) The fixed-supergraph arm receives the same posterior marginals and rule-level belief features as the adaptive arm, but not the credible-set mask as an explicit input feature. That stronger control is not implemented yet (docs/ROADMAP.md), so a positive adaptive-versus-fixed contrast could still be the representational convenience described in the table.
 - (d) The interaction contrast is estimated by the summarizer when all four arms exist. The fixed-library control with extra training budget, the oracle-library control and the library-transplant diagnostic are not implemented.
 - (e) No variant without declared pools exists yet; the information audit is in docs/METHODS.md (Section 2).
+
+## 7. Related work for the hypergraph-walker study (checked 2026-10-07)
+
+| Id | Authors (as verified) | Title | Year, venue (as verified) | URL | Depth |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| W1 | D. Madigan, J. York, D. Allard (Crossref record; commonly cited as Madigan and York) | Bayesian Graphical Models for Discrete Data | 1995, International Statistical Review 63(2), from p. 215 (end page unverified) | https://doi.org/10.2307/1403615 | `metadata` |
+| W2 | T. Deleu, A. Góis, C. Emezue, M. Rankawat, S. Lacoste-Julien, S. Bauer, Y. Bengio | Bayesian Structure Learning with Generative Flow Networks | 2022, UAI, PMLR 180:518-528 | https://proceedings.mlr.press/v180/deleu22a.html | `abstract` |
+| W3 | T. M. Mitchell | Generalization as search | 1982, Artificial Intelligence 18(2):203-226 | https://doi.org/10.1016/0004-3702(82)90040-6 | `metadata` |
+| W4 | E. Yolcu, B. Póczos | Learning Local Search Heuristics for Boolean Satisfiability | 2019, NeurIPS 32, pp. 7992-8003 | https://papers.nips.cc/paper/2019/hash/12e59a33dea1bf0630f46edfe13d6ea2-Abstract.html | `methods` |
+| W5 | I. Osband, D. Russo, B. Van Roy | (More) Efficient Reinforcement Learning via Posterior Sampling | 2013, NIPS 26, pp. 3003-3011 | https://proceedings.neurips.cc/paper/2013/hash/6a5889bb0190d0211a991f47bb19a777-Abstract.html | `abstract` |
+| W6 | X. Chen, Y. Tian | Learning to Perform Local Rewriting for Combinatorial Optimization | arXiv 1810.00337 (Comments: NeurIPS 2019; proceedings unverified) | https://arxiv.org/abs/1810.00337 | `abstract` |
+| W7 | T. Wang, Y. Wu, D. Moore, S. Russell | Meta-Learning MCMC Proposals | 2018, NeurIPS 31 (pages unverified) | https://proceedings.neurips.cc/paper/2018/hash/584b98aac2dddf59ee2cf19ca4ccb75e-Abstract.html | `abstract` |
+
+Overlaps. The walk itself is structure search over graphs (W1, by its common
+description; the move set was not verified at metadata depth), and a version
+space (W3) is the noise-free set of consistent nodes. W2 also places a
+distribution over discrete structures and builds them by learned sequential
+decisions, but samples a posterior over DAGs edge by edge rather than editing a
+complete precondition hypothesis towards consistency. The `sample` walker is
+posterior sampling in the sense of W5, whose regret guarantee is for tabular
+MDPs and does not transfer automatically. The closest match to the learned
+walk is W4: a policy trained with REINFORCE picks which variable to flip in
+WalkSAT-style local search and, half of the time, falls back to a random
+variable of an unsatisfied clause, which parallels the focused proposals; it
+searches assignments of a known formula, whereas the walkers search hypotheses
+about hidden preconditions inferred from logged evidence. W6 and W7 learn local
+edits and MCMC proposals in other domains. A3 (OHCAM, Section 2) keeps a belief
+over action models and expands its hypotheses on inconsistency, gathering
+data online by disagreement; its abstract mentions no graph walk or learned
+proposal. Not checked: arXiv 2006.15762 ("Empirically Verifying Hypotheses
+Using Reinforcement Learning"). Status of the walker contribution: a learned
+proposal for hypothesis search over precondition hypergraphs is at most a
+`potential empirical contribution` relative to W4, and the pilot evidence for
+it is narrow (docs/RESULTS.md, Section 4.4).

@@ -1,0 +1,869 @@
+{
+ "runs": [
+  {
+   "run_id": "walk-a-p1-planner-default-s0-20261007-141423",
+   "phase": "walker_a",
+   "arm": "planner",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 251,
+    "warmup": 0,
+    "evaluation": 251,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 1.0,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-bounds-maximal-budget0.6-s0-20261007-141418",
+   "phase": "walker_a",
+   "arm": "maximal",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 347,
+    "warmup": 0,
+    "evaluation": 347,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.6,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-bounds-maximal-budget1.0-s0-20261007-141418",
+   "phase": "walker_a",
+   "arm": "maximal",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 376,
+    "warmup": 0,
+    "evaluation": 376,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 1.0,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-bounds-reference-budget0.6-s0-20261007-141418",
+   "phase": "walker_a",
+   "arm": "reference",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 208,
+    "warmup": 0,
+    "evaluation": 208,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 1.0,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-bounds-reference-budget1.0-s0-20261007-141418",
+   "phase": "walker_a",
+   "arm": "reference",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 208,
+    "warmup": 0,
+    "evaluation": 208,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 1.0,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-local_focused-budget0.6-s0-20261007-141408",
+   "phase": "walker_a",
+   "arm": "local_focused",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 317,
+    "warmup": 0,
+    "evaluation": 317,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.6,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-local_focused-budget0.6-s1-20261007-141408",
+   "phase": "walker_a",
+   "arm": "local_focused",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 328,
+    "warmup": 0,
+    "evaluation": 328,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.5333333333333333,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-local_focused-budget0.6-s2-20261007-141408",
+   "phase": "walker_a",
+   "arm": "local_focused",
+   "seed": 2,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 324,
+    "warmup": 0,
+    "evaluation": 324,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.5666666666666667,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-local_focused-budget1.0-s0-20261007-141408",
+   "phase": "walker_a",
+   "arm": "local_focused",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 378,
+    "warmup": 0,
+    "evaluation": 378,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.9666666666666667,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-local_focused-budget1.0-s1-20261007-141408",
+   "phase": "walker_a",
+   "arm": "local_focused",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 361,
+    "warmup": 0,
+    "evaluation": 361,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 1.0,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-local_focused-budget1.0-s2-20261007-141408",
+   "phase": "walker_a",
+   "arm": "local_focused",
+   "seed": 2,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 373,
+    "warmup": 0,
+    "evaluation": 373,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.8666666666666667,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-optimistic-budget0.6-s0-20261007-141408",
+   "phase": "walker_a",
+   "arm": "optimistic",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 341,
+    "warmup": 0,
+    "evaluation": 341,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.5333333333333333,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-optimistic-budget0.6-s1-20261007-141408",
+   "phase": "walker_a",
+   "arm": "optimistic",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 341,
+    "warmup": 0,
+    "evaluation": 341,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.5333333333333333,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-optimistic-budget0.6-s2-20261007-141408",
+   "phase": "walker_a",
+   "arm": "optimistic",
+   "seed": 2,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 341,
+    "warmup": 0,
+    "evaluation": 341,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.5333333333333333,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-optimistic-budget1.0-s0-20261007-141408",
+   "phase": "walker_a",
+   "arm": "optimistic",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 378,
+    "warmup": 0,
+    "evaluation": 378,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.8333333333333334,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-optimistic-budget1.0-s1-20261007-141408",
+   "phase": "walker_a",
+   "arm": "optimistic",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 378,
+    "warmup": 0,
+    "evaluation": 378,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.8333333333333334,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-optimistic-budget1.0-s2-20261007-141408",
+   "phase": "walker_a",
+   "arm": "optimistic",
+   "seed": 2,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 378,
+    "warmup": 0,
+    "evaluation": 378,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.8333333333333334,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-sample-budget0.6-s0-20261007-141408",
+   "phase": "walker_a",
+   "arm": "sample",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 328,
+    "warmup": 0,
+    "evaluation": 328,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.7,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-sample-budget0.6-s1-20261007-141408",
+   "phase": "walker_a",
+   "arm": "sample",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 316,
+    "warmup": 0,
+    "evaluation": 316,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.6,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-sample-budget0.6-s2-20261007-141408",
+   "phase": "walker_a",
+   "arm": "sample",
+   "seed": 2,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 318,
+    "warmup": 0,
+    "evaluation": 318,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.7,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-sample-budget1.0-s0-20261007-141408",
+   "phase": "walker_a",
+   "arm": "sample",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 343,
+    "warmup": 0,
+    "evaluation": 343,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 1.0,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-sample-budget1.0-s1-20261007-141408",
+   "phase": "walker_a",
+   "arm": "sample",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 340,
+    "warmup": 0,
+    "evaluation": 340,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 0.9666666666666667,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p2-sample-budget1.0-s2-20261007-141408",
+   "phase": "walker_a",
+   "arm": "sample",
+   "seed": 2,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 345,
+    "warmup": 0,
+    "evaluation": 345,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 30,
+   "eval_success": 1.0,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p3-maximal-default-s0-20261007-141442",
+   "phase": "walker_a",
+   "arm": "maximal",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 251,
+    "warmup": 0,
+    "evaluation": 251,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 20,
+   "eval_success": 0.95,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p3-maximal-default-s1-20261007-141442",
+   "phase": "walker_a",
+   "arm": "maximal",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 290,
+    "warmup": 0,
+    "evaluation": 290,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 20,
+   "eval_success": 0.9,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p3-optimistic-default-s0-20261007-141442",
+   "phase": "walker_a",
+   "arm": "optimistic",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 1884,
+    "warmup": 1500,
+    "evaluation": 384,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 20,
+   "eval_success": 0.1,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p3-optimistic-default-s1-20261007-141442",
+   "phase": "walker_a",
+   "arm": "optimistic",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 1826,
+    "warmup": 1500,
+    "evaluation": 326,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 20,
+   "eval_success": 0.35,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p3-reference-default-s0-20261007-141442",
+   "phase": "walker_a",
+   "arm": "reference",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 241,
+    "warmup": 0,
+    "evaluation": 241,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 20,
+   "eval_success": 0.7,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p3-reference-default-s1-20261007-141442",
+   "phase": "walker_a",
+   "arm": "reference",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 247,
+    "warmup": 0,
+    "evaluation": 247,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 20,
+   "eval_success": 0.75,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p3-sample-default-s0-20261007-141442",
+   "phase": "walker_a",
+   "arm": "sample",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 1736,
+    "warmup": 1500,
+    "evaluation": 236,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 20,
+   "eval_success": 1.0,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-a-p3-sample-default-s1-20261007-141442",
+   "phase": "walker_a",
+   "arm": "sample",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 1742,
+    "warmup": 1500,
+    "evaluation": 242,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 20,
+   "eval_success": 0.95,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-b-bounds-maximal-default-s0-20261007-142032",
+   "phase": "walker_b",
+   "arm": "maximal",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 501,
+    "warmup": 0,
+    "evaluation": 501,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 1.0,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-b-bounds-reference-default-s0-20261007-142032",
+   "phase": "walker_b",
+   "arm": "reference",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 276,
+    "warmup": 0,
+    "evaluation": 276,
+    "kind": "reporting",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 1.0,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-b-collector-s0-20261007-141613",
+   "phase": "walker_b",
+   "arm": "collector",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": null,
+   "interactions": {
+    "physical": 852,
+    "kind": "adaptive"
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 64,
+   "eval_success": 0.75,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-b-collector-s1-20261007-141613",
+   "phase": "walker_b",
+   "arm": "collector",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": null,
+   "interactions": {
+    "physical": 867,
+    "kind": "adaptive"
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 64,
+   "eval_success": 0.734375,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-b-learned-default-s0-20261007-141613",
+   "phase": "walker_b",
+   "arm": "learned",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 619,
+    "warmup": 0,
+    "evaluation": 619,
+    "kind": "adaptive",
+    "logical_policy_evidence": 852
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.6,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-b-learned-default-s1-20261007-141613",
+   "phase": "walker_b",
+   "arm": "learned",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 592,
+    "warmup": 0,
+    "evaluation": 592,
+    "kind": "adaptive",
+    "logical_policy_evidence": 867
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.675,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-b-local_focused-default-s0-20261007-141613",
+   "phase": "walker_b",
+   "arm": "local_focused",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 525,
+    "warmup": 0,
+    "evaluation": 525,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.775,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-b-local_focused-default-s1-20261007-141613",
+   "phase": "walker_b",
+   "arm": "local_focused",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 560,
+    "warmup": 0,
+    "evaluation": 560,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.725,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-b-local_uniform-default-s0-20261007-141613",
+   "phase": "walker_b",
+   "arm": "local_uniform",
+   "seed": 0,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 574,
+    "warmup": 0,
+    "evaluation": 574,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.725,
+   "other_eval": {},
+   "library": null
+  },
+  {
+   "run_id": "walk-b-local_uniform-default-s1-20261007-141613",
+   "phase": "walker_b",
+   "arm": "local_uniform",
+   "seed": 1,
+   "status": "completed",
+   "stop_reason": "tasks_done",
+   "interactions": {
+    "physical": 566,
+    "warmup": 0,
+    "evaluation": 566,
+    "kind": "adaptive",
+    "logical_policy_evidence": 0
+   },
+   "topology_deltas": null,
+   "eval_set": "eval",
+   "eval_n": 40,
+   "eval_success": 0.75,
+   "other_eval": {},
+   "library": null
+  }
+ ],
+ "contrasts": {
+  "walker_a": {},
+  "walker_b": {}
+ },
+ "figures": [
+  "success_vs_cost.png",
+  "success_vs_horizon.png",
+  "mechanism_diagnostics.png",
+  "walker_cost_by_episode.png"
+ ]
+}

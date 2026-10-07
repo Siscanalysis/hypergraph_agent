@@ -77,3 +77,6 @@ termination; two seeds per pilot; tuning only on the gated encoder.
 | 8 | Growth with revision transfers better than growth without revision (P3) | study-scale G1 - G0 on held-out longer compositions | 2-seed pilot, -0.025 (-0.10 to 0.075) | unresolved |
 | 9 | Revision and growth interact | interaction contrast with intervals | 2-seed pilot, 0.0 (-0.10 to 0.125) | unresolved |
 | 10 | Any novelty claim | method-level comparison with MSGI, CODE-SHARP, OHCAM and others | audit at abstract or methods depth | unresolved |
+| 11 | Choosing a node of the hypothesis graph and planning on it saves interactions over the brute-force node | frozen W-A contrast `optimistic` - `maximal` | 1.82 vs 1.81 (failed); posterior sampling 1.63-1.66 vs 1.81, 4 of 5 worlds (secondary) | primary not supported; sampling variant supported descriptively |
+| 12 | A learned walk finds consistent hypotheses with fewer evaluations than a focused heuristic when hypotheses do not factorize | frozen W-B offline benchmark | mean 26.5 / 32.7 vs 37.6 / 39.2, higher median (RESULTS 4.4) | supported narrowly (2 seeds, 5 held-out worlds) |
+| 13 | Faster search over hypotheses yields cheaper acting | online cost of the walkers in Stage B | learned walker is the costliest; no walker beats the brute-force node | not supported |

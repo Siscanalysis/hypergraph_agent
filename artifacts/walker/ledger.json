@@ -1,0 +1,576 @@
+{
+ "adaptive_cap": 32000,
+ "reporting_cap": 8000,
+ "allocations": {
+  "pre_plan_development": 4377,
+  "walker_a": 17000,
+  "walker_b": 10600
+ },
+ "adaptive_total": 22948,
+ "reporting_total": 3196,
+ "by_allocation": {
+  "pre_plan_development": 4377,
+  "walker_a": 13416,
+  "walker_b": 5155
+ },
+ "runs": {
+  "walker-pre-plan-development": {
+   "allocation": "pre_plan_development",
+   "run_cap": 4377,
+   "used": 4377,
+   "by_purpose": {
+    "external": 4377
+   },
+   "started": 1791375245.812143,
+   "meta": {
+    "external": true,
+    "note": "walker plumbing checks before addendum W (scratch ledger)"
+   }
+  },
+  "walk-a-p2-sample-budget1.0-s0-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 343,
+   "by_purpose": {
+    "exploration": 343
+   },
+   "started": 1791375249.0723643,
+   "meta": {
+    "strategy": "sample",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-optimistic-budget1.0-s0-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 378,
+   "by_purpose": {
+    "exploration": 378
+   },
+   "started": 1791375249.383256,
+   "meta": {
+    "strategy": "optimistic",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-local_focused-budget1.0-s0-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 378,
+   "by_purpose": {
+    "exploration": 378
+   },
+   "started": 1791375249.6950436,
+   "meta": {
+    "strategy": "local_focused",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-sample-budget0.6-s0-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 328,
+   "by_purpose": {
+    "exploration": 328
+   },
+   "started": 1791375250.0482676,
+   "meta": {
+    "strategy": "sample",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p2-optimistic-budget0.6-s0-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 341,
+   "by_purpose": {
+    "exploration": 341
+   },
+   "started": 1791375250.3639374,
+   "meta": {
+    "strategy": "optimistic",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p2-local_focused-budget0.6-s0-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 317,
+   "by_purpose": {
+    "exploration": 317
+   },
+   "started": 1791375250.74307,
+   "meta": {
+    "strategy": "local_focused",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p2-sample-budget1.0-s1-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 340,
+   "by_purpose": {
+    "exploration": 340
+   },
+   "started": 1791375251.0459673,
+   "meta": {
+    "strategy": "sample",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-optimistic-budget1.0-s1-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 378,
+   "by_purpose": {
+    "exploration": 378
+   },
+   "started": 1791375251.319002,
+   "meta": {
+    "strategy": "optimistic",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-local_focused-budget1.0-s1-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 361,
+   "by_purpose": {
+    "exploration": 361
+   },
+   "started": 1791375251.6191223,
+   "meta": {
+    "strategy": "local_focused",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-sample-budget0.6-s1-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 316,
+   "by_purpose": {
+    "exploration": 316
+   },
+   "started": 1791375251.9363308,
+   "meta": {
+    "strategy": "sample",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p2-optimistic-budget0.6-s1-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 341,
+   "by_purpose": {
+    "exploration": 341
+   },
+   "started": 1791375252.191274,
+   "meta": {
+    "strategy": "optimistic",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p2-local_focused-budget0.6-s1-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 328,
+   "by_purpose": {
+    "exploration": 328
+   },
+   "started": 1791375252.501017,
+   "meta": {
+    "strategy": "local_focused",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p2-sample-budget1.0-s2-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 345,
+   "by_purpose": {
+    "exploration": 345
+   },
+   "started": 1791375252.8111548,
+   "meta": {
+    "strategy": "sample",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-optimistic-budget1.0-s2-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 378,
+   "by_purpose": {
+    "exploration": 378
+   },
+   "started": 1791375253.2600632,
+   "meta": {
+    "strategy": "optimistic",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-local_focused-budget1.0-s2-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 373,
+   "by_purpose": {
+    "exploration": 373
+   },
+   "started": 1791375253.619966,
+   "meta": {
+    "strategy": "local_focused",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-sample-budget0.6-s2-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 318,
+   "by_purpose": {
+    "exploration": 318
+   },
+   "started": 1791375254.0610416,
+   "meta": {
+    "strategy": "sample",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p2-optimistic-budget0.6-s2-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 341,
+   "by_purpose": {
+    "exploration": 341
+   },
+   "started": 1791375254.4295492,
+   "meta": {
+    "strategy": "optimistic",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p2-local_focused-budget0.6-s2-20261007-141408": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 324,
+   "by_purpose": {
+    "exploration": 324
+   },
+   "started": 1791375254.8852026,
+   "meta": {
+    "strategy": "local_focused",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p2-bounds-maximal-budget1.0-s0-20261007-141418": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 376,
+   "by_purpose": {
+    "reporting_eval": 376
+   },
+   "started": 1791375258.8224728,
+   "meta": {
+    "strategy": "maximal",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-bounds-reference-budget1.0-s0-20261007-141418": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 208,
+   "by_purpose": {
+    "reporting_eval": 208
+   },
+   "started": 1791375259.0931327,
+   "meta": {
+    "strategy": "reference",
+    "variant": "budget1.0"
+   }
+  },
+  "walk-a-p2-bounds-maximal-budget0.6-s0-20261007-141418": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 347,
+   "by_purpose": {
+    "reporting_eval": 347
+   },
+   "started": 1791375259.3509998,
+   "meta": {
+    "strategy": "maximal",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p2-bounds-reference-budget0.6-s0-20261007-141418": {
+   "allocation": "walker_a",
+   "run_cap": 600,
+   "used": 208,
+   "by_purpose": {
+    "reporting_eval": 208
+   },
+   "started": 1791375259.6331804,
+   "meta": {
+    "strategy": "reference",
+    "variant": "budget0.6"
+   }
+  },
+  "walk-a-p1-planner-default-s0-20261007-141423": {
+   "allocation": "walker_a",
+   "run_cap": 400,
+   "used": 251,
+   "by_purpose": {
+    "reporting_eval": 251
+   },
+   "started": 1791375263.4129891,
+   "meta": {
+    "strategy": "maximal",
+    "variant": "default"
+   }
+  },
+  "walk-a-p3-sample-default-s0-20261007-141442": {
+   "allocation": "walker_a",
+   "run_cap": 700,
+   "used": 1736,
+   "by_purpose": {
+    "exploration": 1736
+   },
+   "started": 1791375282.3092685,
+   "meta": {
+    "strategy": "sample",
+    "variant": "default"
+   }
+  },
+  "walk-a-p3-optimistic-default-s0-20261007-141442": {
+   "allocation": "walker_a",
+   "run_cap": 700,
+   "used": 1884,
+   "by_purpose": {
+    "exploration": 1884
+   },
+   "started": 1791375283.1357265,
+   "meta": {
+    "strategy": "optimistic",
+    "variant": "default"
+   }
+  },
+  "walk-a-p3-maximal-default-s0-20261007-141442": {
+   "allocation": "walker_a",
+   "run_cap": 700,
+   "used": 251,
+   "by_purpose": {
+    "reporting_eval": 251
+   },
+   "started": 1791375284.2118669,
+   "meta": {
+    "strategy": "maximal",
+    "variant": "default"
+   }
+  },
+  "walk-a-p3-reference-default-s0-20261007-141442": {
+   "allocation": "walker_a",
+   "run_cap": 700,
+   "used": 241,
+   "by_purpose": {
+    "reporting_eval": 241
+   },
+   "started": 1791375284.4340637,
+   "meta": {
+    "strategy": "reference",
+    "variant": "default"
+   }
+  },
+  "walk-a-p3-sample-default-s1-20261007-141442": {
+   "allocation": "walker_a",
+   "run_cap": 700,
+   "used": 1742,
+   "by_purpose": {
+    "exploration": 1742
+   },
+   "started": 1791375284.643566,
+   "meta": {
+    "strategy": "sample",
+    "variant": "default"
+   }
+  },
+  "walk-a-p3-optimistic-default-s1-20261007-141442": {
+   "allocation": "walker_a",
+   "run_cap": 700,
+   "used": 1826,
+   "by_purpose": {
+    "exploration": 1826
+   },
+   "started": 1791375285.337691,
+   "meta": {
+    "strategy": "optimistic",
+    "variant": "default"
+   }
+  },
+  "walk-a-p3-maximal-default-s1-20261007-141442": {
+   "allocation": "walker_a",
+   "run_cap": 700,
+   "used": 290,
+   "by_purpose": {
+    "reporting_eval": 290
+   },
+   "started": 1791375286.1146507,
+   "meta": {
+    "strategy": "maximal",
+    "variant": "default"
+   }
+  },
+  "walk-a-p3-reference-default-s1-20261007-141442": {
+   "allocation": "walker_a",
+   "run_cap": 700,
+   "used": 247,
+   "by_purpose": {
+    "reporting_eval": 247
+   },
+   "started": 1791375286.4241378,
+   "meta": {
+    "strategy": "reference",
+    "variant": "default"
+   }
+  },
+  "walk-b-collector-s0-20261007-141613": {
+   "allocation": "walker_b",
+   "run_cap": 1500,
+   "used": 852,
+   "by_purpose": {
+    "exploration": 852
+   },
+   "started": 1791375374.0726807,
+   "meta": {
+    "strategy": "local_focused"
+   }
+  },
+  "walk-b-local_uniform-default-s0-20261007-141613": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 574,
+   "by_purpose": {
+    "exploration": 574
+   },
+   "started": 1791375492.8292947,
+   "meta": {
+    "strategy": "local_uniform",
+    "variant": "default"
+   }
+  },
+  "walk-b-local_focused-default-s0-20261007-141613": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 525,
+   "by_purpose": {
+    "exploration": 525
+   },
+   "started": 1791375493.911837,
+   "meta": {
+    "strategy": "local_focused",
+    "variant": "default"
+   }
+  },
+  "walk-b-learned-default-s0-20261007-141613": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 619,
+   "by_purpose": {
+    "exploration": 619
+   },
+   "started": 1791375506.02715,
+   "meta": {
+    "strategy": "learned",
+    "variant": "default"
+   }
+  },
+  "walk-b-collector-s1-20261007-141613": {
+   "allocation": "walker_b",
+   "run_cap": 1500,
+   "used": 867,
+   "by_purpose": {
+    "exploration": 867
+   },
+   "started": 1791375506.9546053,
+   "meta": {
+    "strategy": "local_focused"
+   }
+  },
+  "walk-b-local_uniform-default-s1-20261007-141613": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 566,
+   "by_purpose": {
+    "exploration": 566
+   },
+   "started": 1791375613.7858684,
+   "meta": {
+    "strategy": "local_uniform",
+    "variant": "default"
+   }
+  },
+  "walk-b-local_focused-default-s1-20261007-141613": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 560,
+   "by_purpose": {
+    "exploration": 560
+   },
+   "started": 1791375614.4986994,
+   "meta": {
+    "strategy": "local_focused",
+    "variant": "default"
+   }
+  },
+  "walk-b-learned-default-s1-20261007-141613": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 592,
+   "by_purpose": {
+    "exploration": 592
+   },
+   "started": 1791375628.1927376,
+   "meta": {
+    "strategy": "learned",
+    "variant": "default"
+   }
+  },
+  "walk-b-bounds-maximal-default-s0-20261007-142032": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 501,
+   "by_purpose": {
+    "reporting_eval": 501
+   },
+   "started": 1791375633.0903983,
+   "meta": {
+    "strategy": "maximal",
+    "variant": "default"
+   }
+  },
+  "walk-b-bounds-reference-default-s0-20261007-142032": {
+   "allocation": "walker_b",
+   "run_cap": 800,
+   "used": 276,
+   "by_purpose": {
+    "reporting_eval": 276
+   },
+   "started": 1791375633.34525,
+   "meta": {
+    "strategy": "reference",
+    "variant": "default"
+   }
+  }
+ },
+ "logical_charges": [
+  {
+   "run_id": "walk-b-learned-default-s0-20261007-141613",
+   "source_run": "walk-b-collector-s0-20261007-141613",
+   "n": 852,
+   "note": "evidence collected to train the edit policy"
+  },
+  {
+   "run_id": "walk-b-learned-default-s1-20261007-141613",
+   "source_run": "walk-b-collector-s1-20261007-141613",
+   "n": 867,
+   "note": "evidence collected to train the edit policy"
+  }
+ ]
+}

@@ -20,12 +20,13 @@ relation-local memory, goal-conditioned primitive-policy control,
 library-transplant diagnostic, credible-set-mask-as-feature control, learned
 proposals or termination (docs/DECISIONS.md, docs/ROADMAP.md).
 
-Test suite: 125 deterministic tests pass (`python -m pytest -q`), covering the
+Test suite: 144 deterministic tests pass (`python -m pytest -q`), covering the
 items listed in docs/METHODS.md (environment semantics, information boundary,
 equivariance and padding, incidence and hypergraph equivalence, topology
 updates and rollback, executor semantics, library lifecycle, duration-aware
 returns, likelihood reconstruction and stale-batch refusal, budget accounting,
-transfer bindings, statistics fixtures, installation hygiene).
+transfer bindings, statistics fixtures, installation hygiene, walker replay
+semantics against the environment, meta-graph neighbourhoods and searches).
 
 ## 2. Interaction budget
 
@@ -165,6 +166,97 @@ Observations, not claims:
 - Managers often call a skill whose target already holds (for example 19 of 39
   calls of `achieve[bell]/L2` in one run); each such call costs a `wait`.
 
+## 4.4 Hypergraph-walker study (addendum W of the plan)
+
+Separate ledger `runs/walker-ledger.json`: 22,948 of 32,000 adaptive
+interactions (4,377 plumbing before the addendum, 13,416 Stage A, 5,155 Stage
+B) and 3,196 of 8,000 reporting. Evidence in `artifacts/walker/`; the figure
+`walker_cost_by_episode.png` plots cost relative to the optimum by episode
+index within each world. Walkers are planners on hypothesized structures, not
+learned policies; the worlds are the only independent units (5 for P2 tasks,
+2 for P3 worlds), so everything below is descriptive.
+
+**Stage A, P2 pilot tasks** (30 tasks, 5 unseen worlds x 6 episodes; walkers
+over 3 seeds, bounds deterministic):
+
+| Arm | Success, budget 1.0 | Steps / optimal, budget 1.0 | Success, budget 0.6 | Steps / optimal, budget 0.6 |
+|---|---|---|---|---|
+| `reference` (privileged) | 1.00 | 1.00 | 1.00 | 1.00 |
+| `maximal` (full-pool node) | 1.00 | 1.81 | 0.60 | 1.67 |
+| `sample` (posterior sampling) | 0.97-1.00 | 1.63-1.66 | 0.60-0.70 | 1.52-1.58 |
+| `optimistic` | 0.83 | 1.82 | 0.53 | 1.64 |
+| `local_focused` (walk on the graph) | 0.87-1.00 | 1.74-1.82 | 0.53-0.60 | 1.52-1.58 |
+| P2 pilot policies (for reference) | 0.00-0.07 | - | - | - |
+
+- **Primary contrast failed.** `optimistic` is not cheaper than `maximal` at
+  budget 1.0 (1.82 versus 1.81; cheaper in 2 of 5 worlds) and misses 5 of 30
+  tasks: each wrong cheapest guess costs a failed attempt. Design decision W3
+  was wrong on these tasks.
+- Posterior sampling is cheaper than the brute-force node (1.63-1.66; cheaper
+  in 4 of 5 worlds) at equal success, and the cost falls within a world as
+  evidence accumulates (from 1.95 in a world's first episode to 1.39 in its
+  fifth, pooled), while `maximal` stays near 1.8.
+- The local walk on the graph (`local_focused`, episodic evidence) lands close
+  to `optimistic`, which uses the exact factorized posterior; in this profile
+  the walk neither helps nor hurts compared with exact inference.
+- Every walker and the brute-force node solve 83-100% of the tasks on which
+  the P2 pilot policies solved 0-7%; the task budget always admits the
+  brute-force plan (DECISIONS W2).
+- P1 tasks: planning on the supplied structure is optimal (30/30, ratio 1.00).
+
+**Stage A, P3 pilot worlds** (same shared world per seed block; failure
+probability 0.1; 1,500 warm-up interactions on training tasks, then the P3
+pilot's 20 test tasks at goal levels 5-6):
+
+| Arm | Seed 0 success | Seed 0 steps/opt | Seed 1 success | Seed 1 steps/opt |
+|---|---|---|---|---|
+| `sample` | 20/20 | 1.52 | 19/20 | 1.38 |
+| `maximal` | 19/20 | 1.62 | 18/20 | 1.66 |
+| `optimistic` | 2/20 | 2.48 | 7/20 | 1.86 |
+| `reference` (privileged, open loop) | 14/20 | 1.55 | 15/20 | 1.41 |
+| P3 pilot arms (14,000 interactions each) | 0-2/20 | - | 0-1/20 | - |
+
+With noise no hypothesis is ever eliminated, so "the cheapest supported node"
+stays the cheapest node and `optimistic` keeps failing: the rule needs a
+support threshold under noise. The privileged reference replays the
+deterministic optimal plan and restarts after a failure, which is why it misses
+tasks here; ratios are still relative to the deterministic optimum.
+
+**Stage B, goal-only observation** (hypotheses do not factorize; 40 tasks, 5
+unseen worlds x 8 episodes; 2 seeds):
+
+| Arm | Success (s0 / s1) | Steps / optimal (s0 / s1) | Search evaluations (s0 / s1) |
+|---|---|---|---|
+| `reference` (privileged) | 1.00 | 1.00 | - |
+| `maximal` | 1.00 | 1.82 | 0 |
+| `local_focused` | 0.78 / 0.72 | 1.90 / 2.03 | 370 / 543 |
+| `local_uniform` | 0.72 / 0.75 | 2.08 / 2.05 | 3,754 / 2,563 |
+| `learned` | 0.60 / 0.68 | 2.24 / 2.14 | 657 / 937 |
+
+Offline search benchmark (primary contrast; held-out evidence of the focused
+arm, 35 problems x 5 paired start nodes per seed, at most 400 evaluations):
+
+| Walk | Mean evaluations (s0 / s1) | Median (s0 / s1) | Consistent node found (s0 / s1) |
+|---|---|---|---|
+| uniform proposals | 119.3 / 104.7 | 69 / 64 | 0.88 / 0.93 |
+| focused proposals | 37.6 / 39.2 | 10 / 14 | 0.97 / 0.99 |
+| learned proposals | 26.5 / 32.7 | 13 / 23 | 1.00 / 1.00 |
+
+- **Primary criterion met, narrowly.** The learned walk needs fewer evaluations
+  on average than the focused heuristic in both seeds and always finds a
+  consistent node, but its median is higher: it removes the long, failed
+  searches rather than speeding up the typical one. The edit policy was trained
+  on 56 problems per seed (1,500 internal searches, 71,507 and 66,681
+  evaluations), on evidence collected for 852 and 867 interactions.
+- Focus matters: violation-focused proposals need about a third of the
+  evaluations of uniform ones.
+- **Better search did not give better acting.** Online, the learned walker is
+  the worst walker, and every walker is worse than the brute-force node in this
+  profile (only goal outcomes are observed, so each wrong hypothesis costs a
+  whole failed chain, and 8 episodes per world do not amortize that). The
+  policy is rewarded for reaching any consistent node quickly, not for reaching
+  one that is cheap or informative to act on.
+
 ## 5. What the session shows and does not show
 
 Shows: the mechanisms run end to end under one interaction ledger; public
@@ -175,8 +267,17 @@ are rejected; the training core learns shallow tasks with the gated encoder
 (post hoc).
 
 Does not show: any advantage of the context gate, of adaptive routing, of
-library growth or of their combination; transfer to longer compositions;
-learned composition of skills; anything about statistical significance.
+library growth or of their combination; transfer to longer compositions by the
+learned policies; learned composition of skills; anything about statistical
+significance.
+
+Walker study: planning on a node chosen from public evidence solves the tasks
+the pilot policies could not, including the P3 pilot's longer test tasks after
+1,500 interactions; posterior sampling over nodes beats the brute-force node on
+cost when items are observable; the optimistic rule does not (the frozen
+primary contrast failed) and breaks under noise. When intermediate items are
+hidden, a learned walk finds consistent nodes with fewer evaluations on average
+than a focused heuristic, but no walker beats the brute-force node at acting.
 
 ## 6. Known issues in the recorded runs
 
