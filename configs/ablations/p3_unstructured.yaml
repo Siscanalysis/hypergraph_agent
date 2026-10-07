@@ -1,0 +1,34 @@
+# Study control: the same discovery pipeline and budgets with a set-attention
+# manager (no incidence message passing). This is an adaptation: it reruns
+# pretraining with that manager instead of transplanting another arm's library.
+run:
+  name: p3-unstructured
+  phase: p3
+  allocation: p3
+  seeds: [0, 1]
+  requires_flag: allow_full_study
+  ledger: runs/ablation-ledger.json
+budget:
+  per_run_interactions: 6000
+  pretraining_interactions: 9000
+  batch_steps: 256
+  ledger_allocations: {p2: 24000, p3: 84000}
+  ledger_adaptive_cap: 108000
+  ledger_reporting_cap: 20000
+  reporting_eval_per_run: 1200
+ppo: {epochs: 8}
+train:
+  world_mode: shared
+  shared_world_seed: 3000
+  goal_levels: [1, 2, 3]
+  tasks: {profile: unknown_prerequisites, failure_prob: 0.1, p_init_base: 0.3, p_init_item: 0.2,
+          n_distractor_base: 0}
+eval:
+  namespace: test
+  n_tasks: 20
+  goal_levels: [5, 6]
+skills:
+  controller_encoder: set
+arms:
+  - {id: G0, encoder: set, growth: true, revision: false}
+  - {id: G1, encoder: set, growth: true, revision: true}

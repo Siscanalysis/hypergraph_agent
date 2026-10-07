@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Raw run output, checkpoints and the session budget ledger stay local.
+# Small attributable summaries are copied to artifacts/ by `summarize`.
+runs/
+*.pt
+*.ckpt
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

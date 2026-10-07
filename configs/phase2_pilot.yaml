@@ -1,0 +1,29 @@
+# P2 development pilot: hidden prerequisites inside public candidate pools,
+# eight persistent training worlds, beliefs scoped per world. Evaluation is
+# the within-task inference track on unseen worlds (beliefs start from the prior).
+# Three variants x two seeds x 4,500 interactions = 27,000
+# (reduced from 6,000 on 2026-10-07 before any pilot ran; see docs/DECISIONS.md A1).
+run:
+  name: p2-pilot
+  phase: p2
+  allocation: p2
+  seeds: [0, 1]
+budget:
+  per_run_interactions: 4500
+  batch_steps: 256
+  reporting_eval_per_run: 500
+ppo: {epochs: 8}
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0}
+eval:
+  namespace: val
+  n_tasks: 30
+  track: inference
+  n_worlds: 5
+  episodes_per_world: 6
+arms:
+  - {id: evidence_set, encoder: set, graph_mode: supergraph, topology: none, use_posterior: false}
+  - {id: fixed_supergraph, encoder: gated, graph_mode: supergraph, topology: frozen_structure}
+  - {id: adaptive_incidence, encoder: gated, graph_mode: active, topology: revise}

@@ -1,0 +1,22 @@
+# Plumbing check of the P2 adaptive-incidence path (unknown prerequisites, persistent worlds).
+run:
+  name: smoke-p2
+  phase: smoke
+  allocation: smoke
+  seeds: [0]
+budget:
+  per_run_interactions: 600
+  batch_steps: 256
+  reporting_eval_per_run: 80
+ppo: {epochs: 8}
+train:
+  world_mode: pool
+  n_worlds: 4
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 2, n_distractor_base: 0}
+eval:
+  n_tasks: 4
+  track: inference
+  n_worlds: 2
+  episodes_per_world: 2
+arms:
+  - {id: adaptive_incidence, encoder: gated, graph_mode: active, topology: revise}

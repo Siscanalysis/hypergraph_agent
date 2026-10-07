@@ -1,0 +1,19 @@
+# Track 3 (continual cross-task adaptation with parameter updates and new
+# admissions). NOT IMPLEMENTED in this version: the evaluate command exits
+# with status "not_implemented" instead of substituting another track.
+run:
+  name: adaptation-stream
+  phase: p3
+  allocation: p3
+budget:
+  reporting_eval_per_run: 1000
+train:
+  world_mode: shared
+  shared_world_seed: 3000
+  tasks: {profile: unknown_prerequisites, failure_prob: 0.1}
+eval:
+  namespace: test
+  n_tasks: 50
+  track: continual
+arms:
+  - {id: manager, graph_mode: active, topology: revise}

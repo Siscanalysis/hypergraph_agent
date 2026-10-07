@@ -1,0 +1,21 @@
+# Track 2 (within-task online inference) on unseen P2 worlds: parameters fixed,
+# world-scoped beliefs start from the prior and update between episodes.
+#   python -m hypergraph_agent.evaluate --checkpoint runs/<p2 run> --config configs/transfer_inference.yaml
+run:
+  name: transfer-inference
+  phase: p2
+  allocation: p2
+budget:
+  reporting_eval_per_run: 1500
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 2, depth_max: 4, n_distractor_base: 0}
+eval:
+  namespace: test
+  n_tasks: 60
+  track: inference
+  n_worlds: 6
+  episodes_per_world: 10
+arms:
+  - {id: adaptive_incidence, encoder: gated, graph_mode: active, topology: revise}

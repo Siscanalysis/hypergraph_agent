@@ -1,2 +1,95 @@
 # hypergraph_agent
-toy experiment on training an agent on an hypergraph model of "reasonig"
+
+Toy experiment on training an agent on a hypergraph model of "reasoning":
+**RecipeQuest**, a small symbolic crafting benchmark for studying
+context-conditioned relational policies, learned prerequisite topology and
+growing libraries of reusable closed-loop skills.
+
+> Research question (a hypothesis, not a claim): from public interaction
+> evidence, can an agent learn and revise a compact library of closed-loop
+> skills and conjunctive prerequisite relations, and does that improve transfer
+> to longer compositions beyond topology adaptation or skill discovery alone?
+
+Status: research code at the development-pilot stage. Results are in
+[docs/RESULTS.md](docs/RESULTS.md) once runs exist; nothing here establishes a
+performance or novelty claim.
+
+## The game
+
+Facts are Boolean and persistent. A recipe is a directed hyperedge: a
+conjunction of prerequisite facts produces one effect fact, and an item can
+have alternative recipes (AND within a recipe, OR across recipes). Primitive
+operations gather a resource, activate a facility, attempt a recipe, wait or
+submit; each costs one step of a public task budget. Reward is 1 on successful
+submission and 0 otherwise.
+
+```
+ore + fuel + furnace_ready  --smelt-->  ingot
+ingot + mould_ready         --shape-->  key
+```
+
+## Three phases
+
+| Phase | What is supplied | What is learned or inferred |
+|---|---|---|
+| P1 | the true recipe groupings | a policy; compares a token-attention baseline, a role-typed incidence (hypergraph) encoder and a context-gated variant |
+| P2 | candidate prerequisite pools; the true subsets are hidden | beliefs over a finite hypothesis class (41 per recipe), updated from public attempts; an adaptive incidence structure versus a fixed candidate supergraph with the same beliefs |
+| P3 | the same as P2, one shared world per seed block | candidate skills mined from the agent's own trajectories, closed-loop controllers trained on public target predicates, validated and admitted into a versioned library with a call hierarchy; a manager trained with duration-aware PPO |
+
+See [docs/METHODS.md](docs/METHODS.md) for the mechanisms,
+[docs/EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md) for the frozen protocol,
+[docs/DECISIONS.md](docs/DECISIONS.md) for design decisions and amendments and
+[docs/PRIOR_ART.md](docs/PRIOR_ART.md) for the related-work audit.
+
+## Installation
+
+Python 3.10 or newer (developed with 3.12), CPU only.
+
+```bash
+python -m venv .venv
+. .venv/bin/activate            # Windows: .venv\Scripts\activate
+python -m pip install -e ".[dev]"
+python -m pytest -q
+```
+
+## Commands
+
+```bash
+python -m hypergraph_agent.play --agent manual --seed 7
+python -m hypergraph_agent.play --agent reference --seed 7 --debug   # privileged, labelled
+python -m hypergraph_agent.train --config configs/smoke.yaml
+python -m hypergraph_agent.train --config configs/phase1_pilot.yaml
+python -m hypergraph_agent.train --config configs/phase2_pilot.yaml
+python -m hypergraph_agent.train --config configs/phase3_pilot.yaml
+python -m hypergraph_agent.train --config configs/study.yaml --dry-run
+python -m hypergraph_agent.evaluate --checkpoint runs/<run> --config configs/transfer_frozen.yaml
+python -m hypergraph_agent.summarize --runs runs --out artifacts
+python -m hypergraph_agent.ledger show
+```
+
+Every command that touches the environment charges a persistent session
+ledger (`runs/ledger.json`), so separate commands and restarts share one
+interaction allowance. `configs/study.yaml` refuses to start without
+`--allow-full-study`. Raw runs and checkpoints stay in `runs/` (ignored by
+Git); `summarize` copies small, attributable records to `artifacts/`.
+
+## Layout
+
+```
+src/hypergraph_agent/
+  envs/            game, generator, public schema, reference solver (evaluator only)
+  representations/ shared observation adapter and encoders
+  topology/        hypothesis updater, snapshots, deltas
+  skills/          skill specs, library, binder, executor, discovery
+  agents/          actor-critic and labelled baselines
+  training/        rollouts, returns, PPO, budget ledger, P1/P2 and P3 trainers
+  evaluation/      evaluation tracks, metrics, seed-block statistics
+configs/           smoke, diagnostics, pilots, study and ablation presets
+tests/             deterministic mechanism tests
+docs/              methods, plan, decisions, prior art, results, roadmap
+paper/OUTLINE.md   prospective outline with a claim-to-evidence table
+```
+
+## License
+
+MIT, see [LICENSE](LICENSE).
