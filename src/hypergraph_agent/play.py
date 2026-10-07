@@ -19,7 +19,7 @@ import torch
 
 from .agents.baselines import ManualPolicy, RandomPolicy, ReferencePolicy
 from .envs.generator import PROFILES, TaskConfig, TaskStream, TaskStreamConfig, WorldConfig
-from .envs.recipequest import RecipeQuestEnv, render_public
+from .envs.recipequest import RecipeQuestEnv, action_name, render_public
 from .envs.reference_solver import reference_solve
 from .skills.executor import Executor
 from .topology.snapshot import TopologyManager
@@ -30,7 +30,7 @@ from .training.rollout import run_episode
 class _Narrator:
     """Wraps a policy and prints the public view before every root decision."""
 
-    def __init__(self, policy, ex, depth_only_root=True):
+    def __init__(self, policy, ex):
         self.policy, self.ex = policy, ex
         self.label = getattr(policy, "label", "learned")
 
@@ -39,11 +39,14 @@ class _Narrator:
 
     def step(self, struct, present, mem, h):
         print("\n" + render_public(self.ex.spec, self.ex.obs))
-        for i, k in enumerate(struct.cand_keys):
-            print(f"  [{i:2d}] {k}")
+        for i, (k, ch) in enumerate(zip(struct.cand_keys, struct.cand_choices)):
+            name = action_name(self.ex.spec, ch[1]) if ch[0] == "prim" else k
+            print(f"  [{i:2d}] {name:<24} {k if ch[0] == 'prim' else ''}")
         logits, value, h2, alpha = self.policy.step(struct, present, mem, h)
-        print(f"{self.label} chooses: {struct.cand_keys[int(torch.argmax(logits))]}"
-              if not isinstance(self.policy, ManualPolicy) else "")
+        if not isinstance(self.policy, ManualPolicy):
+            ch = struct.cand_choices[int(torch.argmax(logits))]
+            name = action_name(self.ex.spec, ch[1]) if ch[0] == "prim" else struct.cand_keys[int(torch.argmax(logits))]
+            print(f"{self.label} prefers: {name}")
         return logits, value, h2, alpha
 
 
