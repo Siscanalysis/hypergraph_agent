@@ -46,6 +46,25 @@ def test_ledger_persists_and_separates_reporting_and_logical(tmp_path):
         b.register_run("r1", "p3", 10)
 
 
+def test_amendments_cannot_exceed_the_session_cap(tmp_path, capsys):
+    from hypergraph_agent.ledger import main as ledger_main
+    path = str(tmp_path / "l.json")
+    ledger_main(["init", "--ledger", path, "--allocations", '{"p1": 150000}'])
+    assert ledger_main(["amend", "--ledger", path, "--allocation", "diagnostics", "--add", "10000",
+                        "--note", "x"]) == 0
+    with pytest.raises(SystemExit):
+        ledger_main(["amend", "--ledger", path, "--allocation", "diagnostics", "--add", "1", "--note", "y"])
+    st = SessionLedger(path).state
+    assert st["allocations"]["diagnostics"] == 10000 and st["amendments"][0]["note"] == "x"
+
+
+def test_manifest_records_process_provenance(tmp_path):
+    from hypergraph_agent.training.run import LOADED_CODE_SHA256, RunContext
+    ctx = RunContext(tmp_path, "r", {"a": 1}, phase="p1", arm="x", seed=0)
+    src = ctx.manifest["source"]
+    assert src["loaded_code_sha256"] == LOADED_CODE_SHA256 and "commit_at_run_creation" in src
+
+
 def test_two_handles_on_one_ledger_add_up(tmp_path):
     path = tmp_path / "ledger.json"
     a, b = SessionLedger(path), SessionLedger(path)

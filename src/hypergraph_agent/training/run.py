@@ -2,8 +2,12 @@
 
 Each run directory holds ``manifest.json`` (rewritten as the run progresses),
 ``config.json``, append-only ``events.jsonl`` and ``episodes.jsonl``, the
-working-tree patch when the source tree is dirty, and checkpoints. An existing
-run id is never reused: a rerun is a new run.
+working-tree patch when the source tree was dirty at process start, and
+checkpoints. An existing run id is never reused: a rerun is a new run.
+
+``source.commit`` is the commit checked out when the process started (the code
+it executes); ``source.loaded_code_sha256`` hashes the package files loaded at
+that time.
 """
 
 from __future__ import annotations
@@ -45,6 +49,29 @@ def source_info(repo: Path) -> dict:
     }
 
 
+def _code_hash() -> str:
+    pkg = Path(__file__).resolve().parents[1]
+    h = hashlib.sha256()
+    for f in sorted(pkg.rglob("*.py")):
+        h.update(str(f.relative_to(pkg)).encode())
+        h.update(f.read_bytes())
+    return h.hexdigest()
+
+
+# Provenance is captured once per process, when this module is imported: a
+# long-lived process keeps executing the code it loaded at start, even if the
+# working tree or HEAD changes while it runs.
+LOADED_CODE_SHA256 = _code_hash()
+_PROCESS_SOURCE: dict | None = None
+
+
+def process_source(repo: Path) -> dict:
+    global _PROCESS_SOURCE
+    if _PROCESS_SOURCE is None:
+        _PROCESS_SOURCE = source_info(repo)
+    return dict(_PROCESS_SOURCE)
+
+
 def environment_info() -> dict:
     return {
         "python": sys.version.split()[0], "platform": platform.platform(),
@@ -64,10 +91,14 @@ class RunContext:
             raise FileExistsError(f"run {run_id} exists; start a new run or an explicit child run")
         self.dir.mkdir(parents=True)
         repo = repo or Path(__file__).resolve().parents[3]
-        src = source_info(repo)
+        src = process_source(repo)
         patch = src.pop("_patch")
         if patch:
             (self.dir / "dirty.patch").write_text(patch)
+        now = source_info(repo)
+        src["loaded_code_sha256"] = LOADED_CODE_SHA256
+        src["commit_at_run_creation"] = now["commit"]
+        src["code_changed_since_process_start"] = _code_hash() != LOADED_CODE_SHA256
         (self.dir / "config.json").write_text(json.dumps(config, indent=1, default=str))
         self.t0 = time.time()
         self.manifest = {

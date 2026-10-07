@@ -116,4 +116,10 @@ runnable but not launched. The continual-adaptation track is not implemented.
 
 ## Amendments
 
-(none yet)
+- 2026-10-07, A2 (post hoc, after the shallow diagnostic and P1 were
+  evaluated): one additional shallow diagnostic with the `gated` encoder on the
+  same evaluation tasks, funded by 3,400 unallocated interactions. Reported as
+  post hoc; the failure of diagnostic 1 stands. Details in docs/DECISIONS.md.
+- 2026-10-07, A3: run provenance is recorded once per process (code actually
+  executed); earlier pilot manifests are interpreted as described in
+  docs/DECISIONS.md.

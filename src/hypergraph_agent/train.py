@@ -73,6 +73,8 @@ def main(argv=None) -> int:
     p.add_argument("--arms", nargs="*", help="run only these arm ids")
     args = p.parse_args(argv)
 
+    from .training.run import process_source
+    process_source(Path(__file__).resolve().parents[2])  # provenance of the code this process runs
     cfg = load_config(args.config)
     if args.seeds:
         cfg["run"]["seeds"] = args.seeds

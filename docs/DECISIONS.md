@@ -135,3 +135,23 @@ remaining allocations were reduced (P1 and P2 per-run caps 6,000 to 4,500, P3
 per-arm cap 6,000 to 5,000, the shallow diagnostic to one `set` run, smoke to
 2,500; reporting caps per run reduced accordingly). The tuning used only the
 gated encoder, so any tuning advantage favours the gated arms.
+
+**A2 (2026-10-07, post hoc: decided after the shallow diagnostic and the P1
+pilot had been evaluated).** The pre-registered shallow diagnostic (`set`
+encoder) failed, and every P1 run scored zero, so the protocol produced no
+evidence that the shared training core learns at all. One additional
+diagnostic run, identical except for the encoder (`gated`, the encoder the
+hyperparameters were tuned on), is run on the same 30 evaluation tasks as the
+failed run and the random reference (`configs/diagnostic_shallow_gated.yaml`).
+It uses 3,400 previously unallocated interactions moved into the diagnostics
+allocation (`ledger amend`), keeping the session total under 160,000. It is
+reported as post hoc; it does not replace the recorded failure and cannot
+change any P1 contrast.
+
+**A3 (2026-10-07, provenance).** Run manifests created before the commit
+"Record run provenance once per process" record the HEAD at run creation. Pilot
+processes started at commit `a79d840` and kept executing that code while
+later commits changed only playback, documentation and the decision count of
+unrecorded evaluation episodes; some of their manifests therefore name
+`d4a9865` or `6c44ec1`. From the provenance commit on, manifests record the
+commit and a hash of the source loaded when the process started.
