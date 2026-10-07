@@ -206,6 +206,31 @@ both seeds. Secondary: `focused_sample` versus `local_focused`, `learned_sample`
 versus Stage B `learned` (the effect of sampling), and `learned_sample` versus
 `focused_sample`. Descriptive only (5 worlds, 2 seeds).
 
+### W-D: Stage D, longer streams per world (frozen after Stage C, before any Stage D run)
+
+Motivation: in Stage C the sampling walks were still improving at the eighth
+and last episode of each world (1.50 versus 1.80 for `maximal` in that
+episode), so eight episodes may not amortize their early exploration.
+
+Tasks: five fresh held-out worlds from namespace `test` (never used by any
+walker study) x 16 episodes = 80 tasks, intermediate items unobserved,
+deterministic. Arms: `focused_sample` and `learned_sample` (Stage B's edit
+policy per seed, 50 consistent moves), seeds 0 and 1, at most 1,450
+interactions per run; bounds `maximal` and `reference` once on the same tasks
+(reporting budget).
+
+Budget: the unused remainders of allocations `walker_a` (3,584) and `walker_b`
+(2,216 of 2,246) are moved into a new allocation `walker_d` of 5,800 with
+`ledger move`, before any Stage D outcome is seen; the 32,000 cap is unchanged.
+
+Primary contrast: cost ratio over episodes 9-16 of every world (pooled over the
+five worlds), `learned_sample` versus `maximal`. It passes if `learned_sample`
+is lower in both seeds. Secondary: the same for `focused_sample`; success over
+episodes 9-16; the first-half cost ratio as an independent replication of
+Stage C on new worlds; per-world second-half ratios. Descriptive only (5
+worlds, 2 seeds). A run that stops at its interaction cap before finishing its
+80 tasks is reported as incomplete and does not count as passing.
+
 ## Amendments
 
 - 2026-10-07, A2 (post hoc, after the shallow diagnostic and P1 were

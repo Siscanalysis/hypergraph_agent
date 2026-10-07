@@ -189,9 +189,22 @@ def _summarize_rows(rows: list[dict]) -> dict:
         by_ep.setdefault(r["world_episode"], []).append(r)
     total = sum(r["primitive_length"] for r in rows)
     opt = sum(r["reference_length"] for r in rows if r["reference_length"])
+
+    def ratio(rs):
+        o = sum(x["reference_length"] or 0 for x in rs)
+        return sum(x["primitive_length"] for x in rs) / o if o else float("nan")
+
+    half = (max((r["world_episode"] for r in rows), default=0) + 1) // 2
+    late = [r for r in rows if r["world_episode"] >= half]
+    worlds = sorted({r["world_key"] for r in rows})
     return {
         "all": aggregate(rows),
         "cost_ratio": total / opt if opt else float("nan"),
+        "half_split_episode": half,
+        "cost_ratio_early": ratio([r for r in rows if r["world_episode"] < half]),
+        "cost_ratio_late": ratio(late),
+        "success_late": float(np.mean([r["success"] for r in late])) if late else float("nan"),
+        "cost_ratio_late_by_world": {w: ratio([r for r in late if r["world_key"] == w]) for w in worlds},
         "by_world_episode": {str(k): {"n": len(v), "success": float(np.mean([x["success"] for x in v])),
                                       "cost_ratio": float(sum(x["primitive_length"] for x in v)
                                                           / max(1, sum(x["reference_length"] or 0 for x in v)))}

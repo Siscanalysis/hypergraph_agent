@@ -7,7 +7,10 @@
     python -m hypergraph_agent.ledger amend --allocation diagnostics --add 1000 --note "..."
 
 ``amend`` moves unallocated interactions (never beyond the session cap) into an
-allocation and records the reason.
+allocation and records the reason. ``move`` transfers the unused remainder of
+one allocation to another; neither can raise the session cap.
+
+    python -m hypergraph_agent.ledger move --source walker_a --target walker_d --amount 3000 --note "..."
 
 ``record`` enters interactions that were executed outside the ledger (for
 example development runs before the protocol was frozen) so the session total
@@ -27,13 +30,18 @@ from .training.budget import ADAPTIVE_CAP, REPORTING_CAP, SessionLedger
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="python -m hypergraph_agent.ledger")
     sub = p.add_subparsers(dest="cmd", required=True)
-    for name in ("show", "init", "record", "amend"):
+    for name in ("show", "init", "record", "amend", "move"):
         s = sub.add_parser(name)
         s.add_argument("--ledger", default="runs/ledger.json")
     a = sub.choices["amend"]
     a.add_argument("--allocation", required=True)
     a.add_argument("--add", type=int, required=True, help="interactions moved into this allocation")
     a.add_argument("--note", required=True)
+    mv = sub.choices["move"]
+    mv.add_argument("--source", required=True, help="allocation giving up unused interactions")
+    mv.add_argument("--target", required=True)
+    mv.add_argument("--amount", type=int, required=True)
+    mv.add_argument("--note", required=True)
     sub.choices["init"].add_argument("--allocations", required=True, help="JSON object")
     sub.choices["init"].add_argument("--adaptive-cap", type=int, default=ADAPTIVE_CAP)
     sub.choices["init"].add_argument("--reporting-cap", type=int, default=REPORTING_CAP)
@@ -51,6 +59,19 @@ def main(argv=None) -> int:
             p.error(f"{path} exists; a ledger is never re-initialized")
         led = SessionLedger(path, json.loads(args.allocations), args.adaptive_cap, args.reporting_cap)
         led.save()
+    elif args.cmd == "move":
+        led = SessionLedger(path)
+        s = led.state
+        unused = s["allocations"].get(args.source, 0) - s["by_allocation"].get(args.source, 0)
+        if args.amount <= 0 or args.amount > unused:
+            p.error(f"{args.source} has {unused} unused interactions")
+
+        def fn(st):
+            st["allocations"][args.source] -= args.amount
+            st["allocations"][args.target] = st["allocations"].get(args.target, 0) + args.amount
+            st.setdefault("amendments", []).append(
+                {"move_from": args.source, "to": args.target, "amount": args.amount, "note": args.note})
+        led._mutate(fn)
     elif args.cmd == "amend":
         led = SessionLedger(path)
         s = led.state

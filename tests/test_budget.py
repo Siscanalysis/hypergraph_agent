@@ -58,6 +58,21 @@ def test_amendments_cannot_exceed_the_session_cap(tmp_path, capsys):
     assert st["allocations"]["diagnostics"] == 10000 and st["amendments"][0]["note"] == "x"
 
 
+def test_moves_transfer_only_unused_interactions(tmp_path):
+    from hypergraph_agent.ledger import main as ledger_main
+    path = str(tmp_path / "l.json")
+    ledger_main(["init", "--ledger", path, "--allocations", '{"a": 100, "b": 50}', "--adaptive-cap", "150"])
+    SessionLedger(path).record("r", "a", 70, {"exploration": 70}, "adaptive")
+    with pytest.raises(SystemExit):
+        ledger_main(["move", "--ledger", path, "--source", "a", "--target", "c", "--amount", "31",
+                     "--note", "too much"])
+    assert ledger_main(["move", "--ledger", path, "--source", "a", "--target", "c", "--amount", "30",
+                        "--note", "ok"]) == 0
+    st = SessionLedger(path).state
+    assert st["allocations"] == {"a": 70, "b": 50, "c": 30} and sum(st["allocations"].values()) <= 150
+    assert SessionLedger(path).remaining("c") == 30
+
+
 def test_manifest_records_process_provenance(tmp_path):
     from hypergraph_agent.training.run import LOADED_CODE_SHA256, RunContext
     ctx = RunContext(tmp_path, "r", {"a": 1}, phase="p1", arm="x", seed=0)
