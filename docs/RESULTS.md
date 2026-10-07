@@ -20,7 +20,7 @@ relation-local memory, goal-conditioned primitive-policy control,
 library-transplant diagnostic, credible-set-mask-as-feature control, learned
 proposals or termination (docs/DECISIONS.md, docs/ROADMAP.md).
 
-Test suite: 149 deterministic tests pass (`python -m pytest -q`), covering the
+Test suite: 152 deterministic tests pass (`python -m pytest -q`), covering the
 items listed in docs/METHODS.md (environment semantics, information boundary,
 equivariance and padding, incidence and hypergraph equivalence, topology
 updates and rollback, executor semantics, library lifecycle, duration-aware
@@ -168,9 +168,10 @@ Observations, not claims:
 
 ## 4.4 Hypergraph-walker study (addendum W of the plan)
 
-Separate ledger `runs/walker-ledger.json`: 26,147 of 32,000 adaptive
+Separate ledger `runs/walker-ledger.json`: 29,895 of 32,000 adaptive
 interactions (4,377 plumbing before the addendum, 13,416 Stage A, 5,155 Stage
-B, 3,199 Stage C) and 3,196 of 8,000 reporting. Evidence in `artifacts/walker/`; the figure
+B, 3,199 Stage C, 3,748 Stage D; the unused remainders of the Stage A and B/C
+allocations were moved to Stage D before it ran) and 4,731 of 8,000 reporting. Evidence in `artifacts/walker/`; the figure
 `walker_cost_by_episode.png` plots cost relative to the optimum by episode
 index within each world. Walkers are planners on hypothesized structures, not
 learned policies; the worlds are the only independent units (5 for P2 tasks,
@@ -287,6 +288,43 @@ per seed, its original 852 and 867 collection interactions charged logically):
 Walker ledger after Stage C: 26,147 of 32,000 adaptive and 3,196 of 8,000
 reporting interactions.
 
+**Stage D, longer streams per world** (five fresh held-out worlds from
+namespace `test` x 16 episodes = 80 tasks, goal-only observation; seeds 0 and
+1; every run finished its 80 tasks; 3,748 adaptive and 1,535 reporting
+interactions):
+
+| Arm | Episodes 1-8, steps / optimal | Episodes 9-16, steps / optimal | All 16 | Success, all (late) |
+|---|---|---|---|---|
+| `reference` (privileged) | 1.00 | 1.00 | 1.00 | 1.00 (1.00) |
+| `maximal` | 1.71 | 1.70 | 1.71 | 1.00 (1.00) |
+| `focused_sample` s0 / s1 | 1.77 / 1.78 | 1.55 / 1.44 | 1.66 / 1.60 | 0.95 / 0.96 (0.95 / 1.00) |
+| `learned_sample` s0 / s1 | 1.90 / 1.95 | 1.39 / 1.47 | 1.64 / 1.71 | 0.94 / 0.95 (1.00 / 1.00) |
+
+- **Primary contrast passed.** Over episodes 9-16, `learned_sample` needs
+  1.39 and 1.47 steps per optimal step against 1.70 for the brute-force node,
+  and is cheaper in 5 of 5 worlds (seed 0) and 4 of 5 (seed 1), with every late
+  task solved. `focused_sample` is also cheaper (1.55 and 1.44; 3 of 5 and 5 of
+  5 worlds).
+- The first half replicates Stage C on new worlds: the walks pay for early
+  exploration (1.77-1.95 against 1.71) and fail 5-13% of the tasks in
+  episodes 1-8.
+  Over all 16 episodes the walks roughly break even with brute force (1.60-1.71
+  against 1.71); the gain is in later episodes of a world, which is what the
+  amortization hypothesis predicted. Pooled per episode, both walks fall below
+  `maximal` from about the fifth episode on (`walker_cost_by_episode.png`).
+- The learned component is not what helps: the two walks do not differ
+  consistently online (seed 0 favours the learned walk, seed 1 the focused
+  one), and in the offline benchmark on this evidence the learned walk needs
+  more evaluations than the focused one (33.4 against 26.8, and 38.2 against
+  28.4). Sampling among consistent hypotheses and accumulating evidence within a
+  world carry the effect.
+- Scope: one task family, five worlds, two seeds, deterministic dynamics. The
+  brute-force node never fails, so the walks trade a few early failures for
+  cheaper later episodes.
+
+Walker ledger after Stage D: 29,895 of 32,000 adaptive and 4,731 of 8,000
+reporting interactions.
+
 ## 5. What the session shows and does not show
 
 Shows: the mechanisms run end to end under one interaction ledger; public
@@ -308,8 +346,12 @@ cost when items are observable; the optimistic rule does not (the frozen
 primary contrast failed) and breaks under noise. When intermediate items are
 hidden, a learned walk found consistent nodes with fewer evaluations on average
 than a focused heuristic in Stage B (not replicated on Stage C's evidence), and
-no walker beats the brute-force node at acting in both seeds, even after
-sampling among consistent nodes (Stage C), which did raise success.
+no walker beat the brute-force node at acting in both seeds within eight
+episodes per world, even after sampling among consistent nodes (Stage C), which
+did raise success. With sixteen episodes per world (Stage D, fresh worlds), the
+sampling walks were cheaper than the brute-force node over the second half of
+every stream in both seeds (frozen contrast passed); the learned search
+component did not contribute.
 
 ## 6. Known issues in the recorded runs
 

@@ -3,15 +3,17 @@
  "reporting_cap": 8000,
  "allocations": {
   "pre_plan_development": 4377,
-  "walker_a": 17000,
-  "walker_b": 10600
+  "walker_a": 13416,
+  "walker_b": 8384,
+  "walker_d": 5800
  },
- "adaptive_total": 26147,
- "reporting_total": 3196,
+ "adaptive_total": 29895,
+ "reporting_total": 4731,
  "by_allocation": {
   "pre_plan_development": 4377,
   "walker_a": 13416,
-  "walker_b": 8354
+  "walker_b": 8354,
+  "walker_d": 3748
  },
  "runs": {
   "walker-pre-plan-development": {
@@ -635,6 +637,84 @@
     "strategy": "learned_sample",
     "variant": "default"
    }
+  },
+  "walk-d-focused_sample-default-s0-20261007-161217": {
+   "allocation": "walker_d",
+   "run_cap": 1450,
+   "used": 942,
+   "by_purpose": {
+    "exploration": 942
+   },
+   "started": 1791382338.193631,
+   "meta": {
+    "strategy": "focused_sample",
+    "variant": "default"
+   }
+  },
+  "walk-d-learned_sample-default-s0-20261007-161217": {
+   "allocation": "walker_d",
+   "run_cap": 1450,
+   "used": 929,
+   "by_purpose": {
+    "exploration": 929
+   },
+   "started": 1791382396.297361,
+   "meta": {
+    "strategy": "learned_sample",
+    "variant": "default"
+   }
+  },
+  "walk-d-focused_sample-default-s1-20261007-161217": {
+   "allocation": "walker_d",
+   "run_cap": 1450,
+   "used": 909,
+   "by_purpose": {
+    "exploration": 909
+   },
+   "started": 1791382399.2954853,
+   "meta": {
+    "strategy": "focused_sample",
+    "variant": "default"
+   }
+  },
+  "walk-d-learned_sample-default-s1-20261007-161217": {
+   "allocation": "walker_d",
+   "run_cap": 1450,
+   "used": 968,
+   "by_purpose": {
+    "exploration": 968
+   },
+   "started": 1791382451.0998263,
+   "meta": {
+    "strategy": "learned_sample",
+    "variant": "default"
+   }
+  },
+  "walk-d-bounds-maximal-default-s0-20261007-161418": {
+   "allocation": "walker_d",
+   "run_cap": 1450,
+   "used": 968,
+   "by_purpose": {
+    "reporting_eval": 968
+   },
+   "started": 1791382458.2335768,
+   "meta": {
+    "strategy": "maximal",
+    "variant": "default"
+   }
+  },
+  "walk-d-bounds-reference-default-s0-20261007-161418": {
+   "allocation": "walker_d",
+   "run_cap": 1450,
+   "used": 567,
+   "by_purpose": {
+    "reporting_eval": 567
+   },
+   "started": 1791382458.6061962,
+   "meta": {
+    "strategy": "reference",
+    "variant": "default"
+   }
   }
  },
  "logical_charges": [
@@ -661,6 +741,32 @@
    "source_run": "walk-b-collector-s1-20261007-141613",
    "n": 867,
    "note": "evidence collected to train the edit policy"
+  },
+  {
+   "run_id": "walk-d-learned_sample-default-s0-20261007-161217",
+   "source_run": "walk-b-collector-s0-20261007-141613",
+   "n": 852,
+   "note": "evidence collected to train the edit policy"
+  },
+  {
+   "run_id": "walk-d-learned_sample-default-s1-20261007-161217",
+   "source_run": "walk-b-collector-s1-20261007-141613",
+   "n": 867,
+   "note": "evidence collected to train the edit policy"
+  }
+ ],
+ "amendments": [
+  {
+   "move_from": "walker_a",
+   "to": "walker_d",
+   "amount": 3584,
+   "note": "W-D: unused Stage A remainder for longer streams, before any Stage D outcome"
+  },
+  {
+   "move_from": "walker_b",
+   "to": "walker_d",
+   "amount": 2216,
+   "note": "W-D: unused Stage B/C remainder for longer streams, before any Stage D outcome"
   }
  ]
 }

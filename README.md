@@ -15,7 +15,7 @@ establishes a performance or novelty claim. The first development session
 ([docs/RESULTS.md](docs/RESULTS.md)) ran all three phases under one
 160,000-interaction ledger:
 
-- the mechanisms run end to end, and 149 deterministic tests pass;
+- the mechanisms run end to end, and 152 deterministic tests pass;
 - public evidence produced logged, evidence-linked revisions of the
   prerequisite structure (P2);
 - skills mined from the agent's own trajectories were trained, passed held-out
@@ -31,9 +31,11 @@ complete dependency hypergraph, each edge a single-incidence edit, and
 "hypergraph walkers" move on it from public evidence and plan on the node they
 choose (`python -m hypergraph_agent.walk`). Posterior sampling over nodes
 solved the tasks the learned policies could not, at fewer steps than a
-brute-force plan. When intermediate items are hidden, no walk beat the
-brute-force plan in both seeds; sampling among consistent hypotheses raised
-success, and the walks were still improving after eight episodes per world
+brute-force plan. When intermediate items are hidden, walks that sample among
+the hypotheses consistent with the evidence pay for early exploration, then
+act more cheaply than the brute-force plan once evidence has accumulated: over
+episodes 9-16 of fresh worlds they used 9-18% fewer steps in both seeds.
+A learned edit policy for the walk did not contribute
 ([docs/RESULTS.md](docs/RESULTS.md), Section 4.4).
 
 ## The game

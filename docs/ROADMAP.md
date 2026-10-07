@@ -32,12 +32,11 @@ control and a cost estimate before it is built.
 6b. **Optimism with a support threshold.** Under noise no hypothesis is
     eliminated, so the cheapest supported node never changes; require posterior
     support above a threshold before treating a node as plausible.
-6c. **Longer streams per world and an exact goal-only reference.** Eight
-    episodes did not amortize exploration when only goals are observed (Stage
-    C's walks were still improving at episode 8); a constraint solver over
-    connected groups of recipes would give an exact reference where
-    enumeration is infeasible. Sampling among consistent nodes (Stage C) is
-    the default to build on.
+6c. **Replicate the Stage D amortization result at study scale** (more worlds,
+    seeds and task families, failure noise) and add an exact goal-only
+    reference: a constraint solver over connected groups of recipes, where
+    enumeration is infeasible. Sampling among consistent nodes is the default
+    to build on; the learned edit policy is not (Stages C and D).
 6d. **Start walks from the brute-force node** and remove requirements as evidence
     allows, instead of starting from single-candidate guesses.
 
