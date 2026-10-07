@@ -288,18 +288,26 @@ def run_phase3(cfg: dict, ledger: SessionLedger, runs_dir: str) -> list[dict]:
                                         "skill_practice_objective": "public target predicate, reward 1"},
                                skills_config=sk)
         batch, stop = 0, None
+        wall = cfg["run"]["wallclock_s"]
         try:
             while meter.used < sk["explore_before_discovery"] and meter.remaining > 0:
+                if pre_ctx.elapsed > wall:
+                    stop = "wallclock_cap"
+                    break
                 manager_batch(state, c, meter, pre_ctx, env, stream, batch, "pretraining", True,
                               use_library=False)
                 batch += 1
-            rnd = discovery_round(state, c, meter, pre_ctx, stream, sk["discovery_budget"], True, seed)
-            pre_ctx.event({"type": "discovery_summary", **rnd})
-            while meter.remaining > 0:
+            if stop is None:
+                rnd = discovery_round(state, c, meter, pre_ctx, stream, sk["discovery_budget"], True, seed)
+                pre_ctx.event({"type": "discovery_summary", **rnd})
+            while stop is None and meter.remaining > 0:
+                if pre_ctx.elapsed > wall:
+                    stop = "wallclock_cap"
+                    break
                 if not manager_batch(state, c, meter, pre_ctx, env, stream, batch, "pretraining", True):
                     break
                 batch += 1
-            stop = "interaction_cap"
+            stop = stop or "interaction_cap"
         finally:
             meter.flush()
         pre_dir = pre_ctx.dir
@@ -332,9 +340,12 @@ def run_phase3(cfg: dict, ledger: SessionLedger, runs_dir: str) -> list[dict]:
                                arm_definition={"growth": growth, "revision": revision,
                                                "live_contracts": revision},
                                logical_pretraining_charge=pre_used)
-            b, did_discovery = 0, False
+            b, did_discovery, arm_stop = 0, False, "interaction_cap"
             try:
                 while m.remaining > 0:
+                    if ctx.elapsed > wall:
+                        arm_stop = "wallclock_cap"
+                        break
                     if growth and not did_discovery and m.used >= sk["arm_discovery_after"]:
                         rnd = discovery_round(arm_state, c, m, ctx, stream, sk["arm_discovery_budget"],
                                               revision, seed)
@@ -358,7 +369,7 @@ def run_phase3(cfg: dict, ledger: SessionLedger, runs_dir: str) -> list[dict]:
             summary = {"eval_test": aggregate(test_rows), "eval_test_by_depth": aggregate(test_rows, by="depth"),
                        "eval_val": aggregate(val_rows)}
             lib = arm_state.library
-            ctx.finish("completed", batches=b,
+            ctx.finish("completed", stop_reason=arm_stop, batches=b,
                        interactions={"adaptive_physical": m.used, "by_purpose": dict(m.by_purpose),
                                      "logical_pretraining_charge": pre_used,
                                      "all_in_logical": pre_used + m.used,
