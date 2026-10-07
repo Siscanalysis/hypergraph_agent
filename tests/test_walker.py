@@ -145,6 +145,51 @@ def test_episodic_walkers_refuse_noisy_dynamics():
         w.run_episode(Executor(RecipeQuestEnv(), meter(), "exploration", torch.Generator()), t, 0)
 
 
+def test_consistent_mixing_never_leaves_the_consistent_set():
+    from hypergraph_agent.agents.walker import mix_consistent
+    s = stream("goal_only", seed=7)
+    w = Walker("local_focused", np.random.default_rng(2))
+    play(w, [s.task(i) for i in range(6)])
+    ws = max(w.worlds.values(), key=lambda x: len(x.evidence.logs))
+    node, _ = Walker("local_focused", np.random.default_rng(3)).choose_node(ws, None)
+    assert ws.evidence.violations(node) == 0
+    before = ws.evidence.evaluations
+    mixed, st = mix_consistent(node, ws, None, np.random.default_rng(4), 3, 60)
+    assert ws.evidence.violations(mixed) == 0
+    assert st["mix_evals"] == ws.evidence.evaluations - before - 1 and st["mix_accepted"] > 0
+
+
+@pytest.mark.parametrize("strategy", ["focused_sample", "learned_sample"])
+def test_sampling_walkers_plan_on_consistent_nodes(strategy):
+    s = stream("goal_only", seed=7)
+    torch.manual_seed(0)
+    w = Walker(strategy, np.random.default_rng(5), policy=EditPolicy(8), consistent_moves=20)
+    rows = play(w, [s.task(i) for i in range(6)])
+    assert any(r["success"] for r in rows)
+    for ws in w.worlds.values():
+        node, st = w.choose_node(ws, None)  # a fresh replan on all logged evidence
+        assert ws.evidence.violations(node) == 0 and st.get("mix_evals", 0) > 0
+
+
+def test_saved_edit_policy_is_reused_with_its_cost(tmp_path):
+    import json
+    from hypergraph_agent.evaluation.walkers import load_policy
+    run = tmp_path / "walk-b-collector-s3-x"
+    run.mkdir()
+    torch.manual_seed(0)
+    pol = EditPolicy(8)
+    torch.save(pol.state_dict(), run / "edit_policy.pt")
+    (run / "manifest.json").write_text(json.dumps(
+        {"run_id": run.name, "interactions": {"physical": 777}, "policy_training": {"iters": 5}}))
+    wc = {"policy_from": str(tmp_path / "walk-b-collector-s{seed}-*" / "edit_policy.pt"), "policy": {"hidden": 8}}
+    loaded, stats, cost, rid = load_policy(wc, 3)
+    assert cost == 777 and rid == run.name and stats == {"iters": 5}
+    for a, b in zip(pol.parameters(), loaded.parameters()):
+        assert torch.equal(a, b)
+    with pytest.raises(FileNotFoundError):
+        load_policy(wc, 4)
+
+
 def test_edit_policy_trains_and_benchmarks():
     s = stream("goal_only", seed=7)
     w = Walker("local_focused", np.random.default_rng(2))

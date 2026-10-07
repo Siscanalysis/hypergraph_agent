@@ -1,0 +1,38 @@
+# Walker study, Stage C (docs/EXPERIMENT_PLAN.md, addendum W-C): sample among
+# consistent hypotheses instead of planning on the first one found. Stage B's
+# 40 goal-only tasks; the learned arm reuses Stage B's edit policy per seed.
+run:
+  name: walk-c
+  phase: walker_c
+  allocation: walker_b
+  seeds: [0, 1]
+  ledger: runs/walker-ledger.json
+budget:
+  ledger_allocations: {pre_plan_development: 4377, walker_a: 17000, walker_b: 10600}
+  ledger_adaptive_cap: 32000
+  ledger_reporting_cap: 8000
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only}
+eval:
+  namespace: val
+  n_tasks: 40
+  track: inference
+  n_worlds: 5
+  episodes_per_world: 8
+walker:
+  per_run_cap: 800
+  collector: local_focused
+  collector_episodes_per_world: 8
+  collector_interactions: 1500
+  policy_from: runs/walk-b-collector-s{seed}-*/edit_policy.pt
+  consistent_moves: 50
+  benchmark_source: focused_sample
+  benchmark_starts: 5
+  policy: {iters: 1500, lr: 0.003, hidden: 32}
+arms:
+  - {id: local_focused, strategy: local_focused}
+  - {id: focused_sample, strategy: focused_sample}
+  - {id: learned_sample, strategy: learned_sample}

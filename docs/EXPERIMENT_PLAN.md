@@ -176,6 +176,36 @@ fewer evaluations than `local_focused`, the claim "a learned walk improves on
 the focused heuristic" fails. The online contrasts are descriptive (5 worlds,
 2 seeds).
 
+### W-C: Stage C (frozen after Stage B, before any Stage C run)
+
+Motivation from the recorded results: in Stage A, drawing a node from the
+posterior beat taking the cheapest one; in Stage B every walker planned on the
+first consistent node it reached (effectively the cheapest-guess rule), and the
+learned policy's advantage was removing long failed searches.
+
+Arms, on Stage B's 40 tasks and seeds 0 and 1, allocation `walker_b` (at most
+800 interactions per run):
+
+- `local_focused`: reproduction control. It must reproduce Stage B's per-seed
+  success and cost ratio exactly; if it does, Stage B's recorded `learned` and
+  `maximal` results serve as same-code baselines, otherwise only comparisons
+  within Stage C are reported.
+- `focused_sample`: the focused walk to a consistent node, then 50 Metropolis
+  moves restricted to consistent nodes (uniform proposals with the
+  neighbourhood-size correction); recipes without evidence redrawn from the
+  prior at every replan.
+- `learned_sample`: the same with the learned walk, reusing Stage B's trained
+  edit policy of the same seed (no retraining, no new evidence collection; the
+  original collection cost is charged logically).
+
+The 50 moves were fixed before any run and are not tuned.
+
+Primary contrast: `learned_sample` versus `maximal` (Stage B, 1.82) on the cost
+ratio. It passes if `learned_sample` has a lower cost ratio than `maximal` in
+both seeds. Secondary: `focused_sample` versus `local_focused`, `learned_sample`
+versus Stage B `learned` (the effect of sampling), and `learned_sample` versus
+`focused_sample`. Descriptive only (5 worlds, 2 seeds).
+
 ## Amendments
 
 - 2026-10-07, A2 (post hoc, after the shallow diagnostic and P1 were

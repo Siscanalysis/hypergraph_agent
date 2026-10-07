@@ -17,7 +17,10 @@ benchmark of the walks themselves is run on held-out evidence.
 from __future__ import annotations
 
 import copy
+import glob
+import json
 import time
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -34,6 +37,7 @@ from ..training.run import RunContext
 from .metrics import aggregate
 
 NON_ADAPTIVE = ("maximal", "reference")
+LEARNED = ("learned", "learned_sample")
 
 
 def reference_episode(ex: Executor, task, dyn_seed: int) -> dict:
@@ -70,7 +74,20 @@ def make_walker(strategy: str, wc: dict, seed_key, epsilon: float, policy=None) 
     return Walker(strategy, np.random.default_rng(derive_seed("walker", *seed_key) % (2 ** 32)),
                   epsilon=epsilon, max_evals=wc["max_evals"], temperature=wc["temperature"],
                   restart_after=wc["restart_after"], exact_cap=wc["exact_cap"], plan_cap=wc["plan_cap"],
-                  policy=policy)
+                  policy=policy, consistent_moves=wc["consistent_moves"])
+
+
+def load_policy(wc: dict, seed: int):
+    """Reuse an edit policy trained in an earlier run (``walker.policy_from``,
+    a glob with ``{seed}``); returns it with that run's collection cost and id."""
+    matches = sorted(glob.glob(wc["policy_from"].format(seed=seed)))
+    if len(matches) != 1:
+        raise FileNotFoundError(f"policy_from matched {len(matches)} files for seed {seed}")
+    path = Path(matches[0])
+    policy = EditPolicy(wc["policy"]["hidden"])
+    policy.load_state_dict(torch.load(path, weights_only=True))
+    man = json.loads((path.parent / "manifest.json").read_text())
+    return policy, man.get("policy_training"), man["interactions"]["physical"], man["run_id"]
 
 
 def play(agent, strategy: str, stream, order: list[int], meter, seed: int, ctx: RunContext | None,
@@ -107,9 +124,12 @@ def run_walker_study(cfg: dict, ledger: SessionLedger, runs_dir: str) -> list[di
     results = []
     for seed in cfg["run"]["seeds"]:
         policy, policy_stats, collector_used, collector_id = None, None, 0, None
-        if any(a["strategy"] == "learned" for a in cfg["arms"]):
-            policy, policy_stats, collector_used, collector_id, collected = _train_policy(
-                cfg, ledger, runs_dir, seed, stamp, epsilon)
+        if any(a["strategy"] in LEARNED for a in cfg["arms"]):
+            if wc["policy_from"]:
+                policy, policy_stats, collector_used, collector_id = load_policy(wc, seed)
+            else:
+                policy, policy_stats, collector_used, collector_id, _ = _train_policy(
+                    cfg, ledger, runs_dir, seed, stamp, epsilon)
         for variant in variants:
             vcfg = copy.deepcopy(cfg)
             vcfg["eval"]["tasks"] = {**vcfg["eval"]["tasks"], **variant.get("tasks", {})}
@@ -122,11 +142,11 @@ def run_walker_study(cfg: dict, ledger: SessionLedger, runs_dir: str) -> list[di
                 run_id = f"{cfg['run']['name']}-{arm['id']}-{variant['name']}-s{seed}-{stamp}"
                 ctx = RunContext(runs_dir, run_id, {**vcfg, "arm": arm, "variant": variant},
                                  phase=cfg["run"]["phase"], arm=arm["id"], seed=seed,
-                                 parent_run=collector_id if strategy == "learned" else None)
+                                 parent_run=collector_id if strategy in LEARNED else None)
                 kind = "reporting" if strategy in NON_ADAPTIVE else "adaptive"
                 cap = wc["per_run_cap"]
                 ledger.register_run(run_id, alloc, cap, {"strategy": strategy, "variant": variant["name"]})
-                if strategy == "learned" and collector_used:
+                if strategy in LEARNED and collector_used:
                     ledger.logical_charge(run_id, collector_id, collector_used, "evidence collected to train the edit policy")
                 meter = BudgetMeter(ledger, run_id, alloc, cap, kind=kind)
                 agent = None if strategy == "reference" else make_walker(
@@ -151,8 +171,10 @@ def run_walker_study(cfg: dict, ledger: SessionLedger, runs_dir: str) -> list[di
                     ctx.event({"type": "search_benchmark", **summary["search_benchmark"]})
                 ctx.finish("completed", stop_reason="tasks_done" if len(rows) == len(order) else "interaction_cap",
                            interactions={"physical": meter.used + warm, "warmup": warm, "evaluation": meter.used,
-                                         "kind": kind, "logical_policy_evidence": collector_used if strategy == "learned" else 0},
-                           policy_training=policy_stats if strategy == "learned" else None,
+                                         "kind": kind,
+                                         "logical_policy_evidence": collector_used if strategy in LEARNED else 0},
+                           policy_training=policy_stats if strategy in LEARNED else None,
+                           policy_source=collector_id if strategy in LEARNED else None,
                            eval_summary=summary, session_budget=ledger.summary())
                 results.append({"run_id": run_id, "arm": arm["id"], "strategy": strategy,
                                 "variant": variant["name"], "seed": seed, **summary})

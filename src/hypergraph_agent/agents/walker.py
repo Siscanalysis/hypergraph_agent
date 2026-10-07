@@ -26,6 +26,11 @@ Strategies
 ``learned``        proposals drawn from a trained edit policy (``agents.edit_policy``)
 ``exact``          enumeration of the attempted recipes' joint space when it is small;
                    the cheapest consistent node (reference for search quality)
+``focused_sample`` / ``learned_sample``
+                   the focused or learned walk until a consistent node is reached,
+                   then ``consistent_moves`` Metropolis moves restricted to consistent
+                   nodes (targeting a uniform draw among them); recipes without
+                   evidence are redrawn from the prior at every replan
 The last four use episode-level evidence and also work when intermediate items
 are unobserved (``observe_items: goal_only``), where the posterior no longer
 factorizes by recipe. They assume deterministic dynamics and that items start
@@ -46,8 +51,10 @@ from ..envs.vocabulary import is_base
 from ..topology.inference import DependencyModel, enumerate_hypotheses, evidence_from_transition
 from ..training.budget import BudgetExhausted
 
-STRATEGIES = ("maximal", "sample", "optimistic", "local_uniform", "local_focused", "learned", "exact")
-EPISODIC = ("local_uniform", "local_focused", "learned", "exact")
+STRATEGIES = ("maximal", "sample", "optimistic", "local_uniform", "local_focused", "learned", "exact",
+              "focused_sample", "learned_sample")
+EPISODIC = ("local_uniform", "local_focused", "learned", "exact", "focused_sample", "learned_sample")
+SAMPLING = {"focused_sample": "focused", "learned_sample": "learned"}
 
 
 @dataclass(frozen=True)
@@ -264,6 +271,32 @@ def local_walk(start: dict, w: "WorldState", log, mode: str, rng: np.random.Gene
                   "violations": best_v}
 
 
+def mix_consistent(node: dict, w: "WorldState", log, rng: np.random.Generator, max_size: int,
+                   moves: int) -> tuple[dict, dict]:
+    """Metropolis moves restricted to nodes consistent with every logged
+    observation. Proposals are uniform over single edits of attempted recipes;
+    accepting with min(1, |N(x)| / |N(y)|) corrects for unequal neighbourhood
+    sizes, so the walk targets a uniform draw among the consistent nodes that
+    are connected to the start through consistent nodes."""
+    ev = w.evidence
+    start = ev.evaluations
+    attempted = sorted({s for lg in ev.all_logs(log) for s in lg.attempted() if w.infos[s].known is None})
+    cur = dict(node)
+    nb = neighbours(cur, w.infos, attempted, max_size)
+    accepted = 0
+    for _ in range(moves):
+        if not nb:
+            break
+        nxt = apply_edit(cur, nb[int(rng.integers(len(nb)))])
+        if ev.violations(nxt, log) != 0:
+            continue
+        nb2 = neighbours(nxt, w.infos, attempted, max_size)
+        if rng.random() < min(1.0, len(nb) / max(len(nb2), 1)):
+            cur, nb = nxt, nb2
+            accepted += 1
+    return cur, {"mix_evals": ev.evaluations - start, "mix_accepted": accepted}
+
+
 class WorldState:
     def __init__(self, world_key: str, epsilon: float, max_size: int):
         self.world_key = world_key
@@ -298,11 +331,12 @@ class Walker:
     def __init__(self, strategy: str, rng: np.random.Generator, *, epsilon: float = 0.0,
                  max_size: int = 3, max_evals: int = 400, temperature: float = 0.5,
                  restart_after: int = 80, exact_cap: int = 20_000, plan_cap: int = 4096,
-                 policy=None):
+                 policy=None, consistent_moves: int = 50):
         if strategy not in STRATEGIES:
             raise ValueError(f"unknown strategy {strategy!r}")
-        if strategy == "learned" and policy is None:
-            raise ValueError("the learned strategy needs an edit policy")
+        if strategy in ("learned", "learned_sample") and policy is None:
+            raise ValueError("the learned strategies need an edit policy")
+        self.consistent_moves = consistent_moves
         self.strategy, self.rng, self.epsilon = strategy, rng, epsilon
         self.max_size, self.max_evals, self.temperature = max_size, max_evals, temperature
         self.restart_after, self.exact_cap, self.plan_cap = restart_after, exact_cap, plan_cap
@@ -348,8 +382,26 @@ class Walker:
             if node is not None:
                 return node, st
             return self._local(w, log, "focused")  # space too large: declared fallback
+        if s in SAMPLING:
+            return self._local_sample(w, log, SAMPLING[s])
         return self._local(w, log, {"local_uniform": "uniform", "local_focused": "focused",
                                     "learned": "learned"}[s])
+
+    def _local_sample(self, w: WorldState, log, mode: str) -> tuple[dict, dict]:
+        logs = w.evidence.all_logs(log)
+        attempted = {s for lg in logs for s in lg.attempted()}
+        start = dict(w.node)
+        for sig in w.hidden():  # recipes without evidence: a fresh draw from the prior
+            if sig not in attempted:
+                hyps = w.hypotheses[sig]
+                start[sig] = hyps[int(self.rng.integers(len(hyps)))]
+        node, st = local_walk(start, w, log, mode, self.rng, self.max_size, self.max_evals,
+                              self.temperature, self.restart_after, self.policy)
+        if st["violations"] == 0:
+            node, mix = mix_consistent(node, w, log, self.rng, self.max_size, self.consistent_moves)
+            st = {**st, **mix, "evals": st["evals"] + mix["mix_evals"]}
+        w.node = node
+        return node, st
 
     def _local(self, w: WorldState, log, mode: str) -> tuple[dict, dict]:
         best, st = local_walk(dict(w.node), w, log, mode, self.rng, self.max_size, self.max_evals,

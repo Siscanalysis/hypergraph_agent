@@ -21,7 +21,7 @@ def plan(cfg: dict) -> dict:
     variants = [v["name"] for v in wc["eval_variants"]] or ["default"]
     seeds = cfg["run"]["seeds"]
     es = eval_stream_config(cfg)
-    learned = any(s == "learned" for _, s in arms)
+    learned = any(s in ("learned", "learned_sample") for _, s in arms) and not wc["policy_from"]
     n_runs = len(arms) * len(variants) * len(seeds)
     return {
         "phase": cfg["run"]["phase"], "allocation": cfg["run"]["allocation"], "arms": arms,

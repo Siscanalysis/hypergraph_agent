@@ -55,6 +55,10 @@ DEFAULTS: dict = {
         "collector_interactions": 1500, "benchmark_source": "local_focused", "benchmark_starts": 5,
         # shared-world studies: world seed = train.shared_world_seed + run seed (as in the P3 pilot)
         "shared_world_offset_by_seed": False,
+        # reuse a trained edit policy: glob with {seed}, e.g. "runs/walk-b-collector-s{seed}-*/edit_policy.pt"
+        "policy_from": None,
+        # sampling walkers: Metropolis moves among consistent nodes after reaching one
+        "consistent_moves": 50,
         "policy": {"iters": 1500, "lr": 0.003, "hidden": 32},
     },
     "arms": [{"id": "gated", "encoder": "gated", "graph_mode": "known", "topology": "none",
