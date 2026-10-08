@@ -1,8 +1,8 @@
 # Study R: replication of the Stage D amortization result
 
 Status: protocol frozen on 2026-10-08 by the commit that adds this file,
-before any measurement run; the measurement runs execute that commit from a
-clean checkout. The development checks listed under Implementation used only
+before any measurement run; the measurement runs executed that commit from a
+clean checkout, and Sections 5 and 6 report them. The development checks listed under Implementation used only
 the `dev` allocation and the `replication_dev` namespace (plus the Stage D
 worlds for the reproduction check).
 
@@ -306,8 +306,80 @@ Equivalence and development checks:
 
 ## 5. Results
 
-Not yet run.
+All 110 measurement runs (50 adaptive, 60 reporting) completed their streams
+from a clean checkout of the freeze commit; none was rerun. They used 154,498
+adaptive interactions (allocation `rep`) and 117,157 reporting interactions.
+Tables: `artifacts/replication/replication_summary.md` (and `.json`); figure:
+`artifacts/replication/replication_cost_by_episode.png`.
+
+Late half (episodes 9-16), steps per optimal step, mean over units of the
+per-unit ratio, paired per unit (50 worlds per cell; 50 blocks in F0):
+
+| Cell | `focused_sample` | `maximal` | Difference [95% CI] | Lower in | Late success difference [95% CI] | Verdict |
+|---|---|---|---|---|---|---|
+| F1, failure 0 (primary) | 1.51 | 1.87 | -0.357 [-0.449, -0.270] | 42 of 50 | -0.005 [-0.013, 0.000] | pass |
+| F1, failure 0.1 | 1.76 | 2.08 | -0.311 [-0.408, -0.218] | 37 of 50 | -0.058 [-0.098, -0.020] | pass |
+| F2, failure 0 | 2.05 | 1.85 | +0.202 [0.120, 0.280] | 13 of 50 | -0.388 [-0.465, -0.315] | fail |
+| F2, failure 0.1 | 2.35 | 2.10 | +0.248 [0.195, 0.297] | 5 of 50 | -0.522 [-0.583, -0.465] | fail |
+| F0, failure 0 (control) | 2.27 | 1.85 | +0.414 [0.375, 0.452] | 1 of 50 | -0.207 [-0.250, -0.165] | descriptive |
+| F0, failure 0.1 (control) | 2.39 | 2.08 | +0.313 [0.271, 0.355] | 1 of 50 | -0.290 [-0.340, -0.240] | descriptive |
+
+Pooled ratios (total steps over total optimal steps) are quoted below where
+stated; they differ from the per-unit means by at most 0.03 in F1.
+
+- Primary: passes. In F1 without failures the sampler pays for exploration in
+  episodes 1-8 (pooled 2.04 against 1.82) and is cheaper from episode 9 on
+  (pooled 1.52 against 1.84; break-even episode 9), with late success 0.99
+  against 1.00. Over all 16 episodes the two are about even (pooled 1.78
+  against 1.83; paired per-world difference -0.060 [-0.125, 0.004], lower in 28
+  of 50 worlds).
+- Failures (0.1) do not remove the F1 advantage (about 15%), at a cost in late
+  success (0.91 against 0.97). The break-even episode is again 9, so the
+  order-of-magnitude expectation of a later break-even was not borne out; in
+  both F1 cells the break-even rests on a margin of 0.01 at episode 8.
+- Amortization check (pre-registered): the difference-in-differences is
+  -0.571 [-0.655, -0.496] in F1 and -0.039 [-0.100, 0.019] in F0, so the
+  advantage appears only where recipes recur: supported (also at failure 0.1:
+  F1 -0.503 [-0.596, -0.411], F0 -0.051 [-0.125, 0.020]).
+- Random omission: `focused_sample` is cheaper than `random_omit` in every F1
+  and F2 cell (F1 at failure 0: -0.947 [-1.036, -0.865], lower in 50 of 50
+  worlds; `random_omit` late success 0.66). Using the evidence beats omitting
+  candidates at about the same rate without it (omitted fraction late: 0.65
+  against the sampler's 0.61 in F1, 0.69 and 0.69 in F2).
+- F2 does not replicate: the sampler stays costlier than the brute-force plan
+  through episode 16 (break-even never). Its whole late excess comes from
+  failed episodes: at failure 0 the pooled late excess is +0.215, of which
+  +0.238 comes from failed episodes (155 of 400) and -0.023 from solved ones;
+  on the tasks it solves the sampler is barely cheaper than `maximal` (1.88
+  against 1.92), whereas in F1 the same comparison is 1.51 against 1.85. It
+  improves within a world at failure 0 (difference-in-differences -0.298
+  [-0.385, -0.219]) but hardly at 0.1 (-0.059 [-0.114, -0.006]; flat
+  per-episode curve). Late failure grows with goal depth (0.19, 0.42 and 0.59
+  at depths 3, 4 and 5, failure 0), and every failed episode ran out of budget
+  after at least one contradicted guess.
 
 ## 6. Verdict and limits
 
-Not yet available.
+The Stage D result replicates at scale in its own family: on 50 independent
+worlds, sampling among the hypotheses that explain the evidence makes episodes
+9-16 about 18-19% cheaper than the brute-force plan (per-world mean 1.51
+against 1.87 steps per optimal step; pooled 1.52 against 1.84), and about 15%
+cheaper with random action failures, at a late-success cost of 0.06. The
+controls are consistent with the intended explanation: there is no gain
+without recipe recurrence, and omitting candidates at about the same rate
+without the evidence is much worse. That second control shows that the
+evidence is used; it does not show that the posterior weighting itself is what
+matters, since no control used the evidence without the posterior (such as an
+adaptive group-testing rule). Over all 16 episodes the sampler and the
+brute-force plan are about even. The replication is not general: in the deeper
+family with more alternative recipes and larger pools (F2) the sampler does not
+break even within 16 episodes; its excess cost comes entirely from failed
+episodes, consistent with wrong guesses on long chains exhausting the budget
+(not tested directly).
+
+Limits: one generator family passes and one fails, so the boundary between
+them (depth, alternatives, pool size or budget) is not located; budgets are
+fixed at two steps above the public brute-force bound; no exact posterior
+sampler or adaptive group-testing control was run; worlds are simulated, the
+failure probability is known to the agents, and one hypothesis prior (uniform
+over the class) is used throughout.
