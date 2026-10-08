@@ -1,0 +1,42 @@
+# Study M, M2 confirmation (docs/studies/M_markov_ranking.md): the 2x2
+# factorial representation {hyper, pair} x selector {sample, rank} plus the
+# extra arm hyper_sample_ppr, on fresh worlds (namespace markov_conf), ten
+# worlds per seed x 16 episodes, every seed its own worlds. Allocation m2.
+run:
+  name: markov-m2
+  phase: markov_m2
+  allocation: m2
+  seeds: [0, 1, 2, 3, 4]
+  ledger: runs/M-ledger.json
+budget:
+  ledger_allocations: {dev: 6000, m1: 18475, m2: 77650}
+  ledger_adaptive_cap: 102125
+  ledger_reporting_cap: 50500
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only}
+eval:
+  namespace: markov_conf
+  n_tasks: 160
+  track: inference
+  n_worlds: 10
+  episodes_per_world: 16
+walker:
+  # the largest sum of task budgets over the five seeds' streams: no run can be cut short
+  per_run_cap: 3148
+  eval_world_offset_by_seed: true
+  consistent_moves: 50
+  # agents.markov parameters. restart and ppr_seed are null placeholders: the agents
+  # refuse them until the M1 selection (selection worlds only) is written in, and a
+  # Markov arm is listed first so a run stops before any interaction. The others are
+  # fixed a priori.
+  markov: {restart: null, ppr_seed: null, prior_strength: 2.0, rank_neighbours: true,
+           proposal_floor: 0.1}
+arms:
+  - {id: hyper_rank, strategy: hyper_rank}
+  - {id: pair_sample, strategy: pair_sample}
+  - {id: pair_rank, strategy: pair_rank}
+  - {id: hyper_sample_ppr, strategy: hyper_sample_ppr}
+  - {id: focused_sample, strategy: focused_sample}

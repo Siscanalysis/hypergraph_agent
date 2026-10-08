@@ -15,6 +15,7 @@ import json
 import sys
 from pathlib import Path
 
+from .agents.walker import STRATEGIES
 from .config import eval_stream_config, load_config
 from .train import make_ledger
 
@@ -65,6 +66,14 @@ def main(argv=None) -> int:
     from .training.run import process_source
     process_source(Path(__file__).resolve().parents[2])
     cfg = load_config(args.config)
+    if not args.dry_run and any(a["strategy"] not in STRATEGIES + ("reference",) for a in cfg["arms"]):
+        # study M agents: refuse unset or invalid parameters before any run is registered, checked on the
+        # whole config (before --arms), so no arm of a config with an unset Markov parameter can run
+        from .agents.markov import markov_params
+        try:
+            markov_params(cfg["walker"]["markov"])
+        except (KeyError, ValueError) as exc:
+            p.error(f"walker.markov: {exc}")
     if args.seeds:
         cfg["run"]["seeds"] = args.seeds
     if args.arms:
