@@ -383,6 +383,13 @@ def tables(metrics: dict) -> dict:
     return dict(out)
 
 
+# one colour per arm in every panel and figure
+ARM_COLORS = {"reference": "tab:purple", "oracle": "tab:pink", "oracle_library": "tab:pink",
+              "random": "tab:gray", "none": "tab:olive", "pooled": "tab:blue", "isolated": "tab:orange",
+              "nomem": "tab:cyan", "blind": "tab:brown", "remember": "tab:orange", "promote": "tab:blue",
+              "sham_promote": "tab:red", "adaptive": "tab:green"}
+
+
 def figures(rows: list[dict], out_dir: Path, name: str) -> list[str]:
     import matplotlib
     matplotlib.use("Agg")
@@ -405,7 +412,7 @@ def figures(rows: list[dict], out_dir: Path, name: str) -> list[str]:
         for arm, eps in sorted(by_var[v].items()):
             xs = sorted(eps)
             ax.plot(xs, [eps[x][0] / max(eps[x][1], 1) for x in xs], marker="o", markersize=3,
-                    label=f"{arm} (episodes={sum(eps[x][2] for x in xs)})")
+                    color=ARM_COLORS.get(arm), label=f"{arm} (episodes={sum(eps[x][2] for x in xs)})")
         ax.set_yscale("log")
         ax.set_title(v, fontsize=8)
         ax.set_xlabel("episode index within a world")
@@ -438,7 +445,7 @@ def figures(rows: list[dict], out_dir: Path, name: str) -> list[str]:
             horizon = max((p[0] for pts in worlds for p in pts), default=1)
             grid = np.linspace(0, horizon, 60)
             vals = [[max([n for s, n in pts if s <= g], default=0) for g in grid] for pts in worlds]
-            ax.plot(grid, np.mean(vals, axis=0), label=f"{arm} (worlds={len(worlds)})")
+            ax.plot(grid, np.mean(vals, axis=0), color=ARM_COLORS.get(arm), label=f"{arm} (worlds={len(worlds)})")
         ax.set_title(v, fontsize=8)
         ax.set_xlabel("cumulative actions in a world")
         ax.set_ylabel("distinct concepts discovered")
