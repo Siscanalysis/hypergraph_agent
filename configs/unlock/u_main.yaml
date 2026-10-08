@@ -1,0 +1,94 @@
+# Study U, measurement (docs/studies/U_composites_unlocks.md): a mechanism and
+# validity check of TechTree as a test of discovery cost. Composite length k in
+# {1, 2, 3} crossed with intermediate signal off/on (k >= 2 only: with k = 1
+# there is no proper prefix, so k1-on is identical to k1-off for every arm) and
+# unlock visibility announced/silent: 10 cells. Per world a key composite of k
+# base primitives activates one of three extra slots; the goal (an entry
+# composite) uses that slot. 5 seeds x 6 worlds = 30 worlds per cell, 12
+# episodes per world. The oracle and the reference are identical across the
+# signal and visibility cells of one k (tested), so they run once per k; random
+# runs only where a contrast reads it. Draft until the protocol is frozen.
+run: {name: u-main, study: U, allocation: u_main, seeds: [0, 1, 2, 3, 4], ledger: runs/U-ledger.json,
+      requires_flag: true}
+ledger:
+  allocations: {dev: 20000, u_main: 864000}
+  adaptive_cap: 1000000
+  reporting_cap: 1400000
+world: {n_primitives: 4, n_slots: 3, n_unlocks: 1, unlock_level: 1, n_levels: 1, concepts_per_level: [2],
+        combo_length: 2}
+stream: {namespace: techtree_u, n_worlds: 6, episodes_per_world: 12, goal_levels: [1], goal_rule: unlock,
+         episode_budget: 100}
+variants:
+  - {name: k1-off-ann, world: {combo_length: 1}, stream: {signal: false, unlock_visibility: announced},
+     arms: [pooled, isolated, oracle, reference]}
+  - {name: k1-off-sil, world: {combo_length: 1}, stream: {signal: false, unlock_visibility: silent},
+     arms: [pooled, isolated]}
+  - {name: k2-off-ann, world: {combo_length: 2}, stream: {signal: false, unlock_visibility: announced},
+     arms: [pooled, isolated, oracle, reference]}
+  - {name: k2-off-sil, world: {combo_length: 2}, stream: {signal: false, unlock_visibility: silent},
+     arms: [pooled, isolated]}
+  - {name: k2-on-ann, world: {combo_length: 2}, stream: {signal: true, unlock_visibility: announced},
+     arms: [pooled, isolated]}
+  - {name: k2-on-sil, world: {combo_length: 2}, stream: {signal: true, unlock_visibility: silent},
+     arms: [pooled, isolated]}
+  - {name: k3-off-ann, world: {combo_length: 3}, stream: {signal: false, unlock_visibility: announced},
+     arms: [pooled, isolated, random, oracle, reference]}
+  - {name: k3-off-sil, world: {combo_length: 3}, stream: {signal: false, unlock_visibility: silent},
+     arms: [pooled, isolated, random]}
+  - {name: k3-on-ann, world: {combo_length: 3}, stream: {signal: true, unlock_visibility: announced},
+     arms: [pooled, isolated]}
+  - {name: k3-on-sil, world: {combo_length: 3}, stream: {signal: true, unlock_visibility: silent},
+     arms: [pooled, isolated]}
+arms: [pooled, isolated, random, oracle, reference]
+analysis:
+  late_from: 6
+  tests:
+    - {type: paired, role: primary, name: "U1a isolated - pooled, k3 off ann", metric: first_success_steps,
+       a: isolated, b: pooled, variant: k3-off-ann, expect: greater}
+    - {type: ratio, role: primary, name: "U1b isolated / pooled in 2.85-4.75 (analytic 3.8), k3 off ann",
+       metric: first_success_steps, a: isolated, b: pooled, variant: k3-off-ann, band: [2.85, 4.75]}
+    - {type: all_success, role: validity, name: "V1 reference solves every task", arm: reference}
+    - {type: all_success, role: validity, name: "V2 oracle solves every task", arm: oracle}
+    - {type: at_least_reference, role: validity, name: "V3 oracle never shorter than the reference", arm: oracle}
+    - {type: paired, role: secondary, name: "S1 isolated - pooled, k3 off sil", metric: first_success_steps,
+       a: isolated, b: pooled, variant: k3-off-sil, expect: greater}
+    - {type: paired, role: secondary, name: "S1 isolated - pooled, k3 on ann", metric: first_success_steps,
+       a: isolated, b: pooled, variant: k3-on-ann, expect: greater}
+    - {type: paired, role: secondary, name: "S1 isolated - pooled, k3 on sil", metric: first_success_steps,
+       a: isolated, b: pooled, variant: k3-on-sil, expect: greater}
+    - {type: paired, role: secondary, name: "S1 isolated - pooled, k2 off ann", metric: first_success_steps,
+       a: isolated, b: pooled, variant: k2-off-ann, expect: greater}
+    - {type: paired, role: secondary, name: "S1 isolated - pooled, k2 off sil", metric: first_success_steps,
+       a: isolated, b: pooled, variant: k2-off-sil, expect: greater}
+    - {type: ratio, role: secondary, name: "S1r isolated / pooled in 2.93-4.88 (analytic 3.9), k3 off sil",
+       metric: first_success_steps, a: isolated, b: pooled, variant: k3-off-sil, band: [2.93, 4.88]}
+    - {type: ratio, role: secondary, name: "S1r isolated / pooled in 2.00-3.33 (analytic 2.67), k2 off ann",
+       metric: first_success_steps, a: isolated, b: pooled, variant: k2-off-ann, band: [2.0, 3.33]}
+    - {type: ratio, role: secondary, name: "S1r isolated / pooled in 2.09-3.48 (analytic 2.78), k2 off sil",
+       metric: first_success_steps, a: isolated, b: pooled, variant: k2-off-sil, band: [2.09, 3.48]}
+    - {type: equivalence, role: secondary, name: "S2 isolated equivalent to pooled within 1 action, k1 off ann",
+       metric: first_success_steps, a: isolated, b: pooled, variant: k1-off-ann, margin_abs: 1}
+    - {type: interaction, role: secondary, name: "S3 pooling advantage grows from k2 to k3 (off ann)",
+       metric: first_success_steps, a: isolated, b: pooled, variant_hi: k3-off-ann, variant_lo: k2-off-ann,
+       expect: greater}
+    - {type: paired, role: secondary, name: "S4 discovery cost pooled - oracle, k3 off ann",
+       metric: first_success_steps, a: pooled, b: oracle, variant: k3-off-ann, expect: greater}
+    - {type: paired, role: secondary, name: "S5 random - pooled, k3 off ann", metric: first_success_steps,
+       a: random, b: pooled, variant: k3-off-ann, expect: greater}
+    - {type: across, role: secondary, name: "S6 signal helps pooled, k3 ann", metric: first_success_steps,
+       arm: pooled, variant_a: k3-on-ann, variant_b: k3-off-ann, expect: less}
+    - {type: across, role: secondary, name: "S6 signal helps isolated, k3 ann", metric: first_success_steps,
+       arm: isolated, variant_a: k3-on-ann, variant_b: k3-off-ann, expect: less}
+    - {type: across, role: secondary, name: "S7 silent costs pooled, k3 off", metric: first_success_steps,
+       arm: pooled, variant_a: k3-off-sil, variant_b: k3-off-ann, expect: greater}
+    - {type: across, role: secondary, name: "S7 silent costs isolated, k3 off", metric: first_success_steps,
+       arm: isolated, variant_a: k3-off-sil, variant_b: k3-off-ann, expect: greater}
+    - {type: across, role: secondary, name: "S7 silent costs random, k3 off", metric: first_success_steps,
+       arm: random, variant_a: k3-off-sil, variant_b: k3-off-ann, expect: greater}
+    - {type: paired, role: secondary, name: "S8 late cost isolated - pooled, k3 off ann", metric: steps_late,
+       a: isolated, b: pooled, variant: k3-off-ann, expect: not_less}
+  verdict:
+    rule: all
+    require: ["U1a isolated - pooled, k3 off ann", "U1b isolated / pooled in 2.85-4.75 (analytic 3.8), k3 off ann",
+              "V1 reference solves every task", "V2 oracle solves every task",
+              "V3 oracle never shorter than the reference"]

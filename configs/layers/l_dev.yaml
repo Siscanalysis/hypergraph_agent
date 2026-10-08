@@ -1,0 +1,34 @@
+# Study L, development only (allocation dev, namespace techtree_dev): calibration
+# of phase L1 at reuse depth 0 and 2 on 2 worlds x 12 episodes. Same world and
+# stream parameters as l1_main.yaml otherwise; the ledger block is identical so
+# whichever config runs first creates runs/L-ledger.json with every allocation.
+run: {name: l-dev, study: L, allocation: dev, seeds: [0], ledger: runs/L-ledger.json}
+ledger:
+  allocations: {dev: 20000, l1_main: 576000, l2_main: 576000}
+  adaptive_cap: 1300000
+  reporting_cap: 650000
+world: {n_primitives: 3, n_levels: 3, concepts_per_level: [3, 3, 3], combo_length: 2, length_rule: linear}
+stream: {namespace: techtree_dev, n_worlds: 2, episodes_per_world: 12, goal_levels: [3], episode_budget: 100,
+         reveal_levels: [1]}
+variants:
+  - {name: d0, world: {reuse_depth: 0}}
+  - {name: d2, world: {reuse_depth: 2}}
+arms: [remember, promote, sham_promote, adaptive, oracle_library, reference]
+analysis:
+  late_from: 6
+  tests:
+    - {type: paired, role: primary, name: "L1 promote - remember, depth 2", metric: steps_late,
+       a: promote, b: remember, variant: d2, expect: less}
+    - {type: equivalence, role: falsification, name: "F1 promote equivalent to remember at depth 2 (+-10%)",
+       metric: steps_late, a: promote, b: remember, variant: d2, margin_rel: 0.10, level: 0.90}
+    - {type: paired, role: condition, name: "S1 control: promote - remember, depth 0 (no benefit)",
+       metric: steps_late, a: promote, b: remember, variant: d0, expect: not_less}
+    - {type: paired, role: condition, name: "S5 promote - sham, depth 2", metric: steps_late,
+       a: promote, b: sham_promote, variant: d2, expect: less}
+    - {type: all_success, role: validity, name: "V1 reference solves every task", arm: reference}
+  verdict:
+    rule: precedence
+    primary: "L1 promote - remember, depth 2"
+    falsification: "F1 promote equivalent to remember at depth 2 (+-10%)"
+    conditions: ["S1 control: promote - remember, depth 0 (no benefit)", "S5 promote - sham, depth 2"]
+    validity: ["V1 reference solves every task"]

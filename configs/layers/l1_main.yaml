@@ -1,0 +1,62 @@
+# Study L, phase L1, measurement (docs/studies/L_layered_discovery.md): whether
+# discoveries used as atoms of new hypotheses (promote) beat discoveries replayed
+# as literal links (remember), with the level-1 links supplied identically to
+# every arm at the start of every episode. Reuse depth 0/1/2 on coupled worlds
+# (same structure; only the sequences above level 1 differ). Goals at level 3.
+# 8 seeds x 4 worlds = 32 worlds per depth, 12 episodes per world. `none` runs
+# only at depths 0 and 2, where S9 and S6 read it. Draft until frozen.
+run: {name: l1-main, study: L, allocation: l1_main, seeds: [0, 1, 2, 3, 4, 5, 6, 7], ledger: runs/L-ledger.json,
+      requires_flag: true}
+ledger:
+  allocations: {dev: 20000, l1_main: 576000, l2_main: 576000}
+  adaptive_cap: 1300000
+  reporting_cap: 650000
+world: {n_primitives: 3, n_levels: 3, concepts_per_level: [3, 3, 3], combo_length: 2, length_rule: linear}
+stream: {namespace: techtree_l, n_worlds: 4, episodes_per_world: 12, goal_levels: [3], episode_budget: 100,
+         reveal_levels: [1]}
+variants:
+  - {name: d0, world: {reuse_depth: 0}}
+  - {name: d1, world: {reuse_depth: 1},
+     arms: [remember, promote, sham_promote, adaptive, oracle_library, reference]}
+  - {name: d2, world: {reuse_depth: 2}}
+arms: [none, remember, promote, sham_promote, adaptive, oracle_library, reference]
+analysis:
+  late_from: 6
+  tests:
+    - {type: paired, role: primary, name: "L1 promote - remember, depth 2", metric: steps_late,
+       a: promote, b: remember, variant: d2, expect: less}
+    - {type: equivalence, role: falsification, name: "F1 promote equivalent to remember at depth 2 (+-10%)",
+       metric: steps_late, a: promote, b: remember, variant: d2, margin_rel: 0.10, level: 0.90}
+    - {type: paired, role: condition, name: "S1 control: promote - remember, depth 0 (no benefit)",
+       metric: steps_late, a: promote, b: remember, variant: d0, expect: not_less}
+    - {type: paired, role: condition, name: "S5 promote - sham, depth 2", metric: steps_late,
+       a: promote, b: sham_promote, variant: d2, expect: less}
+    - {type: interaction, role: secondary, name: "S2 benefit larger at depth 2 than 0", metric: steps_late,
+       a: promote, b: remember, variant_hi: d2, variant_lo: d0, expect: less}
+    - {type: paired, role: secondary, name: "S3 promote - remember, depth 1", metric: steps_late,
+       a: promote, b: remember, variant: d1, expect: less}
+    - {type: interaction, role: secondary, name: "S3 benefit larger at depth 2 than 1", metric: steps_late,
+       a: promote, b: remember, variant_hi: d2, variant_lo: d1, expect: less}
+    - {type: paired, role: secondary, name: "S4 sham - remember, depth 0", metric: steps_late,
+       a: sham_promote, b: remember, variant: d0, expect: not_less}
+    - {type: paired, role: secondary, name: "S4 sham - remember, depth 2", metric: steps_late,
+       a: sham_promote, b: remember, variant: d2, expect: not_less}
+    - {type: paired, role: secondary, name: "S6 sham - none, depth 2", metric: steps_late,
+       a: sham_promote, b: none, variant: d2, expect: less}
+    - {type: within_margin, role: secondary, name: "S7 adaptive within 10% of the better fixed arm",
+       metric: steps_late, a: adaptive, others: [remember, promote], variants: [d0, d1, d2], margin_rel: 0.10}
+    - {type: paired, role: secondary, name: "S8 whole-stream promote - remember, depth 2", metric: steps_all,
+       a: promote, b: remember, variant: d2, expect: less}
+    - {type: paired, role: secondary, name: "S9 memory: none - remember, depth 0", metric: steps_late,
+       a: none, b: remember, variant: d0, expect: greater}
+    - {type: all_success, role: validity, name: "V1 reference solves every task", arm: reference}
+    - {type: all_success, role: validity, name: "V2 oracle library solves every task", arm: oracle_library}
+    - {type: at_least_reference, role: validity, name: "V3 oracle library never shorter than the reference",
+       arm: oracle_library}
+  verdict:
+    rule: precedence
+    primary: "L1 promote - remember, depth 2"
+    falsification: "F1 promote equivalent to remember at depth 2 (+-10%)"
+    conditions: ["S1 control: promote - remember, depth 0 (no benefit)", "S5 promote - sham, depth 2"]
+    validity: ["V1 reference solves every task", "V2 oracle library solves every task",
+               "V3 oracle library never shorter than the reference"]

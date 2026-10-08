@@ -1,0 +1,47 @@
+# Study U, development only (allocation dev, namespace techtree_dev): calibration
+# of the k2 and k3 cells of u_main.yaml on 2 worlds x 8 episodes, with the same
+# arms per cell except random (k3-off-ann only). Same world and stream
+# parameters as u_main.yaml otherwise; the ledger block is identical so
+# whichever config runs first creates runs/U-ledger.json with both allocations.
+run: {name: u-dev, study: U, allocation: dev, seeds: [0], ledger: runs/U-ledger.json}
+ledger:
+  allocations: {dev: 20000, u_main: 864000}
+  adaptive_cap: 1000000
+  reporting_cap: 1400000
+world: {n_primitives: 4, n_slots: 3, n_unlocks: 1, unlock_level: 1, n_levels: 1, concepts_per_level: [2],
+        combo_length: 2}
+stream: {namespace: techtree_dev, n_worlds: 2, episodes_per_world: 8, goal_levels: [1], goal_rule: unlock,
+         episode_budget: 100}
+variants:
+  - {name: k2-off-ann, world: {combo_length: 2}, stream: {signal: false, unlock_visibility: announced},
+     arms: [pooled, isolated, oracle, reference]}
+  - {name: k2-off-sil, world: {combo_length: 2}, stream: {signal: false, unlock_visibility: silent},
+     arms: [pooled, isolated]}
+  - {name: k2-on-ann, world: {combo_length: 2}, stream: {signal: true, unlock_visibility: announced},
+     arms: [pooled, isolated]}
+  - {name: k2-on-sil, world: {combo_length: 2}, stream: {signal: true, unlock_visibility: silent},
+     arms: [pooled, isolated]}
+  - {name: k3-off-ann, world: {combo_length: 3}, stream: {signal: false, unlock_visibility: announced},
+     arms: [pooled, isolated, random, oracle, reference]}
+  - {name: k3-off-sil, world: {combo_length: 3}, stream: {signal: false, unlock_visibility: silent},
+     arms: [pooled, isolated]}
+  - {name: k3-on-ann, world: {combo_length: 3}, stream: {signal: true, unlock_visibility: announced},
+     arms: [pooled, isolated]}
+  - {name: k3-on-sil, world: {combo_length: 3}, stream: {signal: true, unlock_visibility: silent},
+     arms: [pooled, isolated]}
+arms: [pooled, isolated, random, oracle, reference]
+analysis:
+  late_from: 4
+  tests:
+    - {type: paired, role: primary, name: "U1a isolated - pooled, k3 off ann", metric: first_success_steps,
+       a: isolated, b: pooled, variant: k3-off-ann, expect: greater}
+    - {type: ratio, role: primary, name: "U1b isolated / pooled, k3 off ann", metric: first_success_steps,
+       a: isolated, b: pooled, variant: k3-off-ann, band: [2.85, 4.75]}
+    - {type: all_success, role: validity, name: "V1 reference solves every task", arm: reference}
+    - {type: all_success, role: validity, name: "V2 oracle solves every task", arm: oracle}
+    - {type: at_least_reference, role: validity, name: "V3 oracle never shorter than the reference", arm: oracle}
+  verdict:
+    rule: all
+    require: ["U1a isolated - pooled, k3 off ann", "U1b isolated / pooled, k3 off ann",
+              "V1 reference solves every task", "V2 oracle solves every task",
+              "V3 oracle never shorter than the reference"]
