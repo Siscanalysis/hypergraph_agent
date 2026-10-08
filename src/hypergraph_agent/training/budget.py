@@ -36,6 +36,19 @@ class BudgetExhausted(RuntimeError):
     pass
 
 
+def _retry(fn, timeout: float = 60.0):
+    """On Windows a file that another process is reading cannot be replaced, and a
+    reader can meet a replacement in progress; both are retried briefly."""
+    t0 = time.time()
+    while True:
+        try:
+            return fn()
+        except (PermissionError, json.JSONDecodeError):
+            if time.time() - t0 > timeout:
+                raise
+            time.sleep(0.05)
+
+
 class _FileLock:
     """Exclusive lock file so concurrent commands update one ledger safely."""
 
@@ -78,7 +91,7 @@ class SessionLedger:
 
     def _refresh(self):
         if self.path is not None and self.path.exists():
-            self.state = json.loads(self.path.read_text())
+            self.state = _retry(lambda: json.loads(self.path.read_text()))
 
     def _mutate(self, fn):
         if self.path is None:
@@ -89,7 +102,7 @@ class SessionLedger:
             fn(self.state)
             tmp = self.path.with_suffix(".tmp")
             tmp.write_text(json.dumps(self.state, indent=1))
-            os.replace(tmp, self.path)
+            _retry(lambda: os.replace(tmp, self.path))
 
     # --------------------------------------------------------------- caps
     def remaining(self, allocation: str, kind: str = "adaptive") -> int:
