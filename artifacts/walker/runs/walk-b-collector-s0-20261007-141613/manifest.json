@@ -1,0 +1,65 @@
+{
+ "run_id": "walk-b-collector-s0-20261007-141613",
+ "parent_run": null,
+ "phase": "walker_b",
+ "arm": "collector",
+ "seed": 0,
+ "status": "completed",
+ "method_version": "2.0",
+ "config_hash": "a96506d71a51336e",
+ "source": {
+  "commit": "911129f0fd67c286719e6ae9f418b847c5c4dcc0",
+  "dirty": false,
+  "dirty_patch_sha256": null,
+  "loaded_code_sha256": "32af5532190970a245c8f613117b5f4ce496d59707db6a0288d6d9859b757751",
+  "commit_at_run_creation": "911129f0fd67c286719e6ae9f418b847c5c4dcc0",
+  "code_changed_since_process_start": false
+ },
+ "environment": {
+  "python": "3.12.13",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "torch": "2.14.1+cpu",
+  "numpy": "2.5.3",
+  "gymnasium": "1.4.0",
+  "torch_threads": 4,
+  "device": "cpu",
+  "deterministic_algorithms": false,
+  "package": "0.1.0",
+  "method_version": "2.0"
+ },
+ "start_time": "2026-10-07T14:16:14",
+ "end_time": "2026-10-07T14:18:12",
+ "wallclock_s": 118.6,
+ "interactions": {
+  "physical": 852,
+  "kind": "adaptive"
+ },
+ "collected": {
+  "episodes": 64,
+  "worlds": 8,
+  "problems": 56
+ },
+ "policy_training": {
+  "iters": 1500,
+  "search_evaluations": 71507,
+  "mean_evals_first100": 97.1,
+  "mean_evals_last100": 41.73,
+  "solved_last100": 1.0
+ },
+ "session_budget": {
+  "adaptive_total": 18645,
+  "adaptive_cap": 32000,
+  "reporting_total": 2419,
+  "reporting_cap": 8000,
+  "by_allocation": {
+   "pre_plan_development": 4377,
+   "walker_a": 13416,
+   "walker_b": 852
+  },
+  "allocations": {
+   "pre_plan_development": 4377,
+   "walker_a": 17000,
+   "walker_b": 10600
+  }
+ }
+}

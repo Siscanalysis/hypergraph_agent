@@ -1,0 +1,179 @@
+{
+ "run_id": "walk-d-learned_sample-default-s0-20261007-161217",
+ "parent_run": "walk-b-collector-s0-20261007-141613",
+ "phase": "walker_d",
+ "arm": "learned_sample",
+ "seed": 0,
+ "status": "completed",
+ "method_version": "2.0",
+ "config_hash": "bcdde6fc8e52b3a9",
+ "source": {
+  "commit": "8a3e2ca1f6fd8d103b3f22c3e5d981a87bfb7c63",
+  "dirty": false,
+  "dirty_patch_sha256": null,
+  "loaded_code_sha256": "d1e0c5e772e0deaf24346ab8e1c065b71d1902c29d4380309fe63bd122af5e7a",
+  "commit_at_run_creation": "8a3e2ca1f6fd8d103b3f22c3e5d981a87bfb7c63",
+  "code_changed_since_process_start": false
+ },
+ "environment": {
+  "python": "3.12.13",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "torch": "2.14.1+cpu",
+  "numpy": "2.5.3",
+  "gymnasium": "1.4.0",
+  "torch_threads": 4,
+  "device": "cpu",
+  "deterministic_algorithms": false,
+  "package": "0.1.0",
+  "method_version": "2.0"
+ },
+ "start_time": "2026-10-07T16:13:16",
+ "end_time": "2026-10-07T16:13:19",
+ "wallclock_s": 2.8,
+ "stop_reason": "tasks_done",
+ "interactions": {
+  "physical": 929,
+  "warmup": 0,
+  "evaluation": 929,
+  "kind": "adaptive",
+  "logical_policy_evidence": 852
+ },
+ "policy_training": {
+  "iters": 1500,
+  "search_evaluations": 71507,
+  "mean_evals_first100": 97.1,
+  "mean_evals_last100": 41.73,
+  "solved_last100": 1.0
+ },
+ "policy_source": "walk-b-collector-s0-20261007-141613",
+ "eval_summary": {
+  "all": {
+   "n": 80,
+   "success_rate": 0.9375,
+   "mean_primitive_length_all": 11.6125,
+   "mean_manager_decisions_all": 11.6125,
+   "mean_noop_or_invalid": 1.475,
+   "mean_skill_calls": 0.0,
+   "n_failures": 5,
+   "failure_status": {
+    "deadline": 5
+   },
+   "mean_primitive_length_success": 11.146666666666667,
+   "mean_length_over_optimal_success": 1.593013468013468
+  },
+  "cost_ratio": 1.6384479717813052,
+  "half_split_episode": 8,
+  "cost_ratio_early": 1.8992805755395683,
+  "cost_ratio_late": 1.3875432525951557,
+  "success_late": 1.0,
+  "cost_ratio_late_by_world": {
+   "W6c2e5e80": 1.4576271186440677,
+   "W74ff8905": 1.3617021276595744,
+   "Wb032b3a1": 1.2105263157894737,
+   "Wbfd07e40": 1.5625,
+   "Wc83f57aa": 1.3225806451612903
+  },
+  "by_world_episode": {
+   "0": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 2.103448275862069
+   },
+   "1": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 2.1666666666666665
+   },
+   "2": {
+    "n": 5,
+    "success": 0.8,
+    "cost_ratio": 2.4324324324324325
+   },
+   "3": {
+    "n": 5,
+    "success": 0.6,
+    "cost_ratio": 1.775
+   },
+   "4": {
+    "n": 5,
+    "success": 0.8,
+    "cost_ratio": 1.6666666666666667
+   },
+   "5": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.4375
+   },
+   "6": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.7272727272727273
+   },
+   "7": {
+    "n": 5,
+    "success": 0.8,
+    "cost_ratio": 1.8421052631578947
+   },
+   "8": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.5
+   },
+   "9": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.5609756097560976
+   },
+   "10": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.3235294117647058
+   },
+   "11": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.4090909090909092
+   },
+   "12": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.411764705882353
+   },
+   "13": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.2857142857142858
+   },
+   "14": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.2
+   },
+   "15": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.3658536585365855
+   }
+  },
+  "search_evaluations": 10403,
+  "replans": 198
+ },
+ "session_budget": {
+  "adaptive_total": 28018,
+  "adaptive_cap": 32000,
+  "reporting_total": 3196,
+  "reporting_cap": 8000,
+  "by_allocation": {
+   "pre_plan_development": 4377,
+   "walker_a": 13416,
+   "walker_b": 8354,
+   "walker_d": 1871
+  },
+  "allocations": {
+   "pre_plan_development": 4377,
+   "walker_a": 13416,
+   "walker_b": 8384,
+   "walker_d": 5800
+  }
+ }
+}

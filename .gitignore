@@ -13,8 +13,8 @@ venv/
 env/
 
 # Raw run output, checkpoints and the session budget ledger stay local.
-# Small attributable summaries are copied to artifacts/ by `summarize`.
-runs/
+# Small attributable records and summaries are copied to artifacts/ (tracked).
+/runs/
 *.pt
 *.ckpt
 

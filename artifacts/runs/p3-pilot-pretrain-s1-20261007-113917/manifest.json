@@ -1,0 +1,124 @@
+{
+ "run_id": "p3-pilot-pretrain-s1-20261007-113917",
+ "parent_run": null,
+ "phase": "p3",
+ "arm": "pretrain",
+ "seed": 1,
+ "status": "completed",
+ "method_version": "2.0",
+ "config_hash": "e50ed0fc2a57e4e8",
+ "source": {
+  "commit": "070252bb332fad7d6f035cc55096600366bd3594",
+  "dirty": true,
+  "dirty_patch_sha256": "b02542e5ca438f37ef65084dbfa31637148f5fc9547d6476ddf41aa81a09a86d"
+ },
+ "environment": {
+  "python": "3.12.13",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "torch": "2.14.1+cpu",
+  "numpy": "2.5.3",
+  "gymnasium": "1.4.0",
+  "torch_threads": 2,
+  "device": "cpu",
+  "deterministic_algorithms": false,
+  "package": "0.1.0",
+  "method_version": "2.0"
+ },
+ "start_time": "2026-10-07T12:02:20",
+ "allocation": "p3",
+ "run_cap": 9000,
+ "train_stream_hash": "18398b0ba6428dfe",
+ "regimes": {
+  "profile": "unknown_prerequisites",
+  "world_mode": "shared",
+  "failure_prob": 0.1,
+  "skill_practice_objective": "public target predicate, reward 1"
+ },
+ "skills_config": {
+  "explore_before_discovery": 3000,
+  "discovery_budget": 4500,
+  "max_proposals": 8,
+  "max_trained_per_round": 3,
+  "max_admissions_per_round": 2,
+  "max_admitted": 24,
+  "max_depth": 3,
+  "practice_budget": 1200,
+  "practice_timeout": 12,
+  "practice_batch_steps": 200,
+  "validation_episodes": 10,
+  "bc_epochs": 20,
+  "controller_encoder": "gated",
+  "admission": {
+   "profile": "diagnostic",
+   "min_episodes": 8,
+   "min_success": 0.5,
+   "min_primitive_steps": 2
+  },
+  "arm_discovery_after": 1500,
+  "arm_discovery_budget": 2000,
+  "max_recent_episodes": 400,
+  "val_goal_levels": [
+   2,
+   3,
+   4
+  ],
+  "val_tasks": 20,
+  "mode": "learned",
+  "macro_retries": 3
+ },
+ "end_time": "2026-10-07T12:07:02",
+ "wallclock_s": 282.8,
+ "stop_reason": "interaction_cap",
+ "batches": 20,
+ "fork_hashes": {
+  "manager": "C43581d06eed2a411",
+  "library_id": "L0a0a6049e86fb6b3",
+  "topology": {
+   "W860adcc8": "Sdceb7cd4c9499994"
+  }
+ },
+ "interactions": {
+  "adaptive_physical": 9000,
+  "by_purpose": {
+   "pretraining": 5160,
+   "skill_practice": 3600,
+   "candidate_validation": 240
+  }
+ },
+ "library": {
+  "version": 2,
+  "admitted": [
+   [
+    "achieve[dye]/L1",
+    1
+   ],
+   [
+    "achieve[key]/L1",
+    1
+   ]
+  ],
+  "candidates": 5
+ },
+ "session_budget": {
+  "adaptive_total": 139400,
+  "adaptive_cap": 160000,
+  "reporting_total": 13134,
+  "reporting_cap": 20000,
+  "by_allocation": {
+   "pre_plan_development": 37000,
+   "smoke": 2400,
+   "diagnostics": 8000,
+   "p2": 27000,
+   "p3": 38000,
+   "p1": 27000
+  },
+  "allocations": {
+   "pre_plan_development": 37000,
+   "smoke": 2500,
+   "diagnostics": 8000,
+   "p1": 27000,
+   "p2": 27000,
+   "p3": 58000
+  }
+ }
+}

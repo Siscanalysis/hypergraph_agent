@@ -1,0 +1,15 @@
+{"t": 19.043, "type": "edit_policy_training", "iter": 100, "mean_evals_last100": 97.1, "solved_last100": 0.92}
+{"t": 32.182, "type": "edit_policy_training", "iter": 200, "mean_evals_last100": 77.81, "solved_last100": 0.92}
+{"t": 40.064, "type": "edit_policy_training", "iter": 300, "mean_evals_last100": 44.7, "solved_last100": 0.98}
+{"t": 46.835, "type": "edit_policy_training", "iter": 400, "mean_evals_last100": 40.98, "solved_last100": 0.98}
+{"t": 54.4, "type": "edit_policy_training", "iter": 500, "mean_evals_last100": 44.26, "solved_last100": 1.0}
+{"t": 61.964, "type": "edit_policy_training", "iter": 600, "mean_evals_last100": 43.89, "solved_last100": 0.99}
+{"t": 69.17, "type": "edit_policy_training", "iter": 700, "mean_evals_last100": 47.13, "solved_last100": 0.98}
+{"t": 75.418, "type": "edit_policy_training", "iter": 800, "mean_evals_last100": 36.72, "solved_last100": 1.0}
+{"t": 81.508, "type": "edit_policy_training", "iter": 900, "mean_evals_last100": 39.9, "solved_last100": 1.0}
+{"t": 88.931, "type": "edit_policy_training", "iter": 1000, "mean_evals_last100": 51.22, "solved_last100": 1.0}
+{"t": 94.495, "type": "edit_policy_training", "iter": 1100, "mean_evals_last100": 36.2, "solved_last100": 1.0}
+{"t": 99.521, "type": "edit_policy_training", "iter": 1200, "mean_evals_last100": 32.01, "solved_last100": 1.0}
+{"t": 106.356, "type": "edit_policy_training", "iter": 1300, "mean_evals_last100": 44.53, "solved_last100": 0.99}
+{"t": 112.096, "type": "edit_policy_training", "iter": 1400, "mean_evals_last100": 36.89, "solved_last100": 0.99}
+{"t": 118.607, "type": "edit_policy_training", "iter": 1500, "mean_evals_last100": 41.73, "solved_last100": 1.0}

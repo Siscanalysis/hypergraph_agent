@@ -1,0 +1,173 @@
+{
+ "run": {
+  "name": "p3-pilot",
+  "phase": "p3",
+  "allocation": "p3",
+  "seeds": [
+   0,
+   1
+  ],
+  "threads": 2,
+  "wallclock_s": 1800,
+  "runs_dir": "runs",
+  "ledger": "runs/ledger.json",
+  "requires_flag": null
+ },
+ "budget": {
+  "per_run_interactions": 5000,
+  "batch_steps": 256,
+  "reporting_eval_per_run": 1100,
+  "pretraining_interactions": 9000,
+  "ledger_allocations": null,
+  "ledger_adaptive_cap": null,
+  "ledger_reporting_cap": null
+ },
+ "model": {
+  "d": 64,
+  "hidden": 64,
+  "rounds": 3,
+  "layers": 2,
+  "heads": 4
+ },
+ "ppo": {
+  "lr": 0.001,
+  "epochs": 8,
+  "minibatch_episodes": 8,
+  "clip": 0.2,
+  "vf_coef": 0.5,
+  "ent_coef": 0.01,
+  "max_grad_norm": 0.5,
+  "gamma": 1.0,
+  "lam": 0.95,
+  "adv_norm": "none"
+ },
+ "world": {
+  "n_levels": 8,
+  "items_per_level": 2,
+  "pool_size": 6,
+  "max_true": 3,
+  "arity_weights": [
+   0.2,
+   0.5,
+   0.3
+  ],
+  "p_alternative": 0.25,
+  "p_extra_item_input": 0.0
+ },
+ "train": {
+  "world_mode": "shared",
+  "n_worlds": 0,
+  "shared_world_seed": 3001,
+  "goal_levels": [
+   1,
+   2,
+   3
+  ],
+  "repeat_index": null,
+  "tasks": {
+   "profile": "unknown_prerequisites",
+   "depth_min": 1,
+   "depth_max": 4,
+   "n_distractor_rules": 1,
+   "n_distractor_base": 0,
+   "p_init_base": 0.3,
+   "p_init_item": 0.2,
+   "failure_prob": 0.1,
+   "budget_factor": 1.0,
+   "budget_slack": 2,
+   "max_budget": 256
+  }
+ },
+ "eval": {
+  "namespace": "test",
+  "base_seed": 10000,
+  "n_tasks": 20,
+  "track": "frozen",
+  "greedy": false,
+  "world_mode": null,
+  "n_worlds": 0,
+  "episodes_per_world": 1,
+  "goal_levels": [
+   5,
+   6
+  ],
+  "tasks": {}
+ },
+ "topology": {
+  "credible_mass": 0.9,
+  "max_size": 3
+ },
+ "skills": {
+  "explore_before_discovery": 3000,
+  "discovery_budget": 4500,
+  "max_proposals": 8,
+  "max_trained_per_round": 3,
+  "max_admissions_per_round": 2,
+  "practice_budget": 1200,
+  "practice_timeout": 12,
+  "validation_episodes": 10,
+  "bc_epochs": 20,
+  "admission": {
+   "profile": "diagnostic",
+   "min_episodes": 8,
+   "min_success": 0.5,
+   "min_primitive_steps": 2
+  },
+  "arm_discovery_after": 1500,
+  "arm_discovery_budget": 2000,
+  "val_goal_levels": [
+   2,
+   3,
+   4
+  ],
+  "val_tasks": 20
+ },
+ "arms": [
+  {
+   "encoder": "gated",
+   "graph_mode": "known",
+   "topology": "none",
+   "use_posterior": true,
+   "growth": false,
+   "revision": false,
+   "id": "F0"
+  },
+  {
+   "encoder": "gated",
+   "graph_mode": "known",
+   "topology": "none",
+   "use_posterior": true,
+   "growth": false,
+   "revision": true,
+   "id": "F1"
+  },
+  {
+   "encoder": "gated",
+   "graph_mode": "known",
+   "topology": "none",
+   "use_posterior": true,
+   "growth": true,
+   "revision": false,
+   "id": "G0"
+  },
+  {
+   "encoder": "gated",
+   "graph_mode": "known",
+   "topology": "none",
+   "use_posterior": true,
+   "growth": true,
+   "revision": true,
+   "id": "G1"
+  }
+ ],
+ "_source": "configs/phase3_pilot.yaml",
+ "arm": {
+  "encoder": "gated",
+  "graph_mode": "known",
+  "topology": "none",
+  "use_posterior": true,
+  "growth": true,
+  "revision": true,
+  "id": "G1"
+ }
+}

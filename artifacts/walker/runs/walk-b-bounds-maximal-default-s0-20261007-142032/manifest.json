@@ -1,0 +1,117 @@
+{
+ "run_id": "walk-b-bounds-maximal-default-s0-20261007-142032",
+ "parent_run": null,
+ "phase": "walker_b",
+ "arm": "maximal",
+ "seed": 0,
+ "status": "completed",
+ "method_version": "2.0",
+ "config_hash": "66e68e3dafbc3fc2",
+ "source": {
+  "commit": "911129f0fd67c286719e6ae9f418b847c5c4dcc0",
+  "dirty": false,
+  "dirty_patch_sha256": null,
+  "loaded_code_sha256": "32af5532190970a245c8f613117b5f4ce496d59707db6a0288d6d9859b757751",
+  "commit_at_run_creation": "911129f0fd67c286719e6ae9f418b847c5c4dcc0",
+  "code_changed_since_process_start": false
+ },
+ "environment": {
+  "python": "3.12.13",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "torch": "2.14.1+cpu",
+  "numpy": "2.5.3",
+  "gymnasium": "1.4.0",
+  "torch_threads": 4,
+  "device": "cpu",
+  "deterministic_algorithms": false,
+  "package": "0.1.0",
+  "method_version": "2.0"
+ },
+ "start_time": "2026-10-07T14:20:33",
+ "end_time": "2026-10-07T14:20:33",
+ "wallclock_s": 0.1,
+ "stop_reason": "tasks_done",
+ "interactions": {
+  "physical": 501,
+  "warmup": 0,
+  "evaluation": 501,
+  "kind": "reporting",
+  "logical_policy_evidence": 0
+ },
+ "policy_training": null,
+ "eval_summary": {
+  "all": {
+   "n": 40,
+   "success_rate": 1.0,
+   "mean_primitive_length_all": 12.525,
+   "mean_manager_decisions_all": 12.525,
+   "mean_noop_or_invalid": 0.0,
+   "mean_skill_calls": 0.0,
+   "n_failures": 0,
+   "failure_status": {},
+   "mean_primitive_length_success": 12.525,
+   "mean_length_over_optimal_success": 1.8367171717171715
+  },
+  "cost_ratio": 1.815217391304348,
+  "by_world_episode": {
+   "0": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.8928571428571428
+   },
+   "1": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.8
+   },
+   "2": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.7894736842105263
+   },
+   "3": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.75
+   },
+   "4": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.868421052631579
+   },
+   "5": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.7586206896551724
+   },
+   "6": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.8928571428571428
+   },
+   "7": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.8
+   }
+  },
+  "search_evaluations": 0,
+  "replans": 40
+ },
+ "session_budget": {
+  "adaptive_total": 22948,
+  "adaptive_cap": 32000,
+  "reporting_total": 2920,
+  "reporting_cap": 8000,
+  "by_allocation": {
+   "pre_plan_development": 4377,
+   "walker_a": 13416,
+   "walker_b": 5155
+  },
+  "allocations": {
+   "pre_plan_development": 4377,
+   "walker_a": 17000,
+   "walker_b": 10600
+  }
+ }
+}

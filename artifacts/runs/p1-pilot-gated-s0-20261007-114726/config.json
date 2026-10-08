@@ -1,0 +1,133 @@
+{
+ "run": {
+  "name": "p1-pilot",
+  "phase": "p1",
+  "allocation": "p1",
+  "seeds": [
+   0,
+   1
+  ],
+  "threads": 2,
+  "wallclock_s": 1800,
+  "runs_dir": "runs",
+  "ledger": "runs/ledger.json",
+  "requires_flag": null
+ },
+ "budget": {
+  "per_run_interactions": 4500,
+  "batch_steps": 256,
+  "reporting_eval_per_run": 400,
+  "pretraining_interactions": 0,
+  "ledger_allocations": null,
+  "ledger_adaptive_cap": null,
+  "ledger_reporting_cap": null
+ },
+ "model": {
+  "d": 64,
+  "hidden": 64,
+  "rounds": 3,
+  "layers": 2,
+  "heads": 4
+ },
+ "ppo": {
+  "lr": 0.001,
+  "epochs": 8,
+  "minibatch_episodes": 8,
+  "clip": 0.2,
+  "vf_coef": 0.5,
+  "ent_coef": 0.01,
+  "max_grad_norm": 0.5,
+  "gamma": 1.0,
+  "lam": 0.95,
+  "adv_norm": "none"
+ },
+ "world": {
+  "n_levels": 8,
+  "items_per_level": 2,
+  "pool_size": 6,
+  "max_true": 3,
+  "arity_weights": [
+   0.2,
+   0.5,
+   0.3
+  ],
+  "p_alternative": 0.25,
+  "p_extra_item_input": 0.0
+ },
+ "train": {
+  "world_mode": "per_task",
+  "n_worlds": 0,
+  "shared_world_seed": 0,
+  "goal_levels": null,
+  "repeat_index": null,
+  "tasks": {
+   "profile": "known_structure",
+   "depth_min": 1,
+   "depth_max": 4,
+   "n_distractor_rules": 1,
+   "n_distractor_base": 0,
+   "p_init_base": 0.0,
+   "p_init_item": 0.0,
+   "failure_prob": 0.0,
+   "budget_factor": 1.0,
+   "budget_slack": 2,
+   "max_budget": 256
+  }
+ },
+ "eval": {
+  "namespace": "val",
+  "base_seed": 10000,
+  "n_tasks": 30,
+  "track": "frozen",
+  "greedy": false,
+  "world_mode": null,
+  "n_worlds": 0,
+  "episodes_per_world": 1,
+  "goal_levels": null,
+  "tasks": {}
+ },
+ "topology": {
+  "credible_mass": 0.9,
+  "max_size": 3
+ },
+ "skills": {},
+ "arms": [
+  {
+   "encoder": "set",
+   "graph_mode": "known",
+   "topology": "none",
+   "use_posterior": true,
+   "growth": false,
+   "revision": false,
+   "id": "set"
+  },
+  {
+   "encoder": "incidence",
+   "graph_mode": "known",
+   "topology": "none",
+   "use_posterior": true,
+   "growth": false,
+   "revision": false,
+   "id": "incidence"
+  },
+  {
+   "encoder": "gated",
+   "graph_mode": "known",
+   "topology": "none",
+   "use_posterior": true,
+   "growth": false,
+   "revision": false,
+   "id": "gated"
+  }
+ ],
+ "_source": "configs/phase1_pilot.yaml",
+ "arm": {
+  "encoder": "gated",
+  "graph_mode": "known",
+  "topology": "none",
+  "use_posterior": true,
+  "growth": false,
+  "revision": false,
+  "id": "gated"
+ }
+}

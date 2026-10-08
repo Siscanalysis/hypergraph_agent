@@ -1,0 +1,1 @@
+{"t": 51.641, "type": "search_benchmark", "uniform": {"mean_evals": 166.58933333333334, "median_evals": 122.0, "solved": 0.8293333333333334, "n": 375}, "focused": {"mean_evals": 28.357333333333333, "median_evals": 18.0, "solved": 1.0, "n": 375}, "learned": {"mean_evals": 38.248, "median_evals": 31.0, "solved": 1.0, "n": 375}}

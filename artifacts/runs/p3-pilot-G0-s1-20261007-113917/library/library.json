@@ -1,0 +1,540 @@
+{
+ "version": 3,
+ "max_admitted": 24,
+ "max_depth": 3,
+ "specs": [
+  {
+   "skill_key": "achieve[dye]/L1",
+   "version": 1,
+   "level": 1,
+   "target_type": 30,
+   "timeout": 12,
+   "children": [],
+   "controller_ref": "Cb5d4ba4512ca4b23",
+   "contract_support": [
+    [
+     4,
+     1.0
+    ],
+    [
+     11,
+     1.0
+    ],
+    [
+     13,
+     1.0
+    ]
+   ],
+   "success_est": 0.9,
+   "duration_est": 4.222222222222222,
+   "provenance": "{\"cand_id\": \"cand0000\", \"round\": 0, \"evidence\": {\"successful_fragments\": 60, \"failed_attempts\": 204, \"sources\": [\"T397ecba716:15\", \"T841c07af56:9\", \"T79d47fb02d:7\", \"T0e3d7286ff:14\", \"T3a3e08c78e:11\", \"Ta81b22e4f6:15\", \"T8fcc6e3849:10\", \"T6ada51aebd:1\", \"T36da470a7b:12\", \"T73ff0f1f52:7\", \"Taa2a157821:8\", \"T57083edc9e:4\", \"Tdb43494cac:12\", \"Tc92a87af10:14\", \"Td3afacffc4:10\", \"T18f672c2c0:11\"]}, \"bc_updates\": 20, \"proposer\": \"heuristic_fragment_mining\"}",
+   "training_cost": 1250,
+   "validation": "{\"n\": 10, \"successes\": 9, \"success_rate\": 0.9, \"mean_tau\": 5.0, \"mean_tau_success\": 4.222222222222222, \"interactions\": 50}",
+   "status": "admitted",
+   "admission_profile": "diagnostic",
+   "arg_roles": [
+    [
+     "target",
+     "item"
+    ]
+   ],
+   "target_predicate": [
+    "present",
+    "target"
+   ],
+   "initiation": "public_target_absent",
+   "termination": "target_present_or_timeout",
+   "macro": [],
+   "macro_retries": 0
+  },
+  {
+   "skill_key": "achieve[key]/L1",
+   "version": 1,
+   "level": 1,
+   "target_type": 19,
+   "timeout": 12,
+   "children": [],
+   "controller_ref": "C04443ff426112c09",
+   "contract_support": [
+    [
+     5,
+     0.9999900000992081
+    ],
+    [
+     7,
+     0.9900990991060576
+    ],
+    [
+     16,
+     0.9999999900000014
+    ]
+   ],
+   "success_est": 0.8,
+   "duration_est": 6.0,
+   "provenance": "{\"cand_id\": \"cand0002\", \"round\": 0, \"evidence\": {\"successful_fragments\": 2, \"failed_attempts\": 55, \"sources\": [\"T9732070d56:5\", \"T5d1d7367c6:14\"]}, \"bc_updates\": 20, \"proposer\": \"heuristic_fragment_mining\"}",
+   "training_cost": 1270,
+   "validation": "{\"n\": 10, \"successes\": 8, \"success_rate\": 0.8, \"mean_tau\": 7.0, \"mean_tau_success\": 6.0, \"interactions\": 70}",
+   "status": "admitted",
+   "admission_profile": "diagnostic",
+   "arg_roles": [
+    [
+     "target",
+     "item"
+    ]
+   ],
+   "target_predicate": [
+    "present",
+    "target"
+   ],
+   "initiation": "public_target_absent",
+   "termination": "target_present_or_timeout",
+   "macro": [],
+   "macro_retries": 0
+  },
+  {
+   "skill_key": "achieve[dye]/L2",
+   "version": 1,
+   "level": 2,
+   "target_type": 30,
+   "timeout": 12,
+   "children": [
+    [
+     "achieve[dye]/L1",
+     1
+    ]
+   ],
+   "controller_ref": "Cc9678b351c55e09e",
+   "contract_support": [
+    [
+     4,
+     1.0
+    ],
+    [
+     11,
+     1.0
+    ],
+    [
+     13,
+     1.0
+    ]
+   ],
+   "success_est": 0.9,
+   "duration_est": 5.333333333333333,
+   "provenance": "{\"cand_id\": \"cand0005\", \"round\": 1, \"evidence\": {\"successful_fragments\": 36, \"failed_attempts\": 5, \"sources\": [\"T427b210220:7\", \"T75ec0102bc:2\", \"T7393001bbf:9\", \"T5c576e676a:0\", \"T837e73d708:6\", \"T1261f49071:3\", \"Ta424cc0ba8:14\", \"T416ce8f651:2\", \"Td533536547:6\", \"T2625385a66:6\", \"T4f1842ad54:13\", \"Ta04d84b7db:12\", \"Tcf7e193ab0:2\", \"Tcb5b8c6bf6:0\", \"T331e38467b:1\", \"T9296b6129a:8\"]}, \"bc_updates\": 20, \"proposer\": \"heuristic_fragment_mining\"}",
+   "training_cost": 1260,
+   "validation": "{\"n\": 10, \"successes\": 9, \"success_rate\": 0.9, \"mean_tau\": 6.0, \"mean_tau_success\": 5.333333333333333, \"interactions\": 60}",
+   "status": "admitted",
+   "admission_profile": "diagnostic",
+   "arg_roles": [
+    [
+     "target",
+     "item"
+    ]
+   ],
+   "target_predicate": [
+    "present",
+    "target"
+   ],
+   "initiation": "public_target_absent",
+   "termination": "target_present_or_timeout",
+   "macro": [],
+   "macro_retries": 0
+  }
+ ],
+ "configs": [
+  [
+   [
+    "achieve[dye]/L1",
+    1
+   ],
+   {
+    "encoder": "gated",
+    "d": 64,
+    "hidden": 64,
+    "rounds": 3,
+    "layers": 2,
+    "heads": 4
+   }
+  ],
+  [
+   [
+    "achieve[key]/L1",
+    1
+   ],
+   {
+    "encoder": "gated",
+    "d": 64,
+    "hidden": 64,
+    "rounds": 3,
+    "layers": 2,
+    "heads": 4
+   }
+  ],
+  [
+   [
+    "achieve[dye]/L2",
+    1
+   ],
+   {
+    "encoder": "gated",
+    "d": 64,
+    "hidden": 64,
+    "rounds": 3,
+    "layers": 2,
+    "heads": 4
+   }
+  ]
+ ],
+ "candidates": [
+  {
+   "cand_id": "cand0000",
+   "skill_key": "achieve[dye]/L1",
+   "level": 1,
+   "target_type": 30,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 60,
+    "failed_attempts": 204,
+    "sources": [
+     "T397ecba716:15",
+     "T841c07af56:9",
+     "T79d47fb02d:7",
+     "T0e3d7286ff:14",
+     "T3a3e08c78e:11",
+     "Ta81b22e4f6:15",
+     "T8fcc6e3849:10",
+     "T6ada51aebd:1",
+     "T36da470a7b:12",
+     "T73ff0f1f52:7",
+     "Taa2a157821:8",
+     "T57083edc9e:4",
+     "Tdb43494cac:12",
+     "Tc92a87af10:14",
+     "Td3afacffc4:10",
+     "T18f672c2c0:11"
+    ]
+   },
+   "status": "admitted",
+   "reason": "",
+   "practice_cost": 1200,
+   "validation_cost": 50,
+   "bc_updates": 20,
+   "validation": {
+    "n": 10,
+    "successes": 9,
+    "success_rate": 0.9,
+    "mean_tau": 5.0,
+    "mean_tau_success": 4.222222222222222,
+    "interactions": 50
+   },
+   "revision_of": null,
+   "admitted_ref": [
+    "achieve[dye]/L1",
+    1
+   ]
+  },
+  {
+   "cand_id": "cand0001",
+   "skill_key": "achieve[gear]/L1",
+   "level": 1,
+   "target_type": 26,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 7,
+    "failed_attempts": 88,
+    "sources": [
+     "Tbed9e941d7:11",
+     "T27b70a623a:13",
+     "T57083edc9e:12",
+     "T9c67754574:14",
+     "Td4036564f6:11",
+     "T246e9f7111:11",
+     "T231622f382:4"
+    ]
+   },
+   "status": "rejected",
+   "reason": "success 0.00 below 0.5",
+   "practice_cost": 1200,
+   "validation_cost": 120,
+   "bc_updates": 20,
+   "validation": {
+    "n": 10,
+    "successes": 0,
+    "success_rate": 0.0,
+    "mean_tau": 12.0,
+    "mean_tau_success": null,
+    "interactions": 120
+   },
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0002",
+   "skill_key": "achieve[key]/L1",
+   "level": 1,
+   "target_type": 19,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 2,
+    "failed_attempts": 55,
+    "sources": [
+     "T9732070d56:5",
+     "T5d1d7367c6:14"
+    ]
+   },
+   "status": "admitted",
+   "reason": "",
+   "practice_cost": 1200,
+   "validation_cost": 70,
+   "bc_updates": 20,
+   "validation": {
+    "n": 10,
+    "successes": 8,
+    "success_rate": 0.8,
+    "mean_tau": 7.0,
+    "mean_tau_success": 6.0,
+    "interactions": 70
+   },
+   "revision_of": null,
+   "admitted_ref": [
+    "achieve[key]/L1",
+    1
+   ]
+  },
+  {
+   "cand_id": "cand0003",
+   "skill_key": "achieve[bell]/L1",
+   "level": 1,
+   "target_type": 29,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 2,
+    "failed_attempts": 59,
+    "sources": [
+     "T4664121ce0:5",
+     "Td9a45fb3da:14"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0004",
+   "skill_key": "achieve[rope]/L1",
+   "level": 1,
+   "target_type": 23,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 2,
+    "failed_attempts": 48,
+    "sources": [
+     "T2a45e351ba:15",
+     "T9b0c93931e:2"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0005",
+   "skill_key": "achieve[dye]/L2",
+   "level": 2,
+   "target_type": 30,
+   "children": [
+    [
+     "achieve[dye]/L1",
+     1
+    ]
+   ],
+   "created_round": 1,
+   "evidence": {
+    "successful_fragments": 36,
+    "failed_attempts": 5,
+    "sources": [
+     "T427b210220:7",
+     "T75ec0102bc:2",
+     "T7393001bbf:9",
+     "T5c576e676a:0",
+     "T837e73d708:6",
+     "T1261f49071:3",
+     "Ta424cc0ba8:14",
+     "T416ce8f651:2",
+     "Td533536547:6",
+     "T2625385a66:6",
+     "T4f1842ad54:13",
+     "Ta04d84b7db:12",
+     "Tcf7e193ab0:2",
+     "Tcb5b8c6bf6:0",
+     "T331e38467b:1",
+     "T9296b6129a:8"
+    ]
+   },
+   "status": "admitted",
+   "reason": "",
+   "practice_cost": 1200,
+   "validation_cost": 60,
+   "bc_updates": 20,
+   "validation": {
+    "n": 10,
+    "successes": 9,
+    "success_rate": 0.9,
+    "mean_tau": 6.0,
+    "mean_tau_success": 5.333333333333333,
+    "interactions": 60
+   },
+   "revision_of": null,
+   "admitted_ref": [
+    "achieve[dye]/L2",
+    1
+   ]
+  },
+  {
+   "cand_id": "cand0006",
+   "skill_key": "achieve[key]/L2",
+   "level": 2,
+   "target_type": 19,
+   "children": [
+    [
+     "achieve[key]/L1",
+     1
+    ]
+   ],
+   "created_round": 1,
+   "evidence": {
+    "successful_fragments": 30,
+    "failed_attempts": 3,
+    "sources": [
+     "T1c82dcfc62:0",
+     "T5e0c52d1e8:5",
+     "Tcb6405980d:0",
+     "Te71bf5f34a:2",
+     "Tf57c8b63c3:11",
+     "T04edc95808:2",
+     "T812ab6f7f5:3",
+     "T35c44672ff:1",
+     "Tbbf7ce6675:0",
+     "T1aabc702d9:0",
+     "T6cda73039d:4",
+     "Td8976e9333:0",
+     "Tc65f698c0b:0",
+     "T40c8aaf900:3",
+     "T66b4d15ac0:3",
+     "T898982f013:4"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0007",
+   "skill_key": "achieve[bell]/L2",
+   "level": 2,
+   "target_type": 29,
+   "children": [
+    [
+     "achieve[key]/L1",
+     1
+    ]
+   ],
+   "created_round": 1,
+   "evidence": {
+    "successful_fragments": 4,
+    "failed_attempts": 1,
+    "sources": [
+     "T88b97acf0a:3",
+     "T7e8744152d:1",
+     "Tf0981deb18:1",
+     "T6a80094690:1"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0008",
+   "skill_key": "achieve[gear]/L2",
+   "level": 2,
+   "target_type": 26,
+   "children": [
+    [
+     "achieve[key]/L1",
+     1
+    ]
+   ],
+   "created_round": 1,
+   "evidence": {
+    "successful_fragments": 2,
+    "failed_attempts": 2,
+    "sources": [
+     "T13163939e3:1",
+     "T9ad0795f99:10"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0009",
+   "skill_key": "achieve[rope]/L2",
+   "level": 2,
+   "target_type": 23,
+   "children": [
+    [
+     "achieve[key]/L1",
+     1
+    ]
+   ],
+   "created_round": 1,
+   "evidence": {
+    "successful_fragments": 1,
+    "failed_attempts": 2,
+    "sources": [
+     "Tafce7c72da:0"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  }
+ ]
+}

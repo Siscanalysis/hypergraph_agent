@@ -1,0 +1,173 @@
+{
+ "run_id": "p3-pilot-F1-s1-20261007-113917",
+ "parent_run": "p3-pilot-pretrain-s1-20261007-113917",
+ "phase": "p3",
+ "arm": "F1",
+ "seed": 1,
+ "status": "completed",
+ "method_version": "2.0",
+ "config_hash": "c3751e26baabb79d",
+ "source": {
+  "commit": "56e428abb33f16fdeb52077c6a75a84bdd232196",
+  "dirty": false,
+  "dirty_patch_sha256": null
+ },
+ "environment": {
+  "python": "3.12.13",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "torch": "2.14.1+cpu",
+  "numpy": "2.5.3",
+  "gymnasium": "1.4.0",
+  "torch_threads": 2,
+  "device": "cpu",
+  "deterministic_algorithms": false,
+  "package": "0.1.0",
+  "method_version": "2.0"
+ },
+ "start_time": "2026-10-07T12:09:10",
+ "allocation": "p3",
+ "run_cap": 5000,
+ "fork_hashes": {
+  "manager": "C43581d06eed2a411",
+  "library_id": "L0a0a6049e86fb6b3",
+  "topology": {
+   "W860adcc8": "Sdceb7cd4c9499994"
+  }
+ },
+ "arm_definition": {
+  "growth": false,
+  "revision": true,
+  "live_contracts": true
+ },
+ "logical_pretraining_charge": 9000,
+ "end_time": "2026-10-07T12:11:09",
+ "wallclock_s": 119.2,
+ "stop_reason": "interaction_cap",
+ "batches": 19,
+ "interactions": {
+  "adaptive_physical": 5000,
+  "by_purpose": {
+   "exploration": 5000
+  },
+  "logical_pretraining_charge": 9000,
+  "all_in_logical": 14000,
+  "reporting_eval": 736
+ },
+ "library": {
+  "version": 2,
+  "admitted": [
+   [
+    "achieve[dye]/L1",
+    1
+   ],
+   [
+    "achieve[key]/L1",
+    1
+   ]
+  ],
+  "candidates": {
+   "cand0000": {
+    "key": "achieve[dye]/L1",
+    "status": "admitted",
+    "reason": ""
+   },
+   "cand0001": {
+    "key": "achieve[gear]/L1",
+    "status": "rejected",
+    "reason": "success 0.00 below 0.5"
+   },
+   "cand0002": {
+    "key": "achieve[key]/L1",
+    "status": "admitted",
+    "reason": ""
+   },
+   "cand0003": {
+    "key": "achieve[bell]/L1",
+    "status": "deferred",
+    "reason": "not trained: per-round training or budget cap"
+   },
+   "cand0004": {
+    "key": "achieve[rope]/L1",
+    "status": "deferred",
+    "reason": "not trained: per-round training or budget cap"
+   }
+  }
+ },
+ "topology_deltas": 3,
+ "eval_summary": {
+  "eval_test": {
+   "n": 20,
+   "success_rate": 0.0,
+   "mean_primitive_length_all": 20.2,
+   "mean_manager_decisions_all": 0.0,
+   "mean_noop_or_invalid": 12.3,
+   "mean_skill_calls": 0.8,
+   "n_failures": 20,
+   "failure_status": {
+    "deadline": 20
+   }
+  },
+  "eval_test_by_depth": {
+   "5": {
+    "n": 9,
+    "success_rate": 0.0,
+    "mean_primitive_length_all": 19.444444444444443,
+    "mean_manager_decisions_all": 0.0,
+    "mean_noop_or_invalid": 12.0,
+    "mean_skill_calls": 0.8888888888888888,
+    "n_failures": 9,
+    "failure_status": {
+     "deadline": 9
+    }
+   },
+   "6": {
+    "n": 11,
+    "success_rate": 0.0,
+    "mean_primitive_length_all": 20.818181818181817,
+    "mean_manager_decisions_all": 0.0,
+    "mean_noop_or_invalid": 12.545454545454545,
+    "mean_skill_calls": 0.7272727272727273,
+    "n_failures": 11,
+    "failure_status": {
+     "deadline": 11
+    }
+   }
+  },
+  "eval_val": {
+   "n": 20,
+   "success_rate": 0.05,
+   "mean_primitive_length_all": 16.6,
+   "mean_manager_decisions_all": 0.0,
+   "mean_noop_or_invalid": 9.25,
+   "mean_skill_calls": 0.75,
+   "n_failures": 19,
+   "failure_status": {
+    "deadline": 19
+   },
+   "mean_primitive_length_success": 17.0,
+   "mean_length_over_optimal_success": 3.4
+  }
+ },
+ "session_budget": {
+  "adaptive_total": 149400,
+  "adaptive_cap": 160000,
+  "reporting_total": 14606,
+  "reporting_cap": 20000,
+  "by_allocation": {
+   "pre_plan_development": 37000,
+   "smoke": 2400,
+   "diagnostics": 8000,
+   "p2": 27000,
+   "p3": 48000,
+   "p1": 27000
+  },
+  "allocations": {
+   "pre_plan_development": 37000,
+   "smoke": 2500,
+   "diagnostics": 8000,
+   "p1": 27000,
+   "p2": 27000,
+   "p3": 58000
+  }
+ }
+}

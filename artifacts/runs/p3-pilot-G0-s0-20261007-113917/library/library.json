@@ -1,0 +1,551 @@
+{
+ "version": 3,
+ "max_admitted": 24,
+ "max_depth": 3,
+ "specs": [
+  {
+   "skill_key": "achieve[bell]/L1",
+   "version": 1,
+   "level": 1,
+   "target_type": 29,
+   "timeout": 12,
+   "children": [],
+   "controller_ref": "C6b7b41f2d8bff71a",
+   "contract_support": [
+    [
+     9,
+     1.0
+    ]
+   ],
+   "success_est": 1.0,
+   "duration_est": 5.0,
+   "provenance": "{\"cand_id\": \"cand0000\", \"round\": 0, \"evidence\": {\"successful_fragments\": 58, \"failed_attempts\": 164, \"sources\": [\"T5706451234:2\", \"T7baf9ffe79:16\", \"Tacc09eb0f8:15\", \"T64ca6724b5:9\", \"Tca6834099f:13\", \"T7347b55aba:7\", \"T30cfc0cc62:3\", \"Tc27ef7659f:4\", \"T211eeb132b:10\", \"Tb0b1dabadb:1\", \"Te226340e52:12\", \"T37329edb87:1\", \"T3af0782298:6\", \"Tbc74f56efc:9\", \"T7d9c255bc6:6\", \"Ta627b5c3bc:8\"]}, \"bc_updates\": 20, \"proposer\": \"heuristic_fragment_mining\"}",
+   "training_cost": 1250,
+   "validation": "{\"n\": 10, \"successes\": 10, \"success_rate\": 1.0, \"mean_tau\": 5.0, \"mean_tau_success\": 5.0, \"interactions\": 50}",
+   "status": "admitted",
+   "admission_profile": "diagnostic",
+   "arg_roles": [
+    [
+     "target",
+     "item"
+    ]
+   ],
+   "target_predicate": [
+    "present",
+    "target"
+   ],
+   "initiation": "public_target_absent",
+   "termination": "target_present_or_timeout",
+   "macro": [],
+   "macro_retries": 0
+  },
+  {
+   "skill_key": "achieve[glass]/L1",
+   "version": 1,
+   "level": 1,
+   "target_type": 20,
+   "timeout": 12,
+   "children": [],
+   "controller_ref": "C2fe7ca08f1e4ef72",
+   "contract_support": [
+    [
+     16,
+     1.0
+    ]
+   ],
+   "success_est": 0.8,
+   "duration_est": 5.5,
+   "provenance": "{\"cand_id\": \"cand0001\", \"round\": 0, \"evidence\": {\"successful_fragments\": 27, \"failed_attempts\": 76, \"sources\": [\"T4932e60e44:14\", \"Te2e52be78f:1\", \"T4705a720c6:8\", \"Tfe3628434d:18\", \"T05368e11fd:8\", \"Tbc74f56efc:12\", \"T31a6cbdd3b:1\", \"Tf87b466941:11\", \"T3f9921cf2f:6\", \"Te076e59b8a:8\", \"T06162bfca0:5\", \"Ta4e7ecbe67:7\", \"T520c733965:8\", \"T4755541006:7\", \"Te4cce1a705:7\", \"Te8cecbf3a1:1\"]}, \"bc_updates\": 20, \"proposer\": \"heuristic_fragment_mining\"}",
+   "training_cost": 1268,
+   "validation": "{\"n\": 10, \"successes\": 8, \"success_rate\": 0.8, \"mean_tau\": 6.8, \"mean_tau_success\": 5.5, \"interactions\": 68}",
+   "status": "admitted",
+   "admission_profile": "diagnostic",
+   "arg_roles": [
+    [
+     "target",
+     "item"
+    ]
+   ],
+   "target_predicate": [
+    "present",
+    "target"
+   ],
+   "initiation": "public_target_absent",
+   "termination": "target_present_or_timeout",
+   "macro": [],
+   "macro_retries": 0
+  },
+  {
+   "skill_key": "achieve[bell]/L2",
+   "version": 1,
+   "level": 2,
+   "target_type": 29,
+   "timeout": 12,
+   "children": [
+    [
+     "achieve[bell]/L1",
+     1
+    ]
+   ],
+   "controller_ref": "Cbff50d0f843c2fed",
+   "contract_support": [
+    [
+     9,
+     1.0
+    ]
+   ],
+   "success_est": 1.0,
+   "duration_est": 5.2,
+   "provenance": "{\"cand_id\": \"cand0006\", \"round\": 1, \"evidence\": {\"successful_fragments\": 71, \"failed_attempts\": 14, \"sources\": [\"T6f12a2ca4f:2\", \"T2ca0ab00dd:6\", \"T15a7bec784:9\", \"T149a3d2cff:6\", \"T6b68e8729a:3\", \"T27a63db320:3\", \"T8f8d800249:4\", \"T43d9b2f769:4\", \"T5fddfb42f8:4\", \"T1534e67b99:2\", \"T4a460279b9:7\", \"T782b27ae74:1\", \"T74be494f71:4\", \"Tcf5115cdeb:1\", \"T9158d084b0:2\", \"T0d192a4ca3:1\"]}, \"bc_updates\": 20, \"proposer\": \"heuristic_fragment_mining\"}",
+   "training_cost": 1252,
+   "validation": "{\"n\": 10, \"successes\": 10, \"success_rate\": 1.0, \"mean_tau\": 5.2, \"mean_tau_success\": 5.2, \"interactions\": 52}",
+   "status": "admitted",
+   "admission_profile": "diagnostic",
+   "arg_roles": [
+    [
+     "target",
+     "item"
+    ]
+   ],
+   "target_predicate": [
+    "present",
+    "target"
+   ],
+   "initiation": "public_target_absent",
+   "termination": "target_present_or_timeout",
+   "macro": [],
+   "macro_retries": 0
+  }
+ ],
+ "configs": [
+  [
+   [
+    "achieve[bell]/L1",
+    1
+   ],
+   {
+    "encoder": "gated",
+    "d": 64,
+    "hidden": 64,
+    "rounds": 3,
+    "layers": 2,
+    "heads": 4
+   }
+  ],
+  [
+   [
+    "achieve[glass]/L1",
+    1
+   ],
+   {
+    "encoder": "gated",
+    "d": 64,
+    "hidden": 64,
+    "rounds": 3,
+    "layers": 2,
+    "heads": 4
+   }
+  ],
+  [
+   [
+    "achieve[bell]/L2",
+    1
+   ],
+   {
+    "encoder": "gated",
+    "d": 64,
+    "hidden": 64,
+    "rounds": 3,
+    "layers": 2,
+    "heads": 4
+   }
+  ]
+ ],
+ "candidates": [
+  {
+   "cand_id": "cand0000",
+   "skill_key": "achieve[bell]/L1",
+   "level": 1,
+   "target_type": 29,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 58,
+    "failed_attempts": 164,
+    "sources": [
+     "T5706451234:2",
+     "T7baf9ffe79:16",
+     "Tacc09eb0f8:15",
+     "T64ca6724b5:9",
+     "Tca6834099f:13",
+     "T7347b55aba:7",
+     "T30cfc0cc62:3",
+     "Tc27ef7659f:4",
+     "T211eeb132b:10",
+     "Tb0b1dabadb:1",
+     "Te226340e52:12",
+     "T37329edb87:1",
+     "T3af0782298:6",
+     "Tbc74f56efc:9",
+     "T7d9c255bc6:6",
+     "Ta627b5c3bc:8"
+    ]
+   },
+   "status": "admitted",
+   "reason": "",
+   "practice_cost": 1200,
+   "validation_cost": 50,
+   "bc_updates": 20,
+   "validation": {
+    "n": 10,
+    "successes": 10,
+    "success_rate": 1.0,
+    "mean_tau": 5.0,
+    "mean_tau_success": 5.0,
+    "interactions": 50
+   },
+   "revision_of": null,
+   "admitted_ref": [
+    "achieve[bell]/L1",
+    1
+   ]
+  },
+  {
+   "cand_id": "cand0001",
+   "skill_key": "achieve[glass]/L1",
+   "level": 1,
+   "target_type": 20,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 27,
+    "failed_attempts": 76,
+    "sources": [
+     "T4932e60e44:14",
+     "Te2e52be78f:1",
+     "T4705a720c6:8",
+     "Tfe3628434d:18",
+     "T05368e11fd:8",
+     "Tbc74f56efc:12",
+     "T31a6cbdd3b:1",
+     "Tf87b466941:11",
+     "T3f9921cf2f:6",
+     "Te076e59b8a:8",
+     "T06162bfca0:5",
+     "Ta4e7ecbe67:7",
+     "T520c733965:8",
+     "T4755541006:7",
+     "Te4cce1a705:7",
+     "Te8cecbf3a1:1"
+    ]
+   },
+   "status": "admitted",
+   "reason": "",
+   "practice_cost": 1200,
+   "validation_cost": 68,
+   "bc_updates": 20,
+   "validation": {
+    "n": 10,
+    "successes": 8,
+    "success_rate": 0.8,
+    "mean_tau": 6.8,
+    "mean_tau_success": 5.5,
+    "interactions": 68
+   },
+   "revision_of": null,
+   "admitted_ref": [
+    "achieve[glass]/L1",
+    1
+   ]
+  },
+  {
+   "cand_id": "cand0002",
+   "skill_key": "achieve[blade]/L1",
+   "level": 1,
+   "target_type": 24,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 5,
+    "failed_attempts": 104,
+    "sources": [
+     "Tf784435cdc:12",
+     "Tc8ff894eb1:14",
+     "T7b826d2c65:1",
+     "T42116f7679:8",
+     "Tdf285c6d69:6"
+    ]
+   },
+   "status": "rejected",
+   "reason": "success 0.00 below 0.5",
+   "practice_cost": 1200,
+   "validation_cost": 120,
+   "bc_updates": 20,
+   "validation": {
+    "n": 10,
+    "successes": 0,
+    "success_rate": 0.0,
+    "mean_tau": 12.0,
+    "mean_tau_success": null,
+    "interactions": 120
+   },
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0003",
+   "skill_key": "achieve[brick]/L1",
+   "level": 1,
+   "target_type": 22,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 13,
+    "failed_attempts": 130,
+    "sources": [
+     "Tcee9230346:4",
+     "Tc8ff894eb1:16",
+     "T42116f7679:10",
+     "T7989087929:12",
+     "T6f8304b138:2",
+     "T7d1b4e4109:5",
+     "T0c6558bb63:10",
+     "T065f01d930:7",
+     "T804beeca63:3",
+     "Tc6e5612d6b:8",
+     "T1d35e3e668:11",
+     "Tfb11855ef8:15",
+     "Tef8181903f:5"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0004",
+   "skill_key": "achieve[gear]/L1",
+   "level": 1,
+   "target_type": 26,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 8,
+    "failed_attempts": 118,
+    "sources": [
+     "T5a4d0cc891:8",
+     "T9867bc8543:14",
+     "T6db0960b4a:3",
+     "T8eab0e9340:5",
+     "T9f849bcef0:7",
+     "T37324d1a8b:10",
+     "Tc4172f06bb:6",
+     "Tc07e69492f:5"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0005",
+   "skill_key": "achieve[dye]/L1",
+   "level": 1,
+   "target_type": 30,
+   "children": [],
+   "created_round": 0,
+   "evidence": {
+    "successful_fragments": 12,
+    "failed_attempts": 127,
+    "sources": [
+     "T9789a80ba1:11",
+     "T43d9b2f769:7",
+     "Tfa4e84a986:6",
+     "T1534e67b99:6",
+     "T115e39f0ea:5",
+     "T65f680be10:7",
+     "T6db0960b4a:14",
+     "T6296fcc6df:4",
+     "T8eab0e9340:7",
+     "T7d7c4a38db:11",
+     "T63a7cdddeb:7",
+     "T9c794235d8:2"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0006",
+   "skill_key": "achieve[bell]/L2",
+   "level": 2,
+   "target_type": 29,
+   "children": [
+    [
+     "achieve[bell]/L1",
+     1
+    ]
+   ],
+   "created_round": 1,
+   "evidence": {
+    "successful_fragments": 71,
+    "failed_attempts": 14,
+    "sources": [
+     "T6f12a2ca4f:2",
+     "T2ca0ab00dd:6",
+     "T15a7bec784:9",
+     "T149a3d2cff:6",
+     "T6b68e8729a:3",
+     "T27a63db320:3",
+     "T8f8d800249:4",
+     "T43d9b2f769:4",
+     "T5fddfb42f8:4",
+     "T1534e67b99:2",
+     "T4a460279b9:7",
+     "T782b27ae74:1",
+     "T74be494f71:4",
+     "Tcf5115cdeb:1",
+     "T9158d084b0:2",
+     "T0d192a4ca3:1"
+    ]
+   },
+   "status": "admitted",
+   "reason": "",
+   "practice_cost": 1200,
+   "validation_cost": 52,
+   "bc_updates": 20,
+   "validation": {
+    "n": 10,
+    "successes": 10,
+    "success_rate": 1.0,
+    "mean_tau": 5.2,
+    "mean_tau_success": 5.2,
+    "interactions": 52
+   },
+   "revision_of": null,
+   "admitted_ref": [
+    "achieve[bell]/L2",
+    1
+   ]
+  },
+  {
+   "cand_id": "cand0007",
+   "skill_key": "achieve[glass]/L2",
+   "level": 2,
+   "target_type": 20,
+   "children": [
+    [
+     "achieve[glass]/L1",
+     1
+    ]
+   ],
+   "created_round": 1,
+   "evidence": {
+    "successful_fragments": 25,
+    "failed_attempts": 1,
+    "sources": [
+     "T951573ec9d:13",
+     "Te8463dea54:1",
+     "Tb11449b28f:8",
+     "T801aed5ca7:0",
+     "T43d9b2f769:5",
+     "T9b38dc860d:0",
+     "Tfe19635e59:1",
+     "Tf2b6fd2a0d:2",
+     "T7f65d5fbcd:1",
+     "Te376cd9f85:7",
+     "T72fb0b0486:5",
+     "T2f1830a155:14",
+     "T204f27606c:6",
+     "T4a68672dc4:4",
+     "T813eef7b09:5",
+     "T25d2bc9692:3"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0008",
+   "skill_key": "achieve[blade]/L2",
+   "level": 2,
+   "target_type": 24,
+   "children": [
+    [
+     "achieve[bell]/L1",
+     1
+    ]
+   ],
+   "created_round": 1,
+   "evidence": {
+    "successful_fragments": 5,
+    "failed_attempts": 12,
+    "sources": [
+     "Tda539ea4e4:7",
+     "T0c6558bb63:8",
+     "Tadfa871978:15",
+     "Tf5eb605e73:3",
+     "T06cb9be826:6"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  },
+  {
+   "cand_id": "cand0009",
+   "skill_key": "achieve[brick]/L2",
+   "level": 2,
+   "target_type": 22,
+   "children": [
+    [
+     "achieve[bell]/L1",
+     1
+    ]
+   ],
+   "created_round": 1,
+   "evidence": {
+    "successful_fragments": 1,
+    "failed_attempts": 18,
+    "sources": [
+     "T0167368c93:8"
+    ]
+   },
+   "status": "deferred",
+   "reason": "not trained: per-round training or budget cap",
+   "practice_cost": 0,
+   "validation_cost": 0,
+   "bc_updates": 0,
+   "validation": {},
+   "revision_of": null,
+   "admitted_ref": null
+  }
+ ]
+}

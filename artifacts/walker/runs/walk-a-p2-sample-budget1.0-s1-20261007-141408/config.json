@@ -1,0 +1,184 @@
+{
+ "run": {
+  "name": "walk-a-p2",
+  "phase": "walker_a",
+  "allocation": "walker_a",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "threads": 2,
+  "wallclock_s": 1800,
+  "runs_dir": "runs",
+  "ledger": "runs/walker-ledger.json",
+  "requires_flag": null
+ },
+ "budget": {
+  "per_run_interactions": 2000,
+  "batch_steps": 512,
+  "reporting_eval_per_run": 600,
+  "pretraining_interactions": 0,
+  "ledger_allocations": {
+   "pre_plan_development": 4377,
+   "walker_a": 17000,
+   "walker_b": 10600
+  },
+  "ledger_adaptive_cap": 32000,
+  "ledger_reporting_cap": 8000
+ },
+ "model": {
+  "d": 64,
+  "hidden": 64,
+  "rounds": 3,
+  "layers": 2,
+  "heads": 4
+ },
+ "ppo": {
+  "lr": 0.001,
+  "epochs": 4,
+  "minibatch_episodes": 8,
+  "clip": 0.2,
+  "vf_coef": 0.5,
+  "ent_coef": 0.01,
+  "max_grad_norm": 0.5,
+  "gamma": 1.0,
+  "lam": 0.95,
+  "adv_norm": "none"
+ },
+ "world": {
+  "n_levels": 8,
+  "items_per_level": 2,
+  "pool_size": 6,
+  "max_true": 3,
+  "arity_weights": [
+   0.2,
+   0.5,
+   0.3
+  ],
+  "p_alternative": 0.25,
+  "p_extra_item_input": 0.0
+ },
+ "train": {
+  "world_mode": "pool",
+  "n_worlds": 8,
+  "shared_world_seed": 0,
+  "goal_levels": null,
+  "repeat_index": null,
+  "tasks": {
+   "profile": "unknown_prerequisites",
+   "depth_min": 1,
+   "depth_max": 3,
+   "n_distractor_rules": 1,
+   "n_distractor_base": 0,
+   "p_init_base": 0.0,
+   "p_init_item": 0.0,
+   "failure_prob": 0.0,
+   "budget_factor": 1.0,
+   "budget_slack": 2,
+   "max_budget": 256
+  }
+ },
+ "eval": {
+  "namespace": "val",
+  "base_seed": 10000,
+  "n_tasks": 30,
+  "track": "inference",
+  "greedy": false,
+  "world_mode": null,
+  "n_worlds": 5,
+  "episodes_per_world": 6,
+  "goal_levels": null,
+  "tasks": {
+   "budget_factor": 1.0
+  }
+ },
+ "topology": {
+  "credible_mass": 0.9,
+  "max_size": 3
+ },
+ "skills": {},
+ "walker": {
+  "max_evals": 400,
+  "temperature": 0.5,
+  "restart_after": 80,
+  "exact_cap": 20000,
+  "plan_cap": 4096,
+  "per_run_cap": 600,
+  "warmup_interactions": 0,
+  "eval_variants": [
+   {
+    "name": "budget1.0",
+    "tasks": {
+     "budget_factor": 1.0
+    }
+   },
+   {
+    "name": "budget0.6",
+    "tasks": {
+     "budget_factor": 0.6
+    }
+   }
+  ],
+  "collector": "local_focused",
+  "collector_episodes_per_world": 8,
+  "collector_interactions": 1500,
+  "benchmark_source": "local_focused",
+  "benchmark_starts": 5,
+  "shared_world_offset_by_seed": false,
+  "policy": {
+   "iters": 1500,
+   "lr": 0.003,
+   "hidden": 32
+  }
+ },
+ "arms": [
+  {
+   "encoder": "gated",
+   "graph_mode": "known",
+   "topology": "none",
+   "use_posterior": true,
+   "growth": false,
+   "revision": false,
+   "strategy": "sample",
+   "id": "sample"
+  },
+  {
+   "encoder": "gated",
+   "graph_mode": "known",
+   "topology": "none",
+   "use_posterior": true,
+   "growth": false,
+   "revision": false,
+   "strategy": "optimistic",
+   "id": "optimistic"
+  },
+  {
+   "encoder": "gated",
+   "graph_mode": "known",
+   "topology": "none",
+   "use_posterior": true,
+   "growth": false,
+   "revision": false,
+   "strategy": "local_focused",
+   "id": "local_focused"
+  }
+ ],
+ "_source": "configs/walker_stage_a.yaml",
+ "arm": {
+  "encoder": "gated",
+  "graph_mode": "known",
+  "topology": "none",
+  "use_posterior": true,
+  "growth": false,
+  "revision": false,
+  "strategy": "sample",
+  "id": "sample"
+ },
+ "variant": {
+  "name": "budget1.0",
+  "tasks": {
+   "budget_factor": 1.0
+  }
+ }
+}

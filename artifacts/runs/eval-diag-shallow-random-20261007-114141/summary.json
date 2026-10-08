@@ -1,0 +1,38 @@
+{
+ "agent": "random",
+ "track": "frozen",
+ "interactions": 400,
+ "kind": "reporting",
+ "summary": {
+  "n": 26,
+  "success_rate": 0.07692307692307693,
+  "mean_primitive_length_all": 15.384615384615385,
+  "mean_manager_decisions_all": 0.0,
+  "mean_noop_or_invalid": 6.576923076923077,
+  "mean_skill_calls": 0.0,
+  "n_failures": 24,
+  "failure_status": {
+   "budget_exhausted": 1,
+   "deadline": 23
+  },
+  "mean_primitive_length_success": 13.5,
+  "mean_length_over_optimal_success": 3.75
+ },
+ "by_depth": {
+  "1": {
+   "n": 26,
+   "success_rate": 0.07692307692307693,
+   "mean_primitive_length_all": 15.384615384615385,
+   "mean_manager_decisions_all": 0.0,
+   "mean_noop_or_invalid": 6.576923076923077,
+   "mean_skill_calls": 0.0,
+   "n_failures": 24,
+   "failure_status": {
+    "budget_exhausted": 1,
+    "deadline": 23
+   },
+   "mean_primitive_length_success": 13.5,
+   "mean_length_over_optimal_success": 3.75
+  }
+ }
+}

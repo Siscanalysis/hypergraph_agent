@@ -1,0 +1,140 @@
+{
+ "run_id": "walk-c-focused_sample-default-s0-20261007-160511",
+ "parent_run": null,
+ "phase": "walker_c",
+ "arm": "focused_sample",
+ "seed": 0,
+ "status": "completed",
+ "method_version": "2.0",
+ "config_hash": "4e6b7b61253220fa",
+ "source": {
+  "commit": "83f6d3176b3638f60e207ee607f26a32917fddda",
+  "dirty": false,
+  "dirty_patch_sha256": null,
+  "loaded_code_sha256": "e9dddcad4ed785de6747753ef6485830277eddd29928c10b287d72ae2bf0fa5d",
+  "commit_at_run_creation": "83f6d3176b3638f60e207ee607f26a32917fddda",
+  "code_changed_since_process_start": false
+ },
+ "environment": {
+  "python": "3.12.13",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "torch": "2.14.1+cpu",
+  "numpy": "2.5.3",
+  "gymnasium": "1.4.0",
+  "torch_threads": 4,
+  "device": "cpu",
+  "deterministic_algorithms": false,
+  "package": "0.1.0",
+  "method_version": "2.0"
+ },
+ "start_time": "2026-10-07T16:05:12",
+ "end_time": "2026-10-07T16:05:27",
+ "wallclock_s": 14.9,
+ "stop_reason": "tasks_done",
+ "interactions": {
+  "physical": 519,
+  "warmup": 0,
+  "evaluation": 519,
+  "kind": "adaptive",
+  "logical_policy_evidence": 0
+ },
+ "policy_training": null,
+ "policy_source": null,
+ "eval_summary": {
+  "all": {
+   "n": 40,
+   "success_rate": 0.95,
+   "mean_primitive_length_all": 12.975,
+   "mean_manager_decisions_all": 12.975,
+   "mean_noop_or_invalid": 1.85,
+   "mean_skill_calls": 0.0,
+   "n_failures": 2,
+   "failure_status": {
+    "deadline": 2
+   },
+   "mean_primitive_length_success": 12.657894736842104,
+   "mean_length_over_optimal_success": 1.8534309257993464
+  },
+  "cost_ratio": 1.8804347826086956,
+  "by_world_episode": {
+   "0": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 2.4285714285714284
+   },
+   "1": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.8
+   },
+   "2": {
+    "n": 5,
+    "success": 0.8,
+    "cost_ratio": 1.868421052631579
+   },
+   "3": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.9
+   },
+   "4": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.5789473684210527
+   },
+   "5": {
+    "n": 5,
+    "success": 0.8,
+    "cost_ratio": 2.0689655172413794
+   },
+   "6": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.75
+   },
+   "7": {
+    "n": 5,
+    "success": 1.0,
+    "cost_ratio": 1.8
+   }
+  },
+  "search_evaluations": 5898,
+  "replans": 114,
+  "search_benchmark": {
+   "uniform": {
+    "mean_evals": 128.5142857142857,
+    "median_evals": 78.0,
+    "solved": 0.9085714285714286,
+    "n": 175
+   },
+   "focused": {
+    "mean_evals": 26.08,
+    "median_evals": 14.0,
+    "solved": 1.0,
+    "n": 175
+   },
+   "learned": {
+    "mean_evals": 24.76,
+    "median_evals": 17.0,
+    "solved": 1.0,
+    "n": 175
+   }
+  }
+ },
+ "session_budget": {
+  "adaptive_total": 23992,
+  "adaptive_cap": 32000,
+  "reporting_total": 3196,
+  "reporting_cap": 8000,
+  "by_allocation": {
+   "pre_plan_development": 4377,
+   "walker_a": 13416,
+   "walker_b": 6199
+  },
+  "allocations": {
+   "pre_plan_development": 4377,
+   "walker_a": 17000,
+   "walker_b": 10600
+  }
+ }
+}
