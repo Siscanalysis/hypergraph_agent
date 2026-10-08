@@ -445,7 +445,8 @@ def figures(rows: list[dict], out_dir: Path, name: str) -> list[str]:
             horizon = max((p[0] for pts in worlds for p in pts), default=1)
             grid = np.linspace(0, horizon, 60)
             vals = [[max([n for s, n in pts if s <= g], default=0) for g in grid] for pts in worlds]
-            ax.plot(grid, np.mean(vals, axis=0), color=ARM_COLORS.get(arm), label=f"{arm} (worlds={len(worlds)})")
+            ax.plot(grid, np.mean(vals, axis=0), color=ARM_COLORS.get(arm),
+                    label=f"{arm} (worlds={len(worlds)})")
         ax.set_title(v, fontsize=8)
         ax.set_xlabel("cumulative actions in a world")
         ax.set_ylabel("distinct concepts discovered")
