@@ -1,9 +1,11 @@
 # Study M: pairwise Markov graphs with proximity ranking
 
-Status: protocol frozen on 2026-10-08 by the commit that adds this file,
-before any measurement run; the measurement runs execute that commit from a
-clean checkout. Development runs used only the allocation `dev` and the
-namespace `markov_dev`.
+Status: protocol frozen on 2026-10-08 by the commit that adds this file
+(b443d2c), before any measurement run. The M1 collection runs executed that
+commit and the M2 runs executed the commit of amendment MA1 (95d008a), each
+from a clean checkout; the analyses were run from the same snapshots, and
+Results and Verdict below report them. Development runs used only the
+allocation `dev` and the namespace `markov_dev`.
 
 ## Question and claim
 
@@ -372,6 +374,10 @@ handled by the rerun rule above and recorded as an amendment.
   propagation adds nothing beyond the raw weights on these worlds; `pair_rank`
   and the proposals of `hyper_sample_ppr` therefore rank by the pairwise
   weights.
+- The commit of MA1 left two tests failing that asserted the pre-MA1
+  placeholders in `configs/markov/m2.yaml`; the next commit changed those tests
+  only (they now blank the two settings themselves). No code or config used by
+  a measurement run changed.
 
 ## Implementation
 
@@ -457,8 +463,216 @@ that came from development and the independent review:
 
 ## Results
 
-(Empty until the M1 and M2 runs.)
+Evidence: `artifacts/markov/m1_ranking.{md,json}` and
+`artifacts/markov/m2_factorial.{md,json}`, produced by the frozen analyses run
+from the snapshots of the freeze commit (M1) and of the MA1 commit (M2).
+Re-runs of both analyses from the same snapshots into a scratch folder
+reproduced the artifacts exactly (every field except the elapsed time), and
+the twins were recomputed from the same code. Intervals are 95%
+world-cluster bootstrap intervals (10,000 resamples) unless stated.
+
+### Runs and interactions
+
+M1: ten collection runs (`focused_sample` and `maximal`, seeds 0-4, twelve
+`markov_sel` worlds per seed, 192 tasks per run), all completed; no rerun. M2:
+25 factorial runs and 10 anchor runs (seeds 0-4, ten `markov_conf` worlds per
+seed, 160 tasks per run), all completed; 50 paired worlds; no rerun and no
+ignored run.
+
+Interactions of the measurement runs (`runs/M-ledger.json` minus development):
+59,624 adaptive and 27,089 reporting. Adaptive: M1 `focused_sample` 10,866
+(allocation `m1`, 18,475); M2 48,758 (allocation `m2`, 77,650):
+`focused_sample` 9,385, `hyper_rank` 9,526, `pair_sample` 9,914, `pair_rank`
+10,352, `hyper_sample_ppr` 9,581. Reporting: M1 `maximal` 11,535; M2 `maximal`
+9,994 and `reference` 5,560. With development (5,079 adaptive, 427
+reporting) the ledger holds 64,703 of 102,125 adaptive and 27,516 of 50,500
+reporting interactions.
+
+### M1: ranking benchmark (offline)
+
+The posterior was exact for every recipe at 16 episodes (164 recipe-world
+pairs on the selection worlds, 258 on the test worlds); at 4 to 12 episodes 6
+to 30 recipe-world pairs per split and checkpoint were sampled. The AND-OR
+factor score did not converge in 2 selection worlds at 12 episodes and in 2 at
+16 episodes.
+
+Selection (24 worlds of seeds 0-1, `focused_sample` evidence, 16 episodes;
+mean per-world AUROC of the star-graph score):
+
+| Seed | 0.05 | 0.15 | 0.3 | 0.5 | 0.7 | 0.9 | 1.0 (no propagation) |
+|---|---|---|---|---|---|---|---|
+| recipe | 0.778 | 0.821 | 0.847 | 0.861 | 0.867 | 0.870 | 0.879 |
+| effect | 0.730 | 0.768 | 0.789 | 0.809 | 0.813 | 0.813 | 0.879 |
+| goal | 0.629 | 0.607 | 0.605 | 0.615 | 0.611 | 0.610 | 0.879 |
+
+The fact chain gave 0.629, 0.668, 0.689, 0.696, 0.696, 0.697 and 0.753 at the
+same restarts. Both selections fell at restart 1.0, the edge of the grid where
+the score is the raw edge weight (the three seeds tie there and the tie rule
+picks `recipe`); every setting that propagates ranked worse than the raw
+weights, and the goal seed by far the worst. As pre-stated, propagation added
+nothing beyond the raw weights; in every table below the star-graph score
+equals the pairwise weight (their difference is 0.000 [0.000, 0.000]
+everywhere).
+
+Primary (36 test worlds of seeds 2-4, 16 episodes, `focused_sample`
+evidence): AUROC posterior minus AUROC star-graph score 0.009 [-0.004, 0.023];
+90% interval [-0.002, 0.021], inside the margin (-0.03, 0.03). Decision:
+**equivalent**. Observed SD of the per-world differences 0.044, minimum
+detectable difference 0.020. The predicted outcome, "posterior better", was
+not confirmed.
+
+Test worlds, `focused_sample` evidence, AUROC by checkpoint:
+
+| Episodes | (a) posterior | (d) AND-OR | (c) star-graph score | (b) fact chain | (e) random | (c) - (a) |
+|---|---|---|---|---|---|---|
+| 4 | 0.737 [0.712, 0.764] | 0.732 [0.704, 0.759] | 0.702 [0.672, 0.733] | 0.629 [0.598, 0.661] | 0.500 | -0.036 [-0.054, -0.017] |
+| 8 | 0.783 [0.757, 0.810] | 0.775 [0.747, 0.805] | 0.771 [0.743, 0.800] | 0.665 [0.637, 0.696] | 0.500 | -0.012 [-0.027, 0.004] |
+| 12 | 0.818 [0.800, 0.837] | 0.815 [0.796, 0.835] | 0.809 [0.789, 0.830] | 0.692 [0.667, 0.718] | 0.500 | -0.009 [-0.024, 0.005] |
+| 16 | 0.864 [0.850, 0.880] | 0.864 [0.847, 0.882] | 0.855 [0.835, 0.875] | 0.738 [0.713, 0.763] | 0.500 | -0.009 [-0.023, 0.004] |
+
+Secondary predictions (test worlds, 16 episodes):
+
+- (c) - (b) >= 0: 0.116 [0.095, 0.138]; holds.
+- (b) - (e) > 0: 0.238 [0.213, 0.263]; holds.
+- Brute-force (`maximal`) evidence at chance: the posterior, the AND-OR score,
+  the star-graph score and the weights are exactly 0.500 at every checkpoint
+  in both splits; the fact chain gives 0.497 to 0.498 on the test worlds (its
+  difference to random at 16 episodes -0.003 [-0.015, 0.009]) and 0.502 to
+  0.514 on the selection worlds, where one checkpoint departs from chance
+  (8 episodes: 0.014 [0.002, 0.027]); holds on the test worlds.
+
+Exploratory: the AND-OR score equals the posterior at 16 episodes (posterior
+minus AND-OR 0.000 [-0.006, 0.007]) and is not distinguishable from the
+star-graph score there (AND-OR minus star 0.009 [-0.003, 0.022]); at 4
+episodes it is above it (0.030 [0.015, 0.044]), so (d) lies between (a) and (c)
+early and coincides with (a) late. Ranked gathering cost at 16 episodes (test
+worlds; candidates gathered until the requirement is covered): posterior 2.88
+[2.76, 3.01], AND-OR 2.88 [2.74, 3.01], star-graph score 2.94 [2.80, 3.09],
+fact chain 3.36 [3.22, 3.50], random 4.60 [4.53, 4.67]; on brute-force
+evidence 4.61 for every score (fact chain 4.62). On the selection worlds,
+which chose the setting, the posterior led the star-graph score at 16 episodes
+(star minus posterior -0.021 [-0.036, -0.005]); the test worlds decide.
+
+Twins (constructed worlds): as predicted. Structural: equal clique expansions
+and clique PPR, different star expansions, cheapest plans of 5 and 4 steps (3
+and 2 base facts), h_add of the goal 4 and 3. Behavioural: identical scores
+after the brute-force episodes and after the shared failure; after the probe
+the posterior and the AND-OR score give the edge (ingot, ore) 1.000 in world A
+and 0.390 in world B, while the pairwise weight is 0.512 in both and the
+rankings of the ingot recipe's candidates by the star-graph score (every
+seed) and by the fact chain are identical in A and B.
+
+### M2: factorial (online)
+
+Per arm, 50 worlds:
+
+| Arm | Late cost ratio | Late success | All episodes | Evaluations / world | Evaluations / replan | Seconds / replan (run) | Choice seconds / replan |
+|---|---|---|---|---|---|---|---|
+| `focused_sample` (hyper, sample) | 1.46 | 1.00 | 1.69 | 2,071 | 52.2 | 0.0200 | - |
+| `hyper_rank` (hyper, rank) | 1.49 | 0.98 | 1.72 | 69,998 | 1,737.2 | 0.3592 | 0.3436 |
+| `pair_sample` (pair, sample) | 1.56 | 0.99 | 1.79 | 0 | 0.0 | 0.0074 | 0.0052 |
+| `pair_rank` (pair, rank) | 1.68 | 0.99 | 1.87 | 0 | 0.0 | 0.0056 | 0.0035 |
+| `hyper_sample_ppr` | 1.52 | 0.98 | 1.73 | 2,091 | 50.7 | 0.0231 | 0.0205 |
+| `maximal` (anchor) | 1.83 | 1.00 | 1.82 | 0 | 0.0 | 0.0080 | - |
+| `reference` (anchor) | 1.00 | 1.00 | 1.00 | 0 | 0.0 | - | - |
+
+With the M1 selection (restart 1.0), `pair_rank` ranks by the pairwise weights
+and `hyper_sample_ppr` weights its proposals by them (MA1).
+
+Primary: representation main effect (hyper minus pair) on late-half cost
+-0.146 [-0.194, -0.097]: **the hypergraph representation lowers late cost**
+(confirmed); its effect on late success 0.000 [-0.009, 0.009].
+
+Other effects: selector (rank minus sample) +0.077 [0.034, 0.118] on late
+cost, -0.010 [-0.019, -0.003] on late success; interaction -0.079
+[-0.172, 0.011] on late cost, -0.010 [-0.030, 0.007] on late success.
+
+Selection rule (97.5% intervals): representation -0.146 [-0.202, -0.090],
+success effect 0.000, so hyper brings more; selector +0.077 [0.028, 0.124],
+which excludes 0 on the side where sampling is cheaper, and choosing sampling
+changes late success by +0.010, so sample brings more. Selected levels: hyper
+and sample. Winning cell `focused_sample` (1.46), descriptive: against the
+runner-up `hyper_rank` (1.49) its paired difference is -0.037
+[-0.094, 0.020].
+
+Secondary, pair cells (episode rows of the runs): `pair_sample` made 98
+within-episode marks, planned on a node refuted by its own episode in 9 of
+2,068 replans and repeated no node; `pair_rank` made 4 marks, with 0 refuted
+replans and 0 repeated nodes in 1,810 replans. Descriptive, not
+pre-registered: the pair cells planned on a node that contradicted earlier
+logged evidence in 1,048 of 2,068 replans (`pair_sample`) and 532 of 1,810
+(`pair_rank`), against 0 of 1,979 for `focused_sample`, 2 of 1,970 for
+`hyper_rank` and 0 of 2,060 for `hyper_sample_ppr`.
+
+Secondary, `hyper_sample_ppr` minus `focused_sample` (50 worlds): search
+evaluations per world +19.4 [-77.4, 113.6] (predicted lower: not confirmed);
+per replan -1.53 [-2.18, -0.97]; late cost +0.068 [0.013, 0.126] and late
+success -0.015 [-0.028, -0.005] (predicted unchanged: both changed, for the
+worse). Seconds per replan 0.0231 against 0.0200 for `focused_sample` (choice
+time 0.0205).
+
+Anchors: the brute-force plan (`maximal`) costs 1.83 in the late half with
+every task solved; the reference is 1.00 by construction. Both pair cells
+stay below the brute-force plan (1.56 and 1.68), as do the hyper cells (1.46,
+1.49 and 1.52). `hyper_rank` spent 69,998 hypothesis evaluations per world
+(1,737.2 per replan, against 2,071 and 52.2 for `focused_sample`) and 0.3592 s
+per replan (against 0.0200 s), without lowering cost.
 
 ## Verdict and limits
 
-(Empty until the M1 and M2 runs.)
+M1. The predicted "posterior better" was not confirmed: on the 36 test worlds
+the joint posterior and the star-graph score are equivalent within the
+pre-stated margin at 16 episodes (0.009 [-0.004, 0.023]; 90% [-0.002, 0.021]).
+The posterior is ahead early (4 episodes: by 0.036 [0.017, 0.054] AUROC) and the
+gap closes as evidence accumulates. PageRank-style proximity itself added
+nothing: on the selection worlds every setting that propagates over the star
+graph or the fact chain ranked worse than its own edge weights, so the
+selected "PPR" is the raw pairwise weight. What ranks nearly as well as the
+posterior is therefore the per-edge evidence (exact eliminations, forced
+edges and 1/k blame), not the walk. The audit's order holds for the other
+pairs: star-graph weights above the fact chain (0.116 [0.095, 0.138]), the fact
+chain above random (0.238 [0.213, 0.263]), and brute-force evidence at chance
+for every method on the test worlds. The twins came out as constructed: the
+pairwise weights and the clique chain do not separate worlds that the joint
+posterior and the AND-OR factor score separate.
+
+M2. The hypergraph representation lowers late-half cost by 0.146
+[-0.194, -0.097] steps per optimal step without losing success: confirmed.
+Ranking instead of sampling raises cost (+0.077 [0.034, 0.118]) and slightly
+lowers success. Under the pre-registered rule the components that bring more
+are the hypergraph representation and posterior sampling, the combination
+already in `focused_sample`, which is the cheapest cell (descriptively; its
+lead over `hyper_rank` is -0.037 [-0.094, 0.020]). The Markov components do not
+bring more: the pairwise representation is dearer on average over the two
+selectors (cell means 1.56 and 1.68 against 1.46 and 1.49), ranking is dearer
+than sampling on average over the two representations (ranking by the
+pairwise weights in the pair cells, the consistent-share centrality in the
+hyper cells; the interaction, -0.079 [-0.172, 0.011], does not separate the
+two), and proximity-ordered proposals (`hyper_sample_ppr`) neither saved
+evaluations per world nor kept acting cost, so the niche named by the audit,
+proposals that save search without changing acting, is not supported. The
+centrality choice also costs
+about 34 times the hypothesis evaluations of `focused_sample` per world and
+18 times the time per replan. Near-equal offline rankings did not translate
+into equal acting: a pairwise agent cannot hold earlier disjunctive evidence
+and planned on nodes that the logs already contradicted in 51% (`pair_sample`)
+and 29% (`pair_rank`) of its replans. The pairwise agents nonetheless remain
+cheaper than the brute-force plan (1.56 and 1.68 against 1.83, descriptive):
+per-edge evidence is useful, joint evidence more so.
+
+Limits. One task family (F1: goal-only observation, chains of depth 1-3,
+deterministic dynamics); other families, noise and deeper chains are untested.
+Every agent and the posterior use the uniform prior over the 41-hypothesis
+class, while the generator draws requirement sizes with weights 0.2, 0.5 and
+0.3. One pairwise update rule (online, n0 = 2, blame 1/k, the within-episode
+marks) stands for the pair representation; other per-edge rules, and learned
+chains of other kinds, could rank or act differently. The fact chain is one
+clique construction (co-occurrence in episodes that reached the goal). The
+restart grid ends at 1.0, where both selections fell, so the result is that
+no propagation within the grid helped, not that none could. The equivalence
+in M1 is relative to a margin of 0.03 AUROC with a minimum detectable
+difference of 0.020 on 36 worlds, and on the selection split the posterior
+was ahead (star minus posterior -0.021 [-0.036, -0.005]). The rank selector
+is two specific rules, times per replan depend on the machine, and the counts
+of refuted replans and of nodes contradicting the logs come from the episode
+rows, not from a contrast with an interval.

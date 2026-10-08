@@ -1,0 +1,307 @@
+{
+ "definition": {
+  "late_episodes": "9-16",
+  "unit": "world",
+  "bootstrap": {
+   "resamples": 10000,
+   "seed": 20261008
+  },
+  "primary": "representation main effect (hyper - pair) on late-half cost, 95% interval",
+  "rule": "a level brings more when choosing it lowers late-half cost with a 97.5% interval (Bonferroni over the two main effects) excluding 0 and lowers late-half success by at most 2 percentage points; the winning cell is descriptive unless its paired 95% interval against the runner-up excludes 0"
+ },
+ "n_worlds": 50,
+ "expected_worlds": 50,
+ "complete": true,
+ "incomplete_runs": [],
+ "effects": {
+  "representation (hyper - pair)": {
+   "late_cost": {
+    "estimate": -0.14629666124079269,
+    "ci": [
+     -0.19410171356916542,
+     -0.0972280303340594
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.95
+   },
+   "late_cost_selection": {
+    "estimate": -0.14629666124079269,
+    "ci": [
+     -0.20153623115036717,
+     -0.08973447344469965
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.975
+   },
+   "late_success": {
+    "estimate": 0.0,
+    "ci": [
+     -0.00875,
+     0.00875
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.95
+   },
+   "late_success_selection": {
+    "estimate": 0.0,
+    "ci": [
+     -0.01,
+     0.00875
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.975
+   }
+  },
+  "selector (rank - sample)": {
+   "late_cost": {
+    "estimate": 0.07692105486958269,
+    "ci": [
+     0.03430495631482105,
+     0.11766368168044027
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.95
+   },
+   "late_cost_selection": {
+    "estimate": 0.07692105486958269,
+    "ci": [
+     0.02790857780700374,
+     0.12365776985948905
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.975
+   },
+   "late_success": {
+    "estimate": -0.01,
+    "ci": [
+     -0.01875,
+     -0.0025
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.95
+   },
+   "late_success_selection": {
+    "estimate": -0.01,
+    "ci": [
+     -0.02,
+     -0.00125
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.975
+   }
+  },
+  "interaction": {
+   "late_cost": {
+    "estimate": -0.07940773522404829,
+    "ci": [
+     -0.1723308226431031,
+     0.010741289012539519
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.95
+   },
+   "late_cost_selection": {
+    "estimate": -0.07940773522404829,
+    "ci": [
+     -0.1851320097193813,
+     0.025525460246749627
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.975
+   },
+   "late_success": {
+    "estimate": -0.01,
+    "ci": [
+     -0.03,
+     0.0075
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.95
+   },
+   "late_success_selection": {
+    "estimate": -0.01,
+    "ci": [
+     -0.0325,
+     0.01
+    ],
+    "n": 50,
+    "n_boot": 10000,
+    "seed": 20261008,
+    "level": 0.975
+   }
+  }
+ },
+ "primary_verdict": "hyper lowers late cost",
+ "chosen": {
+  "representation": "hyper",
+  "selector": "sample"
+ },
+ "component_message": null,
+ "winning_cell": "focused_sample",
+ "winning_vs_runner_up": {
+  "runner_up": "hyper_rank",
+  "difference": {
+   "estimate": -0.037217187257558536,
+   "ci": [
+    -0.09374439265756523,
+    0.020452194463976718
+   ],
+   "n": 50,
+   "n_boot": 10000,
+   "seed": 20261008,
+   "level": 0.95
+  },
+  "status": "descriptive"
+ },
+ "mean_late_cost": {
+  "focused_sample": 1.4566814559469046,
+  "hyper_rank": 1.4938986432044634,
+  "pair_sample": 1.5632742495756735,
+  "pair_rank": 1.6798991720572802
+ },
+ "extra_vs_focused_sample": {
+  "n_worlds": 50,
+  "evals": {
+   "estimate": 19.44,
+   "ci": [
+    -77.44149999999999,
+    113.60399999999994
+   ],
+   "n": 50,
+   "n_boot": 10000,
+   "seed": 20261008,
+   "level": 0.95
+  },
+  "evals_per_replan": {
+   "estimate": -1.530329830700952,
+   "ci": [
+    -2.1842171980937963,
+    -0.9698702195558039
+   ],
+   "n": 50,
+   "n_boot": 10000,
+   "seed": 20261008,
+   "level": 0.95
+  },
+  "late_cost": {
+   "estimate": 0.06822963642930965,
+   "ci": [
+    0.012760756316840411,
+    0.1259994310239441
+   ],
+   "n": 50,
+   "n_boot": 10000,
+   "seed": 20261008,
+   "level": 0.95
+  },
+  "late_success": {
+   "estimate": -0.015,
+   "ci": [
+    -0.0275,
+    -0.005
+   ],
+   "n": 50,
+   "n_boot": 10000,
+   "seed": 20261008,
+   "level": 0.95
+  }
+ },
+ "arms": {
+  "focused_sample": {
+   "worlds": 50,
+   "run_seconds_per_replan": 0.019984901717299615,
+   "late_cost": 1.4566814559469046,
+   "late_success": 1.0,
+   "cost_all": 1.689997495109601,
+   "evals": 2071.22,
+   "evals_per_replan": 52.20233187643736,
+   "choose_seconds_per_replan": NaN
+  },
+  "hyper_rank": {
+   "worlds": 50,
+   "run_seconds_per_replan": 0.3592273742633586,
+   "late_cost": 1.4938986432044634,
+   "late_success": 0.985,
+   "cost_all": 1.7184335395388632,
+   "evals": 69997.6,
+   "evals_per_replan": 1737.1993898274204,
+   "choose_seconds_per_replan": 0.3436188282060683
+  },
+  "pair_sample": {
+   "worlds": 50,
+   "run_seconds_per_replan": 0.007429390454194533,
+   "late_cost": 1.5632742495756735,
+   "late_success": 0.995,
+   "cost_all": 1.7907892858831118,
+   "evals": 0.0,
+   "evals_per_replan": 0.0,
+   "choose_seconds_per_replan": 0.005223258854596324
+  },
+  "pair_rank": {
+   "worlds": 50,
+   "run_seconds_per_replan": 0.005638958168741083,
+   "late_cost": 1.6798991720572802,
+   "late_success": 0.99,
+   "cost_all": 1.8660002383518173,
+   "evals": 0.0,
+   "evals_per_replan": 0.0,
+   "choose_seconds_per_replan": 0.0034791623158006153
+  },
+  "hyper_sample_ppr": {
+   "worlds": 50,
+   "run_seconds_per_replan": 0.023072295051577228,
+   "late_cost": 1.5249110923762146,
+   "late_success": 0.985,
+   "cost_all": 1.7258344543468258,
+   "evals": 2090.66,
+   "evals_per_replan": 50.67200204573642,
+   "choose_seconds_per_replan": 0.020496453945620514
+  },
+  "maximal": {
+   "worlds": 50,
+   "run_seconds_per_replan": 0.008,
+   "late_cost": 1.8302179319681067,
+   "late_success": 1.0,
+   "cost_all": 1.8158269636550028,
+   "evals": 0.0,
+   "evals_per_replan": 0.0,
+   "choose_seconds_per_replan": NaN
+  },
+  "reference": {
+   "worlds": 50,
+   "run_seconds_per_replan": null,
+   "late_cost": 1.0,
+   "late_success": 1.0,
+   "cost_all": 1.0,
+   "evals": 0.0,
+   "evals_per_replan": 0.0,
+   "choose_seconds_per_replan": NaN
+  }
+ },
+ "runs": {
+  "reruns_used": [],
+  "ignored": []
+ }
+}
