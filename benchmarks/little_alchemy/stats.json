@@ -1,0 +1,552 @@
+{
+ "benchmark": "little_alchemy",
+ "generated_by": "python -m hypergraph_agent.benchmarks.stats --write",
+ "graphs": {
+  "little_alchemy_1": {
+   "graph": {
+    "elements": 540,
+    "base": 4,
+    "derived": 536,
+    "reachable_derived": 536,
+    "unlocks": 0,
+    "unlock_kinds": {},
+    "unlockable_elements": 0,
+    "recipes": 882,
+    "and_arity": {
+     "n": 882,
+     "mean": 1.9558,
+     "median": 2.0,
+     "min": 1.0,
+     "max": 2.0
+    },
+    "and_arity_histogram": {
+     "1": 39,
+     "2": 843
+    },
+    "recipes_per_derived": {
+     "n": 536,
+     "mean": 1.6455,
+     "median": 1.0,
+     "min": 1.0,
+     "max": 6.0
+    },
+    "share_derived_with_alternatives": 0.4496,
+    "depth": {
+     "n": 536,
+     "mean": 7.2015,
+     "median": 7.0,
+     "min": 1.0,
+     "max": 13.0
+    },
+    "depth_histogram": {
+     "1": 8,
+     "2": 15,
+     "3": 23,
+     "4": 31,
+     "5": 42,
+     "6": 72,
+     "7": 82,
+     "8": 84,
+     "9": 98,
+     "10": 49,
+     "11": 18,
+     "12": 11,
+     "13": 3
+    },
+    "share_recipes_with_derived_requirement": 0.9898,
+    "share_recipes_only_derived_requirements": 0.8798,
+    "share_derived_reused": 0.5224,
+    "uses_per_derived": {
+     "n": 536,
+     "mean": 3.0093,
+     "median": 1.0,
+     "min": 0.0,
+     "max": 81.0
+    },
+    "shallowest_derivation_size": {
+     "n": 536,
+     "mean": 13.4496,
+     "median": 14.0,
+     "min": 1.0,
+     "max": 30.0
+    }
+   },
+   "concepts": {
+    "concepts": 536,
+    "primitives": 4,
+    "levels": 13,
+    "level_histogram": {
+     "1": 8,
+     "2": 15,
+     "3": 23,
+     "4": 31,
+     "5": 42,
+     "6": 72,
+     "7": 82,
+     "8": 84,
+     "9": 98,
+     "10": 49,
+     "11": 18,
+     "12": 11,
+     "13": 3
+    },
+    "parents_per_concept": 1.9459,
+    "parents_histogram": {
+     "1": 29,
+     "2": 507
+    },
+    "concept_parent_share": 0.9089,
+    "share_with_concept_parent": 0.9851,
+    "reuse_depth_mean": 6.2015,
+    "reuse_depth_max": 12,
+    "reuse_depth_histogram": {
+     "0": 8,
+     "1": 15,
+     "2": 23,
+     "3": 31,
+     "4": 42,
+     "5": 72,
+     "6": 82,
+     "7": 84,
+     "8": 98,
+     "9": 49,
+     "10": 18,
+     "11": 11,
+     "12": 3
+    },
+    "share_reused_as_parent": 0.4216,
+    "children_per_concept_mean": 1.7687,
+    "children_per_concept_max": 58,
+    "two_parent_concepts_above_level_1": 501,
+    "other_parent_shares": {
+     "between": 0.6587,
+     "level_1": 0.0958,
+     "level_l-1": 0.0838,
+     "primitive": 0.1617
+    }
+   },
+   "techtree_fit": {
+    "linear_combo1": {
+     "rule": "linear",
+     "combo_length": 1,
+     "primitives": 4,
+     "derived": 536,
+     "fitted_derived": 33,
+     "coverage": 0.0616,
+     "concepts_per_level": [
+      4,
+      6,
+      10,
+      9,
+      7,
+      1
+     ],
+     "levels": 6
+    },
+    "linear_combo2": {
+     "rule": "linear",
+     "combo_length": 2,
+     "primitives": 4,
+     "derived": 536,
+     "fitted_derived": 9,
+     "coverage": 0.0168,
+     "concepts_per_level": [
+      8,
+      1
+     ],
+     "levels": 2
+    },
+    "doubling_combo1": {
+     "rule": "doubling",
+     "combo_length": 1,
+     "primitives": 4,
+     "derived": 536,
+     "fitted_derived": 6,
+     "coverage": 0.0112,
+     "concepts_per_level": [
+      4,
+      6
+     ],
+     "levels": 2
+    },
+    "doubling_combo2": {
+     "rule": "doubling",
+     "combo_length": 2,
+     "primitives": 4,
+     "derived": 536,
+     "fitted_derived": 9,
+     "coverage": 0.0168,
+     "concepts_per_level": [
+      8,
+      1
+     ],
+     "levels": 2
+    }
+   },
+   "recipequest": {
+    "convertible_goals": 536,
+    "reachable_derived": 536,
+    "share_convertible": 1.0,
+    "sampled_worlds": 40,
+    "per_goal_worlds": {
+     "items": 6.2,
+     "levels": 3.575,
+     "recipes": 8.625,
+     "base_facts": 9.6,
+     "share_items_with_alternative": 0.3826,
+     "item_inputs_per_recipe": 0.5999,
+     "true_base_per_recipe": 1.2755,
+     "pool_per_recipe": 6.0
+    },
+    "promoted_per_world": {
+     "n": 40,
+     "mean": 6.05,
+     "median": 6.0,
+     "min": 0.0,
+     "max": 14.0
+    },
+    "kept_share_of_closure": {
+     "n": 40,
+     "mean": 0.243,
+     "median": 0.23,
+     "min": 0.0238,
+     "max": 1.0
+    },
+    "dropped_recipes_per_world": {
+     "n": 40,
+     "mean": 1.225,
+     "median": 1.0,
+     "min": 0.0,
+     "max": 5.0
+    },
+    "per_goal_tasks": {
+     "tasks": 40,
+     "all_exact": true,
+     "depth_histogram": {
+      "1": 8,
+      "2": 11,
+      "3": 5,
+      "4": 8,
+      "5": 5,
+      "6": 3
+     },
+     "optimal_length": {
+      "n": 40,
+      "mean": 7.475,
+      "median": 6.5,
+      "min": 3.0,
+      "max": 13.0
+     },
+     "hidden_recipes": {
+      "n": 40,
+      "mean": 8.625,
+      "median": 7.5,
+      "min": 1.0,
+      "max": 20.0
+     },
+     "alternative_recipes": 2.425,
+     "entropy_bits": 46.2089,
+     "plan_crafts": 3.0,
+     "headroom": 1.7643,
+     "budget": {
+      "n": 40,
+      "mean": 18.8,
+      "median": 18.0,
+      "min": 10.0,
+      "max": 30.0
+     },
+     "brute_force_within_budget": true
+    },
+    "whole_graph_world": {
+     "converted": false,
+     "reason": "the closure has 381 items (at most 16)"
+    }
+   },
+   "notes": [
+    "element descriptions are game text and are not read",
+    "a combination of an element with itself requires that element once (amount 2 kept as metadata)",
+    "version 1 has no base flags; base = air, earth, fire, water",
+    "dropped 8 recipe(s) that require their own product"
+   ]
+  },
+  "little_alchemy_2": {
+   "graph": {
+    "elements": 720,
+    "base": 4,
+    "derived": 715,
+    "reachable_derived": 715,
+    "unlocks": 9,
+    "unlock_kinds": {
+     "k_of_n": 3,
+     "progress": 6
+    },
+    "unlockable_elements": 1,
+    "recipes": 3440,
+    "and_arity": {
+     "n": 3440,
+     "mean": 1.9593,
+     "median": 2.0,
+     "min": 1.0,
+     "max": 2.0
+    },
+    "and_arity_histogram": {
+     "1": 140,
+     "2": 3300
+    },
+    "recipes_per_derived": {
+     "n": 715,
+     "mean": 4.8112,
+     "median": 4.0,
+     "min": 1.0,
+     "max": 41.0
+    },
+    "share_derived_with_alternatives": 0.9231,
+    "depth": {
+     "n": 715,
+     "mean": 8.628,
+     "median": 9.0,
+     "min": 1.0,
+     "max": 15.0
+    },
+    "depth_histogram": {
+     "1": 10,
+     "2": 13,
+     "3": 12,
+     "4": 30,
+     "5": 47,
+     "6": 42,
+     "7": 45,
+     "8": 90,
+     "9": 142,
+     "10": 107,
+     "11": 71,
+     "12": 64,
+     "13": 32,
+     "14": 8,
+     "15": 2
+    },
+    "share_recipes_with_derived_requirement": 0.9971,
+    "share_recipes_only_derived_requirements": 0.9134,
+    "share_derived_reused": 0.7399,
+    "uses_per_derived": {
+     "n": 715,
+     "mean": 9.0014,
+     "median": 4.0,
+     "min": 0.0,
+     "max": 187.0
+    },
+    "shallowest_derivation_size": {
+     "n": 715,
+     "mean": 14.9133,
+     "median": 16.0,
+     "min": 1.0,
+     "max": 36.0
+    }
+   },
+   "concepts": {
+    "concepts": 715,
+    "primitives": 5,
+    "levels": 15,
+    "level_histogram": {
+     "1": 10,
+     "2": 13,
+     "3": 12,
+     "4": 30,
+     "5": 47,
+     "6": 42,
+     "7": 45,
+     "8": 90,
+     "9": 142,
+     "10": 107,
+     "11": 71,
+     "12": 64,
+     "13": 32,
+     "14": 8,
+     "15": 2
+    },
+    "parents_per_concept": 1.9161,
+    "parents_histogram": {
+     "0": 5,
+     "1": 50,
+     "2": 660
+    },
+    "concept_parent_share": 0.8956,
+    "share_with_concept_parent": 0.979,
+    "reuse_depth_mean": 7.358,
+    "reuse_depth_max": 14,
+    "reuse_depth_histogram": {
+     "0": 15,
+     "1": 19,
+     "2": 16,
+     "3": 39,
+     "4": 61,
+     "5": 49,
+     "6": 29,
+     "7": 80,
+     "8": 129,
+     "9": 102,
+     "10": 70,
+     "11": 64,
+     "12": 32,
+     "13": 8,
+     "14": 2
+    },
+    "share_reused_as_parent": 0.4112,
+    "children_per_concept_mean": 1.7161,
+    "children_per_concept_max": 64,
+    "two_parent_concepts_above_level_1": 654,
+    "other_parent_shares": {
+     "between": 0.685,
+     "level_1": 0.055,
+     "level_l-1": 0.0657,
+     "other": 0.0015,
+     "primitive": 0.1927
+    }
+   },
+   "techtree_fit": {
+    "linear_combo1": {
+     "rule": "linear",
+     "combo_length": 1,
+     "primitives": 4,
+     "derived": 715,
+     "fitted_derived": 24,
+     "coverage": 0.0336,
+     "concepts_per_level": [
+      4,
+      6,
+      6,
+      4,
+      6,
+      2
+     ],
+     "levels": 6
+    },
+    "linear_combo2": {
+     "rule": "linear",
+     "combo_length": 2,
+     "primitives": 4,
+     "derived": 715,
+     "fitted_derived": 13,
+     "coverage": 0.0182,
+     "concepts_per_level": [
+      10,
+      3
+     ],
+     "levels": 2
+    },
+    "doubling_combo1": {
+     "rule": "doubling",
+     "combo_length": 1,
+     "primitives": 4,
+     "derived": 715,
+     "fitted_derived": 6,
+     "coverage": 0.0084,
+     "concepts_per_level": [
+      4,
+      6
+     ],
+     "levels": 2
+    },
+    "doubling_combo2": {
+     "rule": "doubling",
+     "combo_length": 2,
+     "primitives": 4,
+     "derived": 715,
+     "fitted_derived": 13,
+     "coverage": 0.0182,
+     "concepts_per_level": [
+      10,
+      3
+     ],
+     "levels": 2
+    }
+   },
+   "recipequest": {
+    "convertible_goals": 682,
+    "reachable_derived": 715,
+    "share_convertible": 0.9538,
+    "sampled_worlds": 40,
+    "per_goal_worlds": {
+     "items": 5.6,
+     "levels": 3.65,
+     "recipes": 10.775,
+     "base_facts": 11.0,
+     "share_items_with_alternative": 0.9248,
+     "item_inputs_per_recipe": 0.6316,
+     "true_base_per_recipe": 1.2193,
+     "pool_per_recipe": 6.0
+    },
+    "promoted_per_world": {
+     "n": 40,
+     "mean": 6.525,
+     "median": 6.5,
+     "min": 1.0,
+     "max": 14.0
+    },
+    "kept_share_of_closure": {
+     "n": 40,
+     "mean": 0.1513,
+     "median": 0.1439,
+     "min": 0.025,
+     "max": 0.5385
+    },
+    "dropped_recipes_per_world": {
+     "n": 40,
+     "mean": 5.15,
+     "median": 4.0,
+     "min": 0.0,
+     "max": 18.0
+    },
+    "per_goal_tasks": {
+     "tasks": 40,
+     "all_exact": true,
+     "depth_histogram": {
+      "1": 12,
+      "2": 7,
+      "3": 6,
+      "4": 4,
+      "5": 4,
+      "6": 7
+     },
+     "optimal_length": {
+      "n": 40,
+      "mean": 7.425,
+      "median": 7.0,
+      "min": 3.0,
+      "max": 13.0
+     },
+     "hidden_recipes": {
+      "n": 40,
+      "mean": 10.775,
+      "median": 10.0,
+      "min": 2.0,
+      "max": 30.0
+     },
+     "alternative_recipes": 5.175,
+     "entropy_bits": 57.7276,
+     "plan_crafts": 3.05,
+     "headroom": 1.8002,
+     "budget": {
+      "n": 40,
+      "mean": 19.6,
+      "median": 19.0,
+      "min": 12.0,
+      "max": 37.0
+     },
+     "brute_force_within_budget": true
+    },
+    "whole_graph_world": {
+     "converted": false,
+     "reason": "the closure has 490 items (at most 16)"
+    }
+   },
+   "notes": [
+    "element descriptions are game text and are not read",
+    "a combination of an element with itself requires that element once (amount 2 kept as metadata)",
+    "dropped 10 recipe(s) that require their own product",
+    "dropped 3 recipe(s) that produce a base element (base elements are given)",
+    "merged 2 duplicate recipe(s) (same product and requirements)"
+   ]
+  }
+ }
+}

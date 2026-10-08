@@ -1,0 +1,21 @@
+{
+ "benchmark": "little_alchemy",
+ "retrieved": "2026-10-08",
+ "fetch_script": "fetch.py",
+ "files": [
+  {
+   "path": "data/alchemy1Gametree.json",
+   "url": "https://keeper.mpdl.mpg.de/d/28c50dc3a6bf4d10995d/files/?p=%2Fempowermentexploration%2Fresources%2Flittlealchemy%2Fdata%2Falchemy1Gametree.json&dl=1",
+   "sha256": "a40d3e3008cb7022c610a4fcc2e0664338ac4eafcc103b30acdf9df2f7e8881b",
+   "bytes": 109410,
+   "status": "fetched"
+  },
+  {
+   "path": "data/alchemy2Gametree.json",
+   "url": "https://keeper.mpdl.mpg.de/d/28c50dc3a6bf4d10995d/files/?p=%2Fempowermentexploration%2Fresources%2Flittlealchemy%2Fdata%2Falchemy2Gametree.json&dl=1",
+   "sha256": "897e36c0354a1ddad607bcb556da9fd5f3bb6464ae395642281471a74366a16a",
+   "bytes": 370891,
+   "status": "fetched"
+  }
+ ]
+}

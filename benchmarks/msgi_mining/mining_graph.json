@@ -1,0 +1,403 @@
+{
+ "format": "msgi_subtask_graph/1",
+ "domain": "Mining (Sohn, Woo, Choi and Lee, ICLR 2020)",
+ "source": {
+  "repository": "https://github.com/srsohn/msgi",
+  "commit": "e665861f2d08f41b7dad16588447203e5010145a",
+  "file": "grid-world/environment/data/task_graph_mining/full_mining.pkl",
+  "names": "grid-world/environment/mining.py",
+  "license": "MIT, Copyright (c) 2020 Hyunjae Woo (see LICENSE in this folder)"
+ },
+ "objects": [
+  "workspace",
+  "furnace",
+  "tree",
+  "stone",
+  "grass",
+  "pig",
+  "coal",
+  "iron",
+  "silver",
+  "gold",
+  "diamond",
+  "jeweler",
+  "lumbershop"
+ ],
+ "subtasks": [
+  {
+   "id": 0,
+   "name": "Cut wood",
+   "operation": "pickup",
+   "object": "tree"
+  },
+  {
+   "id": 1,
+   "name": "Get stone",
+   "operation": "pickup",
+   "object": "stone"
+  },
+  {
+   "id": 2,
+   "name": "Get string",
+   "operation": "pickup",
+   "object": "grass"
+  },
+  {
+   "id": 3,
+   "name": "Make firewood",
+   "operation": "transform",
+   "object": "lumbershop"
+  },
+  {
+   "id": 4,
+   "name": "Make stick",
+   "operation": "transform",
+   "object": "lumbershop"
+  },
+  {
+   "id": 5,
+   "name": "Make arrow",
+   "operation": "transform",
+   "object": "lumbershop"
+  },
+  {
+   "id": 6,
+   "name": "Make bow",
+   "operation": "transform",
+   "object": "lumbershop"
+  },
+  {
+   "id": 7,
+   "name": "Make stone pickaxe",
+   "operation": "transform",
+   "object": "workspace"
+  },
+  {
+   "id": 8,
+   "name": "Hit pig",
+   "operation": "pickup",
+   "object": "pig"
+  },
+  {
+   "id": 9,
+   "name": "Get coal",
+   "operation": "pickup",
+   "object": "coal"
+  },
+  {
+   "id": 10,
+   "name": "Get iron ore",
+   "operation": "pickup",
+   "object": "iron"
+  },
+  {
+   "id": 11,
+   "name": "Get silver ore",
+   "operation": "pickup",
+   "object": "silver"
+  },
+  {
+   "id": 12,
+   "name": "Light furnace",
+   "operation": "transform",
+   "object": "furnace"
+  },
+  {
+   "id": 13,
+   "name": "Smelt iron",
+   "operation": "transform",
+   "object": "furnace"
+  },
+  {
+   "id": 14,
+   "name": "Smelt silver",
+   "operation": "transform",
+   "object": "furnace"
+  },
+  {
+   "id": 15,
+   "name": "Bake pork",
+   "operation": "transform",
+   "object": "furnace"
+  },
+  {
+   "id": 16,
+   "name": "Make iron pickaxe",
+   "operation": "transform",
+   "object": "workspace"
+  },
+  {
+   "id": 17,
+   "name": "Make silverware",
+   "operation": "transform",
+   "object": "workspace"
+  },
+  {
+   "id": 18,
+   "name": "Get gold ore",
+   "operation": "pickup",
+   "object": "gold"
+  },
+  {
+   "id": 19,
+   "name": "Get diamond ore",
+   "operation": "pickup",
+   "object": "diamond"
+  },
+  {
+   "id": 20,
+   "name": "Smelt gold",
+   "operation": "transform",
+   "object": "furnace"
+  },
+  {
+   "id": 21,
+   "name": "Craft silver diamond earrings",
+   "operation": "transform",
+   "object": "jeweler"
+  },
+  {
+   "id": 22,
+   "name": "Craft iron diamond rings",
+   "operation": "transform",
+   "object": "jeweler"
+  },
+  {
+   "id": 23,
+   "name": "Make goldware",
+   "operation": "transform",
+   "object": "furnace"
+  },
+  {
+   "id": 24,
+   "name": "Craft gold diamond necklace",
+   "operation": "transform",
+   "object": "lumbershop"
+  },
+  {
+   "id": 25,
+   "name": "Make electrum bracelet",
+   "operation": "transform",
+   "object": "furnace"
+  }
+ ],
+ "rules": [
+  {
+   "subtask": 0,
+   "or": []
+  },
+  {
+   "subtask": 1,
+   "or": []
+  },
+  {
+   "subtask": 2,
+   "or": []
+  },
+  {
+   "subtask": 3,
+   "or": [
+    [
+     0
+    ]
+   ]
+  },
+  {
+   "subtask": 4,
+   "or": [
+    [
+     0
+    ]
+   ]
+  },
+  {
+   "subtask": 5,
+   "or": [
+    [
+     0,
+     1
+    ]
+   ]
+  },
+  {
+   "subtask": 6,
+   "or": [
+    [
+     0,
+     2
+    ]
+   ]
+  },
+  {
+   "subtask": 7,
+   "or": [
+    [
+     1,
+     4
+    ]
+   ]
+  },
+  {
+   "subtask": 8,
+   "or": [
+    [
+     5,
+     6
+    ]
+   ]
+  },
+  {
+   "subtask": 9,
+   "or": [
+    [
+     7
+    ]
+   ]
+  },
+  {
+   "subtask": 10,
+   "or": [
+    [
+     7
+    ]
+   ]
+  },
+  {
+   "subtask": 11,
+   "or": [
+    [
+     7
+    ]
+   ]
+  },
+  {
+   "subtask": 12,
+   "or": [
+    [
+     3
+    ],
+    [
+     9
+    ]
+   ]
+  },
+  {
+   "subtask": 13,
+   "or": [
+    [
+     10,
+     12
+    ]
+   ]
+  },
+  {
+   "subtask": 14,
+   "or": [
+    [
+     11,
+     12
+    ]
+   ]
+  },
+  {
+   "subtask": 15,
+   "or": [
+    [
+     8,
+     12
+    ]
+   ]
+  },
+  {
+   "subtask": 16,
+   "or": [
+    [
+     4,
+     13
+    ]
+   ]
+  },
+  {
+   "subtask": 17,
+   "or": [
+    [
+     14
+    ]
+   ]
+  },
+  {
+   "subtask": 18,
+   "or": [
+    [
+     16
+    ]
+   ]
+  },
+  {
+   "subtask": 19,
+   "or": [
+    [
+     16
+    ]
+   ]
+  },
+  {
+   "subtask": 20,
+   "or": [
+    [
+     12,
+     18
+    ]
+   ]
+  },
+  {
+   "subtask": 21,
+   "or": [
+    [
+     14,
+     19
+    ]
+   ]
+  },
+  {
+   "subtask": 22,
+   "or": [
+    [
+     13,
+     19
+    ]
+   ]
+  },
+  {
+   "subtask": 23,
+   "or": [
+    [
+     20
+    ]
+   ]
+  },
+  {
+   "subtask": 24,
+   "or": [
+    [
+     19,
+     20
+    ]
+   ]
+  },
+  {
+   "subtask": 25,
+   "or": [
+    [
+     13,
+     14,
+     20
+    ]
+   ]
+  }
+ ],
+ "check": {
+  "graphs_in_file": 222,
+  "every_graph_is_a_subgraph_of_these_rules": true
+ }
+}

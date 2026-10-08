@@ -23,3 +23,6 @@ env/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Benchmark data that may not be redistributed: fetched by benchmarks/<name>/fetch.py
+benchmarks/*/data/

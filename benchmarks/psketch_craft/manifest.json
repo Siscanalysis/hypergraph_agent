@@ -1,0 +1,27 @@
+{
+ "benchmark": "psketch_craft",
+ "retrieved": "2026-10-08",
+ "files": [
+  {
+   "path": "recipes.yaml",
+   "url": "https://raw.githubusercontent.com/jacobandreas/psketch/f9cfca81ce7c489c45e853adcf5ece82466b65e3/resources/craft/recipes.yaml",
+   "sha256": "c5eb7aa3cf2069e165e3d519aaf5f70151db098c77093e062c63429d5ff983a1",
+   "bytes": 590,
+   "status": "committed"
+  },
+  {
+   "path": "hints.yaml",
+   "url": "https://raw.githubusercontent.com/jacobandreas/psketch/f9cfca81ce7c489c45e853adcf5ece82466b65e3/resources/craft/hints.yaml",
+   "sha256": "0380c62e9a80bad97f89d1835ca5bbc8987a30bca8a68eaff27b575128b87d8a",
+   "bytes": 525,
+   "status": "committed"
+  },
+  {
+   "path": "LICENSE",
+   "url": "https://raw.githubusercontent.com/jacobandreas/psketch/f9cfca81ce7c489c45e853adcf5ece82466b65e3/LICENSE",
+   "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+   "bytes": 11357,
+   "status": "committed"
+  }
+ ]
+}

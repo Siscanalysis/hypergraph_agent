@@ -155,9 +155,13 @@ configs/           smoke, diagnostics, pilots, study and ablation presets, walke
 tests/             deterministic mechanism tests
 docs/              methods, plan, decisions, prior art, results, roadmap
 docs/studies/      the four follow-up studies: protocol, results and verdict each
+benchmarks/        external benchmark problems: sources, licenses, statistics, converters
 paper/OUTLINE.md   prospective outline with a claim-to-evidence table
 ```
 
 ## License
 
-MIT, see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE). The benchmark data in `benchmarks/crafter`,
+`benchmarks/psketch_craft` and `benchmarks/msgi_mining` keep their upstream
+licenses (MIT, Apache-2.0 and MIT), stored next to each data set; data that may
+not be redistributed is fetched by a script instead ([benchmarks/README.md](benchmarks/README.md)).

@@ -10,10 +10,10 @@ from hypergraph_agent.train import main as train_main
 from hypergraph_agent.train import plan
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-# TechTree configs (configs/unlock, configs/layers) have their own schema and tests
-TECHTREE_DIRS = ("unlock", "layers")
+# configs with their own schema and tests: TechTree studies and the open-source baselines
+OWN_SCHEMA_DIRS = ("unlock", "layers", "unlock2", "skills", "baselines")
 CONFIGS = sorted(p for p in (ROOT / "configs").rglob("*.yaml")
-                 if p.relative_to(ROOT / "configs").parts[0] not in TECHTREE_DIRS)
+                 if p.relative_to(ROOT / "configs").parts[0] not in OWN_SCHEMA_DIRS)
 
 
 def test_importing_every_module_starts_nothing(tmp_path, monkeypatch):

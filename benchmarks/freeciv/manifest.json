@@ -1,0 +1,49 @@
+{
+ "benchmark": "freeciv",
+ "retrieved": "2026-10-08",
+ "fetch_script": "fetch.py",
+ "files": [
+  {
+   "path": "data/classic/techs.ruleset",
+   "url": "https://raw.githubusercontent.com/freeciv/freeciv/2c4304c742aa81f1d73a5d604ed83237d57804a1/data/classic/techs.ruleset",
+   "sha256": "cd0ebfae9dfa2ff51f8827c8205d542fe845e169d2537f262e3387cc009b10a1",
+   "bytes": 20738,
+   "status": "fetched"
+  },
+  {
+   "path": "data/classic/units.ruleset",
+   "url": "https://raw.githubusercontent.com/freeciv/freeciv/2c4304c742aa81f1d73a5d604ed83237d57804a1/data/classic/units.ruleset",
+   "sha256": "3ac6fed02dc964f31a0676393d81b524fb9f1147dd2d72cdc729e11c993b2ac0",
+   "bytes": 78346,
+   "status": "fetched"
+  },
+  {
+   "path": "data/classic/buildings.ruleset",
+   "url": "https://raw.githubusercontent.com/freeciv/freeciv/2c4304c742aa81f1d73a5d604ed83237d57804a1/data/classic/buildings.ruleset",
+   "sha256": "73f5654ef0eb16aaed9f64313de2a03a4827b1b7bfaa0dda9847b9adf97cd5d9",
+   "bytes": 51912,
+   "status": "fetched"
+  },
+  {
+   "path": "data/civ2civ3/techs.ruleset",
+   "url": "https://raw.githubusercontent.com/freeciv/freeciv/2c4304c742aa81f1d73a5d604ed83237d57804a1/data/civ2civ3/techs.ruleset",
+   "sha256": "45cd775adf9d61ecbfd93ad35a137ef59b5c3f5c0baca5f0249def0a4c925bd4",
+   "bytes": 21450,
+   "status": "fetched"
+  },
+  {
+   "path": "data/civ2civ3/units.ruleset",
+   "url": "https://raw.githubusercontent.com/freeciv/freeciv/2c4304c742aa81f1d73a5d604ed83237d57804a1/data/civ2civ3/units.ruleset",
+   "sha256": "0884174c09389bf5f0a6de7550e6eec03d791b6250bca1d85f92256f51557636",
+   "bytes": 90442,
+   "status": "fetched"
+  },
+  {
+   "path": "data/civ2civ3/buildings.ruleset",
+   "url": "https://raw.githubusercontent.com/freeciv/freeciv/2c4304c742aa81f1d73a5d604ed83237d57804a1/data/civ2civ3/buildings.ruleset",
+   "sha256": "e80e320b816be012239137580e4a62d2e39a8f223edf8bb67022488ba18b4476",
+   "bytes": 62454,
+   "status": "fetched"
+  }
+ ]
+}

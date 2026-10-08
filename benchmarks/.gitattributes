@@ -1,0 +1,8 @@
+# Third-party files are kept byte-exact: their SHA-256 is recorded in manifest.json.
+crafter/data.yaml -text
+crafter/LICENSE -text
+psketch_craft/recipes.yaml -text
+psketch_craft/hints.yaml -text
+psketch_craft/LICENSE -text
+msgi_mining/LICENSE -text
+msgi_mining/mining_graph.json -text

@@ -1,0 +1,101 @@
+{
+ "benchmark": "msgi_mining",
+ "retrieved": "2026-10-08",
+ "fetch_script": "fetch.py",
+ "files": [
+  {
+   "path": "LICENSE",
+   "url": "https://raw.githubusercontent.com/srsohn/msgi/e665861f2d08f41b7dad16588447203e5010145a/LICENSE",
+   "sha256": "7b0746fd903d431ba39707885557deed87e4214f71a337413ad4ff500b0edbc2",
+   "bytes": 1068,
+   "status": "committed"
+  },
+  {
+   "path": "mining_graph.json",
+   "url": "(derived: python benchmarks/msgi_mining/extract.py)",
+   "sha256": "07a04c340b8245559eff64d46c8d860b77ea8a5210719d637151954fc68a0a1b",
+   "bytes": 5034,
+   "status": "committed"
+  },
+  {
+   "path": "data/full_mining.pkl",
+   "url": "https://raw.githubusercontent.com/srsohn/msgi/e665861f2d08f41b7dad16588447203e5010145a/grid-world/environment/data/task_graph_mining/full_mining.pkl",
+   "sha256": "e209bebb3a5114b2ee818e89ad91ccb57756b9cd7594c215ea1ebeea5c2edd4a",
+   "bytes": 1943998,
+   "status": "fetched",
+   "role": "source"
+  },
+  {
+   "path": "data/train1_mining_1.pkl",
+   "url": "https://raw.githubusercontent.com/srsohn/msgi/e665861f2d08f41b7dad16588447203e5010145a/grid-world/environment/data/task_graph_mining/new/train1_mining_1.pkl",
+   "sha256": "bc80b935c3ec96fe9b8901e2e8260621a7b69e41bccfbe098180300b1113f078",
+   "bytes": 1500123,
+   "status": "fetched",
+   "optional": true,
+   "role": "source"
+  },
+  {
+   "path": "data/train1_mining_2.pkl",
+   "url": "https://raw.githubusercontent.com/srsohn/msgi/e665861f2d08f41b7dad16588447203e5010145a/grid-world/environment/data/task_graph_mining/new/train1_mining_2.pkl",
+   "sha256": "585ded2be541eb85396a1e109449b3d3ad9351c1341808fecbe2ccd6feb980e2",
+   "bytes": 1521604,
+   "status": "fetched",
+   "optional": true,
+   "role": "source"
+  },
+  {
+   "path": "data/train1_mining_3.pkl",
+   "url": "https://raw.githubusercontent.com/srsohn/msgi/e665861f2d08f41b7dad16588447203e5010145a/grid-world/environment/data/task_graph_mining/new/train1_mining_3.pkl",
+   "sha256": "014be994485c9f3ad15a2c909691fe3f3059e416f9076c6b7b78ac3548bc9c84",
+   "bytes": 1497388,
+   "status": "fetched",
+   "optional": true,
+   "role": "source"
+  },
+  {
+   "path": "data/train1_mining_4.pkl",
+   "url": "https://raw.githubusercontent.com/srsohn/msgi/e665861f2d08f41b7dad16588447203e5010145a/grid-world/environment/data/task_graph_mining/new/train1_mining_4.pkl",
+   "sha256": "01a43c228cf3847a2f7ba0ea96a0334dfcfd18dd81588b45ae73a691d835539c",
+   "bytes": 1489403,
+   "status": "fetched",
+   "optional": true,
+   "role": "source"
+  },
+  {
+   "path": "data/eval1_mining_1.pkl",
+   "url": "https://raw.githubusercontent.com/srsohn/msgi/e665861f2d08f41b7dad16588447203e5010145a/grid-world/environment/data/task_graph_mining/new/eval1_mining_1.pkl",
+   "sha256": "217df764c868271d9f9196177a87d59795f966a72dff413e0d16a1b3b001de96",
+   "bytes": 3332214,
+   "status": "fetched",
+   "optional": true,
+   "role": "source"
+  },
+  {
+   "path": "data/eval1_mining_2.pkl",
+   "url": "https://raw.githubusercontent.com/srsohn/msgi/e665861f2d08f41b7dad16588447203e5010145a/grid-world/environment/data/task_graph_mining/new/eval1_mining_2.pkl",
+   "sha256": "9612f6cb0995c4b58b82d03f766d9ed77c7151ac03266bd88c46a4f8d20bdd87",
+   "bytes": 3310733,
+   "status": "fetched",
+   "optional": true,
+   "role": "source"
+  },
+  {
+   "path": "data/eval1_mining_3.pkl",
+   "url": "https://raw.githubusercontent.com/srsohn/msgi/e665861f2d08f41b7dad16588447203e5010145a/grid-world/environment/data/task_graph_mining/new/eval1_mining_3.pkl",
+   "sha256": "54e27f6ec3ca22207854398f864cc62801a3bb50c8466dd3b8b7e479cc1d62ac",
+   "bytes": 3334949,
+   "status": "fetched",
+   "optional": true,
+   "role": "source"
+  },
+  {
+   "path": "data/eval1_mining_4.pkl",
+   "url": "https://raw.githubusercontent.com/srsohn/msgi/e665861f2d08f41b7dad16588447203e5010145a/grid-world/environment/data/task_graph_mining/new/eval1_mining_4.pkl",
+   "sha256": "fac81b0ea51193aaa935aad34faa544f9c971a97a0c2a0fad214a61877151bd1",
+   "bytes": 3342934,
+   "status": "fetched",
+   "optional": true,
+   "role": "source"
+  }
+ ]
+}

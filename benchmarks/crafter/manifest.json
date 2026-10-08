@@ -1,0 +1,20 @@
+{
+ "benchmark": "crafter",
+ "retrieved": "2026-10-08",
+ "files": [
+  {
+   "path": "data.yaml",
+   "url": "https://raw.githubusercontent.com/danijar/crafter/e04542a2159f1aad3d4c5ad52e8185717380ee3a/crafter/data.yaml",
+   "sha256": "41ec28a266e74d7f98e0b7381ff5f11ed491c2a6cf39a460eda8bbd751b8630f",
+   "bytes": 2632,
+   "status": "committed"
+  },
+  {
+   "path": "LICENSE",
+   "url": "https://raw.githubusercontent.com/danijar/crafter/e04542a2159f1aad3d4c5ad52e8185717380ee3a/LICENSE",
+   "sha256": "6285a75f47dc7fef3f0005a83364e3a24b6e7738b8bd64266ad10fe3afde8bc7",
+   "bytes": 1058,
+   "status": "committed"
+  }
+ ]
+}

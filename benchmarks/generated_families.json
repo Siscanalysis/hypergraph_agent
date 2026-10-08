@@ -1,0 +1,215 @@
+{
+ "generated_by": "python -m hypergraph_agent.benchmarks.stats --families --write",
+ "families": {
+  "F1": {
+   "worlds": 50,
+   "graph_mean": {
+    "elements": 32.56,
+    "base": 16.56,
+    "derived": 16.0,
+    "reachable_derived": 16.0,
+    "unlocks": 0.0,
+    "unlockable_elements": 0.0,
+    "recipes": 20.26,
+    "and_arity_mean": 2.9421,
+    "and_arity_max": 4.0,
+    "recipes_per_derived_mean": 1.2663,
+    "recipes_per_derived_max": 1.98,
+    "share_derived_with_alternatives": 0.2662,
+    "depth_mean": 4.5,
+    "depth_max": 8.0,
+    "share_recipes_with_derived_requirement": 0.8812,
+    "share_recipes_only_derived_requirements": 0.0,
+    "share_derived_reused": 0.7137,
+    "uses_per_derived_mean": 1.1162,
+    "uses_per_derived_max": 2.74,
+    "shallowest_derivation_size_mean": 4.5,
+    "shallowest_derivation_size_max": 8.0
+   },
+   "world_mean": {
+    "items": 16.0,
+    "levels": 8.0,
+    "recipes": 20.26,
+    "base_facts": 18.0,
+    "share_items_with_alternative": 0.2662,
+    "item_inputs_per_recipe": 0.8812,
+    "true_base_per_recipe": 2.0609,
+    "pool_per_recipe": 6.0
+   },
+   "tasks": {
+    "tasks": 200,
+    "all_exact": true,
+    "depth_histogram": {
+     "1": 72,
+     "2": 70,
+     "3": 58
+    },
+    "optimal_length": {
+     "n": 200,
+     "mean": 6.475,
+     "median": 6.5,
+     "min": 3.0,
+     "max": 12.0
+    },
+    "hidden_recipes": {
+     "n": 200,
+     "mean": 3.575,
+     "median": 3.0,
+     "min": 2.0,
+     "max": 9.0
+    },
+    "alternative_recipes": 0.475,
+    "entropy_bits": 19.1532,
+    "plan_crafts": 1.93,
+    "headroom": 1.9167,
+    "budget": {
+     "n": 200,
+     "mean": 19.045,
+     "median": 19.0,
+     "min": 13.0,
+     "max": 27.0
+    },
+    "brute_force_within_budget": true
+   }
+  },
+  "F2": {
+   "worlds": 50,
+   "graph_mean": {
+    "elements": 33.12,
+    "base": 17.12,
+    "derived": 16.0,
+    "reachable_derived": 16.0,
+    "unlocks": 0.0,
+    "unlockable_elements": 0.0,
+    "recipes": 25.8,
+    "and_arity_mean": 3.1917,
+    "and_arity_max": 4.72,
+    "recipes_per_derived_mean": 1.6125,
+    "recipes_per_derived_max": 2.0,
+    "share_derived_with_alternatives": 0.6125,
+    "depth_mean": 4.5,
+    "depth_max": 8.0,
+    "share_recipes_with_derived_requirement": 0.8784,
+    "share_recipes_only_derived_requirements": 0.0,
+    "share_derived_reused": 0.8075,
+    "uses_per_derived_mean": 1.7412,
+    "uses_per_derived_max": 4.06,
+    "shallowest_derivation_size_mean": 4.715,
+    "shallowest_derivation_size_max": 8.52
+   },
+   "world_mean": {
+    "items": 16.0,
+    "levels": 8.0,
+    "recipes": 25.8,
+    "base_facts": 18.0,
+    "share_items_with_alternative": 0.6125,
+    "item_inputs_per_recipe": 1.0806,
+    "true_base_per_recipe": 2.1111,
+    "pool_per_recipe": 8.0
+   },
+   "tasks": {
+    "tasks": 200,
+    "all_exact": true,
+    "depth_histogram": {
+     "3": 69,
+     "4": 74,
+     "5": 57
+    },
+    "optimal_length": {
+     "n": 200,
+     "mean": 10.985,
+     "median": 11.0,
+     "min": 7.0,
+     "max": 17.0
+    },
+    "hidden_recipes": {
+     "n": 200,
+     "mean": 9.32,
+     "median": 9.0,
+     "min": 4.0,
+     "max": 18.0
+    },
+    "alternative_recipes": 2.985,
+    "entropy_bits": 60.7996,
+    "plan_crafts": 4.05,
+    "headroom": 1.8794,
+    "budget": {
+     "n": 200,
+     "mean": 27.145,
+     "median": 27.0,
+     "min": 21.0,
+     "max": 31.0
+    },
+    "brute_force_within_budget": true
+   }
+  },
+  "TechTree-L-d0": {
+   "worlds": 50,
+   "concepts_mean": {
+    "concepts": 9.0,
+    "primitives": 3.0,
+    "levels": 3.0,
+    "parents_per_concept": 1.8822,
+    "concept_parent_share": 0.7094,
+    "share_with_concept_parent": 0.6667,
+    "reuse_depth_mean": 0.0,
+    "reuse_depth_max": 0.0,
+    "share_reused_as_parent": 0.5823,
+    "children_per_concept_mean": 1.3333,
+    "children_per_concept_max": 4.12,
+    "two_parent_concepts_above_level_1": 6.0
+   }
+  },
+  "TechTree-L-d1": {
+   "worlds": 50,
+   "concepts_mean": {
+    "concepts": 9.0,
+    "primitives": 3.0,
+    "levels": 3.0,
+    "parents_per_concept": 1.8711,
+    "concept_parent_share": 0.714,
+    "share_with_concept_parent": 0.6667,
+    "reuse_depth_mean": 0.3333,
+    "reuse_depth_max": 1.0,
+    "share_reused_as_parent": 0.5645,
+    "children_per_concept_mean": 1.3333,
+    "children_per_concept_max": 3.92,
+    "two_parent_concepts_above_level_1": 6.0
+   }
+  },
+  "TechTree-L-d2": {
+   "worlds": 50,
+   "concepts_mean": {
+    "concepts": 9.0,
+    "primitives": 3.0,
+    "levels": 3.0,
+    "parents_per_concept": 1.8733,
+    "concept_parent_share": 0.7127,
+    "share_with_concept_parent": 0.6667,
+    "reuse_depth_mean": 1.0,
+    "reuse_depth_max": 2.0,
+    "share_reused_as_parent": 0.5756,
+    "children_per_concept_mean": 1.3333,
+    "children_per_concept_max": 4.06,
+    "two_parent_concepts_above_level_1": 6.0
+   }
+  },
+  "TechTree-U-k3": {
+   "worlds": 50,
+   "concepts_mean": {
+    "concepts": 2.0,
+    "primitives": 4.0,
+    "levels": 1.0,
+    "parents_per_concept": 2.55,
+    "concept_parent_share": 0.0,
+    "share_with_concept_parent": 0.0,
+    "reuse_depth_mean": 0.0,
+    "reuse_depth_max": 0.0,
+    "share_reused_as_parent": 0.0,
+    "children_per_concept_mean": 0.0,
+    "children_per_concept_max": 0.0,
+    "two_parent_concepts_above_level_1": 0.0
+   }
+  }
+ }
+}
