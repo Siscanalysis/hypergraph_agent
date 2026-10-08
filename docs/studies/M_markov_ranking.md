@@ -361,6 +361,18 @@ once, after all ten collection runs; its PPR selection is written into the M2
 config before the first M2 run. A run that fails for a software fault is
 handled by the rerun rule above and recorded as an amendment.
 
+### Amendments
+
+- MA1 (2026-10-08, after M1, before any M2 run). The frozen selection rule,
+  applied to the 24 selection worlds (seeds 0-1) of the M1 collection, chose
+  star-graph PPR with seed `recipe` and restart probability 1.0 (and, for the
+  fact chain, seed `effect` and restart 1.0). Both are written into
+  `configs/markov/m2.yaml`; nothing else changes. Restart 1.0 is the edge of the
+  grid where the score equals the raw pairwise weights, so, as pre-stated,
+  propagation adds nothing beyond the raw weights on these worlds; `pair_rank`
+  and the proposals of `hyper_sample_ppr` therefore rank by the pairwise
+  weights.
+
 ## Implementation
 
 - `src/hypergraph_agent/agents/markov.py`: observation formulas

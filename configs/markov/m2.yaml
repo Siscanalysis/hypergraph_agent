@@ -28,11 +28,11 @@ walker:
   per_run_cap: 3148
   eval_world_offset_by_seed: true
   consistent_moves: 50
-  # agents.markov parameters. restart and ppr_seed are null placeholders: the agents
-  # refuse them until the M1 selection (selection worlds only) is written in, and a
-  # Markov arm is listed first so a run stops before any interaction. The others are
-  # fixed a priori.
-  markov: {restart: null, ppr_seed: null, prior_strength: 2.0, rank_neighbours: true,
+  # agents.markov parameters. restart and ppr_seed: the M1 selection on the selection
+  # worlds (seeds 0-1), written in by amendment MA1 (docs/studies/M_markov_ranking.md)
+  # before any M2 run: seed recipe, restart 1.0 (no propagation). The others are fixed
+  # a priori.
+  markov: {restart: 1.0, ppr_seed: recipe, prior_strength: 2.0, rank_neighbours: true,
            proposal_floor: 0.1}
 arms:
   - {id: hyper_rank, strategy: hyper_rank}
