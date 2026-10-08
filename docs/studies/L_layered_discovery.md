@@ -1,13 +1,14 @@
 # Study L: discoveries used as atoms of new hypotheses
 
-Status: protocol frozen on 2026-10-08 by the commit that adds this file,
-before any measurement run; the measurement runs execute that commit from a
-clean checkout. Development runs used only the dev allocation and the
-namespace `techtree_dev`. An independent
-review ran the full measurement design once on the scratch namespace
-`checker_dev` with in-memory ledgers (no measurement world touched); its
-outcomes were seen before the precedence rule, the conditions of the verdict,
-the per-depth arm lists and the fresh namespace of phase L2 were fixed.
+Status: protocol frozen on 2026-10-08 by the commit that adds this file
+(73e5602), before any measurement run. The measurement runs executed that
+commit from a clean checkout and are reported in the Results section.
+Development runs used only the dev allocation and the namespace `techtree_dev`.
+An independent review ran the full measurement design once on the scratch
+namespace `checker_dev` with in-memory ledgers (no measurement world touched);
+its outcomes were seen before the precedence rule, the conditions of the
+verdict, the per-depth arm lists and the fresh namespace of phase L2 were
+fixed.
 
 ## Question and claim
 
@@ -318,8 +319,97 @@ code uses common random numbers, which changes only tie-breaking.
 
 ## Results
 
-(empty until the measurement runs)
+All 160 runs of `configs/layers/l1_main.yaml` and 152 runs of
+`configs/layers/l2_main.yaml` completed every task (no incomplete cell, no
+rerun); every manifest records commit 73e5602, a clean working tree and one
+loaded-code hash. Analyses: `artifacts/techtree/l1-main/` and
+`artifacts/techtree/l2-main/` (reproduced exactly from the frozen snapshot).
+Measurement used 301,694 adaptive and 24,370 reporting interactions for L1
+(caps 537,600 and 230,400) and 228,640 and 61,566 for L2 (caps 460,800 and
+268,800). The summed per-run wall-clock time from the manifests, including run
+bookkeeping and provenance recording, was 156.0 s (L1) and 128.1 s (L2), of
+which the evaluation loops took 140.3 s and 113.8 s.
+
+Mean actions per episode in the late half (episodes 6-11), 32 worlds per cell:
+
+| Phase, depth | remember | promote | sham_promote | adaptive | none / random | oracle library | reference |
+|---|---|---|---|---|---|---|---|
+| L1, d = 0 | 45.0 | 47.2 | 44.3 | 45.3 | 97.2 (none) | 13.9 | 12.4 |
+| L1, d = 1 | 37.0 | 33.1 | 40.8 | 34.1 | | 11.3 | 10.4 |
+| L1, d = 2 | 31.2 | 10.1 | 36.3 | 10.2 | 91.8 (none) | 8.8 | 7.0 |
+| L2, d = 0 | 39.1 | 44.8 | 43.9 | 40.7 | | 14.1 | 13.0 |
+| L2, d = 1 | 36.8 | 36.3 | 37.1 | 33.8 | | 11.5 | 10.5 |
+| L2, d = 2 | 27.7 | 10.7 | 30.3 | 10.4 | 96.9 (random) | 8.4 | 7.0 |
+
+Pre-registered tests, `promote - remember` on late-half actions unless stated
+(95% world-cluster bootstrap intervals; 90% for F1 and F2). Two-sided sign
+tests are given for the primaries; those of every test are in `analysis.json`.
+
+- L1 (primary, phase L1, d = 2): -21.0 [-27.5, -14.7]; 25 of 26 untied worlds
+  favour `promote` (sign test p = 8.0e-7). Holds. F1: 90% interval [-26.5,
+  -15.7] against the margin +-3.12; not equivalent.
+- L2 (primary, phase L2, d = 2): -17.0 [-22.2, -11.9]; 21 of 22 untied worlds
+  (p = 1.1e-5). Holds. F2: [-21.4, -12.7] against +-2.77; not equivalent.
+- S1 (condition, d = 0, no benefit): L1 +2.3 [-1.6, 6.1]; L2 +5.7 [-0.3, 12.1].
+  Holds in both phases: promotion showed no benefit without reuse (both point
+  estimates are above 0).
+- S5 (condition, `promote - sham_promote`, d = 2): L1 -26.2 [-33.3, -19.2]; L2
+  -19.6 [-25.1, -14.3]. Holds in both phases.
+- S2 (benefit larger at d = 2 than at d = 0): L1 -23.3 [-30.8, -16.0]; L2 -22.8
+  [-28.8, -16.6]. Holds.
+- S3 (d = 1): L1 -3.9 [-8.7, 0.8], fails; L2 -0.6 [-4.7, 4.2], fails. The L1
+  interaction d = 2 versus d = 1, -17.1 [-25.3, -9.6], holds.
+- S4 (`sham_promote - remember`, L1): d = 0 -0.6 [-4.4, 3.2]; d = 2 +5.2 [-0.4,
+  11.0]. Both hold: no benefit from useless nodes (at d = 2 the point estimate
+  is above 0).
+- S6 (`sham_promote - none`, L1, d = 2): -55.5 [-62.1, -48.8]. Holds: sham
+  promotion keeps the replay memory and is far better than no memory.
+- S7 (`adaptive` within 10% of the better fixed arm at every depth): fails in
+  both phases. L1: d = 0 +0.3 [-3.2, 4.1] against `remember`, margin 4.50,
+  holds; d = 1 +1.0 [-2.2, 4.3] against `promote`, margin 3.31, fails; d = 2
+  +0.1 [-0.1, 0.3], margin 1.01, holds. L2: d = 0 +1.6 [-3.4, 6.5] against
+  `remember`, margin 3.91, fails; d = 1 -2.4 [-6.1, 1.1] against `promote`,
+  margin 3.63, holds; d = 2 -0.2 [-0.8, 0.2], margin 1.07, holds.
+- S8 (L1, whole stream, d = 2): -32.3 [-38.1, -26.7]. Holds.
+- S9 (L1, `none - remember`, d = 0): +52.2 [46.6, 57.8]. Holds.
+- V1-V3: in both phases the reference and the oracle library solved all 1,152
+  tasks and the oracle library never beat the reference. Hold.
+- Incidental composition (`discoveries_in_replay` per world, `remember`): L1
+  1.34 of 5.59 discoveries at d = 2, 0.81 of 5.44 at d = 1, 0.06 of 5.28 at
+  d = 0; L2 0.41 of 8.56, 0 of 8.53 and 0.06 of 8.66. Replays alone found about
+  a quarter (24%) of `remember`'s discoveries at L1 depth 2, but only 4.7% at
+  L2 depth 2.
+- Random null (L2, d = 2): `random` held 8.25 of the 9 concepts at least once
+  by the end of a world (`remember` 8.56) but solved 5.7% of late episodes, and
+  10 of 32 worlds never; counts of concepts discovered barely separate it from
+  the explorers, so the discovery curves are read for timing only.
 
 ## Verdict and limits
 
-(empty until the measurement runs)
+Both phases pass under the precedence rule: the primary holds, the
+equivalence does not, and both conditions (no benefit at depth 0, promote below
+sham at depth 2) hold; L2 confirms L1 on fresh worlds with real discovery. In
+this toy world, when discoveries are built from earlier ones (depth 2), using
+them as atoms of new hypotheses cut late-half cost by 67% (L1) and 61% (L2)
+relative to remembering them as literal links (31.2 to 10.1 and 27.7 to 10.7
+actions per episode), to within 1.4 and 2.3 actions of the oracle library. That
+a benefit exists at depth 2 is expected by construction, and the depth-0
+control is guaranteed by the generator's rule for flat sequences; the
+informative results are the size of the benefit, the absence of any benefit
+from as many useless promoted nodes, the lack of a clear benefit at depth 1
+(consistent with the prediction that the level-2 saving and the futile level-3
+composition tests roughly cancel), and the share of compositions that plain
+replay finds incidentally (24% of `remember`'s discoveries at L1 depth 2, 4.7%
+at L2 depth 2). The adaptive arm matched the better fixed arm in point estimate
+(within 2.4 actions everywhere) but failed S7 in both phases; it did not
+demonstrate that it detects the world kind within the pre-set margin.
+
+Limits: a macro hypothesis is the concatenation of stored sequences, so these
+results cannot separate promotion to a higher-layer node from composing
+remembered sequences; the domain is a toy (three primitives, three levels of
+three concepts, deterministic dynamics, exact discoveries); all arms are
+hand-written elimination procedures, so nothing is shown about learning agents,
+and nothing about intelligence or knowledge in general; L1 fixes only the
+level-1 input; `remember` gains part of the composition benefit through replay;
+S7 was underpowered by design; the review pilot's outcomes were seen before the
+verdict rules were fixed.

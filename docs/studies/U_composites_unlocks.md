@@ -1,12 +1,12 @@
 # Study U: discovery cost of unlisted composites and unlocks
 
-Status: protocol frozen on 2026-10-08 by the commit that adds this file,
-before any measurement run; the measurement runs execute that commit from a
-clean checkout. Development runs used only the dev allocation and the
-namespace `techtree_dev`. An independent
-review ran the full measurement design once on the scratch namespace
-`checker_dev` with in-memory ledgers (no measurement world touched) and
-obtained U1a = 179 [148, 210] with a ratio of 3.9; those outcomes were seen
+Status: protocol frozen on 2026-10-08 by the commit that adds this file
+(73e5602), before any measurement run. The measurement runs executed that
+commit from a clean checkout and are reported in the Results section.
+Development runs used only the dev allocation and the namespace `techtree_dev`.
+An independent review ran the full measurement design once on the scratch
+namespace `checker_dev` with in-memory ledgers (no measurement world touched)
+and obtained U1a = 179 [148, 210] with a ratio of 3.9; those outcomes were seen
 before the +-25% band of U1b, the per-cell arm lists and the margin of S2 were
 fixed.
 
@@ -322,8 +322,101 @@ differs only in tie-breaking and in which cells run which arm.
 
 ## Results
 
-(empty until the measurement run)
+All 140 runs of `configs/unlock/u_main.yaml` completed every task (no
+incomplete cell, no rerun); every manifest records commit 73e5602, a clean
+working tree and one loaded-code hash. Analysis: `artifacts/techtree/u-main/`
+(reproduced exactly from the frozen snapshot). Measurement used 75,638
+adaptive and 79,193 reporting interactions of the U ledger (caps 720,000 and
+288,000). The summed per-run wall-clock time from the manifests, including run
+bookkeeping and provenance recording, was 72.8 s, of which the evaluation loops
+took 55.8 s.
+
+Mean actions to the first success per world (30 worlds per cell; predictions
+from the protocol in brackets):
+
+| Cell | pooled | isolated | isolated / pooled | oracle = reference | random |
+|---|---|---|---|---|---|
+| k1-off-ann | 4.9 [4.5] | 4.9 [4.5] | 1.00 [1.0] | 3.0 | |
+| k1-off-sil | 6.0 [5.5] | 6.0 [5.5] | 1.00 [1.0] | | |
+| k2-off-ann | 17.8 [15] | 44.0 [40] | 2.47 [2.7] | 4.9 | |
+| k2-off-sil | 27.9 [23] | 70.6 [64] | 2.53 [2.8] | | |
+| k2-on-ann | 12.8 | 18.9 | 1.48 | | |
+| k2-on-sil | 14.6 | 22.5 | 1.55 | | |
+| k3-off-ann | 67.0 [60] | 272.8 [229] | 4.07 [3.8] | 6.8 | 348.0 [190] |
+| k3-off-sil | 124.9 [108] | 514.0 [421] | 4.11 [3.9] | | 1035.2 [687, most worlds censored] |
+| k3-on-ann | 31.4 | 48.7 | 1.55 | | |
+| k3-on-sil | 38.4 | 56.6 | 1.47 | | |
+
+Censoring: only `random` at k3-off-sil had censored worlds (20 of 30 never
+succeeded within the 1,200 actions of the stream); no other arm or cell had
+any, so every other entry, and S5 below, is exact.
+
+Pre-registered tests (95% world-cluster bootstrap intervals; 90% for S2).
+Two-sided sign tests are given for the primary; those of every test are in
+`analysis.json`.
+
+- U1a, `isolated - pooled` at k3-off-ann: 205.8 [174.3, 237.0], all 30 worlds
+  positive (sign test p = 1.9e-9). Holds.
+- U1b, ratio of means at k3-off-ann: 4.07 (bootstrap interval [3.64, 4.51]),
+  inside the band 2.85-4.75. Holds.
+- V1, V2, V3: the reference and the oracle solved all 1,080 tasks they played,
+  and the oracle never used fewer actions than the reference (0 violations
+  each). Hold.
+- S1, `isolated - pooled`: k3-off-sil 389.1 [326.1, 449.3]; k3-on-ann 17.3
+  [11.6, 23.2]; k3-on-sil 18.2 [11.3, 25.3]; k2-off-ann 26.2 [21.2, 31.2];
+  k2-off-sil 42.7 [35.4, 50.3]. All hold. S1r ratios: k3-off-sil 4.11 [3.59,
+  4.71] in 2.93-4.88; k2-off-ann 2.47 [2.22, 2.72] in 2.00-3.33; k2-off-sil
+  2.53 [2.28, 2.80] in 2.09-3.48. All hold.
+- S2, k1-off-ann: difference 0 [0, 0], equivalent within +-1 action (the two
+  arms act identically at k = 1 by construction). Holds.
+- S3, growth of the pooling advantage from k = 2 to k = 3: 179.6 [151.5,
+  206.9]. Holds.
+- S4, discovery cost `pooled - oracle` at k3-off-ann: 60.2 [53.5, 66.2]. Holds.
+- S5, `random - pooled` at k3-off-ann: 281.0 [194.2, 372.3]. Holds.
+- S6, signal on minus off at k = 3, announced: `pooled` -35.7 [-42.6, -28.5];
+  `isolated` -224.1 [-258.6, -188.1]. Hold.
+- S7, silent minus announced at k = 3, no signal: `pooled` 57.9 [43.9, 72.1];
+  `isolated` 241.2 [194.3, 285.5]; `random` 687.2 [529.1, 832.1], a lower bound
+  only through the 20 censored k3-off-sil `random` worlds. Hold.
+- S8, late-half `isolated - pooled` at k3-off-ann: 0 [0, 0], no difference
+  below 0. Holds: both arms had finished discovering by episode 4 in every
+  k3-off-ann world.
+- Descriptive: with the signal on, the isolated / pooled ratio is about 1.5 at
+  k = 2 and 3, presumably because both arms then extend confirmed prefixes
+  instead of covering whole windows (not tested). `random` solved 26.1% of the
+  late episodes at k3-off-ann (26.7% early) and 3.3% at k3-off-sil; it does not
+  improve within a world. In the late half every non-random arm matched the
+  reference exactly (late cost ratio 1.00) in every cell except `isolated` at
+  k3-off-sil (1.93), which was still discovering at episode 6 or later in 11 of
+  30 worlds.
 
 ## Verdict and limits
 
-(empty until the measurement run)
+U passes (`analysis.verdict`: U1a, U1b and V1-V3 hold). The pass shows what U
+was designed to show and no more: TechTree implements pooled testing of
+unlisted composites as the coverage argument predicts. The isolated / pooled
+ratio grows with composite length (1.00, about 2.5, about 4.1 for k = 1, 2, 3)
+and the observed ratios lie inside their bands; the oracle and the reference
+behave as required. Absolute costs of `pooled` and `isolated` ran 8-22% above
+the predictions, and `random` 83% above at k3-off-ann; the predictions ignored
+episode boundaries (held composites are lost at the end of every episode) and
+the presses needed to reach each next window, which may account for the
+direction but was neither quantified in advance nor tested. TechTree is
+therefore a valid instrument for measuring discovery cost as a function of
+composite length under pooled and isolated testing. The effects of the
+intermediate signal and of silent unlocks rest only on the directions of the
+secondaries S6 and S7, which carry no verdict; both match the predictions.
+Random search stayed near its per-episode success rate without improving. U
+says nothing about learning agents or about intelligence: both explorers are
+hand-written elimination procedures whose priors match the generator.
+
+Limits: a toy domain (four base primitives, three slots, one key and one entry
+per world, deterministic dynamics). The primary contrast is fixed by counting,
+and its band, like the S1r bands, was set after the review pilot. Two
+elimination procedures, a random agent and two privileged arms are the only
+arms, so width-based novelty search, flat macro expansion and learned agents
+remain untested. The explorers' priors (slot windows first, fewest slots first)
+match the generator (exactly one slot per entry); a mismatched prior would cost
+more. S2 holds by construction; S8 is an outcome (both arms had finished
+discovering by episode 4 at k3-off-ann). Cells k1-off-sil, k2-on-ann and
+k2-on-sil are descriptive only.
