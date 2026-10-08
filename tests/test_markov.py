@@ -88,6 +88,7 @@ def test_walk_refuses_any_arm_of_a_config_with_unset_markov_parameters(tmp_path)
     raw = yaml.safe_load((ROOT / "configs" / "markov" / "m2.yaml").read_text())
     raw["run"].update(ledger=str(tmp_path / "ledger.json"), runs_dir=str(tmp_path / "runs"))
     raw["eval"]["n_tasks"] = 2
+    raw["walker"]["markov"].update(restart=None, ppr_seed=None)  # the state before amendment MA1
     path = tmp_path / "m2_unset.yaml"
     path.write_text(yaml.safe_dump(raw))
     with pytest.raises(SystemExit):  # the check sees the whole config, before --arms
@@ -100,7 +101,8 @@ def test_m2_config_refuses_to_run_until_m1_is_written_in():
     from hypergraph_agent.evaluation.walkers import make_walker
     from hypergraph_agent.walk import plan
     cfg = load_config(ROOT / "configs" / "markov" / "m2.yaml")
-    assert cfg["walker"]["markov"]["restart"] is None and cfg["walker"]["markov"]["ppr_seed"] is None
+    markov_params(cfg["walker"]["markov"])  # amendment MA1 wrote the M1 selection in
+    cfg["walker"]["markov"].update(restart=None, ppr_seed=None)  # the state before MA1
     assert cfg["arms"][0]["strategy"] in MARKOV_STRATEGIES  # the first run stops before any interaction
     assert plan(cfg)["caps"]["per_run_cap_covers_every_stream"]  # the dry run still works
     for a in cfg["arms"]:
