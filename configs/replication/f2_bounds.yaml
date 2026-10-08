@@ -1,0 +1,35 @@
+# Study R bounds, family F2: the full-pool node and the privileged optimal plan on
+# the same tasks as configs/replication/f2.yaml, every seed (worlds differ per
+# seed). Non-adaptive: charged to the reporting cap.
+run:
+  name: rep-f2-bounds
+  phase: replication
+  allocation: rep
+  seeds: [0, 1, 2, 3, 4]
+  ledger: runs/R-ledger.json
+budget:
+  ledger_allocations: {dev: 10000, rep: 182330}
+  ledger_adaptive_cap: 192330
+  ledger_reporting_cap: 221860
+world: {p_alternative: 0.6, pool_size: 8, max_true: 3, p_extra_item_input: 0.25}
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 3, depth_max: 5, n_distractor_base: 0,
+          observe_items: goal_only}
+eval:
+  namespace: rep_f2
+  n_tasks: 160
+  track: inference
+  n_worlds: 10
+  episodes_per_world: 16
+walker:
+  per_run_cap: 4449  # largest task-budget sum of the run streams
+  eval_world_offset_by_seed: true
+  consistent_moves: 50
+  eval_variants:
+    - {name: eps0, tasks: {failure_prob: 0.0}}
+    - {name: eps10, tasks: {failure_prob: 0.1}}
+arms:
+  - {id: maximal, strategy: maximal}
+  - {id: reference, strategy: reference}

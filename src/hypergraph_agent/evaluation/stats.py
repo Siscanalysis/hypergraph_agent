@@ -68,3 +68,28 @@ def difference(scores: dict, a: str, b: str, **kw) -> dict:
 def interaction(scores: dict, g1="G1", g0="G0", f1="F1", f0="F0", **kw) -> dict:
     """(J_G1 - J_G0) - (J_F1 - J_F0)."""
     return contrast(scores, {g1: 1.0, g0: -1.0, f1: -1.0, f0: 1.0}, **kw)
+
+
+def cluster_bootstrap_mean(values, n_boot: int = 10_000, seed: int = 0, level: float = 0.95) -> dict:
+    """Percentile bootstrap of the mean of independent cluster values (one
+    value per cluster, e.g. a paired per-world difference): clusters are
+    resampled with replacement, nothing inside a cluster is resampled."""
+    v = np.asarray(list(values), dtype=float)
+    if len(v) == 0:
+        return {"estimate": None, "ci": None, "n": 0}
+    rng = np.random.default_rng(seed)
+    boots = v[rng.integers(0, len(v), (n_boot, len(v)))].mean(axis=1)
+    a = (1 - level) / 2
+    return {"estimate": float(v.mean()), "ci": [float(np.quantile(boots, a)), float(np.quantile(boots, 1 - a))],
+            "n": len(v), "n_boot": n_boot, "seed": seed, "level": level}
+
+
+def sign_test(values) -> dict:
+    """Exact two-sided sign test of a zero median; zeros are dropped."""
+    from math import comb
+    v = [float(x) for x in values]
+    neg, pos = sum(x < 0 for x in v), sum(x > 0 for x in v)
+    n = neg + pos
+    k = min(neg, pos)
+    p = min(1.0, 2 * sum(comb(n, i) for i in range(k + 1)) / 2 ** n) if n else 1.0
+    return {"negative": neg, "positive": pos, "zero": len(v) - n, "p_two_sided": p}

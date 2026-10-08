@@ -1,0 +1,36 @@
+# Study R (docs/studies/R_replication.md), measurement (allocation `rep`),
+# family F0, the no-recurrence negative control: the F1 generator with every
+# task in a fresh world, so evidence is never reused. A run's 160 tasks form
+# 10 blocks of 16 consecutive tasks; the position in a block replaces the
+# episode index. Predicted: no late advantage.
+# Every seed plays its own worlds; both noise levels play the same ones.
+run:
+  name: rep-f0
+  phase: replication
+  allocation: rep
+  seeds: [0, 1, 2, 3, 4]
+  ledger: runs/R-ledger.json
+budget:
+  ledger_allocations: {dev: 10000, rep: 182330}
+  ledger_adaptive_cap: 192330
+  ledger_reporting_cap: 221860
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only}
+eval:
+  namespace: rep_f0
+  world_mode: per_task
+  n_tasks: 160
+  track: inference
+  episodes_per_world: 16
+walker:
+  per_run_cap: 3145  # largest task-budget sum of the run streams
+  eval_world_offset_by_seed: true
+  consistent_moves: 50
+  eval_variants:
+    - {name: eps0, tasks: {failure_prob: 0.0}}
+    - {name: eps10, tasks: {failure_prob: 0.1}}
+arms:
+  - {id: focused_sample, strategy: focused_sample}

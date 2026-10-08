@@ -1,0 +1,41 @@
+# Study R (docs/studies/R_replication.md), measurement (allocation `rep`),
+# family F2: deeper goals (depth 3-5), more OR structure (an alternative
+# recipe for 60% of the items, a second item input for a quarter of the
+# recipes above level 2) and a larger hypothesis class (pools of 8, 92
+# hypotheses per recipe), with the brute-force headroom of F1. Ten worlds per
+# seed x 16 episodes.
+# Every seed plays its own worlds; both noise levels play the same ones.
+run:
+  name: rep-f2
+  phase: replication
+  allocation: rep
+  seeds: [0, 1, 2, 3, 4]
+  ledger: runs/R-ledger.json
+budget:
+  ledger_allocations: {dev: 10000, rep: 182330}
+  ledger_adaptive_cap: 192330
+  ledger_reporting_cap: 221860
+world: {p_alternative: 0.6, pool_size: 8, max_true: 3, p_extra_item_input: 0.25}
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 3, depth_max: 5, n_distractor_base: 0,
+          observe_items: goal_only}
+eval:
+  namespace: rep_f2
+  n_tasks: 160
+  track: inference
+  n_worlds: 10
+  episodes_per_world: 16
+walker:
+  per_run_cap: 4449  # largest task-budget sum of the run streams
+  eval_world_offset_by_seed: true
+  consistent_moves: 50
+  # realized omission rate q - q^8/8 = 0.692, the focused_sample rate in dev F2, eps 0, episodes 9-16 (2807/4056)
+  omit_prob: 0.699
+  eval_variants:
+    - {name: eps0, tasks: {failure_prob: 0.0}}
+    - {name: eps10, tasks: {failure_prob: 0.1}}
+arms:
+  - {id: focused_sample, strategy: focused_sample}
+  - {id: random_omit, strategy: random_omit}

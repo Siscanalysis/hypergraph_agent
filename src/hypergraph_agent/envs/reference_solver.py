@@ -54,9 +54,12 @@ def _plan_from(task: Task, recipes, derivation: Derivation) -> tuple[str, ...]:
     return tuple(plan)
 
 
-def reference_solve(task: Task, max_derivations: int = 4096) -> ReferenceResult:
+def reference_solve(task: Task, max_derivations: int = 4096, held=None) -> ReferenceResult:
+    """Optimal plan from ``held``, the facts already true (default: the task's
+    initial state). The evaluator passes the current true state to replan
+    after a failed step under noise."""
     recipes = true_structure(task)
-    held = frozenset(task.initial_true)
+    held = frozenset(task.initial_true if held is None else held)
     derivations, truncated, work = enumerate_derivations(recipes, held, task.goal, max_derivations)
     lower = 1 + lower_bound_crafts(recipes, held, task.goal)
     if not derivations:

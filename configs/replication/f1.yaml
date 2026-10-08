@@ -1,0 +1,37 @@
+# Study R (docs/studies/R_replication.md), measurement (allocation `rep`),
+# family F1, the Stage D distribution (default worlds, goals at depth 1-3,
+# intermediate items unobserved). Ten worlds per seed x 16 episodes.
+# Every seed plays its own worlds; both noise levels play the same ones.
+run:
+  name: rep-f1
+  phase: replication
+  allocation: rep
+  seeds: [0, 1, 2, 3, 4]
+  ledger: runs/R-ledger.json
+budget:
+  ledger_allocations: {dev: 10000, rep: 182330}
+  ledger_adaptive_cap: 192330
+  ledger_reporting_cap: 221860
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only}
+eval:
+  namespace: rep_f1
+  n_tasks: 160
+  track: inference
+  n_worlds: 10
+  episodes_per_world: 16
+walker:
+  per_run_cap: 3159  # largest task-budget sum of the run streams
+  eval_world_offset_by_seed: true
+  consistent_moves: 50
+  # realized omission rate q - q^6/6 = 0.649, the focused_sample rate in dev F1, eps 0, episodes 9-16 (658/1014)
+  omit_prob: 0.663
+  eval_variants:
+    - {name: eps0, tasks: {failure_prob: 0.0}}
+    - {name: eps10, tasks: {failure_prob: 0.1}}
+arms:
+  - {id: focused_sample, strategy: focused_sample}
+  - {id: random_omit, strategy: random_omit}

@@ -2,6 +2,10 @@
 
     python -m hypergraph_agent.walk --config configs/walker_stage_a.yaml --dry-run
     python -m hypergraph_agent.walk --config configs/walker_stage_a.yaml
+    python -m hypergraph_agent.walk --config configs/replication/f1.yaml --seeds 0 1
+
+The dry run also sums the task budgets of every (seed, variant) evaluation
+stream from the generator alone: no run can use more interactions than that.
 """
 
 from __future__ import annotations
@@ -16,25 +20,37 @@ from .train import make_ledger
 
 
 def plan(cfg: dict) -> dict:
+    from .evaluation.walkers import NON_ADAPTIVE, stream_budget, variant_config
     wc = cfg["walker"]
     arms = [(a["id"], a["strategy"]) for a in cfg["arms"]]
-    variants = [v["name"] for v in wc["eval_variants"]] or ["default"]
+    variants = wc["eval_variants"] or [{"name": "default", "tasks": {}}]
     seeds = cfg["run"]["seeds"]
     es = eval_stream_config(cfg)
     learned = any(s in ("learned", "learned_sample") for _, s in arms) and not wc["policy_from"]
     n_runs = len(arms) * len(variants) * len(seeds)
+    sums = {f"s{seed}-{v['name']}": stream_budget(cfg, seed, v) for seed in seeds for v in variants}
+    capped = sum(min(wc["per_run_cap"], s) for s in sums.values())
+    n_adaptive = sum(s not in NON_ADAPTIVE for _, s in arms)
     return {
         "phase": cfg["run"]["phase"], "allocation": cfg["run"]["allocation"], "arms": arms,
-        "variants": wc["eval_variants"] or [{"name": "default"}], "seeds": seeds,
+        "variants": [{"name": v["name"], "failure_prob":
+                      eval_stream_config(variant_config(cfg, seeds[0], v)).task.failure_prob} for v in variants],
+        "seeds": seeds,
         "eval": {"namespace": es.namespace, "world_mode": es.world_mode, "n_worlds": es.n_worlds,
                  "episodes_per_world": cfg["eval"]["episodes_per_world"], "n_tasks": cfg["eval"]["n_tasks"],
                  "profile": es.task.profile, "observe_items": es.task.observe_items,
-                 "failure_prob": es.task.failure_prob},
+                 "depth": [es.task.depth_min, es.task.depth_max],
+                 "base_seed_by_seed": {s: variant_config(cfg, s, variants[0])["eval"]["base_seed"] for s in seeds}},
         "caps": {"per_run": wc["per_run_cap"], "warmup_per_run": wc["warmup_interactions"],
                  "collector_per_seed": wc["collector_interactions"] if learned else 0,
                  "max_physical_total": n_runs * (wc["per_run_cap"] + wc["warmup_interactions"])
-                 + (len(seeds) * wc["collector_interactions"] if learned else 0)},
-        "search": {k: wc[k] for k in ("max_evals", "temperature", "restart_after", "exact_cap")},
+                 + (len(seeds) * wc["collector_interactions"] if learned else 0),
+                 "stream_budget_sums": sums,
+                 "per_run_cap_covers_every_stream": wc["per_run_cap"] >= max(sums.values()),
+                 "worst_case_adaptive": n_adaptive * capped,
+                 "worst_case_reporting": (len(arms) - n_adaptive) * capped},
+        "search": {k: wc[k] for k in ("max_evals", "temperature", "restart_after", "exact_cap",
+                                      "consistent_moves", "omit_prob")},
         "ledger": cfg["run"]["ledger"],
     }
 
@@ -43,16 +59,26 @@ def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="python -m hypergraph_agent.walk")
     p.add_argument("--config", required=True)
     p.add_argument("--dry-run", action="store_true")
+    p.add_argument("--seeds", type=int, nargs="*", help="run only these seeds (e.g. one process per seed)")
+    p.add_argument("--arms", nargs="*", help="run only these arm ids")
     args = p.parse_args(argv)
     from .training.run import process_source
     process_source(Path(__file__).resolve().parents[2])
     cfg = load_config(args.config)
+    if args.seeds:
+        cfg["run"]["seeds"] = args.seeds
+    if args.arms:
+        cfg["arms"] = [a for a in cfg["arms"] if a["id"] in set(args.arms)]
+        if not cfg["arms"]:
+            p.error("no configured arm matches --arms")
     if any(a["strategy"] is None for a in cfg["arms"]):
         p.error("every walker arm needs a strategy")
     summary = plan(cfg)
     if args.dry_run:
         print(json.dumps(summary, indent=2))
         return 0
+    if any(a["strategy"] == "random_omit" for a in cfg["arms"]) and cfg["walker"]["omit_prob"] is None:
+        p.error("random_omit needs walker.omit_prob")
     from .evaluation.walkers import run_walker_study
     ledger = make_ledger(cfg)
     results = run_walker_study(cfg, ledger, cfg["run"]["runs_dir"])

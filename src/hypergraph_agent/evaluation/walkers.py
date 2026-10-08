@@ -12,6 +12,11 @@ that evidence, and is then evaluated like every other arm. A paired offline
 benchmark of the walks themselves is run on held-out evidence.
 
 ``reference`` is privileged: it executes the evaluator's optimal plan.
+
+Every walker is given the failure probability of the stream it plays (the
+evaluation variant's). With ``eval_world_offset_by_seed`` each seed plays its
+own evaluation worlds (base seed + 1000 x seed), so worlds are independent
+units across seeds; noise variants of one seed play the same worlds.
 """
 
 from __future__ import annotations
@@ -26,7 +31,7 @@ import numpy as np
 import torch
 
 from ..agents.edit_policy import EditPolicy, benchmark_search, search_problems, train_edit_policy
-from ..agents.walker import Walker
+from ..agents.walker import STRATEGIES, Walker
 from ..config import eval_stream_config, train_stream_config
 from ..envs.generator import TaskStream, derive_seed
 from ..envs.recipequest import RecipeQuestEnv
@@ -38,29 +43,40 @@ from .metrics import aggregate
 
 NON_ADAPTIVE = ("maximal", "reference")
 LEARNED = ("learned", "learned_sample")
+EVAL_SEED_STRIDE = 1000
+
+
+def _true_state(ex: Executor) -> frozenset:
+    """PRIVILEGED: the facts that are actually true, read from the environment."""
+    return frozenset(f for f, p in ex.env._present.items() if p)
 
 
 def reference_episode(ex: Executor, task, dyn_seed: int) -> dict:
-    """PRIVILEGED: replays the optimal plan computed from the hidden rules."""
+    """PRIVILEGED: executes the optimal plan computed from the hidden rules.
+    A step that leaves the true state unchanged has failed (every step of an
+    optimal plan changes it); the reference then replans from the current
+    true state, so under noise it retries the failed step at once."""
     ex.reset(task, dyn_seed)
     idx = ex.spec.action_index()
     plan = list(reference_solve(task).plan)
-    status = None
+    status, replans = None, 0
     while not ex.terminated:
         if not ex.meter.can_charge(1):
             status = "budget_exhausted"
             break
         key = plan.pop(0) if plan else "submit"
+        before = _true_state(ex)
         try:
             ex.primitive(idx[key])
         except BudgetExhausted:
             status = "budget_exhausted"
             break
-        if not plan and not ex.terminated:  # a failed step under noise: replan from scratch
-            plan = list(reference_solve(task).plan)
+        if not ex.terminated and (not plan or _true_state(ex) == before):
+            plan = list(reference_solve(task, held=_true_state(ex)).plan)
+            replans += 1
     return {"success": ex.success, "status": status or ex.termination, "primitive_length": ex.n_primitive,
             "noop_or_invalid": ex.n_noop, "manager_decisions": ex.n_primitive, "skill_calls": 0,
-            "replans": 0, "evals": 0}
+            "replans": replans, "evals": 0}
 
 
 def eval_order(stream_cfg, n_tasks: int, episodes_per_world: int) -> list[int]:
@@ -70,11 +86,45 @@ def eval_order(stream_cfg, n_tasks: int, episodes_per_world: int) -> list[int]:
     return list(range(n_tasks))
 
 
-def make_walker(strategy: str, wc: dict, seed_key, epsilon: float, policy=None) -> Walker:
-    return Walker(strategy, np.random.default_rng(derive_seed("walker", *seed_key) % (2 ** 32)),
+def variant_config(cfg: dict, seed: int, variant: dict) -> dict:
+    """The configuration one seed plays under one evaluation variant: the
+    variant's task overrides, the seed's shared world
+    (``shared_world_offset_by_seed``) and the seed's own evaluation worlds
+    (``eval_world_offset_by_seed``)."""
+    wc = cfg["walker"]
+    vcfg = copy.deepcopy(cfg)
+    vcfg["eval"]["tasks"] = {**vcfg["eval"]["tasks"], **variant.get("tasks", {})}
+    if wc["shared_world_offset_by_seed"]:
+        vcfg["train"]["shared_world_seed"] = cfg["train"]["shared_world_seed"] + seed
+    if wc["eval_world_offset_by_seed"]:
+        vcfg["eval"]["base_seed"] = cfg["eval"]["base_seed"] + EVAL_SEED_STRIDE * seed
+    return vcfg
+
+
+def stream_budget(cfg: dict, seed: int, variant: dict) -> int:
+    """Sum of the task budgets of the evaluation stream one run plays: an upper
+    bound on its interactions, since no episode exceeds its budget (generator
+    only, no environment interaction)."""
+    stream_cfg = eval_stream_config(variant_config(cfg, seed, variant))
+    stream = TaskStream(stream_cfg)
+    order = eval_order(stream_cfg, cfg["eval"]["n_tasks"], cfg["eval"]["episodes_per_world"])
+    return sum(stream.task(i).budget for i in order)
+
+
+def make_walker(strategy: str, wc: dict, seed_key, epsilon: float, policy=None):
+    """An ``agents.walker`` strategy, or else an ``agents.markov`` agent (study
+    M), whose module is imported only when one of its strategies is asked for."""
+    rng = np.random.default_rng(derive_seed("walker", *seed_key) % (2 ** 32))
+    if strategy not in STRATEGIES:
+        from ..agents.markov import MARKOV_STRATEGIES, make_markov_agent
+        if set(MARKOV_STRATEGIES) & set(STRATEGIES):
+            raise ValueError(f"Markov strategies shadow walker strategies: "
+                             f"{sorted(set(MARKOV_STRATEGIES) & set(STRATEGIES))}")
+        return make_markov_agent(strategy, rng, wc, epsilon)
+    return Walker(strategy, rng,
                   epsilon=epsilon, max_evals=wc["max_evals"], temperature=wc["temperature"],
                   restart_after=wc["restart_after"], exact_cap=wc["exact_cap"], plan_cap=wc["plan_cap"],
-                  policy=policy, consistent_moves=wc["consistent_moves"])
+                  policy=policy, consistent_moves=wc["consistent_moves"], omit_prob=wc["omit_prob"])
 
 
 def load_policy(wc: dict, seed: int):
@@ -118,7 +168,6 @@ def play(agent, strategy: str, stream, order: list[int], meter, seed: int, ctx: 
 def run_walker_study(cfg: dict, ledger: SessionLedger, runs_dir: str) -> list[dict]:
     wc = cfg["walker"]
     alloc = cfg["run"]["allocation"]
-    epsilon = cfg["train"]["tasks"]["failure_prob"]
     variants = wc["eval_variants"] or [{"name": "default", "tasks": {}}]
     stamp = time.strftime("%Y%m%d-%H%M%S")
     results = []
@@ -129,13 +178,13 @@ def run_walker_study(cfg: dict, ledger: SessionLedger, runs_dir: str) -> list[di
                 policy, policy_stats, collector_used, collector_id = load_policy(wc, seed)
             else:
                 policy, policy_stats, collector_used, collector_id, _ = _train_policy(
-                    cfg, ledger, runs_dir, seed, stamp, epsilon)
+                    cfg, ledger, runs_dir, seed, stamp, train_stream_config(cfg, seed).task.failure_prob)
         for variant in variants:
-            vcfg = copy.deepcopy(cfg)
-            vcfg["eval"]["tasks"] = {**vcfg["eval"]["tasks"], **variant.get("tasks", {})}
-            if wc["shared_world_offset_by_seed"]:
-                vcfg["train"]["shared_world_seed"] = cfg["train"]["shared_world_seed"] + seed
+            vcfg = variant_config(cfg, seed, variant)
             stream_cfg = eval_stream_config(vcfg)
+            epsilon = stream_cfg.task.failure_prob  # the walker knows the noise of the stream it plays
+            if wc["warmup_interactions"] and train_stream_config(vcfg, seed).task.failure_prob != epsilon:
+                raise ValueError("warm-up and evaluation streams must declare the same failure probability")
             order = eval_order(stream_cfg, cfg["eval"]["n_tasks"], cfg["eval"]["episodes_per_world"])
             for arm in cfg["arms"]:
                 strategy = arm["strategy"]
@@ -161,10 +210,11 @@ def run_walker_study(cfg: dict, ledger: SessionLedger, runs_dir: str) -> list[di
                         warm = wm.used
                     rows = play(agent, strategy, TaskStream(stream_cfg), order, meter, seed, ctx,
                                 "reporting_eval" if kind == "reporting" else "exploration",
-                                {"strategy": strategy, "variant": variant["name"]})
+                                {"strategy": strategy, "variant": variant["name"], "failure_prob": epsilon})
                 finally:
                     meter.flush()
-                summary = _summarize_rows(rows)
+                per_task = stream_cfg.world_mode == "per_task" and cfg["eval"]["episodes_per_world"] > 1
+                summary = _summarize_rows(rows, cfg["eval"]["episodes_per_world"] if per_task else None)
                 if policy is not None and strategy == wc["benchmark_source"] and agent is not None:
                     # paired offline comparison of the walks on held-out evidence (no interactions)
                     summary["search_benchmark"] = run_search_benchmark(cfg, policy, agent.worlds.values(), seed)
@@ -183,10 +233,15 @@ def run_walker_study(cfg: dict, ledger: SessionLedger, runs_dir: str) -> list[di
     return results
 
 
-def _summarize_rows(rows: list[dict]) -> dict:
+def _summarize_rows(rows: list[dict], block: int | None = None) -> dict:
+    """Run summary. Episodes are indexed within their world, or, with
+    ``block`` (a fresh world per task), by position within consecutive blocks
+    of ``block`` tasks, which then replace worlds."""
+    pos = (lambda r: r["order"] % block) if block else (lambda r: r["world_episode"])
+    unit = (lambda r: f"block{r['order'] // block}") if block else (lambda r: r["world_key"])
     by_ep: dict = {}
     for r in rows:
-        by_ep.setdefault(r["world_episode"], []).append(r)
+        by_ep.setdefault(pos(r), []).append(r)
     total = sum(r["primitive_length"] for r in rows)
     opt = sum(r["reference_length"] for r in rows if r["reference_length"])
 
@@ -194,17 +249,17 @@ def _summarize_rows(rows: list[dict]) -> dict:
         o = sum(x["reference_length"] or 0 for x in rs)
         return sum(x["primitive_length"] for x in rs) / o if o else float("nan")
 
-    half = (max((r["world_episode"] for r in rows), default=0) + 1) // 2
-    late = [r for r in rows if r["world_episode"] >= half]
-    worlds = sorted({r["world_key"] for r in rows})
+    half = (max((pos(r) for r in rows), default=0) + 1) // 2
+    late = [r for r in rows if pos(r) >= half]
+    worlds = sorted({unit(r) for r in rows})
     return {
         "all": aggregate(rows),
         "cost_ratio": total / opt if opt else float("nan"),
         "half_split_episode": half,
-        "cost_ratio_early": ratio([r for r in rows if r["world_episode"] < half]),
+        "cost_ratio_early": ratio([r for r in rows if pos(r) < half]),
         "cost_ratio_late": ratio(late),
         "success_late": float(np.mean([r["success"] for r in late])) if late else float("nan"),
-        "cost_ratio_late_by_world": {w: ratio([r for r in late if r["world_key"] == w]) for w in worlds},
+        "cost_ratio_late_by_world": {w: ratio([r for r in late if unit(r) == w]) for w in worlds},
         "by_world_episode": {str(k): {"n": len(v), "success": float(np.mean([x["success"] for x in v])),
                                       "cost_ratio": float(sum(x["primitive_length"] for x in v)
                                                           / max(1, sum(x["reference_length"] or 0 for x in v)))}

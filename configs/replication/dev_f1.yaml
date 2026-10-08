@@ -1,0 +1,39 @@
+# Study R development run, family F1 (allocation `dev`, namespace replication_dev,
+# never used for measurement): two worlds x 16 episodes, both noise levels, seed 0.
+# Measures runtime, checks that no arm loops and fixes omit_prob (focused_sample, eps 0,
+# episodes 9-16); its outcomes are not study results.
+run:
+  name: rdev-f1
+  phase: replication_dev
+  allocation: dev
+  seeds: [0]
+  ledger: runs/R-ledger.json
+budget:
+  ledger_allocations: {dev: 10000, rep: 182330}
+  ledger_adaptive_cap: 192330
+  ledger_reporting_cap: 221860
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only}
+eval:
+  namespace: replication_dev
+  n_tasks: 32
+  track: inference
+  n_worlds: 2
+  episodes_per_world: 16
+walker:
+  per_run_cap: 633  # largest task-budget sum of the run streams
+  eval_world_offset_by_seed: true
+  consistent_moves: 50
+  # realized omission rate q - q^6/6 = 0.649, the focused_sample rate in dev F1, eps 0, episodes 9-16 (658/1014)
+  omit_prob: 0.663
+  eval_variants:
+    - {name: eps0, tasks: {failure_prob: 0.0}}
+    - {name: eps10, tasks: {failure_prob: 0.1}}
+arms:
+  - {id: focused_sample, strategy: focused_sample}
+  - {id: maximal, strategy: maximal}
+  - {id: reference, strategy: reference}
+  - {id: random_omit, strategy: random_omit}

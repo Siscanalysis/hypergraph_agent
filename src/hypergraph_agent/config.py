@@ -55,11 +55,17 @@ DEFAULTS: dict = {
         "collector_interactions": 1500, "benchmark_source": "local_focused", "benchmark_starts": 5,
         # shared-world studies: world seed = train.shared_world_seed + run seed (as in the P3 pilot)
         "shared_world_offset_by_seed": False,
+        # evaluation worlds of their own per seed: eval.base_seed + 1000 x run seed
+        "eval_world_offset_by_seed": False,
         # reuse a trained edit policy: glob with {seed}, e.g. "runs/walk-b-collector-s{seed}-*/edit_policy.pt"
         "policy_from": None,
         # sampling walkers: Metropolis moves among consistent nodes after reaching one
         "consistent_moves": 50,
+        # random_omit control: probability of omitting each candidate (fixed from development runs)
+        "omit_prob": None,
         "policy": {"iters": 1500, "lr": 0.003, "hidden": 32},
+        # parameters of the agents in agents.markov (free-form, validated there)
+        "markov": {},
     },
     "arms": [{"id": "gated", "encoder": "gated", "graph_mode": "known", "topology": "none",
               "use_posterior": True}],
@@ -76,7 +82,7 @@ ARM_DEFAULTS = {"encoder": "gated", "graph_mode": "known", "topology": "none",
 def _merge(base: dict, over: dict, path: str = "") -> dict:
     out = copy.deepcopy(base)
     for k, v in over.items():
-        if k not in base and path not in ("eval.tasks", "skills", "walker.eval_variants"):
+        if k not in base and path not in ("eval.tasks", "skills", "walker.eval_variants", "walker.markov"):
             raise KeyError(f"unknown config key {path + '.' + k if path else k}")
         if isinstance(v, dict) and isinstance(base.get(k), dict):
             out[k] = _merge(base[k], v, f"{path}.{k}" if path else k)
