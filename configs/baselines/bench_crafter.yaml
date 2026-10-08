@@ -1,0 +1,34 @@
+# Study X, benchmark test set (measurement draft, evaluation only):
+# the whole Crafter achievement graph (16 items after one promotion) as one world per conversion seed;
+# the 10 worlds share one hidden structure (seeds change vocabulary types and pool decoys only).
+# Learners are those of rq_f1_main.yaml, trained only on generated F1 worlds, evaluated frozen at
+# 1,000,000 interactions: these worlds are out-of-distribution for them. The repository's agents
+# play the same tasks, 16 episodes per world as in study R, each episode's goal drawn among the
+# world's items (baselines/benchmark_sets.py). Conversion: hypergraph_agent.benchmarks.to_recipequest
+# with pools of 6, at most 3 hidden base facts and 2 alternatives per item.
+run: {name: x-bench-crafter, allocation: x_main, ledger: runs/X-ledger.json, requires_flag: true,
+      checkpoints_from: configs/baselines/rq_f1_main.yaml}
+ledger:
+  allocations: {dev: 300000, x_tune: 4500000, x_main: 40000000}
+  adaptive_cap: 44800000
+  reporting_cap: 5000000
+setting:
+  name: bench_crafter
+  family: recipequest
+  loader: "hypergraph_agent.baselines.benchmark_sets:load"
+  benchmark: {graph: crafter, worlds: whole, n_worlds: 10}
+  tasks: {profile: unknown_prerequisites, n_distractor_base: 0, observe_items: goal_only}
+test: {namespace: x_bench_crafter, base_seed: 0, seeds: [0], n_worlds: 10, episodes_per_world: 16,
+       budgets: [1000000]}
+agents: [focused_sample, maximal, reference, random]
+agent_params: {consistent_moves: 50}
+analysis:
+  late_from: 8
+  select_metric: cost_ratio_late
+  tests:
+    - {name: "XB crafter: focused_sample - best learner, late cost ratio", role: secondary,
+       a: focused_sample, b: best_learner, metric: cost_ratio_late, expect: less}
+    - {name: "XB crafter: maximal - best learner, late cost ratio", role: descriptive, a: maximal,
+       b: best_learner, metric: cost_ratio_late, expect: not_greater}
+    - {name: "XB crafter: focused_sample - maximal, late cost ratio", role: descriptive,
+       a: focused_sample, b: maximal, metric: cost_ratio_late, expect: less}

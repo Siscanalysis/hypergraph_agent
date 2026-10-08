@@ -1,0 +1,52 @@
+# Study X, tuning stage (pre-registered; allocation x_tune, namespaces ending in _dev), setting
+# tt_u_k3. Every candidate trains once (training seed 0) for 100,000 interactions on
+# x_tt_u_tune_train_dev and is evaluated in both action modes on x_tt_u_tune_eval_dev (2 seeds
+# x 6 worlds x 12 episodes). Per learner group, the (candidate, mode) with the lowest mean late
+# actions per episode is written into tt_u_k3_main.yaml by a dated amendment
+# (run.tuning_record); ties go to the earlier candidate in this list, then to the
+# deterministic mode.
+run: {name: x-ttu-tune, allocation: x_tune, ledger: runs/X-ledger.json}
+ledger:
+  allocations: {dev: 300000, x_tune: 4500000, x_main: 40000000}
+  adaptive_cap: 44800000
+  reporting_cap: 5000000
+setting:
+  name: tt_u_k3
+  family: techtree
+  agent_study: U
+  world: {n_primitives: 4, n_slots: 3, n_unlocks: 1, unlock_level: 1, n_levels: 1, concepts_per_level: [2],
+          combo_length: 3}
+  stream: {goal_levels: [1], goal_rule: unlock, episode_budget: 100, unlock_visibility: announced,
+           signal: false}
+train: {namespace: x_tt_u_tune_train_dev, base_seed: 30000, seeds: [0], budgets: [100000], n_envs: 8,
+        episodes_per_world: 12}
+test: {namespace: x_tt_u_tune_eval_dev, base_seed: 0, seeds: [0, 1], n_worlds: 6, episodes_per_world: 12}
+learners:
+  - {id: mppo, group: mppo, algo: maskable_ppo, params: {n_steps: 256}, modes: [deterministic, stochastic]}
+  - {id: mppo.ent, group: mppo, algo: maskable_ppo, params: {n_steps: 256, ent_coef: 0.01},
+     modes: [deterministic, stochastic]}
+  - {id: mppo.wide, group: mppo, algo: maskable_ppo,
+     params: {n_steps: 256, ent_coef: 0.01, policy_kwargs: {net_arch: [256, 256]}},
+     modes: [deterministic, stochastic]}
+  - {id: rppo, group: rppo, algo: recurrent_ppo, trial: true,
+     params: {features_dim: 64, batch_size: 512,
+              policy_kwargs: {lstm_hidden_size: 64, shared_lstm: true, enable_critic_lstm: false}},
+     modes: [deterministic, stochastic]}
+  - {id: rppo.ent, group: rppo, algo: recurrent_ppo, trial: true,
+     params: {features_dim: 64, batch_size: 512, ent_coef: 0.01,
+              policy_kwargs: {lstm_hidden_size: 64, shared_lstm: true, enable_critic_lstm: false}},
+     modes: [deterministic, stochastic]}
+  - {id: rppo.long, group: rppo, algo: recurrent_ppo, trial: true,
+     params: {features_dim: 64, batch_size: 512, ent_coef: 0.01, gamma: 0.999,
+              policy_kwargs: {lstm_hidden_size: 64, shared_lstm: true, enable_critic_lstm: false}},
+     modes: [deterministic, stochastic]}
+  - {id: mppo_rnd, group: mppo_rnd, algo: maskable_ppo, params: {n_steps: 256}, rnd: {beta: 0.01},
+     modes: [deterministic, stochastic]}
+  - {id: mppo_rnd.b01, group: mppo_rnd, algo: maskable_ppo, params: {n_steps: 256}, rnd: {beta: 0.1},
+     modes: [deterministic, stochastic]}
+agents: []
+analysis:
+  late_from: 6
+  select_metric: steps_late
+  select_split: test
+  tests: []

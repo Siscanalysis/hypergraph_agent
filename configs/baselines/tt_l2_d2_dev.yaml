@@ -1,0 +1,32 @@
+# Study X, development only (allocation dev, namespaces ending in _dev): plumbing and
+# throughput of setting tt_l2_d2 (TechTree, study L phase L2 at reuse depth 2). Two
+# checkpoints of 8,000 and 16,000 training interactions, one test seed with one world x 12
+# episodes, the repository's arms of that cell on the same worlds. Outcomes are not results.
+run: {name: x-ttl-dev, allocation: dev, ledger: runs/X-ledger.json}
+ledger:
+  allocations: {dev: 300000, x_tune: 4500000, x_main: 40000000}
+  adaptive_cap: 44800000
+  reporting_cap: 5000000
+setting:
+  name: tt_l2_d2
+  family: techtree
+  agent_study: L
+  world: {n_primitives: 3, n_levels: 3, concepts_per_level: [3, 3, 3], combo_length: 2, length_rule: linear,
+          reuse_depth: 2}
+  stream: {goal_levels: [3], episode_budget: 100}
+train: {namespace: x_tt_l_train_dev, base_seed: 30000, seeds: [0], budgets: [8000, 16000], n_envs: 8,
+        episodes_per_world: 12}
+test: {namespace: x_tt_l_eval_dev, base_seed: 0, seeds: [0], n_worlds: 1, episodes_per_world: 12}
+learners:
+  - {id: mppo, algo: maskable_ppo, params: {n_steps: 256}}
+  - {id: rppo, algo: recurrent_ppo, trial: true,
+     params: {features_dim: 64, batch_size: 512,
+              policy_kwargs: {lstm_hidden_size: 64, shared_lstm: true, enable_critic_lstm: false}}}
+agents: [remember, promote, oracle_library, reference, random]
+analysis:
+  late_from: 6
+  select_metric: steps_late
+  select_split: test
+  tests:
+    - {name: "dev promote - best learner, late actions", role: secondary, a: promote, b: best_learner,
+       metric: steps_late, expect: less}

@@ -1,0 +1,43 @@
+# Study X, measurement draft, setting tt_l2_d2: TechTree phase L2 of study L at reuse
+# depth 2 (3 base primitives, three levels of three concepts with lengths 2, 4 and 6,
+# levels 2 and 3 compositions of earlier concepts, goal a level-3 concept, nothing
+# supplied; budget 100; 12 episodes per world). Test x_tt_l_test: 8 seeds x 4 worlds (the
+# layout of study L); validation x_tt_l_val: 3 seeds x 4 worlds. The repository's arms of
+# that cell play the test stream.
+run: {name: x-ttl-main, allocation: x_main, ledger: runs/X-ledger.json, requires_flag: true,
+      tuning_record: null}
+ledger:
+  allocations: {dev: 300000, x_tune: 4500000, x_main: 40000000}
+  adaptive_cap: 44800000
+  reporting_cap: 5000000
+setting:
+  name: tt_l2_d2
+  family: techtree
+  agent_study: L
+  world: {n_primitives: 3, n_levels: 3, concepts_per_level: [3, 3, 3], combo_length: 2, length_rule: linear,
+          reuse_depth: 2}
+  stream: {goal_levels: [3], episode_budget: 100}
+train: {namespace: x_tt_l_train, base_seed: 30000, seeds: [0, 1], budgets: [10000, 100000, 1000000],
+        n_envs: 8, episodes_per_world: 12}
+test: {namespace: x_tt_l_test, base_seed: 0, seeds: [0, 1, 2, 3, 4, 5, 6, 7], n_worlds: 4,
+       episodes_per_world: 12}
+validation: {namespace: x_tt_l_val, base_seed: 0, seeds: [0, 1, 2], n_worlds: 4, episodes_per_world: 12}
+learners:
+  - {id: mppo, algo: maskable_ppo, params: {n_steps: 256}}
+  - {id: rppo, algo: recurrent_ppo, trial: true,
+     params: {features_dim: 64, batch_size: 512,
+              policy_kwargs: {lstm_hidden_size: 64, shared_lstm: true, enable_critic_lstm: false}}}
+  - {id: mppo_rnd, group: maskable_ppo_rnd, algo: maskable_ppo, params: {n_steps: 256}, rnd: {beta: 0.01}}
+agents: [remember, promote, oracle_library, reference, random]
+analysis:
+  late_from: 6
+  select_metric: steps_late
+  tests:
+    - {name: "XL1 promote - best learner, late actions per episode", role: secondary, a: promote,
+       b: best_learner, metric: steps_late, expect: less}
+    - {name: "XL2 remember - best learner, late actions per episode", role: secondary, a: remember,
+       b: best_learner, metric: steps_late, expect: less}
+    - {name: "XL3 best learner - random, late actions per episode", role: secondary, a: best_learner,
+       b: random, metric: steps_late, expect: less}
+    - {name: "XL4 best learner, late minus early cost ratio", role: descriptive, a: best_learner,
+       metric: cost_ratio_late_minus_early, expect: less}

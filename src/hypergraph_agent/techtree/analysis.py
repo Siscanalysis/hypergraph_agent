@@ -32,6 +32,18 @@ Metrics per world:
   discoveries_new, discoveries_in_replay new discoveries, and those made while
                                          replaying known concepts (incidental
                                          composition); explorer arms only
+  exec_steps, practice_steps,            actions inside skill executions, in
+  failed_exec_steps                      practice, and in executions stopped by a
+                                         slip (study P); arms whose rows carry them
+  iw_passes, iw_generated, iw_pruned,    search passes and generated and pruned nodes
+  macro_passes, macro_macros,            of the IW arms, macro passes and macros
+  archive_explore                        executed, exploring presses of the archive
+                                         (study U2); arms whose rows carry them
+
+Per-world sums (``ROW_SUMS``) are formed only when every row of the world
+carries the key. A study's agent module may declare ``ROW_SUMMARIES`` (name ->
+function of the analysed rows returning a JSON-serializable dict); their
+results are stored under ``row_summaries`` (absent when none is declared).
 
 Table notes: ``discoveries_new`` of ``none`` counts the same concepts again in
 every episode (it forgets them), so it is not comparable with the other arms;
@@ -45,10 +57,11 @@ variant_b, paired by world), ``equivalence`` (90% CI of a - b inside
 +-margin, ``margin_abs`` or ``margin_rel`` x the mean of b), ``ratio`` (mean of a
 over mean of b across common worlds; passes when the estimate lies in
 ``band``; the bootstrap CI is reported), ``interaction`` ((a - b) at variant_hi
-minus (a - b) at variant_lo, paired by world when both variants hold the same
-worlds), ``within_margin`` (a minus the better of ``others`` in every listed
-variant, upper CI bound <= margin_rel x that arm's mean), ``all_success`` and
-``at_least_reference`` (validity checks over every episode of an arm).
+minus (a_lo - b_lo) at variant_lo, with a_lo and b_lo defaulting to a and b,
+paired by world when both cells hold the same worlds), ``within_margin`` (a
+minus the better of ``others`` in every listed variant, upper CI bound <=
+margin_rel x that arm's mean), ``all_success`` and ``at_least_reference``
+(validity checks over every episode of an arm).
 
 Verdicts (``analysis.verdict``): rule ``all`` passes iff every ``require`` test
 passes. Rule ``precedence``: a failed validity test fails the study; if the
@@ -61,6 +74,7 @@ hold the benefit is "negligible"; if only the falsification holds the study is
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
 import math
 import sys
@@ -72,6 +86,9 @@ import numpy as np
 from .config import merged, run_hash, variant_arms, variants
 
 ORACLES = ("oracle", "oracle_library")
+# row keys summed per world when every row of the world carries them
+ROW_SUMS = ("discoveries_new", "discoveries_in_replay", "exec_steps", "practice_steps", "failed_exec_steps",
+            "iw_passes", "iw_generated", "iw_pruned", "macro_passes", "macro_macros", "archive_explore")
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -181,7 +198,7 @@ def world_metrics(rows: list[dict], late_from: int) -> dict:
                                         if first else total)
             m["first_success_censored"] = first is None
             m["discovered_late"] = len({c for r in rs for _, c in _discoveries(r)})
-            for name in ("discoveries_new", "discoveries_in_replay"):  # explorer arms only
+            for name in ROW_SUMS:  # only for arms whose rows carry the key
                 if all(name in r for r in rs):
                     m[name] = sum(r[name] for r in rs)
             m["episodes"] = len(rs)
@@ -242,7 +259,8 @@ def cells_of(t: dict, cfg: dict) -> list[tuple[str, str]]:
     if kind == "across":
         return [(t["variant_a"], t["arm"]), (t["variant_b"], t["arm"])]
     if kind == "interaction":
-        return [(v, x) for v in (t["variant_hi"], t["variant_lo"]) for x in (t["a"], t["b"])]
+        return [(t["variant_hi"], t["a"]), (t["variant_hi"], t["b"]),
+                (t["variant_lo"], t.get("a_lo", t["a"])), (t["variant_lo"], t.get("b_lo", t["b"]))]
     if kind == "within_margin":
         return [(v, x) for v in t["variants"] for x in [t["a"], *t["others"]]]
     names = t.get("variants") or [v["name"] for v in variants(cfg) if t["arm"] in variant_arms(cfg, v)]
@@ -287,7 +305,8 @@ def run_test(t: dict, metrics: dict, rows: list[dict], n_boot: int, seed: int) -
             out.update({"n_worlds": 0, "estimate": None, "ci": None, "pass": None})
     elif kind == "interaction":
         wh, dh = paired_values(metrics, t["metric"], t["a"], t["b"], t["variant_hi"])
-        wl, dl = paired_values(metrics, t["metric"], t["a"], t["b"], t["variant_lo"])
+        wl, dl = paired_values(metrics, t["metric"], t.get("a_lo", t["a"]), t.get("b_lo", t["b"]),
+                               t["variant_lo"])
         common = sorted(set(wh) & set(wl))
         if common and len(common) == len(wh) == len(wl):
             ih, il = dict(zip(wh, dh)), dict(zip(wl, dl))
@@ -387,7 +406,8 @@ def tables(metrics: dict) -> dict:
 ARM_COLORS = {"reference": "tab:purple", "oracle": "tab:pink", "oracle_library": "tab:pink",
               "random": "tab:gray", "none": "tab:olive", "pooled": "tab:blue", "isolated": "tab:orange",
               "nomem": "tab:cyan", "blind": "tab:brown", "remember": "tab:orange", "promote": "tab:blue",
-              "sham_promote": "tab:red", "adaptive": "tab:green"}
+              "sham_promote": "tab:red", "adaptive": "tab:green", "iw": "darkcyan", "iw1": "mediumturquoise",
+              "iw2": "teal", "macro_uniform": "goldenrod", "macro_sys": "darkgoldenrod", "archive": "sienna"}
 
 
 def figures(rows: list[dict], out_dir: Path, name: str) -> list[str]:
@@ -460,6 +480,13 @@ def figures(rows: list[dict], out_dir: Path, name: str) -> list[str]:
     return made
 
 
+def row_summaries(study: str, rows: list[dict]) -> dict:
+    """Summaries declared by the study's agent module in ``ROW_SUMMARIES`` (empty when none)."""
+    from .study import STUDY_AGENTS  # lazy: the runner imports this module lazily too
+    module = importlib.import_module(f"{__package__}.{STUDY_AGENTS[study][0]}")
+    return {name: fn(rows) for name, fn in getattr(module, "ROW_SUMMARIES", {}).items()}
+
+
 def analyse(cfg: dict, runs: list[dict]) -> dict:
     a = cfg["analysis"]
     late_from = a["late_from"] or cfg["stream"]["episodes_per_world"] // 2
@@ -476,12 +503,16 @@ def analyse(cfg: dict, runs: list[dict]) -> dict:
             if "equivalent" in res:
                 res["equivalent"] = None
         tests[t.get("name")] = res
-    return {"name": cfg["run"]["name"], "study": cfg["run"]["study"], "late_from": late_from,
-            "n_rows": len(rows), "incomplete_cells": {f"{v}/{arm}": p for (v, arm), p in status.items() if p},
-            "reruns_used": reruns, "tables": tables(metrics), "tests": list(tests.values()),
-            "verdict": verdict(a["verdict"], tests),
-            "runtime": {"episodes": len(rows),
-                        "episode_s_mean": float(np.mean([r["episode_s"] for r in rows])) if rows else None}}
+    out = {"name": cfg["run"]["name"], "study": cfg["run"]["study"], "late_from": late_from,
+           "n_rows": len(rows), "incomplete_cells": {f"{v}/{arm}": p for (v, arm), p in status.items() if p},
+           "reruns_used": reruns, "tables": tables(metrics), "tests": list(tests.values()),
+           "verdict": verdict(a["verdict"], tests),
+           "runtime": {"episodes": len(rows),
+                       "episode_s_mean": float(np.mean([r["episode_s"] for r in rows])) if rows else None}}
+    summaries = row_summaries(cfg["run"]["study"], rows)
+    if summaries:  # absent for studies whose agent module declares none (U, L)
+        out["row_summaries"] = summaries
+    return out
 
 
 def _fmt(t: dict) -> str:
@@ -544,6 +575,8 @@ def main(argv=None) -> int:
         print("incomplete cells:", json.dumps(res["incomplete_cells"]))
     if res["reruns_used"]:
         print("deterministic reruns used:", json.dumps(res["reruns_used"]))
+    if res.get("row_summaries"):
+        print("row summaries in analysis.json:", ", ".join(res["row_summaries"]))
     print("verdict:", json.dumps(res["verdict"]))
     return 0
 

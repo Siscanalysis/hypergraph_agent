@@ -1,0 +1,33 @@
+# Study R2 (docs/studies/R2_boundary.md), measurement (allocation `r2`),
+# family DS6: family D with budget slack 6 (D: 2). Same namespace, worlds, tasks,
+# arm ids and variant as D: paired with D by world and task.
+# Ten worlds per seed x 16 episodes, failure probability 0; every seed plays its
+# own worlds.
+# Only focused_sample (adaptive): at failure probability 0 maximal and the reference
+# never reach the budget and do not depend on it, so the analysis pairs this family
+# with the bounds of its base family on the same tasks.
+run:
+  name: r2-ds6
+  phase: boundary
+  allocation: r2
+  seeds: [0, 1, 2, 3, 4]
+  ledger: runs/R2-ledger.json
+budget:
+  ledger_allocations: {dev: 6000, r2: 278000}
+  ledger_adaptive_cap: 284000
+  ledger_reporting_cap: 352000
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 3, depth_max: 5, n_distractor_base: 0, observe_items: goal_only,
+    budget_slack: 6}
+eval: {namespace: r2_d, n_tasks: 160, track: inference, n_worlds: 10, episodes_per_world: 16}
+walker:
+  per_run_cap: 4628  # largest task-budget sum of the run streams
+  eval_world_offset_by_seed: true
+  consistent_moves: 50
+  eval_variants:
+  - name: eps0
+    tasks: {failure_prob: 0.0}
+arms:
+- {id: focused_sample, strategy: focused_sample}

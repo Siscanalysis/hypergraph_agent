@@ -50,7 +50,8 @@ TEST_KEYS = {
     "across": {"metric", "arm", "variant_a", "variant_b", "expect", "level"},
     "equivalence": {"metric", "a", "b", "variant", "margin_rel", "margin_abs", "level"},
     "ratio": {"metric", "a", "b", "variant", "band", "level"},
-    "interaction": {"metric", "a", "b", "variant_hi", "variant_lo", "expect", "level"},
+    # a_lo, b_lo: optional arms of the low cell (default a, b), e.g. the same contrast at another arm level
+    "interaction": {"metric", "a", "b", "a_lo", "b_lo", "variant_hi", "variant_lo", "expect", "level"},
     "within_margin": {"metric", "a", "others", "variants", "margin_rel", "level"},
     "all_success": {"arm", "variants"},
     "at_least_reference": {"arm", "variants"},
@@ -68,6 +69,17 @@ def _merge(base: dict, over: dict, path: str = "") -> dict:
         else:
             out[k] = copy.deepcopy(v)
     return out
+
+
+def _check_interaction(t: dict, arms: list) -> None:
+    """The optional low-cell arms ``a_lo`` and ``b_lo`` must be arms of the config, and an
+    interaction may not compare a cell with itself (same variant and the same two arms)."""
+    for key in ("a_lo", "b_lo"):
+        if key in t and t[key] not in arms:
+            raise ValueError(f"{key} {t[key]!r} of analysis test {t.get('name')!r} is not a configured arm")
+    low = (t.get("a_lo", t.get("a")), t.get("b_lo", t.get("b")))
+    if t.get("variant_hi") == t.get("variant_lo") and low == (t.get("a"), t.get("b")):
+        raise ValueError(f"interaction {t.get('name')!r} compares a cell with itself")
 
 
 def load_config(path: str | Path) -> dict:
@@ -96,6 +108,8 @@ def load_config(path: str | Path) -> dict:
             raise KeyError(f"unknown keys {sorted(extra)} in analysis test {t.get('name')!r}")
         if t.get("expect", "less") not in ("less", "greater", "not_less", "not_greater"):
             raise ValueError(f"unknown expectation {t['expect']!r} in analysis test {t.get('name')!r}")
+        if kind == "interaction":
+            _check_interaction(t, cfg["arms"])
     tests = {t.get("name") for t in cfg["analysis"]["tests"]}
     verdict = cfg["analysis"]["verdict"]
     if verdict is not None:

@@ -1,0 +1,26 @@
+# Study X, development only (allocation dev, namespaces ending in _dev): the benchmark test-set
+# path on one Crafter world (conversion seed 0) with the checkpoints of rq_f1_dev.yaml at 16,000
+# interactions and the repository's agents. Outcomes are not results.
+run: {name: x-bench-dev, allocation: dev, ledger: runs/X-ledger.json,
+      checkpoints_from: configs/baselines/rq_f1_dev.yaml}
+ledger:
+  allocations: {dev: 300000, x_tune: 4500000, x_main: 40000000}
+  adaptive_cap: 44800000
+  reporting_cap: 5000000
+setting:
+  name: bench_crafter
+  family: recipequest
+  loader: "hypergraph_agent.baselines.benchmark_sets:load"
+  benchmark: {graph: crafter, worlds: whole, n_worlds: 1}
+  tasks: {profile: unknown_prerequisites, n_distractor_base: 0, observe_items: goal_only}
+test: {namespace: x_bench_crafter_dev, base_seed: 0, seeds: [0], n_worlds: 1, episodes_per_world: 16,
+       budgets: [16000]}
+agents: [focused_sample, maximal, reference, random]
+agent_params: {consistent_moves: 50}
+analysis:
+  late_from: 8
+  select_metric: cost_ratio_late
+  select_split: test
+  tests:
+    - {name: "dev bench crafter: focused_sample - best learner", role: secondary, a: focused_sample,
+       b: best_learner, metric: cost_ratio_late, expect: less}

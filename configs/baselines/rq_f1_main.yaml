@@ -1,0 +1,48 @@
+# Study X (docs/studies/X_open_source_baselines.md), measurement draft, setting rq_f1:
+# RecipeQuest family F1 of study R (Stage D generator, hidden prerequisites, goals at
+# depth 1-3, intermediate items unobserved, no distractor base facts, failure 0).
+# Learners train on the namespace x_rq_train and are evaluated frozen on x_rq_test
+# (5 seeds x 10 worlds x 16 episodes, the stream layout of study R) at every budget,
+# and on x_rq_val (2 seeds x 10 worlds) at the largest budget to select the best
+# learner. The repository's agents play the same test streams. Learner params are the
+# library defaults until the tuning stage writes its selection in (run.tuning_record).
+run: {name: x-rq-main, allocation: x_main, ledger: runs/X-ledger.json, requires_flag: true,
+      tuning_record: null}
+ledger:
+  allocations: {dev: 300000, x_tune: 4500000, x_main: 40000000}
+  adaptive_cap: 44800000
+  reporting_cap: 5000000
+setting:
+  name: rq_f1
+  family: recipequest
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only}
+train: {namespace: x_rq_train, base_seed: 30000, seeds: [0, 1], budgets: [10000, 100000, 1000000],
+        n_envs: 8, episodes_per_world: 16}
+test: {namespace: x_rq_test, base_seed: 10000, seeds: [0, 1, 2, 3, 4], n_worlds: 10, episodes_per_world: 16}
+validation: {namespace: x_rq_val, base_seed: 10000, seeds: [0, 1], n_worlds: 10, episodes_per_world: 16}
+learners:
+  - {id: mppo, algo: maskable_ppo, params: {n_steps: 256}}
+  - {id: ppo, algo: ppo, params: {n_steps: 256}}
+  - {id: rppo, algo: recurrent_ppo, trial: true,
+     params: {features_dim: 64, batch_size: 512,
+              policy_kwargs: {lstm_hidden_size: 64, shared_lstm: true, enable_critic_lstm: false}}}
+  - {id: mppo_rnd, group: maskable_ppo_rnd, algo: maskable_ppo, params: {n_steps: 256}, rnd: {beta: 0.01}}
+agents: [focused_sample, maximal, reference, random]
+agent_params: {consistent_moves: 50}
+analysis:
+  late_from: 8
+  select_metric: cost_ratio_late
+  tests:
+    - {name: "X1 focused_sample - best learner, late cost ratio", role: primary, a: focused_sample,
+       b: best_learner, metric: cost_ratio_late, expect: less}
+    - {name: "X1s focused_sample - best learner, late success", role: secondary, a: focused_sample,
+       b: best_learner, metric: success_late, expect: not_less}
+    - {name: "X2 maximal - best learner, late cost ratio", role: secondary, a: maximal, b: best_learner,
+       metric: cost_ratio_late, expect: not_greater}
+    - {name: "X3 best learner - random, late cost ratio", role: secondary, a: best_learner, b: random,
+       metric: cost_ratio_late, expect: less}
+    - {name: "X4 best learner, late minus early cost ratio (within-world improvement)", role: descriptive,
+       a: best_learner, metric: cost_ratio_late_minus_early, expect: less}
+    - {name: "X4r focused_sample, late minus early cost ratio", role: descriptive, a: focused_sample,
+       metric: cost_ratio_late_minus_early, expect: less}

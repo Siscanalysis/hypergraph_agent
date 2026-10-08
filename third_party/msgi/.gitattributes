@@ -1,0 +1,4 @@
+# Third-party files are kept byte-exact: their SHA-256 is recorded in SOURCE.md.
+graph/ILP.py -text
+graph/graph_utils.py -text
+LICENSE -text

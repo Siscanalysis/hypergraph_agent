@@ -1,0 +1,33 @@
+# Study R2 (docs/studies/R2_boundary.md), development run (allocation `dev`),
+# family P: the F1 generator with pools of 8 candidates (F1: 6; 92 hypotheses
+# per recipe instead of 41); one factor changed from F1.
+# Development copy: namespace r2_dev (never used for measurement), one world x 16
+# episodes, seed 0. Checks that every arm completes its stream and measures runtime
+# per task; its outcomes are not study results.
+run:
+  name: r2dev-p
+  phase: boundary_dev
+  allocation: dev
+  seeds: [0]
+  ledger: runs/R2-ledger.json
+budget:
+  ledger_allocations: {dev: 6000, r2: 278000}
+  ledger_adaptive_cap: 284000
+  ledger_reporting_cap: 352000
+world: {pool_size: 8}
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0, observe_items: goal_only}
+eval: {namespace: r2_dev, n_tasks: 16, track: inference, n_worlds: 1, episodes_per_world: 16}
+walker:
+  per_run_cap: 350  # largest task-budget sum of the run streams
+  eval_world_offset_by_seed: true
+  consistent_moves: 50
+  eval_variants:
+  - name: eps0
+    tasks: {failure_prob: 0.0}
+arms:
+- {id: focused_sample, strategy: focused_sample}
+- {id: maximal, strategy: maximal}
+- {id: reference, strategy: reference}

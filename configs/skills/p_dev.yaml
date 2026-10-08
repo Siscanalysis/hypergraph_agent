@@ -1,0 +1,43 @@
+# Study P, development only (allocation dev, namespace techtree_p_dev): plumbing,
+# runtime and a calibration look at both depths on 1 world x 12 episodes, with
+# the arms whose behaviour is new (imperfect skills at e0 0.3, the gate with and
+# without errors) and the anchors. Same world, stream and agent parameters as
+# p_main.yaml otherwise; the ledger block is identical so whichever config runs
+# first creates runs/P-ledger.json with every allocation.
+run: {name: p-dev, study: P, allocation: dev, seeds: [0], ledger: runs/P-ledger.json}
+ledger:
+  allocations: {dev: 20000, p_main: 691200}
+  adaptive_cap: 711200
+  reporting_cap: 173600
+world: {n_primitives: 3, n_levels: 3, concepts_per_level: [3, 3, 3], combo_length: 2, length_rule: linear}
+stream: {namespace: techtree_p_dev, n_worlds: 1, episodes_per_world: 12, goal_levels: [3],
+         episode_budget: 100, reveal_levels: []}
+agent: {half_practice: 10, gate_m: 2, gate_k: 3}
+variants:
+  - {name: d0, world: {reuse_depth: 0}}
+  - {name: d2, world: {reuse_depth: 2}}
+arms: [remember_e30, promote_e30, promote_gate_e30, promote_gate_e00, oracle_library, reference]
+analysis:
+  late_from: 6
+  tests:
+    - {type: paired, role: primary, name: "P1 promote - remember, e0 0.3, depth 2", metric: steps_late,
+       a: promote_e30, b: remember_e30, variant: d2, expect: less}
+    - {type: equivalence, role: falsification,
+       name: "F1 promote equivalent to remember, e0 0.3, depth 2 (+-10%)", metric: steps_late,
+       a: promote_e30, b: remember_e30, variant: d2, margin_rel: 0.10, level: 0.90}
+    - {type: paired, role: condition, name: "C1 control: promote - remember, e0 0.3, depth 0 (no benefit)",
+       metric: steps_late, a: promote_e30, b: remember_e30, variant: d0, expect: not_less}
+    - {type: paired, role: secondary, name: "S1 gated promotion: promote_gate - remember, e0 0.3, depth 2",
+       metric: steps_late, a: promote_gate_e30, b: remember_e30, variant: d2, expect: less}
+    - {type: interaction, role: secondary,
+       name: "gate - promote_e30 with the gate at e0 0.3 minus at e0 0 (exercises a_lo)",
+       metric: steps_late, a: promote_gate_e30, b: promote_e30, a_lo: promote_gate_e00,
+       variant_hi: d2, variant_lo: d2, expect: greater}
+    - {type: all_success, role: validity, name: "V1 reference solves every task", arm: reference}
+    - {type: all_success, role: validity, name: "V2 oracle library solves every task", arm: oracle_library}
+  verdict:
+    rule: precedence
+    primary: "P1 promote - remember, e0 0.3, depth 2"
+    falsification: "F1 promote equivalent to remember, e0 0.3, depth 2 (+-10%)"
+    conditions: ["C1 control: promote - remember, e0 0.3, depth 0 (no benefit)"]
+    validity: ["V1 reference solves every task", "V2 oracle library solves every task"]

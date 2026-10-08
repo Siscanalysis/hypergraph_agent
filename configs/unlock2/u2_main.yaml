@@ -1,0 +1,150 @@
+# Study U2, measurement (docs/studies/U2_techtree_baselines.md): generic, hand-designed exploration
+# baselines (iterated width IW and IW(1), IW(2); flat macro expansion sampled uniformly or
+# enumerated; an archive explorer) against the repository's explorers on fresh TechTree worlds.
+# U setting (namespace techtree_u2, never used before): composite length k in {2, 3} without
+# signal, announced and silent unlocks, and k = 3 with the signal, where the IW arms read the flag
+# as an atom and the macro arms and the archive act identically with and without it (tested). The
+# archive is the same algorithm as macro_uniform in this setting, so it runs only in k3-off-ann
+# (S5, S6). L setting (namespace techtree_u2l, never used before): the world of study L phase L2
+# (full discovery) at reuse depth 0 and 2. 8 seeds x 4 worlds = 32 worlds per cell, 12 episodes per
+# world. Draft until the protocol is frozen. The ledger block is the declaration after the
+# amendment that raises u2_main (runs/U2-ledger.json was created with the caps of an earlier draft).
+run: {name: u2-main, study: U2, allocation: u2_main, seeds: [0, 1, 2, 3, 4, 5, 6, 7],
+      ledger: runs/U2-ledger.json, requires_flag: true}
+ledger:
+  allocations: {dev: 20000, u2_main: 1728000}
+  adaptive_cap: 1748000
+  reporting_cap: 557600
+agent: {trace_atoms: max_length, macro_bound: max_length}
+world: {n_primitives: 4, n_slots: 3, n_unlocks: 1, unlock_level: 1, n_levels: 1, concepts_per_level: [2],
+        combo_length: 2}
+stream: {namespace: techtree_u2, n_worlds: 4, episodes_per_world: 12, goal_levels: [1], goal_rule: unlock,
+         episode_budget: 100}
+variants:
+  - {name: k2-off-ann, world: {combo_length: 2}, stream: {signal: false, unlock_visibility: announced},
+     arms: [pooled, iw, iw1, iw2, macro_uniform, macro_sys, random, oracle, reference]}
+  - {name: k2-off-sil, world: {combo_length: 2}, stream: {signal: false, unlock_visibility: silent},
+     arms: [pooled, iw, iw1, iw2, macro_uniform, macro_sys, random]}
+  - {name: k3-off-ann, world: {combo_length: 3}, stream: {signal: false, unlock_visibility: announced},
+     arms: [pooled, iw, iw1, iw2, macro_uniform, macro_sys, archive, random, oracle, reference]}
+  - {name: k3-off-sil, world: {combo_length: 3}, stream: {signal: false, unlock_visibility: silent},
+     arms: [pooled, iw, iw1, iw2, macro_uniform, macro_sys, random]}
+  - {name: k3-on-ann, world: {combo_length: 3}, stream: {signal: true, unlock_visibility: announced},
+     arms: [pooled, iw, iw2]}
+  - {name: k3-on-sil, world: {combo_length: 3}, stream: {signal: true, unlock_visibility: silent},
+     arms: [pooled, iw, iw2]}
+  - {name: l-d0,
+     world: {n_primitives: 3, n_slots: 0, n_unlocks: 0, n_levels: 3, concepts_per_level: [3, 3, 3],
+             combo_length: 2, reuse_depth: 0},
+     stream: {namespace: techtree_u2l, goal_levels: [3], goal_rule: uniform},
+     arms: [remember, promote, iw, iw2, macro_uniform, macro_sys, archive, random, oracle_library, reference]}
+  - {name: l-d2,
+     world: {n_primitives: 3, n_slots: 0, n_unlocks: 0, n_levels: 3, concepts_per_level: [3, 3, 3],
+             combo_length: 2, reuse_depth: 2},
+     stream: {namespace: techtree_u2l, goal_levels: [3], goal_rule: uniform},
+     arms: [remember, promote, iw, iw2, macro_uniform, macro_sys, archive, random, oracle_library, reference]}
+arms: [pooled, remember, promote, iw, iw1, iw2, macro_uniform, macro_sys, archive, random, oracle,
+       oracle_library, reference]
+analysis:
+  late_from: 6
+  tests:
+    # P1 (primary claim): pooled needs fewer actions to the first success than each generic baseline
+    # family at k3-off-ann (an intersection-union test: the claim holds only if all four hold; each
+    # component is a one-sided test at level 0.025)
+    - {type: paired, role: primary, name: "P1a iw - pooled, k3 off ann", metric: first_success_steps,
+       a: iw, b: pooled, variant: k3-off-ann, expect: greater}
+    - {type: paired, role: primary, name: "P1b iw2 - pooled, k3 off ann", metric: first_success_steps,
+       a: iw2, b: pooled, variant: k3-off-ann, expect: greater}
+    - {type: paired, role: primary, name: "P1c macro_uniform - pooled, k3 off ann",
+       metric: first_success_steps, a: macro_uniform, b: pooled, variant: k3-off-ann, expect: greater}
+    - {type: paired, role: primary, name: "P1d macro_sys - pooled, k3 off ann", metric: first_success_steps,
+       a: macro_sys, b: pooled, variant: k3-off-ann, expect: greater}
+    # F1 (falsification): some baseline needs fewer actions than pooled (CI entirely below 0)
+    - {type: paired, role: falsification, name: "F1a iw - pooled below 0, k3 off ann",
+       metric: first_success_steps, a: iw, b: pooled, variant: k3-off-ann, expect: less}
+    - {type: paired, role: falsification, name: "F1b iw2 - pooled below 0, k3 off ann",
+       metric: first_success_steps, a: iw2, b: pooled, variant: k3-off-ann, expect: less}
+    - {type: paired, role: falsification, name: "F1c macro_uniform - pooled below 0, k3 off ann",
+       metric: first_success_steps, a: macro_uniform, b: pooled, variant: k3-off-ann, expect: less}
+    - {type: paired, role: falsification, name: "F1d macro_sys - pooled below 0, k3 off ann",
+       metric: first_success_steps, a: macro_sys, b: pooled, variant: k3-off-ann, expect: less}
+    # R: reported ratios of means to pooled; bands are a factor 2 around the written predictions
+    - {type: ratio, role: reported, name: "R1 iw / pooled in 2.8-11 (predicted 5.5), k3 off ann",
+       metric: first_success_steps, a: iw, b: pooled, variant: k3-off-ann, band: [2.75, 11.0]}
+    - {type: ratio, role: reported, name: "R2 iw2 / pooled in 1.9-7.5 (predicted 3.7), k3 off ann",
+       metric: first_success_steps, a: iw2, b: pooled, variant: k3-off-ann, band: [1.85, 7.4]}
+    - {type: ratio, role: reported, name: "R3 macro_uniform / pooled in 1.5-6 (predicted 3.0), k3 off ann",
+       metric: first_success_steps, a: macro_uniform, b: pooled, variant: k3-off-ann, band: [1.5, 6.0]}
+    - {type: ratio, role: reported, name: "R4 macro_sys / pooled in 1.4-5.6 (predicted 2.8), k3 off ann",
+       metric: first_success_steps, a: macro_sys, b: pooled, variant: k3-off-ann, band: [1.4, 5.6]}
+    - {type: all_success, role: validity, name: "V1 reference solves every task", arm: reference}
+    - {type: all_success, role: validity, name: "V2 oracle solves every task", arm: oracle}
+    - {type: at_least_reference, role: validity, name: "V3 oracle never shorter than the reference",
+       arm: oracle}
+    - {type: all_success, role: validity, name: "V4 oracle library solves every task", arm: oracle_library}
+    - {type: at_least_reference, role: validity, name: "V5 oracle library never shorter than the reference",
+       arm: oracle_library}
+    # S1: width. One pass of IW(1) misses the 3-press sequences without its first successor
+    - {type: paired, role: secondary, name: "S1 iw1 - iw2, k3 off ann", metric: first_success_steps,
+       a: iw1, b: iw2, variant: k3-off-ann, expect: greater}
+    - {type: paired, role: secondary, name: "S1 iw1 - iw2, k3 off sil", metric: first_success_steps,
+       a: iw1, b: iw2, variant: k3-off-sil, expect: greater}
+    # S2: width 1 suffices for 2-press composites from an empty root
+    - {type: paired, role: secondary, name: "S2 iw1 - iw2 not above 0, k2 off ann", metric: first_success_steps,
+       a: iw1, b: iw2, variant: k2-off-ann, expect: not_greater}
+    - {type: paired, role: secondary, name: "S2 iw1 - iw2 not above 0, k2 off sil", metric: first_success_steps,
+       a: iw1, b: iw2, variant: k2-off-sil, expect: not_greater}
+    # S3: the gap of IW(2) to pooled grows from k = 2 to k = 3
+    - {type: interaction, role: secondary, name: "S3 iw2 - pooled grows from k2 to k3 (off ann)",
+       metric: first_success_steps, a: iw2, b: pooled, variant_hi: k3-off-ann, variant_lo: k2-off-ann,
+       expect: greater}
+    # S4: action-space blow-up of the systematic macro arm
+    - {type: interaction, role: secondary, name: "S4 macro_sys - pooled grows from k2 to k3 (off ann)",
+       metric: first_success_steps, a: macro_sys, b: pooled, variant_hi: k3-off-ann, variant_lo: k2-off-ann,
+       expect: greater}
+    - {type: across, role: secondary, name: "S4 silent costs macro_sys, k3 off", metric: first_success_steps,
+       arm: macro_sys, variant_a: k3-off-sil, variant_b: k3-off-ann, expect: greater}
+    # S5: macro_uniform and the archive are the same algorithm here: no evidence that macros help
+    - {type: paired, role: secondary, name: "S5 macro_uniform - archive, k3 off ann",
+       metric: first_success_steps, a: macro_uniform, b: archive, variant: k3-off-ann, expect: not_less}
+    # S6: the archive keeps the unlock chain that random search loses at every episode boundary
+    - {type: paired, role: secondary, name: "S6 random - archive, k3 off ann", metric: first_success_steps,
+       a: random, b: archive, variant: k3-off-ann, expect: greater}
+    - {type: paired, role: secondary, name: "S6 random - archive, L depth 2", metric: steps_late,
+       a: random, b: archive, variant: l-d2, expect: greater}
+    # S7: the primary claim in the silent cell
+    - {type: paired, role: secondary, name: "S7 iw - pooled, k3 off sil", metric: first_success_steps,
+       a: iw, b: pooled, variant: k3-off-sil, expect: greater}
+    - {type: paired, role: secondary, name: "S7 iw2 - pooled, k3 off sil", metric: first_success_steps,
+       a: iw2, b: pooled, variant: k3-off-sil, expect: greater}
+    - {type: paired, role: secondary, name: "S7 macro_uniform - pooled, k3 off sil",
+       metric: first_success_steps, a: macro_uniform, b: pooled, variant: k3-off-sil, expect: greater}
+    - {type: paired, role: secondary, name: "S7 macro_sys - pooled, k3 off sil", metric: first_success_steps,
+       a: macro_sys, b: pooled, variant: k3-off-sil, expect: greater}
+    # S8: the L setting. margin_rel 0: passes when the upper CI bound of the arm minus the best
+    # baseline (lowest mean) is at most 0
+    - {type: within_margin, role: secondary, name: "S8 remember beats the best baseline, L depth 0",
+       metric: steps_late, a: remember, others: [iw, iw2, macro_uniform, macro_sys, archive],
+       variants: [l-d0], margin_rel: 0.0}
+    - {type: within_margin, role: secondary, name: "S8 promote beats the best baseline, L depth 2",
+       metric: steps_late, a: promote, others: [iw, iw2, macro_uniform, macro_sys, archive],
+       variants: [l-d2], margin_rel: 0.0}
+    # S9: the signal. pooled replicates U (S6 there); the IW arms read it only as one more atom
+    - {type: across, role: secondary, name: "S9 signal helps pooled, k3 ann", metric: first_success_steps,
+       arm: pooled, variant_a: k3-on-ann, variant_b: k3-off-ann, expect: less}
+    - {type: across, role: secondary, name: "S9 signal does not hurt iw, k3 ann",
+       metric: first_success_steps, arm: iw, variant_a: k3-on-ann, variant_b: k3-off-ann,
+       expect: not_greater}
+    - {type: across, role: secondary, name: "S9 signal does not hurt iw2, k3 ann",
+       metric: first_success_steps, arm: iw2, variant_a: k3-on-ann, variant_b: k3-off-ann,
+       expect: not_greater}
+    # S10: iterated width pays for its failed narrow passes at k = 3
+    - {type: paired, role: secondary, name: "S10 iw - iw2, k3 off ann", metric: first_success_steps,
+       a: iw, b: iw2, variant: k3-off-ann, expect: greater}
+  verdict:
+    rule: all
+    require: ["P1a iw - pooled, k3 off ann", "P1b iw2 - pooled, k3 off ann",
+              "P1c macro_uniform - pooled, k3 off ann", "P1d macro_sys - pooled, k3 off ann",
+              "V1 reference solves every task", "V2 oracle solves every task",
+              "V3 oracle never shorter than the reference", "V4 oracle library solves every task",
+              "V5 oracle library never shorter than the reference"]
