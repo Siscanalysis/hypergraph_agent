@@ -35,6 +35,7 @@ loaded package code or commit), because the analysis would reject that rerun.
 
 from __future__ import annotations
 
+import importlib
 import time
 from collections import defaultdict
 from pathlib import Path
@@ -46,16 +47,29 @@ from ..training.budget import BudgetMeter, SessionLedger
 from ..training.run import LOADED_CODE_SHA256, RunContext, process_source
 from .config import merged, run_hash, stream_config, variant_arms, variants
 from .env import TechTreeEnv, agent_interface
-from .explorers import Episode, make_explorer
+from .explorers import Episode
 from .generator import TechStream, needs_unlock, reference_solve, revealed_links
-from .layered import make_layered
 
 NON_ADAPTIVE = ("random", "oracle", "oracle_library", "reference")
 ORACLES = ("oracle", "oracle_library")
+# study -> (agent module, factory). Later studies register their own module here; a
+# factory takes (arm, rng) or, when the study declares agent parameters, (arm, rng, params).
+# A module may list further non-adaptive arms in REPORTING_ARMS.
+STUDY_AGENTS = {"U": ("explorers", "make_explorer"), "L": ("layered", "make_layered"),
+                "U2": ("baselines", "make_baseline"), "P": ("skills", "make_skilled")}
 
 
-def make_agent(study: str, arm: str, rng: np.random.Generator):
-    return make_explorer(arm, rng) if study == "U" else make_layered(arm, rng)
+def _agent_module(study: str):
+    return importlib.import_module(f"{__package__}.{STUDY_AGENTS[study][0]}")
+
+
+def reporting_arms(study: str) -> tuple[str, ...]:
+    return NON_ADAPTIVE + tuple(getattr(_agent_module(study), "REPORTING_ARMS", ()))
+
+
+def make_agent(study: str, arm: str, rng: np.random.Generator, params: dict | None = None):
+    factory = getattr(_agent_module(study), STUDY_AGENTS[study][1])
+    return factory(arm, rng, params) if params else factory(arm, rng)
 
 
 def make_ledger(cfg: dict) -> SessionLedger:
@@ -80,7 +94,7 @@ def plan(cfg: dict) -> dict:
         w, s = merged(cfg, v)
         arms = variant_arms(cfg, v)
         cap = run_cap(cfg, v)
-        n_rep = sum(a in NON_ADAPTIVE for a in arms)
+        n_rep = sum(a in reporting_arms(cfg["run"]["study"]) for a in arms)
         adaptive += cap * (len(arms) - n_rep) * len(seeds)
         reporting += cap * n_rep * len(seeds)
         n_runs += len(arms) * len(seeds)
@@ -184,14 +198,14 @@ def run_study(cfg: dict, ledger: SessionLedger, runs_dir: str, resume: bool = Fa
                 ctx = RunContext(runs_dir, run_id, {**cfg, "variant": variant, "arm": arm},
                                  phase=f"techtree_{study}", arm=arm, seed=seed)
                 ctx.write_manifest(run_hash=rh, variant=variant["name"], expected_tasks=len(tasks))
-                kind = "reporting" if arm in NON_ADAPTIVE else "adaptive"
+                kind = "reporting" if arm in reporting_arms(study) else "adaptive"
                 cap = run_cap(cfg, variant)
                 ledger.register_run(run_id, alloc, cap, {"arm": arm, "variant": variant["name"], "kind": kind,
                                                          "run_hash": rh})
                 meter = BudgetMeter(ledger, run_id, alloc, cap, kind=kind)
                 # common random numbers: every arm and variant of a seed starts from the same agent seed
                 rng = np.random.default_rng(derive_seed("techtree_agent", study, seed) % 2 ** 32)
-                agent = None if arm == "reference" else make_agent(study, arm, rng)
+                agent = None if arm == "reference" else make_agent(study, arm, rng, cfg["agent"])
                 extra = {"arm": arm, "variant": variant["name"], "seed": seed, **factors(w, s)}
                 t0 = time.perf_counter()
                 try:

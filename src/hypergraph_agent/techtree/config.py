@@ -39,9 +39,11 @@ DEFAULTS: dict = {
                "signal": False, "reveal_levels": []},
     "variants": [],
     "arms": ["pooled"],
+    # parameters of the study's agent module (free-form, validated by that module)
+    "agent": {},
     "analysis": {"late_from": None, "n_boot": 10_000, "boot_seed": 20261008, "tests": [], "verdict": None},
 }
-STUDIES = ("U", "L")
+STUDIES = ("U", "L", "U2", "P")
 VERDICT_KEYS = {"all": {"require"}, "precedence": {"primary", "falsification", "conditions", "validity"}}
 TEST_KEYS = {
     "paired": {"metric", "a", "b", "variant", "expect", "level"},
@@ -59,7 +61,7 @@ def _merge(base: dict, over: dict, path: str = "") -> dict:
     out = copy.deepcopy(base)
     for k, v in over.items():
         where = f"{path}.{k}" if path else k
-        if k not in base and path != "ledger.allocations":
+        if k not in base and path not in ("ledger.allocations", "agent"):
             raise KeyError(f"unknown config key {where}")
         if isinstance(v, dict) and isinstance(base.get(k), dict):
             out[k] = _merge(base[k], v, where)
@@ -147,5 +149,6 @@ def run_hash(cfg: dict, variant: dict, arm: str, seed: int) -> str:
     """Hash of what determines a run's rows (study, name, world, stream, variant, arm, seed),
     independent of which arms or variants a command selected."""
     w, s = merged(cfg, variant)
+    agent = {"agent": cfg["agent"]} if cfg.get("agent") else {}  # absent for studies U and L
     return stable_hash({"study": cfg["run"]["study"], "name": cfg["run"]["name"], "world": w, "stream": s,
-                        "variant": variant["name"], "arm": arm, "seed": seed})
+                        "variant": variant["name"], "arm": arm, "seed": seed, **agent})
