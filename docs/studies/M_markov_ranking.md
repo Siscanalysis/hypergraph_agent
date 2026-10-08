@@ -553,7 +553,7 @@ evidence 4.61 for every score (fact chain 4.62). On the selection worlds,
 which chose the setting, the posterior led the star-graph score at 16 episodes
 (star minus posterior -0.021 [-0.036, -0.005]); the test worlds decide.
 
-Twins (constructed worlds): as predicted. Structural: equal clique expansions
+Twins (constructed worlds; `artifacts/markov/twins.json`): as predicted. Structural: equal clique expansions
 and clique PPR, different star expansions, cheapest plans of 5 and 4 steps (3
 and 2 base facts), h_add of the goal 4 and 3. Behavioural: identical scores
 after the brute-force episodes and after the shared failure; after the probe
@@ -599,8 +599,9 @@ Secondary, pair cells (episode rows of the runs): `pair_sample` made 98
 within-episode marks, planned on a node refuted by its own episode in 9 of
 2,068 replans and repeated no node; `pair_rank` made 4 marks, with 0 refuted
 replans and 0 repeated nodes in 1,810 replans. Descriptive, not
-pre-registered: the pair cells planned on a node that contradicted earlier
-logged evidence in 1,048 of 2,068 replans (`pair_sample`) and 532 of 1,810
+pre-registered: the pair cells planned on a node that contradicted logged
+evidence (episode-row field `unresolved`, which also counts contradictions with
+the current episode's own log) in 1,048 of 2,068 replans (`pair_sample`) and 532 of 1,810
 (`pair_rank`), against 0 of 1,979 for `focused_sample`, 2 of 1,970 for
 `hyper_rank` and 0 of 2,060 for `hyper_sample_ppr`.
 
@@ -629,7 +630,7 @@ nothing: on the selection worlds every setting that propagates over the star
 graph or the fact chain ranked worse than its own edge weights, so the
 selected "PPR" is the raw pairwise weight. What ranks nearly as well as the
 posterior is therefore the per-edge evidence (exact eliminations, forced
-edges and 1/k blame), not the walk. The audit's order holds for the other
+edges and 1/k blame), not the walk. The pre-stated order holds for the other
 pairs: star-graph weights above the fact chain (0.116 [0.095, 0.138]), the fact
 chain above random (0.238 [0.213, 0.263]), and brute-force evidence at chance
 for every method on the test worlds. The twins came out as constructed: the
@@ -649,14 +650,15 @@ than sampling on average over the two representations (ranking by the
 pairwise weights in the pair cells, the consistent-share centrality in the
 hyper cells; the interaction, -0.079 [-0.172, 0.011], does not separate the
 two), and proximity-ordered proposals (`hyper_sample_ppr`) neither saved
-evaluations per world nor kept acting cost, so the niche named by the audit,
-proposals that save search without changing acting, is not supported. The
+evaluations per world nor kept acting cost, so the secondary prediction
+(fewer evaluations, unchanged acting) is not supported. The
 centrality choice also costs
 about 34 times the hypothesis evaluations of `focused_sample` per world and
 18 times the time per replan. Near-equal offline rankings did not translate
-into equal acting: a pairwise agent cannot hold earlier disjunctive evidence
-and planned on nodes that the logs already contradicted in 51% (`pair_sample`)
-and 29% (`pair_rank`) of its replans. The pairwise agents nonetheless remain
+into equal acting: the pairwise agents planned on nodes that the logs already
+contradicted in 51% (`pair_sample`) and 29% (`pair_rank`) of their replans,
+consistent with a representation that cannot hold earlier disjunctive
+evidence (not tested directly). The pairwise agents nonetheless remain
 cheaper than the brute-force plan (1.56 and 1.68 against 1.83, descriptive):
 per-edge evidence is useful, joint evidence more so.
 

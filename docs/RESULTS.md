@@ -1,11 +1,12 @@
-# Results (development session of 2026-10-07)
+# Results (development session of 2026-10-07; follow-up studies of 2026-10-08 in Section 4.5)
 
 Everything below comes from recorded runs; per-run manifests, configs, events
 and evaluation episodes are in `artifacts/runs/`, contrasts and figures in
 `artifacts/summary.json` and `artifacts/*.png`. Raw episode logs and
 checkpoints stay outside the repository. With two seed blocks per contrast
-**no comparative claim is made**: the pilots test mechanisms and size the
-study.
+the pilots of that session make **no comparative claim**: they test mechanisms
+and size the study. The follow-up studies (Section 4.5) make narrow claims
+under frozen protocols.
 
 ## 1. Status
 
@@ -20,13 +21,15 @@ relation-local memory, goal-conditioned primitive-policy control,
 library-transplant diagnostic, credible-set-mask-as-feature control, learned
 proposals or termination (docs/DECISIONS.md, docs/ROADMAP.md).
 
-Test suite: 152 deterministic tests pass (`python -m pytest -q`), covering the
+Test suite: 324 deterministic tests pass (`python -m pytest -q`), covering the
 items listed in docs/METHODS.md (environment semantics, information boundary,
 equivariance and padding, incidence and hypergraph equivalence, topology
 updates and rollback, executor semantics, library lifecycle, duration-aware
 returns, likelihood reconstruction and stale-batch refusal, budget accounting,
 transfer bindings, statistics fixtures, installation hygiene, walker replay
-semantics against the environment, meta-graph neighbourhoods and searches).
+semantics against the environment, meta-graph neighbourhoods and searches,
+the noise-aware likelihood, the pairwise evidence rules and PageRank, TechTree
+dynamics, reference and information boundary, and the study analyses).
 
 ## 2. Interaction budget
 
@@ -324,6 +327,49 @@ interactions):
 
 Walker ledger after Stage D: 29,895 of 32,000 adaptive and 4,731 of 8,000
 reporting interactions.
+
+## 4.5 Follow-up studies (2026-10-08)
+
+Four separate studies, each with a protocol committed before its measurement
+runs, its own ledger, measurement runs executed from a clean checkout of the
+freeze commit (for study M's second stage, of its amendment commit), and an
+independent recomputation of the results (docs/EXPERIMENT_PLAN.md, Addendum S). Full results, figures and limits are in
+the study files; the artifacts are in `artifacts/replication/`,
+`artifacts/markov/` and `artifacts/techtree/`.
+
+| Study | Pre-registered primary test | Result | Verdict |
+|---|---|---|---|
+| [R](studies/R_replication.md): replication of Stage D | late-half cost ratio (episodes 9-16), `focused_sample` - `maximal`, family F1 without failures, 50 worlds | 1.51 against 1.87; -0.357 [-0.449, -0.270] | pass; replicates with failures (0.1); not in the deeper family F2 (+0.20 and +0.25, never breaks even) |
+| [M](studies/M_markov_ranking.md): Markov graphs, PageRank ranking | M1: AUROC of the joint posterior - star-graph PageRank, 36 test worlds, margin 0.03; M2: representation main effect on late cost, 50 worlds | M1: 0.864 against 0.855, 0.009 [-0.004, 0.023], equivalent; M2: hyper - pair -0.146 [-0.194, -0.097] | M1: equivalent (prediction "posterior better" not confirmed; PageRank propagation selected out); M2: pass; the selection keeps the hypergraph and posterior sampling |
+| [U](studies/U_composites_unlocks.md): unlisted composites and unlocks | actions to first success, one-at-a-time - pooled testing, composites of length 3, 30 worlds, plus the ratio band | 272.8 against 67.0; 205.8 [174.3, 237.0]; ratio 4.07 (band 2.85-4.75) | pass (validity checks hold) |
+| [L](studies/L_layered_discovery.md): discoveries as atoms of new hypotheses | late-half actions per episode, `promote` - `remember`, reuse depth 2, 32 worlds (L1 supplied level-1 links; L2 fresh worlds, full discovery) | L1: 10.1 against 31.2, -21.0 [-27.5, -14.7]; L2: 10.7 against 27.7, -17.0 [-22.2, -11.9] | pass in both phases; no benefit at depth 0, promotion beats sham promotion |
+
+- R: the advantage appears only where recipes recur (difference-in-differences
+  -0.571 [-0.655, -0.496] in F1 against -0.039 [-0.100, 0.019] in the
+  no-recurrence family) and is not reproduced by omitting candidates at about
+  the same rate without the evidence. In F2 the excess cost comes entirely
+  from failed episodes (late success 0.61 against 1.00).
+- M: in the factorial the pairwise representation costs more than the
+  hypergraph one in both selector cells, and ranking costs more than sampling
+  on average (+0.077 [0.034, 0.118]), mainly in the pairwise cells;
+  `pair_sample` still beats the brute-force plan (1.56 against 1.83). With
+  restart 1.0 selected, the proposal order of `hyper_sample_ppr` follows the
+  raw pairwise weights: it saved 1.5 evaluations per replan but not per world
+  (+19.4 [-77.4, 113.6]), and acted worse (late cost +0.068 [0.013, 0.126],
+  late success -0.015 [-0.028, -0.005]). On evidence from the brute-force
+  policy every score is exactly 0.5 except the fact chain (0.497-0.514).
+- U: the signal on partial progress and the visibility of an unlock move costs
+  in the predicted directions; the pass validates the instrument, not any
+  learning agent.
+- L: at reuse depth 1 promotion showed no clear benefit in either phase, as
+  the analytic count predicted; the adaptive arm missed its margin in both
+  phases. Promotion here cannot be separated from composing remembered
+  sequences.
+
+Interactions (measurement only): R 154,498 adaptive and 117,157 reporting; M
+59,624 and 27,089; U 75,638 and 79,193; L 530,334 and 85,936. Development
+before the freezes used 23,990 adaptive interactions (the `dev` allocations)
+and 8,327 reporting ones.
 
 ## 5. What the session shows and does not show
 

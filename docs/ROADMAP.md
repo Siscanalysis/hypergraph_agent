@@ -32,13 +32,33 @@ control and a cost estimate before it is built.
 6b. **Optimism with a support threshold.** Under noise no hypothesis is
     eliminated, so the cheapest supported node never changes; require posterior
     support above a threshold before treating a node as plausible.
-6c. **Replicate the Stage D amortization result at study scale** (more worlds,
-    seeds and task families, failure noise) and add an exact goal-only
-    reference: a constraint solver over connected groups of recipes, where
-    enumeration is infeasible. Sampling among consistent nodes is the default
-    to build on; the learned edit policy is not (Stages C and D).
+6c. **Locate the boundary of the amortization result.** Study R replicated
+    the Stage D result at scale in its family, with failure noise, but not in a
+    deeper family with more alternatives and larger pools (docs/studies/R_replication.md).
+    Vary depth, alternatives, pool size and budget slack one at a time; add an
+    exact goal-only reference (a constraint solver over connected groups of
+    recipes) and an adaptive group-testing control that uses the evidence
+    without posterior weights.
 6d. **Start walks from the brute-force node** and remove requirements as evidence
     allows, instead of starting from single-candidate guesses.
+
+## Follow-up studies (docs/studies/)
+
+6e. **Markov graphs (study M).** Pairwise weights ranked candidates about as
+    well as the joint posterior offline, yet acting with them cost more and
+    PageRank propagation added nothing; no further work on proximity ranking
+    is planned. Open: a pairwise learner that keeps disjunctive failure
+    evidence (stored clauses), which would make it a hypergraph in all but
+    name.
+6f. **TechTree baselines (study U).** Add the missing blind baselines (width
+    or novelty search, flat macro expansion) and a learned agent, so the
+    environment measures something about learning rather than only about
+    pooled testing.
+6g. **Promotion with real costs (study L).** Separate promotion from
+    composing remembered sequences (atoms that are not concatenations), add an
+    admission criterion and measure the utility problem when discoveries are
+    learned controllers rather than exact sequences, and make the adaptive arm
+    reach its margin.
 
 ## Later extensions
 

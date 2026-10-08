@@ -287,3 +287,31 @@ and `L` rounds: the incidence encoders cost `O(L (F + R + E) d^2)`, the token
 baseline `O(layers (1 + F + R + E)^2 d)`, scoring `O(C d^2)`. A topology update
 costs `O(41 * pool)` per informative attempt. Binding costs `O(skills * F)`.
 Parameter counts are recorded in every run manifest.
+
+## 12. Mechanisms of the follow-up studies (`docs/studies/`)
+
+Each study file has an Implementation section; this is the map.
+
+- Noise-aware walkers (study R; `agents/walker.py`): exact episode likelihood
+  under a known failure probability by forward filtering over unobserved
+  items (`filter_states`), memoized per log, prefix and the hypothesis
+  restricted to the log's attempted recipes; posterior-targeting Metropolis
+  moves among nonzero-likelihood nodes; beliefs thresholded at 0.5; the
+  exploration-matched control `random_omit`. Analysis:
+  `evaluation/replication.py` (`python -m hypergraph_agent.analyze_replication`),
+  with paired per-world differences, world-cluster bootstrap intervals,
+  difference-in-differences and break-even episodes.
+- TechTree (studies U and L; `techtree/`): generator, Gymnasium environment
+  and exact reference (`generator.py`, `env.py`); one elimination engine over
+  candidate sequences with exact discoveries and pooled or one-at-a-time
+  testing (`explorers.py`); the study L arms, which differ only in how a
+  discovery enters later hypotheses (`layered.py`); runner, strict configs and
+  analysis (`study.py`, `config.py`, `analysis.py`;
+  `python -m hypergraph_agent.techtree`).
+- Markov-graph agents (study M; `agents/markov.py`): per-edge evidence on the
+  star graph of recipes and candidate facts (eliminations, forced edges, blame
+  of disjunctive failures spread over open edges), personalized PageRank on
+  that graph (equal to a normalized successor representation), the selectors
+  `pair_sample`, `pair_rank` and `hyper_rank` and the proposal order of
+  `hyper_sample_ppr`. Offline benchmark and factorial analysis:
+  `evaluation/markov_study.py` (`python -m hypergraph_agent.markov_study`).

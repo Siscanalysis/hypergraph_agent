@@ -231,6 +231,34 @@ Stage C on new worlds; per-world second-half ratios. Descriptive only (5
 worlds, 2 seeds). A run that stops at its interaction cap before finishing its
 80 tasks is reported as incomplete and does not count as passing.
 
+## Addendum S: follow-up studies (2026-10-08)
+
+Four further questions, run as separate studies with their own protocol,
+ledger, configs and verdict (docs/studies/README.md). Each protocol is in its
+study file and was committed before any of that study's measurement runs; the
+measurement runs executed the freeze commit from a clean checkout (a git
+worktree of that commit), so every manifest records that commit and a clean
+tree. Study M's second stage ran from the commit of its amendment MA1
+(95d008a), which changed only `configs/markov/m2.yaml` and the study file; its
+manifests record that commit and the same loaded-code hash as the freeze. Development before a freeze used separate namespaces and a `dev`
+allocation.
+
+| Study | Protocol | Freeze commit | Ledger |
+|---|---|---|---|
+| R: replication of the Stage D result | docs/studies/R_replication.md | 663e11c | `runs/R-ledger.json` |
+| U: unlisted composite actions and unlocks | docs/studies/U_composites_unlocks.md | 73e5602 | `runs/U-ledger.json` |
+| L: discoveries used as atoms of new hypotheses | docs/studies/L_layered_discovery.md | 73e5602 | `runs/L-ledger.json` |
+| M: pairwise Markov graphs with proximity ranking | docs/studies/M_markov_ranking.md | b443d2c (amendment MA1 at 95d008a) | `runs/M-ledger.json` |
+
+Every protocol was reviewed independently before its freeze. One review run
+touched tasks of study R's first measurement namespaces in memory; its outputs
+were discarded unread and R's namespaces were renamed before the freeze. The
+reviews of U and L ran trial designs on the scratch namespace `checker_dev`,
+and the review of M on `checker_m_dev` or with in-memory ledgers; where their
+outcomes were seen before a criterion was fixed, the study file says so. After
+the measurement runs, the results of every study were recomputed
+independently from the raw run records before they were written up.
+
 ## Amendments
 
 - 2026-10-07, A2 (post hoc, after the shallow diagnostic and P1 were

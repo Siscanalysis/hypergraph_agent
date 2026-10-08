@@ -146,6 +146,62 @@ and `info`), so the posterior over hypotheses no longer factorizes by recipe.
 The factorized updater refuses this profile rather than reading masked items
 as absent.
 
+## Follow-up studies (docs/studies/)
+
+Details and the reasons for each choice are in the study files; the decisions
+that affect shared code are listed here.
+
+**S1. Clean-checkout execution.** Measurement runs of a study execute its
+freeze commit (or a later amendment commit that changes only a config, as for
+study M's second stage) from a separate git worktree (the package is imported from the
+worktree's `src`), so manifests record the commit, a clean tree and one
+loaded-code hash, independent of later edits to the working tree.
+
+**S2. One ledger per study.** Each study declares its own ledger with a `dev`
+allocation for development and measurement allocations sized from the dry
+run: every per-run cap is the largest sum of task budgets over the run's
+streams, so no cap can cut a run short. A ledger keeps the caps it was created
+with; study M's caps were raised before any measurement run by an amendment
+recorded in the ledger file.
+
+**S3. Noise-aware episodic evidence (study R).** Episode logs record the
+observed outcome of every gather and activation. Under a known failure
+probability the likelihood of a logged episode under a hypothesis is computed
+exactly by forward filtering over the unobserved items; an observed fact the
+hypothesis cannot produce is impossible, a predicted fact that did not appear
+is explained by a failure. The sampling walkers walk to a node with nonzero
+likelihood and then make Metropolis moves whose target is prior x likelihood;
+planning beliefs threshold the filtered probabilities at 0.5. At failure
+probability 0 every decision and random draw equals the earlier code (tested).
+The other episodic walkers still refuse noisy dynamics.
+
+**S4. Failure probability of the evaluated stream.** A walker now receives the
+failure probability of the stream it plays (an evaluation variant can change
+it); before, it received the training stream's value. No recorded stage varied
+it through a variant, so no recorded result is affected.
+
+**S5. TechTree (studies U and L).** A separate environment
+(`src/hypergraph_agent/techtree/`) in which useful actions are secret
+sequences of listed primitives and concepts unlock further ones. Sequence
+lengths grow linearly with the public level (doubling would make flat worlds
+unsearchable); one press may fire several concepts; a discovery reveals its
+sequence exactly, so promotion needs no admission gate. Agents hold only a
+public facade of the environment, and a source check over the agent modules
+excludes introspection.
+
+**S6. Lazy loading of study M's agents.** `evaluation/walkers.make_walker`
+imports `agents/markov.py` only for a strategy that is not a walker strategy,
+and the two name sets may not overlap, so the walker studies run without that
+module.
+
+**S7. Pairwise evidence (study M).** The pairwise representation stores one
+number per (recipe, candidate) edge: exact eliminations and forced edges where
+a single observation settles an edge, and otherwise blame spread evenly over
+the open edges of a failure; a failure is summarized once and never
+re-attributed, since keeping it would need the stored clause, a hyperedge.
+Within an episode both pairwise selectors apply the same per-edge marks after
+a refutation, so the two pair cells differ only in the selector.
+
 ## Not implemented (raise or are absent by design)
 
 Within-episode hard routing; relation-local recurrent memory; the continual

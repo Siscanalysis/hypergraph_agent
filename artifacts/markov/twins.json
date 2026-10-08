@@ -1,0 +1,813 @@
+{
+ "structural": {
+  "one_triple": {
+   "clique_edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     18
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     18
+    ],
+    [
+     2,
+     18
+    ]
+   ],
+   "clique_ppr": [
+    0.220779221,
+    0.220779221,
+    0.220779221
+   ],
+   "star_ppr": [
+    0.097635135,
+    0.097635135,
+    0.097635135
+   ],
+   "h_add_goal": 4,
+   "cheapest_plan": 5,
+   "cheapest_bases": 3
+  },
+  "three_pairs": {
+   "clique_edges": [
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     18
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     18
+    ],
+    [
+     2,
+     18
+    ]
+   ],
+   "clique_ppr": [
+    0.220779221,
+    0.220779221,
+    0.220779221
+   ],
+   "star_ppr": [
+    0.086786787,
+    0.086786787,
+    0.086786787
+   ],
+   "h_add_goal": 3,
+   "cheapest_plan": 4,
+   "cheapest_bases": 2
+  },
+  "clique_equal": true,
+  "star_differs": true,
+  "plans_differ": true
+ },
+ "behavioural": {
+  "edge": "(ingot recipe, ore)",
+  "schedule": [
+   "brute_force",
+   "brute_force",
+   "omit_ore_stone",
+   "omit_stone"
+  ],
+  "stages": {
+   "after_brute_force": {
+    "worlds": {
+     "A": {
+      "goal_outcomes": [
+       true,
+       true
+      ],
+      "scores": {
+       "posterior": 0.390244,
+       "andor": 0.390244,
+       "pair_weight": 0.390244,
+       "random": 0.0,
+       "star_ppr:recipe@0.15": 0.041285,
+       "star_ppr:effect@0.15": 0.021594,
+       "star_ppr:goal@0.15": 0.008095,
+       "fact_ppr:effect@0.15": 0.061372
+      },
+      "order": {
+       "posterior": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "andor": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "pair_weight": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "random": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:recipe@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:effect@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:goal@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "fact_ppr:effect@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ]
+      }
+     },
+     "B": {
+      "goal_outcomes": [
+       true,
+       true
+      ],
+      "scores": {
+       "posterior": 0.390244,
+       "andor": 0.390244,
+       "pair_weight": 0.390244,
+       "random": 0.0,
+       "star_ppr:recipe@0.15": 0.041285,
+       "star_ppr:effect@0.15": 0.021594,
+       "star_ppr:goal@0.15": 0.008095,
+       "fact_ppr:effect@0.15": 0.061372
+      },
+      "order": {
+       "posterior": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "andor": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "pair_weight": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "random": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:recipe@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:effect@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:goal@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "fact_ppr:effect@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ]
+      }
+     }
+    },
+    "observations_identical": true,
+    "ranking_differs": {
+     "posterior": false,
+     "andor": false,
+     "pair_weight": false,
+     "random": false,
+     "star_ppr:recipe@0.15": false,
+     "star_ppr:effect@0.15": false,
+     "star_ppr:goal@0.15": false,
+     "fact_ppr:effect@0.15": false
+    },
+    "score_differs": {
+     "posterior": "False",
+     "andor": false,
+     "pair_weight": false,
+     "random": false,
+     "star_ppr:recipe@0.15": false,
+     "star_ppr:effect@0.15": false,
+     "star_ppr:goal@0.15": false,
+     "fact_ppr:effect@0.15": false
+    }
+   },
+   "after_omission": {
+    "worlds": {
+     "A": {
+      "goal_outcomes": [
+       true,
+       true,
+       false
+      ],
+      "scores": {
+       "posterior": 0.621212,
+       "andor": 0.621212,
+       "pair_weight": 0.512195,
+       "random": 0.0,
+       "star_ppr:recipe@0.15": 0.052632,
+       "star_ppr:effect@0.15": 0.02742,
+       "star_ppr:goal@0.15": 0.010102,
+       "fact_ppr:effect@0.15": 0.061372
+      },
+      "order": {
+       "posterior": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "andor": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "pair_weight": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "random": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:recipe@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:effect@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:goal@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "fact_ppr:effect@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ]
+      }
+     },
+     "B": {
+      "goal_outcomes": [
+       true,
+       true,
+       false
+      ],
+      "scores": {
+       "posterior": 0.621212,
+       "andor": 0.621212,
+       "pair_weight": 0.512195,
+       "random": 0.0,
+       "star_ppr:recipe@0.15": 0.052632,
+       "star_ppr:effect@0.15": 0.02742,
+       "star_ppr:goal@0.15": 0.010102,
+       "fact_ppr:effect@0.15": 0.061372
+      },
+      "order": {
+       "posterior": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "andor": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "pair_weight": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "random": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:recipe@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:effect@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:goal@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "fact_ppr:effect@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ]
+      }
+     }
+    },
+    "observations_identical": true,
+    "ranking_differs": {
+     "posterior": false,
+     "andor": false,
+     "pair_weight": false,
+     "random": false,
+     "star_ppr:recipe@0.15": false,
+     "star_ppr:effect@0.15": false,
+     "star_ppr:goal@0.15": false,
+     "fact_ppr:effect@0.15": false
+    },
+    "score_differs": {
+     "posterior": "False",
+     "andor": false,
+     "pair_weight": false,
+     "random": false,
+     "star_ppr:recipe@0.15": false,
+     "star_ppr:effect@0.15": false,
+     "star_ppr:goal@0.15": false,
+     "fact_ppr:effect@0.15": false
+    }
+   },
+   "after_probe": {
+    "worlds": {
+     "A": {
+      "goal_outcomes": [
+       true,
+       true,
+       false,
+       true
+      ],
+      "scores": {
+       "posterior": 1.0,
+       "andor": 1.0,
+       "pair_weight": 0.512195,
+       "random": 0.0,
+       "star_ppr:recipe@0.15": 0.052972,
+       "star_ppr:effect@0.15": 0.028092,
+       "star_ppr:goal@0.15": 0.011158,
+       "fact_ppr:effect@0.15": 0.062898
+      },
+      "order": {
+       "posterior": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "andor": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "pair_weight": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "random": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:recipe@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:effect@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:goal@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "fact_ppr:effect@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ]
+      }
+     },
+     "B": {
+      "goal_outcomes": [
+       true,
+       true,
+       false,
+       false
+      ],
+      "scores": {
+       "posterior": 0.390244,
+       "andor": 0.390244,
+       "pair_weight": 0.512195,
+       "random": 0.0,
+       "star_ppr:recipe@0.15": 0.052364,
+       "star_ppr:effect@0.15": 0.026888,
+       "star_ppr:goal@0.15": 0.009266,
+       "fact_ppr:effect@0.15": 0.061372
+      },
+      "order": {
+       "posterior": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "andor": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "pair_weight": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "random": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:recipe@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:effect@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "star_ppr:goal@0.15": [
+        [
+         "ore"
+        ],
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "sand",
+         "wood"
+        ]
+       ],
+       "fact_ppr:effect@0.15": [
+        [
+         "clay",
+         "fiber",
+         "fuel",
+         "ore",
+         "sand",
+         "wood"
+        ]
+       ]
+      }
+     }
+    },
+    "observations_identical": false,
+    "ranking_differs": {
+     "posterior": true,
+     "andor": true,
+     "pair_weight": false,
+     "random": false,
+     "star_ppr:recipe@0.15": false,
+     "star_ppr:effect@0.15": false,
+     "star_ppr:goal@0.15": false,
+     "fact_ppr:effect@0.15": false
+    },
+    "score_differs": {
+     "posterior": "True",
+     "andor": true,
+     "pair_weight": false,
+     "random": false,
+     "star_ppr:recipe@0.15": true,
+     "star_ppr:effect@0.15": true,
+     "star_ppr:goal@0.15": true,
+     "fact_ppr:effect@0.15": true
+    }
+   }
+  }
+ }
+}
