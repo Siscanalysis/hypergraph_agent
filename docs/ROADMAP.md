@@ -60,6 +60,15 @@ control and a cost estimate before it is built.
     learned controllers rather than exact sequences, and make the adaptive arm
     reach its margin.
 
+6h. **A graph of states with a learned action distribution in each node.** Map
+    the state to a node of a graph (states or abstract states, edges = observed
+    transitions) whose node holds a learned probability distribution over actions,
+    and act by sampling from it (a policy graph, as in finite-state controllers for
+    partially observed problems). Candidates: TechTree held-set cells (the cells of
+    the archive baseline), the walker's hypothesis nodes (amortizing the planner).
+    Test against the model-based agents and the learning baselines, with the same
+    graph and uniform action distributions as the control.
+
 ## Later extensions
 
 6. **Learned proposals and termination.** Replace fragment mining and
