@@ -22,7 +22,6 @@ and critic, 512-sample minibatches): with the default architecture, an LSTM of
 sb3-contrib's per-step sequence loop ran at about 3-10 training interactions
 per second in development, too slow for the planned budgets. A
 learner may add ``rnd``: random network distillation (Burda et al., 2018) as a
-learner may add ``rnd``: random network distillation (Burda et al., 2018) as a
 reward wrapper around the vectorized environment, since neither library
 ships a maintained implementation. A fixed random target network and a
 trained predictor (two-layer MLPs on observations normalized by running

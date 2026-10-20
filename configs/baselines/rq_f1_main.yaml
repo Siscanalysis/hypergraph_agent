@@ -5,8 +5,10 @@
 # (5 seeds x 10 worlds x 16 episodes, the stream layout of study R) at every budget,
 # and on x_rq_val (2 seeds x 10 worlds) at the largest budget to select the best
 # learner. The repository's agents play the same test streams. Learner params are the
-# library defaults until the tuning stage writes its selection in (run.tuning_record).
+# library defaults until apply-tuning writes the tuning selection in (run.tuning_record).
 run: {name: x-rq-main, allocation: x_main, ledger: runs/X-ledger.json, requires_flag: true,
+      tuning_from: configs/baselines/tune_rq_f1.yaml,
+      tuning_map: {mppo: mppo, ppo: ppo, rppo: rppo, mppo_rnd: mppo_rnd},  # tuning group -> learner id
       tuning_record: null}
 ledger:
   allocations: {dev: 300000, x_tune: 4500000, x_main: 40000000}

@@ -33,15 +33,16 @@ and the hash; an incomplete run is repeated as a new run.
 from __future__ import annotations
 
 import json
-import os
+import sys
 import time
+import traceback
 from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
 
 from ..envs.generator import derive_seed
-from ..training.budget import BudgetMeter, SessionLedger, _FileLock
+from ..training.budget import BudgetMeter, SessionLedger
 from ..training.run import RunContext
 from .agents import agent_kind, play_recipequest, play_techtree, row
 from .config import agent_hash, eval_hash, train_hash
@@ -139,43 +140,9 @@ def plan(cfg: dict, **subset) -> dict:
     }
 
 
-class SharedLedger(SessionLedger):
-    """``SessionLedger`` for several processes on Windows: there ``os.replace`` fails with a
-    PermissionError while another process has the ledger file open for reading, and a read can
-    meet the file mid-replacement. Reads and the final replace are retried (for up to a minute);
-    the update itself stays under the ledger's lock file, so no count is lost or doubled."""
-
-    RETRIES, PAUSE = 1200, 0.05
-
-    def _refresh(self):
-        for _ in range(self.RETRIES):
-            try:
-                return super()._refresh()
-            except (PermissionError, json.JSONDecodeError):
-                time.sleep(self.PAUSE)
-        return super()._refresh()
-
-    def _mutate(self, fn):
-        if self.path is None:
-            fn(self.state)
-            return
-        with _FileLock(self.path):
-            self._refresh()
-            fn(self.state)
-            tmp = self.path.with_suffix(".tmp")
-            tmp.write_text(json.dumps(self.state, indent=1))
-            for _ in range(self.RETRIES):
-                try:
-                    os.replace(tmp, self.path)
-                    return
-                except PermissionError:
-                    time.sleep(self.PAUSE)
-            os.replace(tmp, self.path)
-
-
 def make_ledger(cfg: dict) -> SessionLedger:
     led = cfg["ledger"]
-    ledger = SharedLedger(cfg["run"]["ledger"], dict(led["allocations"]), led["adaptive_cap"],
+    ledger = SessionLedger(cfg["run"]["ledger"], dict(led["allocations"]), led["adaptive_cap"],
                           led["reporting_cap"])
     if cfg["run"]["allocation"] not in ledger.state["allocations"]:
         raise KeyError(f"allocation {cfg['run']['allocation']!r} is not in {cfg['run']['ledger']}")
@@ -305,10 +272,21 @@ def run_eval(cfg: dict, job: dict, train_run: dict, ledger: SessionLedger, stamp
     model = load_model(ln["algo"], ckpt)
     model.set_random_seed(derive_seed("x_eval", cfg["setting"]["name"], seed, budget, split, mode) % 2 ** 31)
     actor = Actor(model, ln["algo"], deterministic=mode == "deterministic")
-    fam, layout, sp = cfg["setting"]["family"], layout_for(cfg), cfg[split]
     purpose = "exploration" if kind == "adaptive" else "reporting_eval"
     rows = []
     t0 = time.perf_counter()
+    try:
+        _play_split(cfg, ln, seed, split, mode, budget, actor, meter, purpose, rows, ctx)
+    except Exception as exc:
+        meter.flush()
+        ctx.finish("failed", error=repr(exc), interactions={"physical": meter.used, "kind": kind})
+        raise
+    _finish(ctx, ledger, meter, kind, t0, summary=summarize(rows, cfg), checkpoint=str(ckpt))
+    return {"run_id": run_id, "rows": len(rows), "interactions": meter.used}
+
+
+def _play_split(cfg, ln, seed, split, mode, budget, actor, meter, purpose, rows, ctx):
+    fam, layout, sp = cfg["setting"]["family"], layout_for(cfg), cfg[split]
     for s in sp["seeds"]:
         src = evaluation_source(fam, cfg["setting"], sp["namespace"], sp["base_seed"], s, sp["n_worlds"],
                                 sp["episodes_per_world"])
@@ -335,8 +313,6 @@ def run_eval(cfg: dict, job: dict, train_run: dict, ledger: SessionLedger, stamp
             done = False
             while not done:
                 obs, _, done, _, _ = env.step(actor.act(obs, env.action_masks()))
-    _finish(ctx, ledger, meter, kind, t0, summary=summarize(rows, cfg), checkpoint=str(ckpt))
-    return {"run_id": run_id, "rows": len(rows), "interactions": meter.used}
 
 
 def run_agent(cfg: dict, job: dict, ledger: SessionLedger, stamp: str) -> dict:
@@ -413,7 +389,10 @@ def _worker(args):
 
 
 def run_study(cfg: dict, resume: bool = False, workers: int = 1, stamp: str | None = None,
-              **subset) -> list[dict]:
+              failures_out: list | None = None, on_result=None, **subset) -> list[dict]:
+    """Runs the missing jobs. A failing job is logged and the others continue; the failures go to
+    ``failures_out`` when given (the CLI then exits non-zero), else a RuntimeError is raised at the end.
+    ``on_result`` receives each finished task's results as they arrive."""
     js = jobs(cfg, **subset)
     done = completed(cfg["run"]["runs_dir"], cfg["run"]["name"])
     planned = {j["hash"] for k in js for j in js[k]}
@@ -439,15 +418,42 @@ def run_study(cfg: dict, resume: bool = False, workers: int = 1, stamp: str | No
             continue
         tasks.append(("chain", (cfg, tj, pair["evals"], stamp, done)))
     tasks += [("agent", (cfg, j, stamp)) for j in js["agent"] if j["hash"] not in done]
-    results = []
+    results, failures = [], []
+
+    def failed(task, exc_text):
+        kind, payload = task
+        job = payload[1]
+        what = job["learner"]["id"] if "learner" in job else job["agent"]
+        failures.append({"task": kind, "arm": what, "seed": job["seed"], "error": exc_text})
+        print(f"[X] {kind} {what} seed {job['seed']} failed:\n{exc_text}", file=sys.stderr, flush=True)
+
     if workers <= 1:
         for t in tasks:
-            results += _worker(t)
-    else:
-        from concurrent.futures import ProcessPoolExecutor
+            try:
+                got = _worker(t)
+            except Exception:
+                failed(t, traceback.format_exc())
+                continue
+            results += got
+            if on_result:
+                on_result(got)
+    else:  # one failing job never cancels the others; results are kept as they arrive
+        from concurrent.futures import ProcessPoolExecutor, as_completed
         with ProcessPoolExecutor(max_workers=workers) as pool:
-            for res in pool.map(_worker, tasks):
-                results += res
+            futures = {pool.submit(_worker, t): t for t in tasks}
+            for fut in as_completed(futures):
+                try:
+                    got = fut.result()
+                except Exception:
+                    failed(futures[fut], traceback.format_exc())
+                    continue
+                results += got
+                if on_result:
+                    on_result(got)
+    if failures_out is not None:
+        failures_out.extend(failures)
+    elif failures:
+        raise RuntimeError(f"{len(failures)} of {len(tasks)} jobs failed: {failures}")
     return results
 
 

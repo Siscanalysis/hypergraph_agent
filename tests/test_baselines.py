@@ -720,11 +720,11 @@ def test_selection_ties_follow_the_config_order_then_the_deterministic_mode():
         "deterministic"
 
 
-def test_shared_ledger_retries_a_replace_blocked_by_a_reader(tmp_path, monkeypatch):
-    import os
-    from hypergraph_agent.baselines import runner
-    led = runner.SharedLedger(tmp_path / "L.json", {"dev": 100}, 100, 100)
-    real, calls = os.replace, {"n": 0}
+def test_session_ledger_retries_a_replace_blocked_by_a_reader(tmp_path, monkeypatch):
+    from hypergraph_agent.baselines.runner import make_ledger
+    from hypergraph_agent.training import budget
+    led = SessionLedger(tmp_path / "L.json", {"dev": 100}, 100, 100)
+    real, calls = budget.os.replace, {"n": 0}
 
     def flaky(src, dst):
         calls["n"] += 1
@@ -732,11 +732,152 @@ def test_shared_ledger_retries_a_replace_blocked_by_a_reader(tmp_path, monkeypat
             raise PermissionError("held open by a reader")
         return real(src, dst)
 
-    monkeypatch.setattr(runner.os, "replace", flaky)
-    monkeypatch.setattr(runner.SharedLedger, "PAUSE", 0.0)
+    monkeypatch.setattr(budget.os, "replace", flaky)
     led.register_run("r", "dev", 10)
     led.record("r", "dev", 3, {"exploration": 3}, "adaptive")
     assert calls["n"] == 4 and json.loads((tmp_path / "L.json").read_text())["adaptive_total"] == 3
+    assert type(make_ledger(unit_config(tmp_path))) is SessionLedger
+
+
+def test_a_failing_job_does_not_stop_the_others(tmp_path, monkeypatch):
+    from hypergraph_agent.baselines import runner
+    cfg = unit_config(tmp_path, agents=["maximal", "random"])
+    real = runner.run_agent
+
+    def boom(cfg, job, ledger, stamp):
+        if job["agent"] == "maximal":
+            raise RuntimeError("boom")
+        return real(cfg, job, ledger, stamp)
+
+    monkeypatch.setattr(runner, "run_agent", boom)
+    failures, seen = [], []
+    out = runner.run_study(cfg, failures_out=failures, on_result=seen.append, agents={"maximal", "random"},
+                           learners=["none"])
+    assert [f["arm"] for f in failures] == ["maximal"] and [r["job"] for r in out] == ["agent"]
+    assert len(seen) == 1
+    with pytest.raises(RuntimeError):
+        runner.run_study(cfg, agents={"maximal"}, learners=["none"])
+
+
+# ----------------------------------------------------------- completeness
+def test_analysis_refuses_partial_data(unit_study, tmp_path):
+    from hypergraph_agent.baselines.analysis import analyse_rows, completeness, write_report
+    cfg, _, _ = unit_study
+    assert completeness(cfg)["complete"]
+    more = {**cfg, "learners": [*cfg["learners"], xconfig._learner({"id": "late", "algo": "ppo"})]}
+    comp = completeness(more)
+    assert not comp["complete"] and comp["missing"] == 3  # one training and two evaluation jobs
+    summary = write_report(more, tmp_path / "partial")
+    assert summary["selection"]["best_learner"] is None
+    assert summary["tests"] and all(t["verdict"] == "incomplete" for t in summary["tests"])
+    # a learner cell recorded for fewer training seeds than declared has no units
+    worlds = ["W0", "W1"]
+    same = {w: 20 for w in worlds}
+    rows = _rows("a", worlds, same, same, "learner", 0, 64) + _rows("maximal", worlds, same, same)
+    acfg = {"analysis": {"late_from": 2, "n_boot": 100, "boot_seed": 0, "select_metric": "cost_ratio_late",
+                         "select_split": "test", "tests": [{"name": "t", "a": "maximal", "b": "best_learner",
+                                                            "metric": "cost_ratio_late"}]},
+            "train": {"budgets": [64], "seeds": [0, 1]},
+            "learners": [{"id": "a", "modes": ["deterministic"]}]}
+    out = analyse_rows(acfg, rows)
+    assert out["selection"]["best_learner"] is None and out["tests"][0]["verdict"] == "incomplete"
+    # a measurement config never falls back to the test split and needs every learner on validation
+    rows2 = _rows("a", worlds, same, same, "learner", 0, 64)
+    rows2 += _rows("b", worlds, same, same, "learner", 0, 64)
+    rows2 += _rows("a", worlds, same, same, "learner", 0, 64, split="validation")
+    mcfg = {**acfg, "run": {"requires_flag": True}, "train": {"budgets": [64], "seeds": [0]},
+            "analysis": {**acfg["analysis"], "select_split": "validation"},
+            "learners": [{"id": "a", "modes": ["deterministic"]}, {"id": "b", "modes": ["deterministic"]}]}
+    sel = analyse_rows(mcfg, rows2)["selection"]
+    assert sel["best_learner"] is None and sel["split"] == "validation" and "incomplete" in sel["note"]
+    sel = analyse_rows(mcfg, [r for r in rows2 if r["split"] == "test"])["selection"]
+    assert sel["best_learner"] is None and sel["split"] == "validation"
+
+
+# ------------------------------------------------------------- tuning
+def test_tuning_tie_rules():
+    from hypergraph_agent.baselines.analysis import choose
+    from hypergraph_agent.baselines.tuning import recompute_choice
+    order = {"zeta": 0, "alpha": 1}
+    same = {("alpha", "deterministic"): 1.0, ("zeta", "stochastic"): 1.0, ("zeta", "deterministic"): 1.0}
+    assert choose(same, order, 1.0) == ("zeta", "deterministic")
+    assert choose({**same, ("alpha", "stochastic"): 0.5}, order, 1.0) == ("alpha", "stochastic")
+    higher = {("zeta", "stochastic"): 0.2, ("alpha", "deterministic"): 0.9}
+    assert choose(higher, order, -1.0) == ("alpha", "deterministic")  # success: higher is better
+    tune = {"learners": [{"id": "zeta"}, {"id": "alpha"}]}
+    tuning = {"metric": "steps_late", "groups": {"g": {"candidates": {
+        "alpha@deterministic": 3.0, "zeta@stochastic": 3.0, "zeta@deterministic": 4.0}}}}
+    assert recompute_choice(tuning, tune) == {"g": ("zeta", "stochastic")}
+
+
+def _tuning_pair(tmp_path):
+    led = {"allocations": {"dev": 100_000, "x_main": 100_000}, "adaptive_cap": 200_000,
+           "reporting_cap": 200_000}
+    base = {"ledger": led, "setting": {"name": "rq_unit", "family": "recipequest", "tasks": F1_TASKS},
+            "agents": [], "analysis": {"late_from": 1, "select_split": "test", "tests": []}}
+    run = {"ledger": str(tmp_path / "X-ledger.json"), "runs_dir": str(tmp_path / "runs")}
+    params = {"n_steps": 16, "batch_size": 16}
+    both = ["deterministic", "stochastic"]
+    tune = {**base, "run": {**run, "name": "x-unit-tune", "allocation": "dev"},
+            "train": {"namespace": "x_unit_tune_train_dev", "base_seed": 0, "seeds": [0], "budgets": [32],
+                      "n_envs": 2, "episodes_per_world": 2},
+            "test": {"namespace": "x_unit_tune_eval_dev", "base_seed": 0, "seeds": [0], "n_worlds": 1,
+                     "episodes_per_world": 2},
+            "learners": [{"id": "m", "group": "g", "algo": "maskable_ppo", "params": params, "modes": both},
+                         {"id": "m.ent", "group": "g", "algo": "maskable_ppo",
+                          "params": {**params, "ent_coef": 0.01}, "modes": both},
+                         {"id": "r", "group": "g_rnd", "algo": "maskable_ppo", "params": params,
+                          "rnd": {"beta": 0.1, "update_every": 4, "batch": 8}, "modes": both}]}
+    tune_path = _write(tmp_path, tune, "tune.yaml")
+    meas = {**base, "run": {**run, "name": "x-unit-main", "allocation": "x_main", "requires_flag": True,
+                            "tuning_from": str(tune_path), "tuning_map": {"g": "m", "g_rnd": "m_rnd"},
+                            "tuning_record": None},
+            "train": {"namespace": "x_unit_train", "base_seed": 0, "seeds": [0], "budgets": [32],
+                      "n_envs": 2, "episodes_per_world": 2},
+            "test": {"namespace": "x_unit_test", "base_seed": 0, "seeds": [0], "n_worlds": 1,
+                     "episodes_per_world": 2},
+            "learners": [{"id": "m", "algo": "maskable_ppo", "params": params},
+                         {"id": "m_rnd", "group": "maskable_ppo_rnd", "algo": "maskable_ppo",
+                          "params": params, "rnd": {"beta": 0.01}}]}
+    return tune_path, _write(tmp_path, meas, "main.yaml")
+
+
+def test_apply_tuning_refuses_incomplete_tuning_then_writes_a_verified_record(tmp_path):
+    from hypergraph_agent.baselines.__main__ import main
+    from hypergraph_agent.baselines.runner import run_study
+    from hypergraph_agent.baselines.tuning import TuningError, apply_tuning, verify_tuning
+    tune_path, main_path = _tuning_pair(tmp_path)
+    before = main_path.read_text()
+    with pytest.raises(TuningError):
+        apply_tuning(main_path, tmp_path / "art")  # no tuning run yet
+    tune = xconfig.load_config(tune_path)
+    run_study(tune, learners=["m", "m.ent"])
+    with pytest.raises(TuningError):
+        apply_tuning(main_path, tmp_path / "art")  # group g_rnd has no run
+    assert main_path.read_text() == before
+    with pytest.raises(SystemExit):  # no record: the measurement run refuses
+        main(["run", "--config", str(main_path), "--allow-measurement"])
+    run_study(tune)
+    out = apply_tuning(main_path, tmp_path / "art")
+    assert out["status"] == "applied" and set(out["choice"]) == {"g", "g_rnd"}
+    cfg = xconfig.load_config(main_path)
+    assert cfg["run"]["tuning_record"]["sha256"] == out["sha256"]
+    assert verify_tuning(cfg) == out["choice"]
+    m_rnd = next(ln for ln in cfg["learners"] if ln["id"] == "m_rnd")
+    assert m_rnd["rnd"]["beta"] == 0.1 and m_rnd["group"] == "maskable_ppo_rnd" and len(m_rnd["modes"]) == 1
+    assert apply_tuning(main_path, tmp_path / "art")["status"] == "already applied"
+    text = main_path.read_text()
+    assert all(len(line) <= 110 for line in text.splitlines() if line.startswith(("  - ", "    ")))
+    flipped = text.replace("deterministic", "@D@").replace("stochastic", "deterministic").replace("@D@",
+                                                                                                "stochastic")
+    main_path.write_text(flipped)
+    with pytest.raises(TuningError):
+        verify_tuning(xconfig.load_config(main_path))  # learners differ from the record
+    main_path.write_text(text)
+    frozen = pathlib.Path(out["summary"])
+    frozen.write_text(frozen.read_text() + " ")
+    with pytest.raises(TuningError):
+        verify_tuning(xconfig.load_config(main_path))  # the record's digest no longer matches
 
 
 def test_baselines_lines_are_short():

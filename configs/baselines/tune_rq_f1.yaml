@@ -2,7 +2,7 @@
 # rq_f1. Every candidate trains once (training seed 0) for 100,000 interactions on
 # x_rq_tune_train_dev and is evaluated in both action modes on x_rq_tune_eval_dev (2 seeds x
 # 10 worlds x 16 episodes). Per learner group, the (candidate, mode) with the lowest mean late
-# cost ratio is written into rq_f1_main.yaml by a dated amendment (run.tuning_record); ties go
+# cost ratio is written into rq_f1_main.yaml by apply-tuning (no human decision) (run.tuning_record); ties go
 # to the earlier candidate in this list, then to the deterministic mode.
 run: {name: x-rq-tune, allocation: x_tune, ledger: runs/X-ledger.json}
 ledger:

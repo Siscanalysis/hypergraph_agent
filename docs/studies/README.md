@@ -14,7 +14,7 @@ allocation, and are reported as such.
 | [R2](R2_boundary.md) | Which property of the deeper family breaks study R's result: depth, alternatives, pool size, a second item input or the budget? | RecipeQuest, goal-only items | `runs/R2-ledger.json` | `configs/boundary/` |
 | [U2](U2_techtree_baselines.md) | How does the pooled explorer compare with generic exploration baselines (iterated width, flat macro expansion, an archive)? | TechTree | `runs/U2-ledger.json` | `configs/unlock2/` |
 | [P](P_imperfect_skills.md) | Does promotion still pay when discoveries are executed by imperfect learned skills, and does an admission gate help? | TechTree | `runs/P-ledger.json` | `configs/skills/` |
-| [X](X_open_source_baselines.md) | How do open-source reinforcement-learning learners compare with the repository's agents? (protocol in preparation, not yet run) | RecipeQuest, TechTree, benchmarks | `runs/X-ledger.json` | `configs/baselines/` |
+| [X](X_open_source_baselines.md) | How do open-source reinforcement-learning learners compare with the repository's agents? (protocol frozen; tuning and measurement run overnight) | RecipeQuest, TechTree, benchmarks | `runs/X-ledger.json` | `configs/baselines/` |
 
 Each study file has the same sections: question and claim, relation to earlier
 work, protocol (frozen), implementation, results, verdict and limits. Studies

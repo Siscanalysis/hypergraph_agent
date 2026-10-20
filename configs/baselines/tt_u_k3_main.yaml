@@ -4,6 +4,8 @@
 # per world). Test x_tt_u_test: 5 seeds x 6 worlds (the layout of study U); validation
 # x_tt_u_val: 2 seeds x 6 worlds. The repository's arms of that cell play the test stream.
 run: {name: x-ttu-main, allocation: x_main, ledger: runs/X-ledger.json, requires_flag: true,
+      tuning_from: configs/baselines/tune_tt_u_k3.yaml,
+      tuning_map: {mppo: mppo, rppo: rppo, mppo_rnd: mppo_rnd},  # tuning group -> learner id
       tuning_record: null}
 ledger:
   allocations: {dev: 300000, x_tune: 4500000, x_main: 40000000}

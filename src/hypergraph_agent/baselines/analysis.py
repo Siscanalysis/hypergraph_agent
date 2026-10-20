@@ -89,9 +89,10 @@ def learner_arm(row: dict, modes: dict) -> str:
     return f"{row['arm']}@{row['mode']}" if len(modes.get(row["arm"], ())) > 1 else row["arm"]
 
 
-def tables(rows: list[dict], late_from: int) -> dict:
+def tables(rows: list[dict], late_from: int, n_seeds: int | None = None) -> dict:
     """{(arm, budget, split): {"units": {unit: metrics}, "seeds": {seed: {unit: metrics}}}};
-    agents have budget None. A learner's unit metrics are means over its training seeds."""
+    agents have budget None. A learner's unit metrics are means over its training seeds; with
+    ``n_seeds``, a learner cell recorded for fewer training seeds has no units (incomplete)."""
     modes = defaultdict(set)
     for r in rows:
         if r["kind"] == "learner":
@@ -103,6 +104,9 @@ def tables(rows: list[dict], late_from: int) -> dict:
     out = {}
     for key, by_seed in groups.items():
         seeds = {s: world_metrics(rs, late_from) for s, rs in by_seed.items()}
+        if n_seeds is not None and key[1] is not None and len(seeds) != n_seeds:
+            out[key] = {"units": {}, "seeds": seeds, "incomplete": True}
+            continue
         common = set.intersection(*(set(v) for v in seeds.values()))
         units = {}
         for u in sorted(common):
@@ -120,26 +124,46 @@ def _mean(units: dict, metric: str) -> float:
     return float(np.mean(vals)) if vals else float("nan")
 
 
+def planned_arms(cfg: dict) -> list[str]:
+    """Learner arms a config evaluates (``id@mode`` for a learner with more than one mode)."""
+    return [f"{ln['id']}@{m}" if len(ln["modes"]) > 1 else ln["id"]
+            for ln in cfg.get("learners", []) if "modes" in ln for m in ln["modes"]]
+
+
+def choose(scores: dict, order: dict, sign: float):
+    """The ``(learner id, mode)`` key with the best score (``sign`` -1 when higher is better); ties go to
+    the earlier learner in the config (``order``), then to the deterministic mode."""
+    def rank(k):
+        return sign * scores[k], order.get(k[0], 10 ** 6), k[1] != "deterministic", k
+    return min(scores, key=rank) if scores else None
+
+
 def select_best(tabs: dict, cfg: dict, top: int) -> dict:
+    """A measurement config (``run.requires_flag``) never falls back to another split and needs a finite
+    score for every planned learner arm, else it has no best learner. A development config without
+    validation rows selects on the test split (flagged)."""
     a = cfg["analysis"]
     metric, split = a["select_metric"], a.get("select_split", "validation")
     configured = split
+    strict = bool(cfg.get("run", {}).get("requires_flag"))
     learners = sorted({arm for (arm, b, sp) in tabs if b is not None})
-    if split == "validation" and not any((arm, top, split) in tabs for arm in learners):
+    if strict:
+        learners = sorted(set(learners) | set(planned_arms(cfg)))
+    elif split == "validation" and not any((arm, top, split) in tabs for arm in learners):
         split = "test"  # no validation rows (development configs): select on the test split, flagged
     scores = {arm: _mean(tabs[(arm, top, split)]["units"], metric)
               for arm in learners if (arm, top, split) in tabs}
     sign = -1.0 if metric.startswith("success") else 1.0
     valid = {k: v for k, v in scores.items() if np.isfinite(v)}
     order = {ln["id"]: i for i, ln in enumerate(cfg.get("learners", []))}
-
-    def rank(k):  # ties: the earlier learner in the config, then the deterministic mode
-        arm, _, mode = k.partition("@")
-        return sign * valid[k], order.get(arm, 10 ** 6), mode == "stochastic", k
-
-    best = min(valid, key=rank) if valid else None
-    return {"metric": metric, "split": split, "budget": top, "scores": scores, "best_learner": best,
-            "note": "selection split differs from the configured one" if split != configured else None}
+    out = {"metric": metric, "split": split, "budget": top, "scores": scores, "best_learner": None,
+           "note": "selection split differs from the configured one" if split != configured else None}
+    missing = sorted(set(learners) - set(valid))
+    if strict and missing:
+        return {**out, "note": f"incomplete: no {split} score for {missing}"}
+    keyed = {(k.partition("@")[0], k.partition("@")[2] or "deterministic"): k for k in valid}
+    best = choose({kk: valid[k] for kk, k in keyed.items()}, order, sign)
+    return {**out, "best_learner": keyed[best] if best else None}
 
 
 def select_by_group(tabs: dict, rows: list[dict], cfg: dict, top: int) -> dict:
@@ -150,7 +174,10 @@ def select_by_group(tabs: dict, rows: list[dict], cfg: dict, top: int) -> dict:
     metric, split = a["select_metric"], a.get("select_split", "validation")
     order = {ln["id"]: i for i, ln in enumerate(cfg.get("learners", []))}
     sign = -1.0 if metric.startswith("success") else 1.0
-    cands = {}
+    # planned candidates: every declared mode of every learner of the config
+    cands = {(ln["id"], m): ln["group"] for ln in cfg.get("learners", []) if "group" in ln
+             for m in ln["modes"]}
+    planned = set(cands)
     for r in rows:
         if r["kind"] == "learner":
             cands[(r["arm"], r["mode"])] = r["group"]
@@ -160,20 +187,19 @@ def select_by_group(tabs: dict, rows: list[dict], cfg: dict, top: int) -> dict:
     out = defaultdict(dict)
     for (arm, mode), group in cands.items():
         key = (f"{arm}@{mode}" if len(modes[arm]) > 1 else arm, top, split)
-        if key in tabs:
-            out[group][(arm, mode)] = _mean(tabs[key]["units"], metric)
-    chosen = {}
+        out[group][(arm, mode)] = _mean(tabs[key]["units"], metric) if key in tabs else float("nan")
+    chosen, incomplete = {}, {}
     for group, scores in out.items():
         valid = {k: v for k, v in scores.items() if np.isfinite(v)}
-
-        def rank(k, valid=valid):
-            return sign * valid[k], order.get(k[0], 10 ** 6), k[1] != "deterministic"
-
+        lacking = sorted(f"{k[0]}@{k[1]}" for k in scores if k not in valid and k in planned)
+        if lacking:  # a group is chosen only when every planned candidate has a full result
+            incomplete[group] = lacking
+            continue
         if valid:
-            arm, mode = min(valid, key=rank)
+            arm, mode = choose(valid, order, sign)
             chosen[group] = {"learner": arm, "mode": mode, "score": valid[(arm, mode)],
                              "candidates": {f"{k[0]}@{k[1]}": v for k, v in sorted(scores.items())}}
-    return {"metric": metric, "split": split, "budget": top, "groups": chosen}
+    return {"metric": metric, "split": split, "budget": top, "groups": chosen, "incomplete": incomplete}
 
 
 def _verdict(ci, expect: str) -> str:
@@ -239,15 +265,25 @@ def learning_curves(tabs: dict, metrics=CURVE_METRICS, split: str = "test") -> d
 
 
 def analyse_rows(cfg: dict, rows: list[dict], expected: int | None = None,
-                 selection: dict | None = None) -> dict:
+                 selection: dict | None = None, completeness: dict | None = None) -> dict:
     """``selection``: a best-learner selection made elsewhere (an evaluation-only config uses that of the
-    config whose checkpoints it evaluates)."""
+    config whose checkpoints it evaluates). ``completeness`` (``completeness()``): while a planned job
+    has no completed run there is no best learner or tuning choice and every verdict is ``incomplete``."""
     late_from = cfg["analysis"]["late_from"]
     top = max(cfg["train"]["budgets"])
-    tabs = tables(rows, late_from)
+    seeds = cfg["train"].get("seeds")
+    tabs = tables(rows, late_from, len(seeds) if seeds else None)
     sel = selection or select_best(tabs, cfg, top)
+    tuning = select_by_group(tabs, rows, cfg, top)
+    partial = completeness is not None and not completeness["complete"]
+    if partial:
+        reason = f"{completeness['missing']} of {completeness['planned']} planned jobs have no completed run"
+        sel = {**sel, "best_learner": None, "note": f"incomplete: {reason}"}
+        tuning = {**tuning, "groups": {}, "incomplete": {"*": reason}}
     tests = [run_test(t, tabs, sel["best_learner"], cfg, top, expected) for t in cfg["analysis"]["tests"]]
-    return {"selection": sel, "tuning": select_by_group(tabs, rows, cfg, top), "tests": tests,
+    if partial:
+        tests = [{**t, "verdict": "incomplete", "reason": reason} for t in tests]
+    return {"selection": sel, "tuning": tuning, "tests": tests, "completeness": completeness,
             "learning_curves": learning_curves(tabs),
             "validation_curves": learning_curves(tabs, split="validation"),
             "cells": {f"{arm}|{b}|{sp}": {"units": len(c["units"]), "training_seeds": sorted(
@@ -378,15 +414,30 @@ def figure(summary: dict, path: Path) -> str | None:
     return str(path)
 
 
+def completeness(cfg: dict) -> dict:
+    """Planned jobs (``runner.jobs``) of a config and how many have no completed run."""
+    from .runner import completed, jobs
+    planned = {j["hash"] for js in jobs(cfg).values() for j in js}
+    missing = len(planned - set(completed(cfg["run"]["runs_dir"], cfg["run"]["name"])))
+    return {"planned": len(planned), "missing": missing, "complete": missing == 0}
+
+
 def source_selection(cfg: dict) -> dict | None:
-    """The best learner of the config named by ``run.checkpoints_from`` (from its own runs)."""
+    """The best learner of the config named by ``run.checkpoints_from`` (from its own runs; none while a
+    planned job of that config has no completed run)."""
     if not cfg["run"]["checkpoints_from"]:
         return None
     from .config import load_config
-    src = load_config(cfg["run"]["checkpoints_from"])
+    src = load_config(cfg.get("_source_path") or cfg["run"]["checkpoints_from"])
     rows, _ = collect(src)
     top = max(src["train"]["budgets"])
-    return {**select_best(tables(rows, src["analysis"]["late_from"]), src, top), "source": src["run"]["name"]}
+    tabs = tables(rows, src["analysis"]["late_from"], len(src["train"]["seeds"]))
+    sel = {**select_best(tabs, src, top), "source": src["run"]["name"]}
+    comp = completeness(src)
+    if not comp["complete"]:
+        sel.update(best_learner=None, note=f"incomplete: {comp['missing']} of {comp['planned']} planned "
+                                           f"jobs of {src['run']['name']} have no completed run")
+    return sel
 
 
 def write_report(cfg: dict, out_dir: str | Path) -> dict:
@@ -399,7 +450,8 @@ def write_report(cfg: dict, out_dir: str | Path) -> dict:
                "family": cfg["setting"]["family"],
                "definition": {"late_from": a["late_from"], "unit": "test world",
                               "bootstrap": {"resamples": a["n_boot"], "seed": a["boot_seed"]}},
-               **analyse_rows(cfg, rows, expected, source_selection(cfg)), "bookkeeping": book,
+               **analyse_rows(cfg, rows, expected, source_selection(cfg), completeness(cfg)),
+               "bookkeeping": book,
                "agent_interactions_per_world": agent_interactions_per_world(rows)}
     if cfg["setting"].get("loader") == benchmark_sets.LOADER:
         recs = benchmark_sets.records(cfg["setting"])

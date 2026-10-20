@@ -1,7 +1,8 @@
 # Study X: the repository's agents against open-source reinforcement-learning baselines
 
-Status: draft protocol, not frozen. No tuning or measurement run has been
-made. The development checks listed under Implementation used only the `dev`
+Status: protocol frozen on 2026-10-20 by the commit that freezes this file,
+before any tuning or measurement run; both run from a clean checkout of that
+commit, and the tuning choice is written into its configs mechanically. The development checks listed under Implementation used only the `dev`
 allocation of `runs/X-ledger.json` and namespaces ending in `_dev`; they are
 calibration, not results.
 
@@ -67,7 +68,7 @@ under declared budgets, not which kind of agent is better in general.
   arXiv:1611.05763); random network distillation (Burda et al., ICLR 2019,
   arXiv:1810.12894).
 
-## Protocol (draft, to be frozen)
+## Protocol (frozen)
 
 ### Settings
 
@@ -206,11 +207,21 @@ configs/baselines/tune_<setting>.yaml`, field `tuning`): per learner, the
 (candidate, mode) with the lowest mean of the setting's selection metric over
 the tuning worlds at 100,000 interactions (late cost ratio for `rq_f1`, late
 actions per episode for TechTree); ties go to the earlier candidate, then to
-the deterministic mode. The selected parameters and mode are written into the
-measurement configs by a dated amendment that also sets `run.tuning_record` to
-the tuning analysis; the measurement CLI refuses a config whose
-`tuning_record` is unset. Nothing else changes after the tuning outcome is
-seen.
+the deterministic mode. The amendment is mechanical, with no human decision:
+`python -m hypergraph_agent.baselines apply-tuning --config
+configs/baselines/<setting>_main.yaml` refuses unless every planned tuning job
+has a completed run and every candidate has full results in both modes; it
+then runs that selection, maps each tuning group to a measurement learner
+through the declared `run.tuning_map` (for example tuning group `mppo_rnd` to
+the measurement learner `mppo_rnd`, whose analysed group is
+`maskable_ppo_rnd`), copies the chosen settings and mode into the measurement
+config and sets `run.tuning_record` to the frozen tuning analysis
+(`artifacts/baselines/<tuning name>/tuning_summary.json`) and its sha256. It
+aborts, writing nothing, if any group lacks a valid candidate. Before every
+measurement run the CLI checks the digest, recomputes the choice from the
+recorded candidate scores and refuses a config whose learners differ from it.
+The dated amendment text is written afterwards from the record. Nothing else
+changes after the tuning outcome is seen.
 
 ### Training and evaluation regimes
 
@@ -387,7 +398,6 @@ plays, so no cap binds. Worst cases from the dry runs (`run --dry-run`):
 | Measurement `tt_u_k3` | 6 / 24 / 20 | 6,000,000 | 734,400 | 144,000 | 6,280,800 | 597,600 |
 | Measurement `tt_l2_d2` | 6 / 24 / 40 | 6,000,000 | 777,600 | 192,000 | 6,336,000 | 633,600 |
 | Development (used, exact) | 11 / 23 / 17, and 5 profiling runs | 168,576 | 17,150 | 5,150 | 175,853 | 15,023 |
-
 | Benchmark sets (5 configs) | 0 / 40 / 20 | 0 | 175,872 | 87,936 | 65,952 | 197,856 |
 
 Tuning needs 2,910,552 adaptive interactions at worst (allocation 4,500,000),
@@ -404,34 +414,51 @@ second, including the policy updates):
 |---|---|---|---|
 | `mppo` | 419 | 301 | 299 |
 | `ppo` | 396 | - | - |
-| `mppo_rnd` | 186 | not measured (taken as 186) | not measured (taken as 186) |
-| `rppo` (declared architecture) | 157 | 374 | 369 |
+| `mppo_rnd` | 186 | 304 (profile) | 313 (profile) |
+| `rppo` (declared architecture) | 157 | 374; 232 (profile) | 369; 213 (profile) |
 | `rppo` (library default architecture) | 3-10 | - | - |
 | DQN (replay buffer 100,000) | 847 | - | - |
 
-Frozen evaluation ran at about 250-650 interactions per second (one
-environment). At these rates the measurement needs about 22 process-hours of
-training and 2 of evaluation, about 3 hours of wall-clock time with 8 worker
-processes (`run --workers 8`; the longest single job, `rppo` on `rq_f1`, about
-1.8 hours); the tuning stage about 3.4 process-hours, under half an hour with 8
-workers. The study is sized in interactions; the times are estimates for this
-machine.
+The profile values (2026-10-20) come from a short development profile: each
+learner trained 4,096 interactions on the `_dev` TechTree namespaces in one
+process with one thread (`tt_*_dev.yaml` settings); they include the start-up of
+a run and so understate the steady rate. Frozen evaluation ran at about 210-650
+interactions per second (one environment).
 
-Commands (after the freeze):
+Runtime. The machine has 4 physical cores (8 hardware threads), so 8 worker
+processes do not run at the single-process rates above; two processes share a
+core, and each runs at roughly 55-65% of its rate alone. At the rates above the
+measurement needs about 22 process-hours of training and 2 of evaluation:
+
+| Stage | Workers | Longest job (alone) | Wall-clock estimate |
+|---|---|---|---|
+| Tuning (3 configs, one after another) | 8 | `rppo` on `rq_f1`, 0.2 h | 1-1.5 h |
+| Measurement `rq_f1` | 8 | `rppo`, 1.8 h | 3-4 h |
+| Measurement `tt_u_k3` and `tt_l2_d2`, concurrently | 4 + 4 | `rppo`, 1.2-1.3 h | 3-4 h |
+| Benchmark sets (5 configs, one after another) | 8 | evaluation only | 0.3-0.5 h |
+| Measurement and benchmark sets in all | | | 6-9 h |
+
+The study is sized in interactions; the times are estimates for this machine.
+
+Commands (after the freeze). One driver runs every step in order, stops at
+the first failure and logs to `runs/x_overnight.log`; it is resume-safe, so
+after an interruption the same command continues:
 
 ```bash
-python -m hypergraph_agent.baselines run --config configs/baselines/tune_rq_f1.yaml --workers 8
-python -m hypergraph_agent.baselines analyze --config configs/baselines/tune_rq_f1.yaml
-# (the same for tune_tt_u_k3 and tune_tt_l2_d2; then the dated amendment)
-python -m hypergraph_agent.baselines run --config configs/baselines/rq_f1_main.yaml --allow-measurement --workers 8
-python -m hypergraph_agent.baselines analyze --config configs/baselines/rq_f1_main.yaml
-# (the same for tt_u_k3_main and tt_l2_d2_main)
-python -m hypergraph_agent.baselines run --config configs/baselines/bench_crafter.yaml --allow-measurement --workers 8
-python -m hypergraph_agent.baselines analyze --config configs/baselines/bench_crafter.yaml
-# (the same for bench_psketch_craft, bench_msgi_mining, bench_little_alchemy_2, bench_freeciv_classic,
-#  after rq_f1_main has completed; the fetch-only data first: python benchmarks/little_alchemy/fetch.py,
-#  python benchmarks/freeciv/fetch.py)
+# from the repository root; X_SNAPSHOT: a clean worktree of the frozen commit (code and configs)
+git worktree add ../x_snapshot <frozen commit>
+X_SNAPSHOT=../x_snapshot bash scripts/run_x_overnight.sh
 ```
+
+Its steps: remove a stale ledger lock; `run` and `analyze` each `tune_*.yaml`;
+`apply-tuning` for the three measurement configs; `run --allow-measurement
+--resume --workers 8` and `analyze` for `rq_f1_main.yaml`; the two TechTree
+measurement configs at once with `--workers 4` each, then their analyses; the
+five `bench_*.yaml` configs one after another, each followed by its analysis.
+`run` exits with a non-zero status when any job failed; the other jobs of that
+call still run to the end. The fetch-only benchmark data
+(`python benchmarks/little_alchemy/fetch.py`, `python benchmarks/freeciv/fetch.py`)
+must be present before the benchmark step.
 
 ### Stopping rules and reruns
 
@@ -443,7 +470,21 @@ did not complete (an error or an interruption) is repeated as a new run with
 the same job hash and code; runs are deterministic given the code, the job
 hash and the seeds (tested for training and evaluation), so the repeat
 replays the same stream; both runs are listed and the completed one is used.
-A completed run is never replaced; later repeats are listed and ignored. The
+A completed run is never replaced; later repeats are listed and ignored.
+Interruptions: with `--workers 8` an interruption can lose the work of up to 8
+training jobs in progress (each restarts from zero as a new run); a hard kill
+can also leave up to 4,095 interactions per running job unflushed (charged to
+the job's meter but not yet to the ledger, which flushes every 4,096), and can
+leave `runs/X-ledger.lock` behind, which blocks every later ledger update. The
+driver removes a lock older than one minute (a live holder keeps it for
+milliseconds) and then runs again with `--resume`. A job that raises is
+logged with its traceback and marked failed in its manifest; the other jobs
+continue, and `run` exits non-zero at the end. The analysis uses only complete
+data: unless every planned job of a config (`runner.jobs`) has a completed run
+and every learner cell has rows for every training seed, the best learner is
+unset and every test, X1 included, is "incomplete"; a measurement config
+selects only on the validation split and needs a validation score for every
+learner (no fallback to the test split). The
 tuning stage is analysed once, after all its runs of a setting completed;
 each measurement setting is analysed once, after all its runs completed; the
 benchmark sets run after every `rq_f1` measurement run has completed and are
@@ -522,12 +563,19 @@ before its runs.
   `evaluation.walkers.play` and `techtree.study.play`) and the RecipeQuest
   random agent.
 - `runner.py`: jobs, caps, run directories and manifests (provenance and
-  library versions), repeats, parallel workers, and a ledger subclass that
-  retries reads and replacements blocked by another process (on Windows a
-  concurrent reader made `os.replace` fail in development).
+  library versions), repeats, and parallel workers (`submit` and
+  `as_completed`: a failing job is logged and marked failed, the others go on,
+  results are appended as they arrive). The ledger is the shared
+  `training.budget.SessionLedger`, which retries reads and replacements
+  blocked by another process (on Windows a concurrent reader made `os.replace`
+  fail in development).
 - `analysis.py`: per-world metrics, learner averaging over training seeds,
-  selection of the best learner and of tuning candidates, contrasts, learning
-  curves, tables and a figure; `__main__.py`: `run` and `analyze`.
+  completeness checks, selection of the best learner and of tuning candidates,
+  contrasts, learning curves, tables and a figure; `tuning.py`: the mechanical
+  tuning amendment and its verification; `__main__.py`: `run`, `analyze` and
+  `apply-tuning`.
+- `scripts/run_x_overnight.sh`: the unattended driver of tuning, amendment,
+  measurement and benchmark sets.
 - Configs: `configs/baselines/*_dev.yaml` and `bench_dev.yaml` (development),
   `tune_*.yaml` (tuning stage), `*_main.yaml` (measurement drafts),
   `bench_*.yaml` (benchmark test sets, evaluation only), with their own schema
@@ -540,8 +588,11 @@ before its runs.
   external-loader hook, config rules, an end-to-end run of every learner and
   agent with exact ledger accounting, repeat refusal, deterministic training,
   the RND bonus, the analysis, the selection tie rules, the retrying ledger,
-  the benchmark sets and their conversion records, and an evaluation-only
-  config that reuses another config's checkpoints and selection).
+  failure isolation of parallel jobs, the analysis's refusal of partial data,
+  the tuning tie rules, apply-tuning's refusal of incomplete tuning and the
+  verification of its record, the benchmark sets and their conversion
+  records, and an evaluation-only config that reuses another config's
+  checkpoints and selection).
 
 ### Development record (calibration, not results)
 
@@ -569,7 +620,12 @@ namespaces ending in `_dev`:
   interactions; agents: 4,447;
 - the benchmark path (`bench_dev.yaml`: one Crafter world, conversion seed 0,
   16 episodes; the `rq_f1` development checkpoints at 16,000 interactions and
-  the four agents): 1,933 interactions in 9 runs.
+  the four agents): 1,933 interactions in 9 runs;
+- a throughput profile (2026-10-20) of `mppo`, `mppo_rnd` and `rppo` on both
+  TechTree settings (`_dev` namespaces, `dev` allocation, 4,096 training
+  interactions each and one evaluation per checkpoint): 26,976 adaptive and
+  4,800 reporting interactions in 12 runs, charged to a separate scratch
+  ledger, so the `runs/X-ledger.json` totals above exclude them.
 
 Outcomes, on one test seed with two RecipeQuest worlds or one TechTree world:
 no learner solved any task at 8,000 or 16,000 interactions (every episode ran

@@ -51,10 +51,12 @@ TECHTREE_AGENTS = {"U": ("pooled", "isolated", "oracle", "reference", "random"),
                          "reference", "random")}
 
 DEFAULTS: dict = {
-    # tuning_record: the tuning analysis whose selection a measurement config holds (written by a dated
-    # amendment); a measurement config with none refuses to run
+    # tuning_from: the tuning config of a measurement config; tuning_map: tuning group -> learner id of
+    # this config; tuning_record: {summary, sha256} written by ``apply-tuning`` (``tuning.py``); a
+    # measurement config without a record that reproduces its learners refuses to run
     "run": {"name": "x-dev", "study": "X", "allocation": "dev", "ledger": "runs/X-ledger.json",
-            "runs_dir": "runs", "requires_flag": False, "tuning_record": None, "checkpoints_from": None},
+            "runs_dir": "runs", "requires_flag": False, "tuning_record": None, "checkpoints_from": None,
+            "tuning_from": None, "tuning_map": None},
     # caps written into a NEW ledger file; an existing ledger keeps its own
     "ledger": {"allocations": {"dev": 300_000}, "adaptive_cap": 300_000, "reporting_cap": 300_000},
     # loader: "package.module:function" for an external benchmark (sources.py); max_variants: craft
@@ -122,6 +124,18 @@ def namespaces(cfg: dict) -> list[str]:
     return out
 
 
+def config_path(config: str | Path, ref: str | Path) -> Path:
+    """A config path named inside a config (``checkpoints_from``, ``tuning_from``): a relative one is
+    taken from the root of the tree holding ``config`` (``<root>/configs/baselines/x.yaml``), so a
+    snapshot's configs refer to the snapshot's own files; else from the working directory."""
+    ref = Path(ref)
+    if not ref.is_absolute():
+        parents = Path(config).resolve().parents
+        if len(parents) > 2 and (parents[2] / ref).exists():
+            return parents[2] / ref
+    return ref
+
+
 def load_config(path: str | Path) -> dict:
     raw = yaml.safe_load(Path(path).read_text()) or {}
     learners = raw.pop("learners", [])
@@ -130,7 +144,8 @@ def load_config(path: str | Path) -> dict:
     if cfg["run"]["checkpoints_from"]:
         if learners or "train" in raw:
             raise ValueError("an evaluation-only config takes learners and train from checkpoints_from")
-        src = load_config(cfg["run"]["checkpoints_from"])
+        cfg["_source_path"] = str(config_path(path, cfg["run"]["checkpoints_from"]))
+        src = load_config(cfg["_source_path"])
         if src["run"]["checkpoints_from"]:
             raise ValueError("checkpoints_from must name a config that trains")
         if (src["setting"]["family"], src["setting"]["max_variants"]) != \
@@ -139,6 +154,12 @@ def load_config(path: str | Path) -> dict:
         cfg["learners"], cfg["train"] = copy.deepcopy(src["learners"]), copy.deepcopy(src["train"])
         cfg["_train_setting"], cfg["_source_name"] = src["setting"], src["run"]["name"]
         cfg["run"]["tuning_record"] = cfg["run"]["tuning_record"] or src["run"]["tuning_record"]
+    if bool(cfg["run"]["tuning_from"]) != bool(cfg["run"]["tuning_map"]):
+        raise ValueError("run.tuning_from and run.tuning_map go together")
+    tmap = cfg["run"]["tuning_map"]
+    if tmap and (len(set(tmap.values())) != len(tmap)
+                 or set(tmap.values()) != {x["id"] for x in cfg["learners"]}):
+        raise ValueError("run.tuning_map must map tuning groups one to one onto this config's learner ids")
     if cfg["test"]["budgets"] is not None and not set(cfg["test"]["budgets"]) <= set(cfg["train"]["budgets"]):
         raise ValueError("test.budgets must be training budgets")
     if cfg["setting"]["loader"] == benchmark_sets.LOADER:

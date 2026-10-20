@@ -5,6 +5,7 @@
     python -m hypergraph_agent.baselines run --config configs/baselines/rq_f1_main.yaml --allow-measurement \
         --workers 8
     python -m hypergraph_agent.baselines analyze --config configs/baselines/rq_f1_main.yaml
+    python -m hypergraph_agent.baselines apply-tuning --config configs/baselines/rq_f1_main.yaml
 
 ``run`` trains every (learner, training seed) of the config unless a completed
 run exists, evaluates its checkpoints, then runs the repository's agents on
@@ -13,7 +14,10 @@ the test stream. ``--learners``, ``--seeds`` and ``--agents`` select a subset
 processes (one torch thread each); a measurement config needs
 ``--allow-measurement`` and refuses to start when any planned job already has a
 completed run, unless ``--resume``. ``analyze`` writes the endpoints to
-``artifacts/baselines/<name>/`` (or ``--out``).
+``artifacts/baselines/<name>/`` (or ``--out``). ``apply-tuning`` writes the tuning
+selection into a measurement config (``tuning.py``); a measurement run refuses
+unless its learners reproduce that record. ``run`` exits with status 1 when any
+job failed (the other jobs still run).
 """
 
 from __future__ import annotations
@@ -39,10 +43,20 @@ def main(argv=None) -> int:
     a = sub.add_parser("analyze")
     a.add_argument("--config", required=True)
     a.add_argument("--out", default=None)
+    t = sub.add_parser("apply-tuning")
+    t.add_argument("--config", required=True)
     args = p.parse_args(argv)
 
     from ..training.run import process_source
     process_source(Path(__file__).resolve().parents[3])
+    if args.cmd == "apply-tuning":
+        from .tuning import TuningError, apply_tuning
+        try:
+            print(json.dumps(apply_tuning(args.config), indent=1))
+        except TuningError as exc:
+            print(f"apply-tuning refused: {exc}", file=sys.stderr)
+            return 1
+        return 0
     from .config import load_config
     cfg = load_config(args.config)
     if args.cmd == "analyze":
@@ -64,16 +78,27 @@ def main(argv=None) -> int:
         return 0
     if cfg["run"]["requires_flag"] and not args.allow_measurement:
         p.error("this is a measurement config: pass --allow-measurement to launch it, or --dry-run")
-    if cfg["run"]["requires_flag"] and not cfg["run"]["tuning_record"]:
-        p.error("run.tuning_record is unset: write the tuning selection into this config (a dated amendment) "
-                "before any measurement run")
+    if cfg["run"]["requires_flag"]:
+        from .tuning import TuningError, verify_tuning
+        try:
+            verify_tuning(cfg)
+        except TuningError as exc:
+            p.error(f"{exc} (a measurement run needs the selection written by apply-tuning)")
     make_ledger(cfg)  # creates the ledger file with the declared caps if it does not exist
-    results = run_study(cfg, resume=args.resume, workers=args.workers, **subset)
-    with open(results_path(cfg), "a", encoding="utf-8") as fh:
-        for res in results:
-            fh.write(json.dumps(res, default=str) + "\n")
-    print(json.dumps({"runs": len(results), "ledger": make_ledger(cfg).summary()}, indent=1))
-    return 0
+    out = results_path(cfg)
+    out.parent.mkdir(parents=True, exist_ok=True)
+
+    def append(results):  # each task's results as it finishes, so an interruption loses none
+        with open(out, "a", encoding="utf-8") as fh:
+            for res in results:
+                fh.write(json.dumps(res, default=str) + "\n")
+
+    failures = []
+    results = run_study(cfg, resume=args.resume, workers=args.workers, failures_out=failures,
+                        on_result=append, **subset)
+    print(json.dumps({"runs": len(results), "failed": len(failures), "ledger": make_ledger(cfg).summary()},
+                     indent=1))
+    return 1 if failures else 0
 
 
 if __name__ == "__main__":

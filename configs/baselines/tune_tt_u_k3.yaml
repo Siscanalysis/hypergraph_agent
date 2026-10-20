@@ -2,7 +2,7 @@
 # tt_u_k3. Every candidate trains once (training seed 0) for 100,000 interactions on
 # x_tt_u_tune_train_dev and is evaluated in both action modes on x_tt_u_tune_eval_dev (2 seeds
 # x 6 worlds x 12 episodes). Per learner group, the (candidate, mode) with the lowest mean late
-# actions per episode is written into tt_u_k3_main.yaml by a dated amendment
+# actions per episode is written into tt_u_k3_main.yaml by apply-tuning (no human decision)
 # (run.tuning_record); ties go to the earlier candidate in this list, then to the
 # deterministic mode.
 run: {name: x-ttu-tune, allocation: x_tune, ledger: runs/X-ledger.json}
