@@ -355,12 +355,15 @@ def slack_contrast(looser: dict, base: dict, expected_units: int | None, n_boot:
     return k
 
 
-def depth_against_headroom(d: str, dh: str) -> str:
-    """Pre-registered reading of D and DH (D with F1's brute-force headroom) together."""
+def depth_against_headroom(d: str, dh: str, f2a: str | None = None) -> str:
+    """Pre-registered reading of D and DH (D with F1's brute-force headroom) together;
+    F2-A, the near-matched deep check, is read like DH and a disagreement is unresolved."""
     if "incomplete" in (d, dh) or "missing" in (d, dh):
         return "incomplete"
     if d != "reversed":
         return "D not reversed: no reversal to attribute"
+    if f2a is not None and f2a not in ("incomplete", "missing") and f2a != dh:
+        return f"unresolved: DH is {dh} but F2-A is {f2a}"
     return {"reversed": "depth matters beyond headroom", "advantage": "headroom, not depth",
             "inconclusive": "headroom accounts for part of D's reversal; depth beyond headroom not shown"}[dh]
 
@@ -415,7 +418,7 @@ def analyze(runs: list[dict], expected_units: int | None = None, n_boot: int = R
     out["primary_verdict"] = out["families"].get(PRIMARY, {}).get("verdict", "missing")
     out["primary_reading"] = get(PRIMARY)
     out["depth_against_headroom"] = {"D": get("D"), "DH": get("DH"), "F2-A": get("F2-A"),
-                                     "reading": depth_against_headroom(get("D"), get("DH"))}
+                                     "reading": depth_against_headroom(get("D"), get("DH"), get("F2-A"))}
     out["caveats"] = [f"{fam} is {get(fam)} (expected {want}): this qualifies {what}"
                       for fam, want, what in CONTROLS if get(fam) != want]
     out["slack_contrasts"] = {f"{a} vs {b}": slack_contrast(fams[a], fams[b], expected_units, n_boot, boot_seed)

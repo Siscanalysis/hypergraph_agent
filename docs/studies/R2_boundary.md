@@ -1,6 +1,8 @@
 # Study R2: where the amortization result stops replicating
 
-Status: draft protocol, not frozen. Sections 1-3 were first drafted before any
+Status: protocol frozen on 2026-10-20 by the commit that freezes this file,
+before any measurement run; measurement runs execute that commit from a clean
+checkout. Sections 1-3 were first drafted before any
 R2 run, development or measurement, from generator statistics (the
 measurement namespaces and the scratch namespace `r2_design_dev`, no
 interaction) and study R's recorded runs. An independent review followed the
@@ -56,7 +58,7 @@ brute-force headroom. Section 8.1 also notes that a second family is a
 replication only if it varies these axes; R varied them together, R2 varies
 them one at a time. Worlds remain the units (N13, R16).
 
-## 3. Protocol (to be frozen)
+## 3. Protocol (frozen)
 
 ### Families
 

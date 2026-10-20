@@ -396,3 +396,10 @@ def test_report_files_and_cli(tmp_path):
     assert main(["endpoints", "--runs", str(runs), "--prefix", "none-", "--out", str(out), "--no-figure"]) == 1
     assert main(["families", "--configs", str(BOUNDARY / "dev_i.yaml"), "--out", str(out)]) == 0
     assert json.loads((out / "boundary_families.json").read_text())["I"]["tasks"] == 16
+
+
+def test_depth_against_headroom_is_unresolved_when_dh_and_f2a_disagree():
+    from hypergraph_agent.evaluation.boundary import depth_against_headroom
+    assert depth_against_headroom("reversed", "reversed", "reversed") == "depth matters beyond headroom"
+    assert depth_against_headroom("reversed", "reversed", "advantage").startswith("unresolved")
+    assert depth_against_headroom("advantage", "reversed", "advantage").startswith("D not reversed")
