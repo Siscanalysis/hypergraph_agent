@@ -1,6 +1,7 @@
 # Study P: promotion when discoveries are imperfect learned skills
 
-Status: draft protocol, not frozen. No measurement run exists. Development used
+Status: protocol frozen on 2026-10-20 by the commit that freezes this file, before
+any measurement run; measurement runs execute that commit from a clean checkout. Development used
 only the dev allocation and the namespace `techtree_p_dev`; it is reported in
 the development record below. On 2026-10-08, before any measurement run and
 before the independent review, the primary was switched from the gated to the
@@ -62,7 +63,7 @@ remembering, under one explicit skill-error model with a depth-0 control and an
 e0 = 0 replication, is a potential empirical contribution. No novelty claim is
 made for the skill model.
 
-## Protocol (to be frozen)
+## Protocol (frozen)
 
 ### Environment
 
@@ -489,7 +490,7 @@ study fails.
   configs, ledger blocks, the run hash and an end-to-end run of study P with
   its analysis; the interaction low cell, its validation, and the row
   summaries being absent for studies U and L).
-- Still to do in shared documents before the freeze: a row for P in
+- Still to do in shared documents after the results (as for study R): a row for P in
   `docs/studies/README.md` and the corresponding entries in README.md,
   docs/DECISIONS.md and docs/METHODS.md Section 12.
 
@@ -521,6 +522,14 @@ After the switch of the primary, the dev config's analysis section was
 updated (the new P1, F1 and C1, and one interaction with `a_lo` to exercise
 the new key) and the existing dev runs were analysed again; that used no
 interactions.
+
+- Independent pre-freeze review: besides reading the code, the reviewer ran an in-memory
+  check on the scratch namespace `checker_rp_dev` (outside every ledger, 37,699
+  interactions, outcomes seen): at e0 = 0 `remember_e00` and `promote_e00` reproduced
+  study L's rows exactly, and evidence stayed sound at e0 = 0.3. The same keystrokes are
+  exact inside a primitive search but noisy inside a macro test; this favours `remember`,
+  so it makes P1 conservative. A replay or practice run that continues a sequence already
+  on the trace counts as a full success for the learning curve and the gate.
 
 ## Results
 
