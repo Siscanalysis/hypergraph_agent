@@ -70,6 +70,10 @@ their own frozen protocol, interaction ledger and verdict:
   ones, gave no benefit without reuse, and useless promoted nodes did
   not help. The benefit is expected by construction; the controls and the
   confirmation on fresh worlds are the informative part.
+- **Second round** ([docs/RESULTS.md](docs/RESULTS.md), Section 4.6): goals three
+  to five levels deep remove study R's advantage (R2); promotion still pays when
+  skills slip, though less (P); and the pooled explorer needs 2.6 to 5.7 times
+  fewer actions than generic exploration baselines (U2).
 
 ## The game
 

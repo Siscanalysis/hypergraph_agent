@@ -249,6 +249,9 @@ allocation.
 | U: unlisted composite actions and unlocks | docs/studies/U_composites_unlocks.md | 73e5602 | `runs/U-ledger.json` |
 | L: discoveries used as atoms of new hypotheses | docs/studies/L_layered_discovery.md | 73e5602 | `runs/L-ledger.json` |
 | M: pairwise Markov graphs with proximity ranking | docs/studies/M_markov_ranking.md | b443d2c (amendment MA1 at 95d008a) | `runs/M-ledger.json` |
+| R2: where study R stops replicating | docs/studies/R2_boundary.md | 1816ad3 | `runs/R2-ledger.json` |
+| P: promotion with imperfect learned skills | docs/studies/P_imperfect_skills.md | b07ecf4 | `runs/P-ledger.json` |
+| U2: generic exploration baselines on TechTree | docs/studies/U2_techtree_baselines.md | 37f6f06 | `runs/U2-ledger.json` |
 
 Every protocol was reviewed independently before its freeze. One review run
 touched tasks of study R's first measurement namespaces in memory; its outputs
