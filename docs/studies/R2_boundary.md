@@ -542,11 +542,66 @@ Equivalence and development checks:
 
 ## 5. Results
 
-Pending: no measurement run before the freeze.
+All 155 measurement runs (65 `focused_sample`, 90 `maximal` and `reference`)
+executed the freeze commit 1816ad3 from a clean checkout and completed; none
+was rerun. Because family DH was added, every cap was raised by a logged
+amendment before the first run (r2 278,000; adaptive 284,000; reporting
+352,000). The runs used 205,106 adaptive and 188,672 reporting interactions. The
+frozen analysis wrote `artifacts/boundary/` (summary table, JSON, figure); the
+borrowed bounds of the four slack families matched their base runs in all 800
+shared episodes each.
+
+Late half (episodes 9-16), `focused_sample` minus `maximal`, paired per world,
+50 worlds per family:
+
+| Family | Changed from | Late ratios | Difference [95% CI] | Reading |
+|---|---|---|---|---|
+| D (primary) | F1 + depth 3-5 | 1.65 / 1.62 | +0.029 [-0.044, 0.098] | inconclusive |
+| DH | D + pools of 8 | 1.81 / 1.82 | -0.005 [-0.100, 0.085] | inconclusive |
+| A | F1 + alternatives 0.6 | 1.62 / 1.89 | -0.271 [-0.379, -0.162] | advantage |
+| P | F1 + pools of 8 | 1.60 / 2.24 | -0.639 [-0.746, -0.535] | advantage |
+| I (positive control) | F1 + second item input | 1.42 / 1.84 | -0.417 [-0.497, -0.341] | advantage |
+| F2-D | F2 without depth | 1.84 / 2.34 | -0.496 [-0.611, -0.377] | advantage |
+| F2-A | F2 without alternatives | 1.88 / 1.80 | +0.074 [-0.019, 0.163] | inconclusive |
+| F2-P | F2 without pools of 8 | 1.92 / 1.65 | +0.263 [0.175, 0.354] | reversed |
+| F2 (replica) | slack 2 | 2.09 / 1.87 | +0.215 [0.109, 0.319] | reversed |
+| F2S6, F2S12 | F2, slack 6 and 12 | 2.10, 2.09 / 1.87 | +0.226, +0.216 | reversed |
+| DS6, DS12 | D, slack 6 and 12 | 1.61, 1.58 / 1.62 | -0.008, -0.033 | inconclusive |
+
+- Primary: D is inconclusive: depth (with its lower headroom) removes a
+  demonstrable advantage (study R's F1: -0.357); a reversal is not shown, and
+  under study R's criterion D does not pass. Break-even episode 15; late excess
+  0.038 (failed episodes 0.080, solved -0.042). The depth-against-headroom
+  reading is "D not reversed: no reversal to attribute"; DH (also
+  inconclusive) is reported as a secondary.
+- The positive control I keeps the advantage, so F1's result holds at R2's
+  code. Alternatives alone (A) and pools of 8 alone (P) keep it too.
+- Necessity: removing depth from F2 (F2-D) restores a clear advantage;
+  removing the alternatives (F2-A) removes the demonstrable reversal without
+  restoring the advantage (inconclusive); removing the pools of 8 (F2-P) leaves
+  it reversed. Depth is necessary for the reversal; necessity of the
+  alternatives is not shown.
+- Budget: no change of the late difference is shown with looser budgets (F2S12 vs F2
+  +0.001 [-0.095, 0.099]; DS12 vs D -0.062 [-0.133, 0.009]) although they raise
+  late success (F2: +0.345 [0.278, 0.417] at slack 12). At slack 12 F2's late
+  excess comes from solved episodes (2.01 against 1.88): the budget causes
+  the failures, but the extra steps cost about what the evidence saves, so
+  the reversal is not an artifact of the budget rule.
+- In every reversed family except F2S12 (where it comes from solved episodes),
+  the late excess comes from failed episodes, every one of them ending at the
+  deadline after a contradicted guess.
 
 ## 6. Verdict and limits
 
-Pending. Limits known in advance: one generator; five structural factors but
+The amortization advantage of sampling among consistent hypotheses is lost
+with depth: goals three to five levels deep remove it (inconclusive rather
+than reversed), also with F1's headroom restored (DH), and depth combined with
+the alternatives and second item inputs of F2 reverses it. Alternatives, larger pools and a second item input do not
+remove it on their own, and a looser budget does not restore it, since it
+turns failed episodes into long successful ones at about the same cost.
+
+
+Limits known in advance: one generator; five structural factors but
 not all their combinations; I tests the second item input only where it is
 rare; DH restores the brute-force headroom only together with a larger
 hypothesis class, and DH and F2-A differ only in a factor that is

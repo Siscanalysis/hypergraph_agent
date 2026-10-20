@@ -533,8 +533,46 @@ interactions.
 
 ## Results
 
-Not run. The protocol is a draft.
+All 176 measurement runs executed the freeze commit b07ecf4 from a clean
+checkout and completed; none was rerun. They used 316,807 adaptive and 16,161
+reporting interactions (ledger totals minus development). The frozen analysis
+wrote `artifacts/techtree/p-main/`. Late-half actions per episode, paired per
+world, 32 worlds per depth:
+
+| Test | Contrast | Difference [95% CI] | Verdict |
+|---|---|---|---|
+| P1 (primary) | promote - remember, e0 0.3, depth 2 | -15.4 [-21.6, -9.7] | pass |
+| F1 | equivalence at +-10% (90% CI) | [-20.6, -10.6] | not equivalent |
+| C1 | promote - remember, e0 0.3, depth 0 | +1.26 [-3.09, 5.96] | holds (no benefit) |
+| C2 | promote - remember, e0 0, depth 2 (study L) | -22.5 [-28.5, -16.6] | holds |
+| S1 | promote_gate - remember, e0 0.3, depth 2 | -15.5 [-21.7, -9.5] | holds |
+| S2 | promote - remember, e0 0.1, depth 2 | -20.2 [-26.5, -14.5] | holds |
+| S3 | promote_gate - promote, e0 0.3, depth 2 | -0.03 [-1.19, 1.14] | fails (gate recovers nothing) |
+| S4 | promote_gate - promote, e0 0.3, depth 0 | -0.42 [-5.01, 4.22] | fails |
+| S5 | utility problem: promote - remember, e0 0.3, depth 0 | +1.26 [-3.09, 5.96] | fails (not shown) |
+| S9a | promote, e0 0.3 - e0 0, depth 2 | +5.99 [4.89, 7.17] | holds |
+| S9b | remember, e0 0.3 - e0 0, depth 2 | -1.12 [-7.09, 4.68] | fails |
+| S13 | (promote - remember) e0 0.3 minus e0 0, depth 2 | +7.11 [1.31, 13.1] | holds (advantage shrinks) |
+| S14 | the same at depth 0 | +1.63 [-3.51, 7.13] | fails |
+| S15 | benefit larger at depth 2 than 0, e0 0.3 | -16.7 [-24.7, -8.84] | holds |
+| S6 | promote - remember, e0 0, depth 0 | -0.37 [-4.61, 3.91] | holds |
+| S12 | promote - remember, e0 0.1, depth 0 | -0.16 [-4.77, 4.66] | fails (not shown) |
+
+Validity: the reference and the oracle library solved all 768 tasks, and the
+oracle library was never shorter than the reference. Sign tests for every
+test are in `analysis.json`, with the execution shares and reliability curves.
 
 ## Verdict and limits
 
-Pending. The limits stated in advance are listed in the protocol.
+P passes under L's precedence rule (P1 holds, F1 does not, C1 and C2 hold):
+promoting discoveries to atoms of new hypotheses still pays when the skills
+that execute them slip, cutting late-half actions by about 15 per episode at
+a 30% initial per-press error, against about 22 with exact skills. Against the
+prediction written before the run, the advantage does shrink as errors grow
+(S13), because errors cost promotion about 6 actions per episode (S9a) and
+remembering almost nothing measurable (S9b). No gain from the admission gate was detected
+at either depth, and no utility problem was detected: without reuse, no cost of
+promotion was detected at any error level (intervals up to about +6 actions),
+against the prediction of a cost of 5 to 15 actions at e0 = 0.3 (S5). The limits stated in advance
+are listed in the protocol; the oracle library executes exactly, so it bounds
+the cost of knowledge, not of execution.

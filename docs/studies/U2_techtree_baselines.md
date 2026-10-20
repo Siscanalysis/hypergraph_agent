@@ -454,8 +454,53 @@ namespace is disjoint from the measurement namespaces `techtree_u2` and
 
 ## Results
 
-No measurement run has been made.
+All 472 measurement runs executed the freeze commit 37f6f06 from a clean
+checkout and completed; none was rerun. The ledger caps had been raised by a
+logged amendment before the first run. They used 622,550 adaptive and 216,249
+reporting interactions (ledger totals minus development). The frozen analysis
+wrote `artifacts/techtree/u2-main/`; sign tests for every test are in its
+`analysis.json`.
+
+Actions to first success at k3-off-ann, baseline minus `pooled`, paired per
+world (32 worlds), and the ratio of means:
+
+| Component | Difference [95% CI] | Ratio [95% CI] | Predicted ratio (band) |
+|---|---|---|---|
+| P1a `iw` | +269 [219, 323] | 5.67 [4.60, 7.01] | 5.5 (2.75-11.0) |
+| P1b `iw2` | +173 [140, 207] | 4.01 [3.31, 4.83] | 3.7 (1.85-7.4) |
+| P1c `macro_uniform` | +160 [101, 222] | 3.78 [2.68, 5.06] | 3.0 (1.5-6.0) |
+| P1d `macro_sys` | +93.7 [57.2, 132] | 2.63 [1.92, 3.50] | 2.8 (1.4-5.6) |
+
+- P1 holds: every component's interval lies above 0 (one-sided level 0.025
+  each); no baseline is better than `pooled` (no falsification), and every
+  ratio lies in its pre-registered band.
+- Validity V1-V5 hold (no violation in 768-1,536 episodes per check).
+- Censoring: no world is censored in the P1 cell (k3-off-ann: `pooled` and all
+  four P1 baselines); S1 and S7 are lower bounds (`iw1` censored in 6 announced
+  and 19 silent worlds; at k3-off-sil `iw` in 8, `macro_uniform` in 5, `iw2` in 1).
+- Secondaries: IW(1) is far costlier than IW(2) at k = 3 (S1: +276 [161, 403]
+  announced, +304 [161, 442] silent) and not costlier at k = 2 (S2; in k2-off-sil IW(1) is slightly cheaper,
+  -1.62 [-3.25, -0.41]); the gaps of
+  IW(2) and of systematic macro expansion to `pooled` grow from k = 2 to k = 3
+  (S3 +151 [120, 183], S4 +75.6 [37.8, 115]); `macro_uniform` and `archive` are
+  not distinguishable in the U setting (S5 +52.8 [-22.3, 129]); the archive beats
+  `random` (S6: +130 [22.2, 251] at k3-off-ann, +62 [54.9, 68.7] at L depth 2);
+  `pooled` stays ahead in the silent cell by more (S7: +432 to +803); the signal
+  helps `pooled` (S9 -26.4 [-34.1, -19.3]) and leaves the IW arms unchanged.
+- S8 in the L setting: `promote` beats the best baseline at reuse depth 2
+  (vs `iw2`: -16.1 [-23.0, -9.9]), but `remember` does not beat the best
+  baseline at depth 0 (vs `macro_sys`: -2.15 [-9.03, 4.83]; S8 fails there).
 
 ## Verdict and limits
 
-No verdict yet.
+U2 passes: on TechTree's composite-discovery task, the repository's pooled
+elimination explorer needs 2.6 to 5.7 times fewer actions to the first success
+than four generic exploration baselines (iterated width, IW(2), uniform and
+systematic flat macro expansion), each ratio within the band predicted from
+the counting argument. In the layered setting, promoting discoveries beats the
+best baseline when discoveries are reused, while without reuse the remembering
+agent is not better than systematic macro expansion. P1 measures pooling,
+elimination and the explorers' priors together (there is no prior-free
+`pooled` arm), `pooled` uses the exact public composite length while the
+baselines use the maximal length only as a bound, and the baselines are
+hand-written adaptations, not learning agents (study X).
