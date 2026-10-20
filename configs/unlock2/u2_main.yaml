@@ -90,9 +90,11 @@ analysis:
     - {type: paired, role: secondary, name: "S1 iw1 - iw2, k3 off sil", metric: first_success_steps,
        a: iw1, b: iw2, variant: k3-off-sil, expect: greater}
     # S2: width 1 suffices for 2-press composites from an empty root
-    - {type: paired, role: secondary, name: "S2 iw1 - iw2 not above 0, k2 off ann", metric: first_success_steps,
+    - {type: paired, role: secondary, name: "S2 iw1 - iw2 not above 0, k2 off ann",
+       metric: first_success_steps,
        a: iw1, b: iw2, variant: k2-off-ann, expect: not_greater}
-    - {type: paired, role: secondary, name: "S2 iw1 - iw2 not above 0, k2 off sil", metric: first_success_steps,
+    - {type: paired, role: secondary, name: "S2 iw1 - iw2 not above 0, k2 off sil",
+       metric: first_success_steps,
        a: iw1, b: iw2, variant: k2-off-sil, expect: not_greater}
     # S3: the gap of IW(2) to pooled grows from k = 2 to k = 3
     - {type: interaction, role: secondary, name: "S3 iw2 - pooled grows from k2 to k3 (off ann)",
