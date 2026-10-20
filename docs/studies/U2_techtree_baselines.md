@@ -172,7 +172,7 @@ and is not run in the signal cells or the L setting.
 | k2-off-sil, k3-off-sil | pooled, iw, iw1, iw2, macro_uniform, macro_sys, random |
 | k3-off-ann | pooled, iw, iw1, iw2, macro_uniform, macro_sys, archive, random, oracle, reference |
 | k3-on-ann, k3-on-sil | pooled, iw, iw2 |
-| l-d0, l-d2 | remember, promote, iw, iw2, macro_uniform, macro_sys, archive, random, oracle_library, reference |
+| l-d0, l-d2 | remember, promote, iw, iw2, macro_uniform, macro_sys, archive, random, oracle_library, ref. |
 
 Seeds 0-7, 4 worlds per seed: 32 worlds per cell, 12 episodes each. As in U, the
 worlds of one k (and, in the L setting, the coupled worlds of the two depths) are
