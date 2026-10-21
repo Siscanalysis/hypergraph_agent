@@ -432,9 +432,10 @@
     "world_index": 0,
     "world_key": "B5c02c8c5",
     "graph": "little_alchemy_2",
-    "goals": [
-     "archeologist"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -446,24 +447,24 @@
     "recipes": 6,
     "closure_items": 34,
     "kept_share": 0.0882,
-    "promoted": [
-     "house",
-     "family",
-     "human"
-    ],
-    "dropped": [
-     "ruins <- city+time: beyond max_alternatives",
-     "ruins <- skyscraper+time: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 2,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 6
    },
    {
     "world_index": 1,
     "world_key": "Bda508845",
     "graph": "little_alchemy_2",
-    "goals": [
-     "atmosphere"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -475,24 +476,24 @@
     "recipes": 3,
     "closure_items": 14,
     "kept_share": 0.1429,
-    "promoted": [
-     "ocean",
-     "continent"
-    ],
-    "dropped": [
-     "planet <- earth+solar system: would need planet to make planet",
-     "planet <- earth+sky: would need planet to make planet",
-     "atmosphere <- air+sky: would need atmosphere to make atmosphere"
-    ],
+    "promoted": {
+     "count": 2,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 7
    },
    {
     "world_index": 2,
     "world_key": "Ba7e74d60",
     "graph": "little_alchemy_2",
-    "goals": [
-     "birdcage"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -504,33 +505,24 @@
     "recipes": 12,
     "closure_items": 35,
     "kept_share": 0.1714,
-    "promoted": [
-     "land",
-     "lake",
-     "lava",
-     "energy",
-     "volcano",
-     "mountain",
-     "sky",
-     "wall",
-     "safe"
-    ],
-    "dropped": [
-     "primordial soup <- planet+sea: beyond max_alternatives",
-     "animal <- beach+life: beyond max_alternatives",
-     "animal <- desert+life: beyond max_alternatives",
-     "animal <- life+mountain range: beyond max_alternatives",
-     "birdcage <- bird+container: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 9,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 5,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 3,
     "world_key": "B0c1c1353",
     "graph": "little_alchemy_2",
-    "goals": [
-     "coral"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -542,40 +534,24 @@
     "recipes": 13,
     "closure_items": 40,
     "kept_share": 0.175,
-    "promoted": [
-     "land",
-     "stone",
-     "lava",
-     "energy",
-     "volcano",
-     "mountain",
-     "moon",
-     "corpse",
-     "sea"
-    ],
-    "dropped": [
-     "primordial soup <- planet+sea: beyond max_alternatives",
-     "animal <- beach+life: beyond max_alternatives",
-     "animal <- desert+life: beyond max_alternatives",
-     "animal <- life+mountain range: beyond max_alternatives",
-     "wolf <- animal+dog: would need wolf to make wolf",
-     "wolf <- blood+dog: would need wolf to make wolf",
-     "wolf <- dog+forest: would need wolf to make wolf",
-     "bone <- meat+wolf: beyond max_alternatives",
-     "coral <- sea+tree: beyond max_alternatives",
-     "coral <- bone+ocean: beyond max_alternatives",
-     "coral <- fossil+ocean: beyond max_alternatives",
-     "coral <- ocean+tree: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 9,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 12,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 4,
     "world_key": "B25243ba5",
     "graph": "little_alchemy_2",
-    "goals": [
-     "cow"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -587,32 +563,24 @@
     "recipes": 12,
     "closure_items": 55,
     "kept_share": 0.1091,
-    "promoted": [
-     "land",
-     "lake",
-     "lava",
-     "energy",
-     "volcano",
-     "mountain",
-     "field",
-     "barn"
-    ],
-    "dropped": [
-     "primordial soup <- planet+sea: beyond max_alternatives",
-     "animal <- beach+life: beyond max_alternatives",
-     "animal <- desert+life: beyond max_alternatives",
-     "animal <- life+mountain range: beyond max_alternatives",
-     "cow <- farmer+livestock: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 8,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 5,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 5,
     "world_key": "B2abd4e97",
     "graph": "little_alchemy_2",
-    "goals": [
-     "darkness"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -624,11 +592,10 @@
     "recipes": 6,
     "closure_items": 21,
     "kept_share": 0.1429,
-    "promoted": [
-     "moon",
-     "sky",
-     "day"
-    ],
+    "promoted": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 8
    },
@@ -636,9 +603,10 @@
     "world_index": 6,
     "world_key": "B72700738",
     "graph": "little_alchemy_2",
-    "goals": [
-     "desert"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -650,10 +618,10 @@
     "recipes": 4,
     "closure_items": 14,
     "kept_share": 0.1429,
-    "promoted": [
-     "stone",
-     "sand"
-    ],
+    "promoted": {
+     "count": 2,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 10
    },
@@ -661,9 +629,10 @@
     "world_index": 7,
     "world_key": "B5dc7cf90",
     "graph": "little_alchemy_2",
-    "goals": [
-     "electricity"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -675,33 +644,24 @@
     "recipes": 17,
     "closure_items": 39,
     "kept_share": 0.2308,
-    "promoted": [
-     "ocean",
-     "continent",
-     "stone",
-     "mist",
-     "energy",
-     "sun",
-     "boiler",
-     "tool",
-     "pressure"
-    ],
-    "dropped": [
-     "planet <- earth+solar system: would need planet to make planet",
-     "planet <- earth+sky: would need planet to make planet",
-     "atmosphere <- air+sky: would need atmosphere to make atmosphere",
-     "solar cell <- electricity+sun: would need solar cell to make solar cell",
-     "rain <- cloud+heat: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 9,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 5,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 8,
     "world_key": "Ba7245a89",
     "graph": "little_alchemy_2",
-    "goals": [
-     "family"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -713,10 +673,10 @@
     "recipes": 4,
     "closure_items": 31,
     "kept_share": 0.0645,
-    "promoted": [
-     "wall",
-     "human"
-    ],
+    "promoted": {
+     "count": 2,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 12
    },
@@ -724,9 +684,10 @@
     "world_index": 9,
     "world_key": "Bbbcc5ef6",
     "graph": "little_alchemy_2",
-    "goals": [
-     "fireplace"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -738,14 +699,10 @@
     "recipes": 11,
     "closure_items": 53,
     "kept_share": 0.1132,
-    "promoted": [
-     "land",
-     "life",
-     "rain",
-     "sword",
-     "tool",
-     "brick"
-    ],
+    "promoted": {
+     "count": 6,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -753,9 +710,10 @@
     "world_index": 10,
     "world_key": "B89030a92",
     "graph": "little_alchemy_2",
-    "goals": [
-     "firetruck"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -767,28 +725,24 @@
     "recipes": 12,
     "closure_items": 46,
     "kept_share": 0.1304,
-    "promoted": [
-     "land",
-     "pressure",
-     "car",
-     "life",
-     "rain",
-     "night"
-    ],
-    "dropped": [
-     "firetruck <- car+firefighter: would need firetruck to make firetruck",
-     "fire extinguisher <- carbon dioxide+metal: beyond max_alternatives",
-     "fire extinguisher <- boiler+carbon dioxide: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 6,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 11,
     "world_key": "B51947f4e",
     "graph": "little_alchemy_2",
-    "goals": [
-     "forest"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -800,23 +754,24 @@
     "recipes": 2,
     "closure_items": 28,
     "kept_share": 0.0357,
-    "promoted": [
-     "land",
-     "tree"
-    ],
-    "dropped": [
-     "forest <- container+tree: beyond max_alternatives",
-     "forest <- plant+tree: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 2,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 2,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 6
    },
    {
     "world_index": 12,
     "world_key": "Bba1a3f48",
     "graph": "little_alchemy_2",
-    "goals": [
-     "fortune cookie"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -828,32 +783,24 @@
     "recipes": 10,
     "closure_items": 83,
     "kept_share": 0.0602,
-    "promoted": [
-     "puddle",
-     "stone",
-     "life",
-     "wheat",
-     "sugar",
-     "chocolate",
-     "magic",
-     "paper"
-    ],
-    "dropped": [
-     "flour <- wheat+wheel: beyond max_alternatives",
-     "flour <- wheat+windmill: beyond max_alternatives",
-     "flour <- rock+wheat: beyond max_alternatives",
-     "dough <- flour+rain: beyond max_alternatives",
-     "gingerbread man <- dough+story: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 8,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 5,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 13,
     "world_key": "Bcb9c6b62",
     "graph": "little_alchemy_2",
-    "goals": [
-     "galaxy cluster"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -865,9 +812,10 @@
     "recipes": 2,
     "closure_items": 22,
     "kept_share": 0.0455,
-    "promoted": [
-     "galaxy"
-    ],
+    "promoted": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 7
    },
@@ -875,9 +823,10 @@
     "world_index": 14,
     "world_key": "B93eea5fa",
     "graph": "little_alchemy_2",
-    "goals": [
-     "ghost"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -889,46 +838,24 @@
     "recipes": 24,
     "closure_items": 78,
     "kept_share": 0.1667,
-    "promoted": [
-     "land",
-     "stone",
-     "blade",
-     "tool",
-     "explosion",
-     "excalibur",
-     "life",
-     "rain",
-     "sword",
-     "human",
-     "wall",
-     "night",
-     "field",
-     "wire",
-     "rope"
-    ],
-    "dropped": [
-     "death <- corpse+philosophy: would need death to make death",
-     "death <- grave+philosophy: would need death to make death",
-     "death <- graveyard+philosophy: would need death to make death",
-     "death <- philosophy+skeleton: would need death to make death",
-     "corpse <- bullet+human: beyond max_alternatives",
-     "corpse <- human+time: beyond max_alternatives",
-     "corpse <- death+human: beyond max_alternatives",
-     "monarch <- castle+human: would need monarch to make monarch",
-     "castle <- wall+warrior: beyond max_alternatives",
-     "castle <- house+monarch: beyond max_alternatives",
-     "castle <- house+warrior: beyond max_alternatives",
-     "castle <- container+monarch: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 15,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 12,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 15,
     "world_key": "Bff9ce51c",
     "graph": "little_alchemy_2",
-    "goals": [
-     "hedgehog"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -940,27 +867,24 @@
     "recipes": 8,
     "closure_items": 75,
     "kept_share": 0.0533,
-    "promoted": [
-     "stone",
-     "animal",
-     "cotton",
-     "tool",
-     "rat"
-    ],
-    "dropped": [
-     "thread <- cotton+machine: beyond max_alternatives",
-     "thread <- cotton+tool: beyond max_alternatives",
-     "needle <- steel+thread: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 5,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 16,
     "world_key": "B61cf03a6",
     "graph": "little_alchemy_2",
-    "goals": [
-     "hurricane"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -972,11 +896,10 @@
     "recipes": 4,
     "closure_items": 9,
     "kept_share": 0.2222,
-    "promoted": [
-     "ocean",
-     "lake",
-     "tornado"
-    ],
+    "promoted": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 6
    },
@@ -984,9 +907,10 @@
     "world_index": 17,
     "world_key": "Bc891d7d7",
     "graph": "little_alchemy_2",
-    "goals": [
-     "husky"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -998,44 +922,24 @@
     "recipes": 13,
     "closure_items": 61,
     "kept_share": 0.1148,
-    "promoted": [
-     "land",
-     "mountain",
-     "lake",
-     "lava",
-     "energy",
-     "volcano",
-     "field",
-     "moon",
-     "barn",
-     "snow",
-     "antarctica"
-    ],
-    "dropped": [
-     "primordial soup <- planet+sea: beyond max_alternatives",
-     "animal <- beach+life: beyond max_alternatives",
-     "animal <- desert+life: beyond max_alternatives",
-     "animal <- life+mountain range: beyond max_alternatives",
-     "wolf <- animal+dog: would need wolf to make wolf",
-     "wolf <- blood+dog: would need wolf to make wolf",
-     "wolf <- dog+forest: would need wolf to make wolf",
-     "dog <- farm+wolf: beyond max_alternatives",
-     "dog <- domestication+wolf: beyond max_alternatives",
-     "dog <- farmer+wolf: beyond max_alternatives",
-     "husky <- blizzard+dog: beyond max_alternatives",
-     "husky <- dog+glacier: beyond max_alternatives",
-     "husky <- arctic+dog: beyond max_alternatives",
-     "husky <- dog+ice: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 11,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 14,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 18,
     "world_key": "B7c23e2c5",
     "graph": "little_alchemy_2",
-    "goals": [
-     "jar"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1047,34 +951,24 @@
     "recipes": 12,
     "closure_items": 45,
     "kept_share": 0.1333,
-    "promoted": [
-     "land",
-     "heat",
-     "rainbow",
-     "life",
-     "rain",
-     "double rainbow!",
-     "machine",
-     "glass"
-    ],
-    "dropped": [
-     "fruit <- flower+time: beyond max_alternatives",
-     "fruit <- farmer+tree: beyond max_alternatives",
-     "fruit <- flower+tree: beyond max_alternatives",
-     "jam <- juice+machine: beyond max_alternatives",
-     "jam <- fruit+juice: beyond max_alternatives",
-     "jar <- bottle+jam: beyond max_alternatives",
-     "jar <- bucket+jam: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 8,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 7,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 19,
     "world_key": "Bc11108a5",
     "graph": "little_alchemy_2",
-    "goals": [
-     "lava lamp"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1086,42 +980,24 @@
     "recipes": 25,
     "closure_items": 59,
     "kept_share": 0.2203,
-    "promoted": [
-     "land",
-     "lava",
-     "mountain",
-     "clay",
-     "explosion",
-     "blade",
-     "light bulb",
-     "life",
-     "rain"
-    ],
-    "dropped": [
-     "animal <- beach+life: beyond max_alternatives",
-     "animal <- desert+life: beyond max_alternatives",
-     "animal <- life+mountain range: beyond max_alternatives",
-     "death <- corpse+philosophy: would need death to make death",
-     "death <- grave+philosophy: would need death to make death",
-     "death <- graveyard+philosophy: would need death to make death",
-     "death <- philosophy+skeleton: would need death to make death",
-     "corpse <- bullet+human: beyond max_alternatives",
-     "corpse <- human+time: beyond max_alternatives",
-     "corpse <- death+human: beyond max_alternatives",
-     "organic matter <- bacteria+death: beyond max_alternatives",
-     "lava lamp <- lamp+volcano: beyond max_alternatives",
-     "steel <- coal+metal: beyond max_alternatives",
-     "steel <- metal+mineral: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 9,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 14,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 20,
     "world_key": "B74698055",
     "graph": "little_alchemy_2",
-    "goals": [
-     "livestock"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1133,31 +1009,24 @@
     "recipes": 10,
     "closure_items": 54,
     "kept_share": 0.0926,
-    "promoted": [
-     "land",
-     "lake",
-     "lava",
-     "energy",
-     "volcano",
-     "mountain",
-     "field",
-     "barn"
-    ],
-    "dropped": [
-     "primordial soup <- planet+sea: beyond max_alternatives",
-     "animal <- beach+life: beyond max_alternatives",
-     "animal <- desert+life: beyond max_alternatives",
-     "animal <- life+mountain range: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 8,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 4,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 21,
     "world_key": "Bbc2b474b",
     "graph": "little_alchemy_2",
-    "goals": [
-     "lumberjack"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1169,14 +1038,10 @@
     "recipes": 10,
     "closure_items": 51,
     "kept_share": 0.098,
-    "promoted": [
-     "land",
-     "life",
-     "rain",
-     "human",
-     "sword",
-     "tool"
-    ],
+    "promoted": {
+     "count": 6,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -1184,9 +1049,10 @@
     "world_index": 22,
     "world_key": "B2e73897a",
     "graph": "little_alchemy_2",
-    "goals": [
-     "mercury"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1198,24 +1064,24 @@
     "recipes": 4,
     "closure_items": 17,
     "kept_share": 0.1176,
-    "promoted": [
-     "ocean",
-     "continent",
-     "heat"
-    ],
-    "dropped": [
-     "planet <- earth+solar system: would need planet to make planet",
-     "planet <- earth+sky: would need planet to make planet"
-    ],
+    "promoted": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 2,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 6
    },
    {
     "world_index": 23,
     "world_key": "Ba2327d47",
     "graph": "little_alchemy_2",
-    "goals": [
-     "music"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1227,23 +1093,24 @@
     "recipes": 4,
     "closure_items": 71,
     "kept_share": 0.0282,
-    "promoted": [
-     "human",
-     "drum",
-     "flute"
-    ],
-    "dropped": [
-     "music <- musician+pan flute: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 9
    },
    {
     "world_index": 24,
     "world_key": "Bc2fe7575",
     "graph": "little_alchemy_2",
-    "goals": [
-     "river"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1255,25 +1122,24 @@
     "recipes": 13,
     "closure_items": 18,
     "kept_share": 0.3889,
-    "promoted": [
-     "ocean",
-     "pond",
-     "continent"
-    ],
-    "dropped": [
-     "planet <- earth+solar system: would need planet to make planet",
-     "planet <- earth+sky: would need planet to make planet",
-     "atmosphere <- air+sky: would need atmosphere to make atmosphere"
-    ],
+    "promoted": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 25,
     "world_key": "Bbac6d2c2",
     "graph": "little_alchemy_2",
-    "goals": [
-     "rivulet"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1285,27 +1151,24 @@
     "recipes": 17,
     "closure_items": 20,
     "kept_share": 0.45,
-    "promoted": [
-     "ocean",
-     "puddle",
-     "pond",
-     "continent"
-    ],
-    "dropped": [
-     "planet <- earth+solar system: would need planet to make planet",
-     "planet <- earth+sky: would need planet to make planet",
-     "atmosphere <- air+sky: would need atmosphere to make atmosphere",
-     "stream <- big+rivulet: would need stream to make stream"
-    ],
+    "promoted": {
+     "count": 4,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 4,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 26,
     "world_key": "B39f47c4a",
     "graph": "little_alchemy_2",
-    "goals": [
-     "seal"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1317,41 +1180,24 @@
     "recipes": 13,
     "closure_items": 57,
     "kept_share": 0.1228,
-    "promoted": [
-     "land",
-     "lake",
-     "lava",
-     "energy",
-     "volcano",
-     "mountain",
-     "field",
-     "moon",
-     "barn"
-    ],
-    "dropped": [
-     "primordial soup <- planet+sea: beyond max_alternatives",
-     "animal <- beach+life: beyond max_alternatives",
-     "animal <- desert+life: beyond max_alternatives",
-     "animal <- life+mountain range: beyond max_alternatives",
-     "wolf <- animal+dog: would need wolf to make wolf",
-     "wolf <- blood+dog: would need wolf to make wolf",
-     "wolf <- dog+forest: would need wolf to make wolf",
-     "dog <- farm+wolf: beyond max_alternatives",
-     "dog <- domestication+wolf: beyond max_alternatives",
-     "dog <- farmer+wolf: beyond max_alternatives",
-     "seal <- dog+sea: beyond max_alternatives",
-     "seal <- dog+ocean: beyond max_alternatives",
-     "seal <- arctic+dog: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 9,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 13,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 27,
     "world_key": "Be9f7ded7",
     "graph": "little_alchemy_2",
-    "goals": [
-     "spoon"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1363,16 +1209,10 @@
     "recipes": 10,
     "closure_items": 61,
     "kept_share": 0.0984,
-    "promoted": [
-     "land",
-     "life",
-     "rain",
-     "house",
-     "flower",
-     "human",
-     "farmer",
-     "tool"
-    ],
+    "promoted": {
+     "count": 8,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -1380,9 +1220,10 @@
     "world_index": 28,
     "world_key": "Bb8163367",
     "graph": "little_alchemy_2",
-    "goals": [
-     "water lily"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1394,28 +1235,24 @@
     "recipes": 8,
     "closure_items": 31,
     "kept_share": 0.129,
-    "promoted": [
-     "land",
-     "puddle",
-     "pond",
-     "rainbow",
-     "life",
-     "rain",
-     "double rainbow!"
-    ],
-    "dropped": [
-     "water lily <- flower+lake: beyond max_alternatives",
-     "water lily <- flower+stream: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 7,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 2,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    },
    {
     "world_index": 29,
     "world_key": "Bb367717c",
     "graph": "little_alchemy_2",
-    "goals": [
-     "wax"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -1427,26 +1264,14 @@
     "recipes": 12,
     "closure_items": 47,
     "kept_share": 0.1277,
-    "promoted": [
-     "land",
-     "wall",
-     "life",
-     "rain",
-     "house",
-     "flower",
-     "animal",
-     "blade"
-    ],
-    "dropped": [
-     "beehive <- bee+container: beyond max_alternatives",
-     "beehive <- bee+tree: beyond max_alternatives",
-     "beehive <- bee+forest: beyond max_alternatives",
-     "beehive <- bee+wood: beyond max_alternatives",
-     "wax <- beehive+sword: beyond max_alternatives",
-     "wax <- beehive+tool: beyond max_alternatives",
-     "wax <- bee+beehive: beyond max_alternatives",
-     "wax <- beehive+beekeeper: beyond max_alternatives"
-    ],
+    "promoted": {
+     "count": 8,
+     "names": "omitted: the source data may not be redistributed"
+    },
+    "dropped": {
+     "count": 8,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "decoy_types": 0
    }
   ]

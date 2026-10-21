@@ -402,9 +402,10 @@
     "world_index": 0,
     "world_key": "B71592bf4",
     "graph": "freeciv_classic",
-    "goals": [
-     "Amphibious Warfare"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -416,15 +417,10 @@
     "recipes": 9,
     "closure_items": 30,
     "kept_share": 0.3,
-    "promoted": [
-     "The Wheel",
-     "Literacy",
-     "Iron Working",
-     "University",
-     "Democracy",
-     "Leadership",
-     "Navigation"
-    ],
+    "promoted": {
+     "count": 7,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -432,9 +428,10 @@
     "world_index": 1,
     "world_key": "Bca88a296",
     "graph": "freeciv_classic",
-    "goals": [
-     "Automobile"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -446,17 +443,10 @@
     "recipes": 11,
     "closure_items": 38,
     "kept_share": 0.2895,
-    "promoted": [
-     "Astronomy",
-     "Literacy",
-     "Banking",
-     "Invention",
-     "Chemistry",
-     "Bridge Building",
-     "Economics",
-     "Explosives",
-     "Steel"
-    ],
+    "promoted": {
+     "count": 9,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -464,9 +454,10 @@
     "world_index": 2,
     "world_key": "Bab5307c5",
     "graph": "freeciv_classic",
-    "goals": [
-     "Chivalry"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -486,9 +477,10 @@
     "world_index": 3,
     "world_key": "B7d7d1f15",
     "graph": "freeciv_classic",
-    "goals": [
-     "Code of Laws"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -508,9 +500,10 @@
     "world_index": 4,
     "world_key": "B02b78d6e",
     "graph": "freeciv_classic",
-    "goals": [
-     "Communism"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -522,14 +515,10 @@
     "recipes": 8,
     "closure_items": 25,
     "kept_share": 0.32,
-    "promoted": [
-     "Astronomy",
-     "Literacy",
-     "Invention",
-     "Bridge Building",
-     "Banking",
-     "Philosophy"
-    ],
+    "promoted": {
+     "count": 6,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -537,9 +526,10 @@
     "world_index": 5,
     "world_key": "Bbe1126e3",
     "graph": "freeciv_classic",
-    "goals": [
-     "Currency"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -559,9 +549,10 @@
     "world_index": 6,
     "world_key": "B3599f8dc",
     "graph": "freeciv_classic",
-    "goals": [
-     "Democracy"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -573,11 +564,10 @@
     "recipes": 5,
     "closure_items": 12,
     "kept_share": 0.4167,
-    "promoted": [
-     "The Wheel",
-     "Literacy",
-     "Banking"
-    ],
+    "promoted": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 5
    },
@@ -585,9 +575,10 @@
     "world_index": 7,
     "world_key": "Bf8d35f47",
     "graph": "freeciv_classic",
-    "goals": [
-     "Economics"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -599,12 +590,10 @@
     "recipes": 5,
     "closure_items": 12,
     "kept_share": 0.4167,
-    "promoted": [
-     "Code of Laws",
-     "Mysticism",
-     "Mathematics",
-     "Banking"
-    ],
+    "promoted": {
+     "count": 4,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 5
    },
@@ -612,9 +601,10 @@
     "world_index": 8,
     "world_key": "B850493c3",
     "graph": "freeciv_classic",
-    "goals": [
-     "Electronics"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -626,15 +616,10 @@
     "recipes": 9,
     "closure_items": 32,
     "kept_share": 0.2812,
-    "promoted": [
-     "Astronomy",
-     "Literacy",
-     "Banking",
-     "Invention",
-     "Bridge Building",
-     "Economics",
-     "Electricity"
-    ],
+    "promoted": {
+     "count": 7,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -642,9 +627,10 @@
     "world_index": 9,
     "world_key": "B0280388a",
     "graph": "freeciv_classic",
-    "goals": [
-     "Environmentalism"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -656,17 +642,10 @@
     "recipes": 8,
     "closure_items": 58,
     "kept_share": 0.1379,
-    "promoted": [
-     "Chemistry",
-     "Electricity",
-     "Explosives",
-     "Electronics",
-     "Theory of Gravity",
-     "The Corporation",
-     "Machine Tools",
-     "Computers",
-     "Recycling"
-    ],
+    "promoted": {
+     "count": 9,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -674,9 +653,10 @@
     "world_index": 10,
     "world_key": "B71857de5",
     "graph": "freeciv_classic",
-    "goals": [
-     "Fusion Power"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -688,10 +668,10 @@
     "recipes": 3,
     "closure_items": 47,
     "kept_share": 0.0638,
-    "promoted": [
-     "Mass Production",
-     "Nuclear Power"
-    ],
+    "promoted": {
+     "count": 2,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 10
    },
@@ -699,9 +679,10 @@
     "world_index": 11,
     "world_key": "Bd075355a",
     "graph": "freeciv_classic",
-    "goals": [
-     "Guerilla Warfare"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -713,14 +694,10 @@
     "recipes": 5,
     "closure_items": 36,
     "kept_share": 0.1389,
-    "promoted": [
-     "Iron Working",
-     "Invention",
-     "University",
-     "Democracy",
-     "Leadership",
-     "Communism"
-    ],
+    "promoted": {
+     "count": 6,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -728,9 +705,10 @@
     "world_index": 12,
     "world_key": "Ba14c05f4",
     "graph": "freeciv_classic",
-    "goals": [
-     "Iron Working"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -750,9 +728,10 @@
     "world_index": 13,
     "world_key": "B02ee1b08",
     "graph": "freeciv_classic",
-    "goals": [
-     "Medicine"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -764,11 +743,10 @@
     "recipes": 4,
     "closure_items": 8,
     "kept_share": 0.5,
-    "promoted": [
-     "Code of Laws",
-     "Mysticism",
-     "Trade"
-    ],
+    "promoted": {
+     "count": 3,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 7
    },
@@ -776,9 +754,10 @@
     "world_index": 14,
     "world_key": "Bd70965b8",
     "graph": "freeciv_classic",
-    "goals": [
-     "Metallurgy"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -790,12 +769,10 @@
     "recipes": 6,
     "closure_items": 15,
     "kept_share": 0.4,
-    "promoted": [
-     "The Wheel",
-     "Literacy",
-     "Iron Working",
-     "University"
-    ],
+    "promoted": {
+     "count": 4,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -803,9 +780,10 @@
     "world_index": 15,
     "world_key": "B98da19eb",
     "graph": "freeciv_classic",
-    "goals": [
-     "Monarchy"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -825,9 +803,10 @@
     "world_index": 16,
     "world_key": "B3375cc0f",
     "graph": "freeciv_classic",
-    "goals": [
-     "Plastics"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -839,15 +818,10 @@
     "recipes": 7,
     "closure_items": 57,
     "kept_share": 0.1228,
-    "promoted": [
-     "Electricity",
-     "Explosives",
-     "Electronics",
-     "Theory of Gravity",
-     "Machine Tools",
-     "Computers",
-     "Refining"
-    ],
+    "promoted": {
+     "count": 7,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 0
    },
@@ -855,9 +829,10 @@
     "world_index": 17,
     "world_key": "B3405419b",
     "graph": "freeciv_classic",
-    "goals": [
-     "Sanitation"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -869,12 +844,10 @@
     "recipes": 5,
     "closure_items": 12,
     "kept_share": 0.4167,
-    "promoted": [
-     "Code of Laws",
-     "Mysticism",
-     "Trade",
-     "Engineering"
-    ],
+    "promoted": {
+     "count": 4,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 4
    },
@@ -882,9 +855,10 @@
     "world_index": 18,
     "world_key": "B405f17a2",
     "graph": "freeciv_classic",
-    "goals": [
-     "Superconductors"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,
@@ -896,10 +870,10 @@
     "recipes": 2,
     "closure_items": 46,
     "kept_share": 0.0435,
-    "promoted": [
-     "Mass Production",
-     "Nuclear Power"
-    ],
+    "promoted": {
+     "count": 2,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "dropped": [],
     "decoy_types": 7
    },
@@ -907,9 +881,10 @@
     "world_index": 19,
     "world_key": "B5034b972",
     "graph": "freeciv_classic",
-    "goals": [
-     "The Wheel"
-    ],
+    "goals": {
+     "count": 1,
+     "names": "omitted: the source data may not be redistributed"
+    },
     "params": {
      "pool_size": 6,
      "max_true": 3,

@@ -33,26 +33,26 @@ Best learner `mppo` by cost_ratio_late on the validation split at budget 1000000
 
 | World | Goals | Items | Promoted | Dropped recipes | Kept share |
 |---|---|---|---|---|---|
-| B71592bf4 | Amphibious Warfare | 9 | The Wheel, Literacy, Iron Working, University, Democracy, Leadership, Navigation | 0 | 0.30 |
-| Bca88a296 | Automobile | 11 | Astronomy, Literacy, Banking, Invention, Chemistry, Bridge Building, Economics, Explosives, Steel | 0 | 0.29 |
-| Bab5307c5 | Chivalry | 4 | - | 0 | 1.00 |
-| B7d7d1f15 | Code of Laws | 1 | - | 0 | 1.00 |
-| B02b78d6e | Communism | 8 | Astronomy, Literacy, Invention, Bridge Building, Banking, Philosophy | 0 | 0.32 |
-| Bbe1126e3 | Currency | 1 | - | 0 | 1.00 |
-| B3599f8dc | Democracy | 5 | The Wheel, Literacy, Banking | 0 | 0.42 |
-| Bf8d35f47 | Economics | 5 | Code of Laws, Mysticism, Mathematics, Banking | 0 | 0.42 |
-| B850493c3 | Electronics | 9 | Astronomy, Literacy, Banking, Invention, Bridge Building, Economics, Electricity | 0 | 0.28 |
-| B0280388a | Environmentalism | 8 | Chemistry, Electricity, Explosives, Electronics, Theory of Gravity, The Corporation, Machine Tools, Computers, Recycling | 0 | 0.14 |
-| B71857de5 | Fusion Power | 3 | Mass Production, Nuclear Power | 0 | 0.06 |
-| Bd075355a | Guerilla Warfare | 5 | Iron Working, Invention, University, Democracy, Leadership, Communism | 0 | 0.14 |
-| Ba14c05f4 | Iron Working | 1 | - | 0 | 1.00 |
-| B02ee1b08 | Medicine | 4 | Code of Laws, Mysticism, Trade | 0 | 0.50 |
-| Bd70965b8 | Metallurgy | 6 | The Wheel, Literacy, Iron Working, University | 0 | 0.40 |
-| B98da19eb | Monarchy | 2 | - | 0 | 1.00 |
-| B3375cc0f | Plastics | 7 | Electricity, Explosives, Electronics, Theory of Gravity, Machine Tools, Computers, Refining | 0 | 0.12 |
-| B3405419b | Sanitation | 5 | Code of Laws, Mysticism, Trade, Engineering | 0 | 0.42 |
-| B405f17a2 | Superconductors | 2 | Mass Production, Nuclear Power | 0 | 0.04 |
-| B5034b972 | The Wheel | 1 | - | 0 | 1.00 |
+| B71592bf4 | omitted | 9 | omitted | 0 | 0.30 |
+| Bca88a296 | omitted | 11 | omitted | 0 | 0.29 |
+| Bab5307c5 | omitted | 4 | omitted | 0 | 1.00 |
+| B7d7d1f15 | omitted | 1 | omitted | 0 | 1.00 |
+| B02b78d6e | omitted | 8 | omitted | 0 | 0.32 |
+| Bbe1126e3 | omitted | 1 | omitted | 0 | 1.00 |
+| B3599f8dc | omitted | 5 | omitted | 0 | 0.42 |
+| Bf8d35f47 | omitted | 5 | omitted | 0 | 0.42 |
+| B850493c3 | omitted | 9 | omitted | 0 | 0.28 |
+| B0280388a | omitted | 8 | omitted | 0 | 0.14 |
+| B71857de5 | omitted | 3 | omitted | 0 | 0.06 |
+| Bd075355a | omitted | 5 | omitted | 0 | 0.14 |
+| Ba14c05f4 | omitted | 1 | omitted | 0 | 1.00 |
+| B02ee1b08 | omitted | 4 | omitted | 0 | 0.50 |
+| Bd70965b8 | omitted | 6 | omitted | 0 | 0.40 |
+| B98da19eb | omitted | 2 | omitted | 0 | 1.00 |
+| B3375cc0f | omitted | 7 | omitted | 0 | 0.12 |
+| B3405419b | omitted | 5 | omitted | 0 | 0.42 |
+| B405f17a2 | omitted | 2 | omitted | 0 | 0.04 |
+| B5034b972 | omitted | 1 | omitted | 0 | 1.00 |
 
 ## Interactions and time
 

@@ -33,36 +33,36 @@ Best learner `mppo` by cost_ratio_late on the validation split at budget 1000000
 
 | World | Goals | Items | Promoted | Dropped recipes | Kept share |
 |---|---|---|---|---|---|
-| B5c02c8c5 | archeologist | 3 | house, family, human | 2 | 0.09 |
-| Bda508845 | atmosphere | 2 | ocean, continent | 3 | 0.14 |
-| Ba7e74d60 | birdcage | 6 | land, lake, lava, energy, volcano, mountain, sky, wall, safe | 5 | 0.17 |
-| B0c1c1353 | coral | 7 | land, stone, lava, energy, volcano, mountain, moon, corpse, sea | 12 | 0.17 |
-| B25243ba5 | cow | 6 | land, lake, lava, energy, volcano, mountain, field, barn | 5 | 0.11 |
-| B2abd4e97 | darkness | 3 | moon, sky, day | 0 | 0.14 |
-| B72700738 | desert | 2 | stone, sand | 0 | 0.14 |
-| B5dc7cf90 | electricity | 9 | ocean, continent, stone, mist, energy, sun, boiler, tool, pressure | 5 | 0.23 |
-| Ba7245a89 | family | 2 | wall, human | 0 | 0.06 |
-| Bbbcc5ef6 | fireplace | 6 | land, life, rain, sword, tool, brick | 0 | 0.11 |
-| B89030a92 | firetruck | 6 | land, pressure, car, life, rain, night | 3 | 0.13 |
-| B51947f4e | forest | 1 | land, tree | 2 | 0.04 |
-| Bba1a3f48 | fortune cookie | 5 | puddle, stone, life, wheat, sugar, chocolate, magic, paper | 5 | 0.06 |
-| Bcb9c6b62 | galaxy cluster | 1 | galaxy | 0 | 0.05 |
-| B93eea5fa | ghost | 13 | land, stone, blade, tool, explosion, excalibur, life, rain, sword, human, wall, night, field, wire, rope | 12 | 0.17 |
-| Bff9ce51c | hedgehog | 4 | stone, animal, cotton, tool, rat | 3 | 0.05 |
-| B61cf03a6 | hurricane | 2 | ocean, lake, tornado | 0 | 0.22 |
-| Bc891d7d7 | husky | 7 | land, mountain, lake, lava, energy, volcano, field, moon, barn, snow, antarctica | 14 | 0.11 |
-| B7c23e2c5 | jar | 6 | land, heat, rainbow, life, rain, double rainbow!, machine, glass | 7 | 0.13 |
-| Bc11108a5 | lava lamp | 13 | land, lava, mountain, clay, explosion, blade, light bulb, life, rain | 14 | 0.22 |
-| B74698055 | livestock | 5 | land, lake, lava, energy, volcano, mountain, field, barn | 4 | 0.09 |
-| Bbc2b474b | lumberjack | 5 | land, life, rain, human, sword, tool | 0 | 0.10 |
-| B2e73897a | mercury | 2 | ocean, continent, heat | 2 | 0.12 |
-| Ba2327d47 | music | 2 | human, drum, flute | 1 | 0.03 |
-| Bc2fe7575 | river | 7 | ocean, pond, continent | 3 | 0.39 |
-| Bbac6d2c2 | rivulet | 9 | ocean, puddle, pond, continent | 4 | 0.45 |
-| B39f47c4a | seal | 7 | land, lake, lava, energy, volcano, mountain, field, moon, barn | 13 | 0.12 |
-| Be9f7ded7 | spoon | 6 | land, life, rain, house, flower, human, farmer, tool | 0 | 0.10 |
-| Bb8163367 | water lily | 4 | land, puddle, pond, rainbow, life, rain, double rainbow! | 2 | 0.13 |
-| Bb367717c | wax | 6 | land, wall, life, rain, house, flower, animal, blade | 8 | 0.13 |
+| B5c02c8c5 | omitted | 3 | omitted | 2 | 0.09 |
+| Bda508845 | omitted | 2 | omitted | 3 | 0.14 |
+| Ba7e74d60 | omitted | 6 | omitted | 5 | 0.17 |
+| B0c1c1353 | omitted | 7 | omitted | 12 | 0.17 |
+| B25243ba5 | omitted | 6 | omitted | 5 | 0.11 |
+| B2abd4e97 | omitted | 3 | omitted | 0 | 0.14 |
+| B72700738 | omitted | 2 | omitted | 0 | 0.14 |
+| B5dc7cf90 | omitted | 9 | omitted | 5 | 0.23 |
+| Ba7245a89 | omitted | 2 | omitted | 0 | 0.06 |
+| Bbbcc5ef6 | omitted | 6 | omitted | 0 | 0.11 |
+| B89030a92 | omitted | 6 | omitted | 3 | 0.13 |
+| B51947f4e | omitted | 1 | omitted | 2 | 0.04 |
+| Bba1a3f48 | omitted | 5 | omitted | 5 | 0.06 |
+| Bcb9c6b62 | omitted | 1 | omitted | 0 | 0.05 |
+| B93eea5fa | omitted | 13 | omitted | 12 | 0.17 |
+| Bff9ce51c | omitted | 4 | omitted | 3 | 0.05 |
+| B61cf03a6 | omitted | 2 | omitted | 0 | 0.22 |
+| Bc891d7d7 | omitted | 7 | omitted | 14 | 0.11 |
+| B7c23e2c5 | omitted | 6 | omitted | 7 | 0.13 |
+| Bc11108a5 | omitted | 13 | omitted | 14 | 0.22 |
+| B74698055 | omitted | 5 | omitted | 4 | 0.09 |
+| Bbc2b474b | omitted | 5 | omitted | 0 | 0.10 |
+| B2e73897a | omitted | 2 | omitted | 2 | 0.12 |
+| Ba2327d47 | omitted | 2 | omitted | 1 | 0.03 |
+| Bc2fe7575 | omitted | 7 | omitted | 3 | 0.39 |
+| Bbac6d2c2 | omitted | 9 | omitted | 4 | 0.45 |
+| B39f47c4a | omitted | 7 | omitted | 13 | 0.12 |
+| Be9f7ded7 | omitted | 6 | omitted | 0 | 0.10 |
+| Bb8163367 | omitted | 4 | omitted | 2 | 0.13 |
+| Bb367717c | omitted | 6 | omitted | 8 | 0.13 |
 
 ## Interactions and time
 
