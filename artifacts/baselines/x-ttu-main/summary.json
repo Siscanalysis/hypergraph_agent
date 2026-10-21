@@ -1,0 +1,827 @@
+{
+ "name": "x-ttu-main",
+ "setting": "tt_u_k3",
+ "family": "techtree",
+ "definition": {
+  "late_from": 6,
+  "unit": "test world",
+  "bootstrap": {
+   "resamples": 10000,
+   "seed": 20261008
+  }
+ },
+ "selection": {
+  "metric": "steps_late",
+  "split": "validation",
+  "budget": 1000000,
+  "scores": {
+   "mppo": 95.08333333333333,
+   "mppo_rnd": 93.125,
+   "rppo": 99.36805555555554
+  },
+  "best_learner": "mppo_rnd",
+  "note": null
+ },
+ "tuning": {
+  "metric": "steps_late",
+  "split": "validation",
+  "budget": 1000000,
+  "groups": {
+   "maskable_ppo": {
+    "learner": "mppo",
+    "mode": "stochastic",
+    "score": 95.08333333333333,
+    "candidates": {
+     "mppo@stochastic": 95.08333333333333
+    }
+   },
+   "recurrent_ppo": {
+    "learner": "rppo",
+    "mode": "stochastic",
+    "score": 99.36805555555554,
+    "candidates": {
+     "rppo@stochastic": 99.36805555555554
+    }
+   },
+   "maskable_ppo_rnd": {
+    "learner": "mppo_rnd",
+    "mode": "stochastic",
+    "score": 93.125,
+    "candidates": {
+     "mppo_rnd@stochastic": 93.125
+    }
+   }
+  },
+  "incomplete": {}
+ },
+ "tests": [
+  {
+   "name": "XU1 pooled - best learner, actions to first success",
+   "role": "secondary",
+   "metric": "first_success_steps",
+   "a": "pooled",
+   "b": "best_learner",
+   "a_resolved": "pooled",
+   "b_resolved": "mppo_rnd",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 30,
+   "estimate": -700.3666666666667,
+   "ci": [
+    -853.4341666666666,
+    -537.6645833333333
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 27,
+    "positive": 3,
+    "zero": 0,
+    "p_two_sided": 8.430331945419312e-06
+   },
+   "mean_a": 70.86666666666666,
+   "mean_b": 771.2333333333333,
+   "per_unit": {
+    "s0:W04304001": -28.5,
+    "s0:W54345633": -128.5,
+    "s0:W7b91071d": -1109.0,
+    "s0:Wa6498677": -631.0,
+    "s0:Wc9447cfd": -520.5,
+    "s0:Wf4c06724": -1123.0,
+    "s1:W2844d9c6": -874.5,
+    "s1:W47ae158a": -1138.0,
+    "s1:W5fcd4e13": -1146.0,
+    "s1:W6ceccc1a": -1118.0,
+    "s1:W92af7c0a": -3.5,
+    "s1:W9a577303": -1058.0,
+    "s2:W02023527": -640.5,
+    "s2:W39531e0e": -1125.0,
+    "s2:W421136e8": -538.0,
+    "s2:W7406c2a4": -899.0,
+    "s2:W8431b8fe": 31.0,
+    "s2:Wcb029bc9": -1120.0,
+    "s3:W424307ed": 35.5,
+    "s3:W46f915e3": -578.0,
+    "s3:W7aaac10b": -591.0,
+    "s3:Wbe4fba02": 12.0,
+    "s3:We145c43b": -31.5,
+    "s3:We58eeea9": -1034.5,
+    "s4:W17246caa": -1164.0,
+    "s4:W2a9ae4b2": -702.0,
+    "s4:W381c369c": -1163.0,
+    "s4:W4b3cd899": -1089.0,
+    "s4:Wc4c82faa": -445.5,
+    "s4:We5f55f57": -1090.0
+   },
+   "by_training_seed": {
+    "0": -759.0,
+    "1": -641.7333333333333
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XU2 pooled - best learner, late actions per episode",
+   "role": "secondary",
+   "metric": "steps_late",
+   "a": "pooled",
+   "b": "best_learner",
+   "a_resolved": "pooled",
+   "b_resolved": "mppo_rnd",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 30,
+   "estimate": -88.44722222222222,
+   "ci": [
+    -90.7222222222222,
+    -85.67493055555553
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 30,
+    "positive": 0,
+    "zero": 0,
+    "p_two_sided": 1.862645149230957e-09
+   },
+   "mean_a": 6.766666666666667,
+   "mean_b": 95.21388888888889,
+   "per_unit": {
+    "s0:W04304001": -79.66666666666666,
+    "s0:W54345633": -87.83333333333333,
+    "s0:W7b91071d": -94.0,
+    "s0:Wa6498677": -93.0,
+    "s0:Wc9447cfd": -89.25,
+    "s0:Wf4c06724": -94.0,
+    "s1:W2844d9c6": -89.41666666666666,
+    "s1:W47ae158a": -93.0,
+    "s1:W5fcd4e13": -94.0,
+    "s1:W6ceccc1a": -93.0,
+    "s1:W92af7c0a": -73.08333333333334,
+    "s1:W9a577303": -87.5,
+    "s2:W02023527": -88.41666666666666,
+    "s2:W39531e0e": -93.0,
+    "s2:W421136e8": -92.66666666666666,
+    "s2:W7406c2a4": -83.0,
+    "s2:W8431b8fe": -62.5,
+    "s2:Wcb029bc9": -93.0,
+    "s3:W424307ed": -91.58333333333333,
+    "s3:W46f915e3": -88.0,
+    "s3:W7aaac10b": -93.0,
+    "s3:Wbe4fba02": -79.66666666666666,
+    "s3:We145c43b": -84.08333333333334,
+    "s3:We58eeea9": -87.16666666666666,
+    "s4:W17246caa": -94.0,
+    "s4:W2a9ae4b2": -93.0,
+    "s4:W381c369c": -93.0,
+    "s4:W4b3cd899": -92.33333333333334,
+    "s4:Wc4c82faa": -84.25,
+    "s4:We5f55f57": -93.0
+   },
+   "by_training_seed": {
+    "0": -89.92222222222222,
+    "1": -86.9722222222222
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XU3 best learner - random, actions to first success",
+   "role": "secondary",
+   "metric": "first_success_steps",
+   "a": "best_learner",
+   "b": "random",
+   "a_resolved": "mppo_rnd",
+   "b_resolved": "random",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 30,
+   "estimate": 542.5666666666667,
+   "ci": [
+    354.37500000000006,
+    718.1004166666667
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 6,
+    "positive": 24,
+    "zero": 0,
+    "p_two_sided": 0.001430906355381012
+   },
+   "mean_a": 771.2333333333333,
+   "mean_b": 228.66666666666666,
+   "per_unit": {
+    "s0:W04304001": 66.5,
+    "s0:W54345633": 86.5,
+    "s0:W7b91071d": 1144.0,
+    "s0:Wa6498677": 186.0,
+    "s0:Wc9447cfd": -562.5,
+    "s0:Wf4c06724": 1060.0,
+    "s1:W2844d9c6": 647.5,
+    "s1:W47ae158a": 1111.0,
+    "s1:W5fcd4e13": 1111.0,
+    "s1:W6ceccc1a": 930.0,
+    "s1:W92af7c0a": -27.5,
+    "s1:W9a577303": 1020.0,
+    "s2:W02023527": 526.5,
+    "s2:W39531e0e": 1146.0,
+    "s2:W421136e8": 250.0,
+    "s2:W7406c2a4": 602.0,
+    "s2:W8431b8fe": -101.0,
+    "s2:Wcb029bc9": 920.0,
+    "s3:W424307ed": -224.5,
+    "s3:W46f915e3": 405.0,
+    "s3:W7aaac10b": 269.0,
+    "s3:Wbe4fba02": -114.0,
+    "s3:We145c43b": -348.5,
+    "s3:We58eeea9": 916.5,
+    "s4:W17246caa": 1161.0,
+    "s4:W2a9ae4b2": 671.0,
+    "s4:W381c369c": 904.0,
+    "s4:W4b3cd899": 969.0,
+    "s4:Wc4c82faa": 533.5,
+    "s4:We5f55f57": 1019.0
+   },
+   "verdict": "does not hold"
+  },
+  {
+   "name": "XU4 best learner - random, late actions per episode",
+   "role": "secondary",
+   "metric": "steps_late",
+   "a": "best_learner",
+   "b": "random",
+   "a_resolved": "mppo_rnd",
+   "b_resolved": "random",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 30,
+   "estimate": 4.174999999999999,
+   "ci": [
+    0.041666666666668024,
+    8.255624999999998
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 9,
+    "positive": 19,
+    "zero": 2,
+    "p_two_sided": 0.08715855330228806
+   },
+   "mean_a": 95.21388888888889,
+   "mean_b": 91.03888888888888,
+   "per_unit": {
+    "s0:W04304001": 3.999999999999986,
+    "s0:W54345633": 20.5,
+    "s0:W7b91071d": 0.0,
+    "s0:Wa6498677": 7.166666666666671,
+    "s0:Wc9447cfd": -3.75,
+    "s0:Wf4c06724": 16.16666666666667,
+    "s1:W2844d9c6": -3.583333333333343,
+    "s1:W47ae158a": 8.166666666666671,
+    "s1:W5fcd4e13": 2.3333333333333286,
+    "s1:W6ceccc1a": 12.666666666666671,
+    "s1:W92af7c0a": -18.08333333333333,
+    "s1:W9a577303": -2.3333333333333286,
+    "s2:W02023527": -3.250000000000014,
+    "s2:W39531e0e": 11.0,
+    "s2:W421136e8": 6.833333333333329,
+    "s2:W7406c2a4": 3.0,
+    "s2:W8431b8fe": -30.5,
+    "s2:Wcb029bc9": 10.833333333333329,
+    "s3:W424307ed": 0.9166666666666572,
+    "s3:W46f915e3": -5.0,
+    "s3:W7aaac10b": 33.16666666666667,
+    "s3:Wbe4fba02": -1.4210854715202004e-14,
+    "s3:We145c43b": -2.749999999999986,
+    "s3:We58eeea9": 12.166666666666657,
+    "s4:W17246caa": 4.5,
+    "s4:W2a9ae4b2": 0.0,
+    "s4:W381c369c": 7.0,
+    "s4:W4b3cd899": 7.166666666666671,
+    "s4:Wc4c82faa": 15.583333333333329,
+    "s4:We5f55f57": 11.333333333333329
+   },
+   "verdict": "does not hold"
+  },
+  {
+   "name": "XU5 best learner, late minus early cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late_minus_early",
+   "a": "best_learner",
+   "b": null,
+   "a_resolved": "mppo_rnd",
+   "b_resolved": null,
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 30,
+   "estimate": 0.11695767195767195,
+   "ci": [
+    -0.2470714285714284,
+    0.49656084656084665
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 9,
+    "positive": 11,
+    "zero": 10,
+    "p_two_sided": 0.8238029479980469
+   },
+   "mean_a": 0.11695767195767195,
+   "mean_b": null,
+   "per_unit": {
+    "s0:W04304001": 0.7142857142857144,
+    "s0:W54345633": 0.738095238095239,
+    "s0:W7b91071d": 0.0,
+    "s0:Wa6498677": 0.6904761904761907,
+    "s0:Wc9447cfd": -0.22619047619047628,
+    "s0:Wf4c06724": 0.0,
+    "s1:W2844d9c6": -0.5119047619047619,
+    "s1:W47ae158a": 0.0,
+    "s1:W5fcd4e13": 0.0,
+    "s1:W6ceccc1a": 0.0,
+    "s1:W92af7c0a": 2.2777777777777777,
+    "s1:W9a577303": -0.7857142857142865,
+    "s2:W02023527": -0.023809523809523725,
+    "s2:W39531e0e": 0.0,
+    "s2:W421136e8": 0.26190476190476186,
+    "s2:W7406c2a4": -2.4000000000000004,
+    "s2:W8431b8fe": -2.1190476190476195,
+    "s2:Wcb029bc9": 0.0,
+    "s3:W424307ed": 0.5119047619047619,
+    "s3:W46f915e3": -0.6190476190476186,
+    "s3:W7aaac10b": 0.4285714285714288,
+    "s3:Wbe4fba02": 3.30952380952381,
+    "s3:We145c43b": 0.8214285714285721,
+    "s3:We58eeea9": -0.8333333333333339,
+    "s4:W17246caa": 0.0,
+    "s4:W2a9ae4b2": 0.4047619047619051,
+    "s4:W381c369c": 0.0,
+    "s4:W4b3cd899": -0.09523809523809579,
+    "s4:Wc4c82faa": 0.9642857142857135,
+    "s4:We5f55f57": 0.0
+   },
+   "verdict": "does not hold"
+  }
+ ],
+ "completeness": {
+  "planned": 50,
+  "missing": 0,
+  "complete": true
+ },
+ "learning_curves": {
+  "mppo": {
+   "10000": {
+    "cost_ratio_late": 14.531084656084657,
+    "success_late": 0.0611111111111111,
+    "steps_late": 97.72222222222221,
+    "first_success_steps": 902.4833333333333,
+    "units": 30
+   },
+   "100000": {
+    "cost_ratio_late": 14.383730158730161,
+    "success_late": 0.10555555555555557,
+    "steps_late": 96.71388888888889,
+    "first_success_steps": 927.4166666666666,
+    "units": 30
+   },
+   "1000000": {
+    "cost_ratio_late": 14.372949735449735,
+    "success_late": 0.08055555555555556,
+    "steps_late": 96.6861111111111,
+    "first_success_steps": 841.4333333333333,
+    "units": 30
+   }
+  },
+  "mppo_rnd": {
+   "10000": {
+    "cost_ratio_late": 14.467645502645503,
+    "success_late": 0.09166666666666669,
+    "steps_late": 97.31388888888888,
+    "first_success_steps": 853.9166666666666,
+    "units": 30
+   },
+   "100000": {
+    "cost_ratio_late": 13.627645502645503,
+    "success_late": 0.25,
+    "steps_late": 91.81944444444443,
+    "first_success_steps": 639.5333333333333,
+    "units": 30
+   },
+   "1000000": {
+    "cost_ratio_late": 14.149828042328041,
+    "success_late": 0.15555555555555553,
+    "steps_late": 95.21388888888889,
+    "first_success_steps": 771.2333333333333,
+    "units": 30
+   }
+  },
+  "oracle": {
+   "agent": {
+    "cost_ratio_late": 1.0,
+    "success_late": 1.0,
+    "steps_late": 6.766666666666667,
+    "first_success_steps": 6.766666666666667,
+    "units": 30
+   }
+  },
+  "pooled": {
+   "agent": {
+    "cost_ratio_late": 1.0,
+    "success_late": 1.0,
+    "steps_late": 6.766666666666667,
+    "first_success_steps": 70.86666666666666,
+    "units": 30
+   }
+  },
+  "random": {
+   "agent": {
+    "cost_ratio_late": 13.543783068783068,
+    "success_late": 0.21666666666666667,
+    "steps_late": 91.03888888888888,
+    "first_success_steps": 228.66666666666666,
+    "units": 30
+   }
+  },
+  "reference": {
+   "agent": {
+    "cost_ratio_late": 1.0,
+    "success_late": 1.0,
+    "steps_late": 6.766666666666667,
+    "first_success_steps": 6.766666666666667,
+    "units": 30
+   }
+  },
+  "rppo": {
+   "10000": {
+    "cost_ratio_late": 14.871031746031745,
+    "success_late": 0.0027777777777777775,
+    "steps_late": 99.98611111111111,
+    "first_success_steps": 1177.8,
+    "units": 30
+   },
+   "100000": {
+    "cost_ratio_late": 14.873015873015872,
+    "success_late": 0.0,
+    "steps_late": 100.0,
+    "first_success_steps": 1200.0,
+    "units": 30
+   },
+   "1000000": {
+    "cost_ratio_late": 14.873015873015872,
+    "success_late": 0.0,
+    "steps_late": 100.0,
+    "first_success_steps": 1200.0,
+    "units": 30
+   }
+  }
+ },
+ "validation_curves": {
+  "mppo": {
+   "1000000": {
+    "cost_ratio_late": 14.319279100529101,
+    "success_late": 0.11805555555555554,
+    "steps_late": 95.08333333333333,
+    "first_success_steps": 932.0,
+    "units": 12
+   }
+  },
+  "mppo_rnd": {
+   "1000000": {
+    "cost_ratio_late": 14.027447089947088,
+    "success_late": 0.19444444444444442,
+    "steps_late": 93.125,
+    "first_success_steps": 710.5,
+    "units": 12
+   }
+  },
+  "rppo": {
+   "1000000": {
+    "cost_ratio_late": 14.979166666666664,
+    "success_late": 0.020833333333333332,
+    "steps_late": 99.36805555555554,
+    "first_success_steps": 1179.8333333333333,
+    "units": 12
+   }
+  }
+ },
+ "cells": {
+  "rppo|10000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "rppo|100000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "rppo|1000000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "rppo|1000000|validation": {
+   "units": 12,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo|10000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo|100000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo|1000000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo|1000000|validation": {
+   "units": 12,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "pooled|None|test": {
+   "units": 30,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "oracle|None|test": {
+   "units": 30,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "reference|None|test": {
+   "units": 30,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "random|None|test": {
+   "units": 30,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "mppo_rnd|10000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo_rnd|100000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo_rnd|1000000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo_rnd|1000000|validation": {
+   "units": 12,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  }
+ },
+ "bookkeeping": {
+  "runs_used": 50,
+  "ignored_repeats": [],
+  "incomplete_runs": [],
+  "costs": {
+   "training": [
+    {
+     "learner": "mppo",
+     "seed": 0,
+     "interactions": 1000000,
+     "seconds": 3342.04,
+     "steps_per_second": 299.2,
+     "checkpoints": [
+      {
+       "budget": 10000,
+       "interactions": 10000,
+       "path": "checkpoint_10000.zip",
+       "seconds": 25.58
+      },
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 313.84
+      },
+      {
+       "budget": 1000000,
+       "interactions": 1000000,
+       "path": "checkpoint_1000000.zip",
+       "seconds": 3342.04
+      }
+     ]
+    },
+    {
+     "learner": "mppo",
+     "seed": 1,
+     "interactions": 1000000,
+     "seconds": 3327.76,
+     "steps_per_second": 300.5,
+     "checkpoints": [
+      {
+       "budget": 10000,
+       "interactions": 10000,
+       "path": "checkpoint_10000.zip",
+       "seconds": 25.11
+      },
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 318.59
+      },
+      {
+       "budget": 1000000,
+       "interactions": 1000000,
+       "path": "checkpoint_1000000.zip",
+       "seconds": 3327.76
+      }
+     ]
+    },
+    {
+     "learner": "rppo",
+     "seed": 0,
+     "interactions": 1000000,
+     "seconds": 2121.89,
+     "steps_per_second": 471.3,
+     "checkpoints": [
+      {
+       "budget": 10000,
+       "interactions": 10000,
+       "path": "checkpoint_10000.zip",
+       "seconds": 17.05
+      },
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 200.65
+      },
+      {
+       "budget": 1000000,
+       "interactions": 1000000,
+       "path": "checkpoint_1000000.zip",
+       "seconds": 2121.89
+      }
+     ]
+    },
+    {
+     "learner": "rppo",
+     "seed": 1,
+     "interactions": 1000000,
+     "seconds": 2346.51,
+     "steps_per_second": 426.2,
+     "checkpoints": [
+      {
+       "budget": 10000,
+       "interactions": 10000,
+       "path": "checkpoint_10000.zip",
+       "seconds": 16.87
+      },
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 191.39
+      },
+      {
+       "budget": 1000000,
+       "interactions": 1000000,
+       "path": "checkpoint_1000000.zip",
+       "seconds": 2346.51
+      }
+     ]
+    },
+    {
+     "learner": "mppo_rnd",
+     "seed": 0,
+     "interactions": 1000000,
+     "seconds": 2087.11,
+     "steps_per_second": 479.1,
+     "checkpoints": [
+      {
+       "budget": 10000,
+       "interactions": 10000,
+       "path": "checkpoint_10000.zip",
+       "seconds": 25.49
+      },
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 295.47
+      },
+      {
+       "budget": 1000000,
+       "interactions": 1000000,
+       "path": "checkpoint_1000000.zip",
+       "seconds": 2087.11
+      }
+     ]
+    },
+    {
+     "learner": "mppo_rnd",
+     "seed": 1,
+     "interactions": 1000000,
+     "seconds": 1983.32,
+     "steps_per_second": 504.2,
+     "checkpoints": [
+      {
+       "budget": 10000,
+       "interactions": 10000,
+       "path": "checkpoint_10000.zip",
+       "seconds": 26.69
+      },
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 292.91
+      },
+      {
+       "budget": 1000000,
+       "interactions": 1000000,
+       "path": "checkpoint_1000000.zip",
+       "seconds": 1983.32
+      }
+     ]
+    }
+   ],
+   "evaluation": {
+    "rppo": {
+     "interactions": 244677,
+     "seconds": 857.6
+    },
+    "mppo": {
+     "interactions": 237634,
+     "seconds": 628.55
+    },
+    "mppo_rnd": {
+     "interactions": 231860,
+     "seconds": 317.27
+    }
+   },
+   "agents": {
+    "pooled": {
+     "interactions": 4324,
+     "seconds": 2.27
+    },
+    "oracle": {
+     "interactions": 2436,
+     "seconds": 1.18
+    },
+    "reference": {
+     "interactions": 2436,
+     "seconds": 1.21
+    },
+    "random": {
+     "interactions": 32039,
+     "seconds": 9.49
+    }
+   }
+  }
+ },
+ "agent_interactions_per_world": {
+  "pooled": 144.13333333333333,
+  "oracle": 81.2,
+  "reference": 81.2,
+  "random": 1067.9666666666667
+ }
+}

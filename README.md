@@ -73,7 +73,9 @@ their own frozen protocol, interaction ledger and verdict:
 - **Second round** ([docs/RESULTS.md](docs/RESULTS.md), Section 4.6): goals three
   to five levels deep remove study R's advantage (R2); promotion still pays when
   skills slip, though less (P); and the pooled explorer needs 2.6 to 5.7 times
-  fewer actions than generic exploration baselines (U2).
+  fewer actions than generic exploration baselines (U2); open-source reinforcement
+  learners (Stable-Baselines3) trained for a million interactions stayed at
+  random level and were far costlier than the repository's agents (X).
 
 ## The game
 

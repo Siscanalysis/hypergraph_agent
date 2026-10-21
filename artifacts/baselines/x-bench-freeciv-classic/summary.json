@@ -1,0 +1,930 @@
+{
+ "name": "x-bench-freeciv-classic",
+ "setting": "bench_freeciv_classic",
+ "family": "recipequest",
+ "definition": {
+  "late_from": 8,
+  "unit": "test world",
+  "bootstrap": {
+   "resamples": 10000,
+   "seed": 20261008
+  }
+ },
+ "selection": {
+  "metric": "cost_ratio_late",
+  "split": "validation",
+  "budget": 1000000,
+  "scores": {
+   "mppo": 2.9033314865594435,
+   "mppo_rnd": 2.9095517995745532,
+   "ppo": 2.972171454958128,
+   "rppo": 2.972171454958128
+  },
+  "best_learner": "mppo",
+  "note": null,
+  "source": "x-rq-main"
+ },
+ "tuning": {
+  "metric": "cost_ratio_late",
+  "split": "validation",
+  "budget": 1000000,
+  "groups": {},
+  "incomplete": {
+   "maskable_ppo": [
+    "mppo@deterministic"
+   ],
+   "ppo": [
+    "ppo@deterministic"
+   ],
+   "recurrent_ppo": [
+    "rppo@deterministic"
+   ],
+   "maskable_ppo_rnd": [
+    "mppo_rnd@stochastic"
+   ]
+  }
+ },
+ "tests": [
+  {
+   "name": "XB freeciv_classic: focused_sample - best learner, late cost ratio",
+   "role": "secondary",
+   "metric": "cost_ratio_late",
+   "a": "focused_sample",
+   "b": "best_learner",
+   "a_resolved": "focused_sample",
+   "b_resolved": "mppo",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 20,
+   "estimate": -1.1962262297630102,
+   "ci": [
+    -1.5014404530684666,
+    -0.895945328041334
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 20,
+    "positive": 0,
+    "zero": 0,
+    "p_two_sided": 1.9073486328125e-06
+   },
+   "mean_a": 1.0945898325800054,
+   "mean_b": 2.2908160623430165,
+   "per_unit": {
+    "s0:B0280388a": -0.3085106382978724,
+    "s0:B02b78d6e": -0.6428571428571428,
+    "s0:B02ee1b08": -1.717391304347826,
+    "s0:B3375cc0f": -0.5073529411764706,
+    "s0:B3405419b": -1.057692307692308,
+    "s0:B3599f8dc": -1.060344827586207,
+    "s0:B405f17a2": -1.9729729729729732,
+    "s0:B5034b972": -2.0833333333333335,
+    "s0:B71592bf4": -0.75,
+    "s0:B71857de5": -2.302325581395349,
+    "s0:B7d7d1f15": -1.5,
+    "s0:B850493c3": -0.29245283018867907,
+    "s0:B98da19eb": -2.171875,
+    "s0:Ba14c05f4": -1.5,
+    "s0:Bab5307c5": -1.2833333333333334,
+    "s0:Bbe1126e3": -2.3333333333333335,
+    "s0:Bca88a296": -0.2727272727272727,
+    "s0:Bd075355a": -0.5390625,
+    "s0:Bd70965b8": -0.4558823529411762,
+    "s0:Bf8d35f47": -1.173076923076923
+   },
+   "by_training_seed": {
+    "0": -1.236243259038248,
+    "1": -1.1562092004877722
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XB freeciv_classic: maximal - best learner, late cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late",
+   "a": "maximal",
+   "b": "best_learner",
+   "a_resolved": "maximal",
+   "b_resolved": "mppo",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "not_greater",
+   "n_units": 20,
+   "estimate": -0.4494037529917782,
+   "ci": [
+    -0.5489869564841491,
+    -0.34439364112235576
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 19,
+    "positive": 1,
+    "zero": 0,
+    "p_two_sided": 4.00543212890625e-05
+   },
+   "mean_a": 1.8414123093512373,
+   "mean_b": 2.2908160623430165,
+   "per_unit": {
+    "s0:B0280388a": -0.2872340425531916,
+    "s0:B02b78d6e": -0.3857142857142857,
+    "s0:B02ee1b08": -0.7173913043478262,
+    "s0:B3375cc0f": -0.34558823529411753,
+    "s0:B3405419b": -0.4615384615384617,
+    "s0:B3599f8dc": -0.4224137931034484,
+    "s0:B405f17a2": -0.756756756756757,
+    "s0:B5034b972": -0.41666666666666696,
+    "s0:B71592bf4": -0.5,
+    "s0:B71857de5": -0.8372093023255816,
+    "s0:B7d7d1f15": 0.16666666666666652,
+    "s0:B850493c3": -0.21698113207547154,
+    "s0:B98da19eb": -0.828125,
+    "s0:Ba14c05f4": -0.5,
+    "s0:Bab5307c5": -0.41666666666666696,
+    "s0:Bbe1126e3": -0.666666666666667,
+    "s0:Bca88a296": -0.2272727272727273,
+    "s0:Bd075355a": -0.3359375,
+    "s0:Bd70965b8": -0.2941176470588234,
+    "s0:Bf8d35f47": -0.5384615384615383
+   },
+   "by_training_seed": {
+    "0": -0.48942078226701613,
+    "1": -0.40938672371654033
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XB freeciv_classic: focused_sample - maximal, late cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late",
+   "a": "focused_sample",
+   "b": "maximal",
+   "a_resolved": "focused_sample",
+   "b_resolved": "maximal",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 20,
+   "estimate": -0.7468224767712319,
+   "ci": [
+    -1.0039729088751752,
+    -0.4971159259635059
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 20,
+    "positive": 0,
+    "zero": 0,
+    "p_two_sided": 1.9073486328125e-06
+   },
+   "mean_a": 1.0945898325800054,
+   "mean_b": 1.8414123093512373,
+   "per_unit": {
+    "s0:B0280388a": -0.02127659574468077,
+    "s0:B02b78d6e": -0.2571428571428571,
+    "s0:B02ee1b08": -0.9999999999999998,
+    "s0:B3375cc0f": -0.16176470588235303,
+    "s0:B3405419b": -0.5961538461538463,
+    "s0:B3599f8dc": -0.6379310344827587,
+    "s0:B405f17a2": -1.2162162162162162,
+    "s0:B5034b972": -1.6666666666666665,
+    "s0:B71592bf4": -0.25,
+    "s0:B71857de5": -1.4651162790697674,
+    "s0:B7d7d1f15": -1.6666666666666665,
+    "s0:B850493c3": -0.07547169811320753,
+    "s0:B98da19eb": -1.34375,
+    "s0:Ba14c05f4": -1.0,
+    "s0:Bab5307c5": -0.8666666666666665,
+    "s0:Bbe1126e3": -1.6666666666666665,
+    "s0:Bca88a296": -0.045454545454545414,
+    "s0:Bd075355a": -0.203125,
+    "s0:Bd70965b8": -0.1617647058823528,
+    "s0:Bf8d35f47": -0.6346153846153846
+   },
+   "verdict": "holds"
+  }
+ ],
+ "completeness": {
+  "planned": 12,
+  "missing": 0,
+  "complete": true
+ },
+ "learning_curves": {
+  "focused_sample": {
+   "agent": {
+    "cost_ratio_late": 1.0945898325800054,
+    "success_late": 0.975,
+    "steps_late": 7.875,
+    "first_success_steps": 11.85,
+    "units": 20
+   }
+  },
+  "maximal": {
+   "agent": {
+    "cost_ratio_late": 1.8414123093512373,
+    "success_late": 1.0,
+    "steps_late": 11.53125,
+    "first_success_steps": 11.45,
+    "units": 20
+   }
+  },
+  "mppo": {
+   "1000000": {
+    "cost_ratio_late": 2.2908160623430165,
+    "success_late": 0.1,
+    "steps_late": 14.40625,
+    "first_success_steps": 195.775,
+    "units": 20
+   }
+  },
+  "mppo_rnd": {
+   "1000000": {
+    "cost_ratio_late": 2.246574789656397,
+    "success_late": 0.2375,
+    "steps_late": 14.19375,
+    "first_success_steps": 112.725,
+    "units": 20
+   }
+  },
+  "ppo": {
+   "1000000": {
+    "cost_ratio_late": 2.3588508612260966,
+    "success_late": 0.0,
+    "steps_late": 14.6625,
+    "first_success_steps": 236.45,
+    "units": 20
+   }
+  },
+  "random": {
+   "agent": {
+    "cost_ratio_late": 2.222577197496391,
+    "success_late": 0.13125,
+    "steps_late": 14.1375,
+    "first_success_steps": 132.55,
+    "units": 20
+   }
+  },
+  "reference": {
+   "agent": {
+    "cost_ratio_late": 1.0,
+    "success_late": 1.0,
+    "steps_late": 7.025,
+    "first_success_steps": 6.65,
+    "units": 20
+   }
+  },
+  "rppo": {
+   "1000000": {
+    "cost_ratio_late": 2.3588508612260966,
+    "success_late": 0.0,
+    "steps_late": 14.6625,
+    "first_success_steps": 236.45,
+    "units": 20
+   }
+  }
+ },
+ "validation_curves": {},
+ "cells": {
+  "mppo|1000000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "ppo|1000000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "rppo|1000000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo_rnd|1000000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "focused_sample|None|test": {
+   "units": 20,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "maximal|None|test": {
+   "units": 20,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "random|None|test": {
+   "units": 20,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "reference|None|test": {
+   "units": 20,
+   "training_seeds": [
+    "None"
+   ]
+  }
+ },
+ "bookkeeping": {
+  "runs_used": 12,
+  "ignored_repeats": [],
+  "incomplete_runs": [],
+  "costs": {
+   "training": [],
+   "evaluation": {
+    "mppo": {
+     "interactions": 9292,
+     "seconds": 41.68
+    },
+    "ppo": {
+     "interactions": 9458,
+     "seconds": 29.05
+    },
+    "rppo": {
+     "interactions": 9458,
+     "seconds": 47.379999999999995
+    },
+    "mppo_rnd": {
+     "interactions": 9154,
+     "seconds": 41.46
+    }
+   },
+   "agents": {
+    "focused_sample": {
+     "interactions": 2849,
+     "seconds": 13.6
+    },
+    "maximal": {
+     "interactions": 3738,
+     "seconds": 3.65
+    },
+    "random": {
+     "interactions": 4585,
+     "seconds": 2.27
+    },
+    "reference": {
+     "interactions": 2303,
+     "seconds": 2.13
+    }
+   }
+  }
+ },
+ "agent_interactions_per_world": {
+  "focused_sample": 142.45,
+  "maximal": 186.9,
+  "random": 229.25,
+  "reference": 115.15
+ },
+ "conversion": {
+  "summary": {
+   "worlds": 20,
+   "items_mean": 4.85,
+   "promoted_mean": 3.65,
+   "dropped_mean": 0.0,
+   "kept_share_mean": 0.49238499999999996,
+   "decoy_types_mean": 3.5
+  },
+  "worlds": [
+   {
+    "world_index": 0,
+    "world_key": "B71592bf4",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Amphibious Warfare"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 9,
+    "recipes": 9,
+    "closure_items": 30,
+    "kept_share": 0.3,
+    "promoted": [
+     "The Wheel",
+     "Literacy",
+     "Iron Working",
+     "University",
+     "Democracy",
+     "Leadership",
+     "Navigation"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 1,
+    "world_key": "Bca88a296",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Automobile"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 38,
+    "kept_share": 0.2895,
+    "promoted": [
+     "Astronomy",
+     "Literacy",
+     "Banking",
+     "Invention",
+     "Chemistry",
+     "Bridge Building",
+     "Economics",
+     "Explosives",
+     "Steel"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 2,
+    "world_key": "Bab5307c5",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Chivalry"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 4,
+    "recipes": 4,
+    "closure_items": 4,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 7
+   },
+   {
+    "world_index": 3,
+    "world_key": "B7d7d1f15",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Code of Laws"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 1,
+    "recipes": 1,
+    "closure_items": 1,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 5
+   },
+   {
+    "world_index": 4,
+    "world_key": "B02b78d6e",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Communism"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 8,
+    "recipes": 8,
+    "closure_items": 25,
+    "kept_share": 0.32,
+    "promoted": [
+     "Astronomy",
+     "Literacy",
+     "Invention",
+     "Bridge Building",
+     "Banking",
+     "Philosophy"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 5,
+    "world_key": "Bbe1126e3",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Currency"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 1,
+    "recipes": 1,
+    "closure_items": 1,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 5
+   },
+   {
+    "world_index": 6,
+    "world_key": "B3599f8dc",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Democracy"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 5,
+    "recipes": 5,
+    "closure_items": 12,
+    "kept_share": 0.4167,
+    "promoted": [
+     "The Wheel",
+     "Literacy",
+     "Banking"
+    ],
+    "dropped": [],
+    "decoy_types": 5
+   },
+   {
+    "world_index": 7,
+    "world_key": "Bf8d35f47",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Economics"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 5,
+    "recipes": 5,
+    "closure_items": 12,
+    "kept_share": 0.4167,
+    "promoted": [
+     "Code of Laws",
+     "Mysticism",
+     "Mathematics",
+     "Banking"
+    ],
+    "dropped": [],
+    "decoy_types": 5
+   },
+   {
+    "world_index": 8,
+    "world_key": "B850493c3",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Electronics"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 9,
+    "recipes": 9,
+    "closure_items": 32,
+    "kept_share": 0.2812,
+    "promoted": [
+     "Astronomy",
+     "Literacy",
+     "Banking",
+     "Invention",
+     "Bridge Building",
+     "Economics",
+     "Electricity"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 9,
+    "world_key": "B0280388a",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Environmentalism"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 8,
+    "recipes": 8,
+    "closure_items": 58,
+    "kept_share": 0.1379,
+    "promoted": [
+     "Chemistry",
+     "Electricity",
+     "Explosives",
+     "Electronics",
+     "Theory of Gravity",
+     "The Corporation",
+     "Machine Tools",
+     "Computers",
+     "Recycling"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 10,
+    "world_key": "B71857de5",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Fusion Power"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 3,
+    "recipes": 3,
+    "closure_items": 47,
+    "kept_share": 0.0638,
+    "promoted": [
+     "Mass Production",
+     "Nuclear Power"
+    ],
+    "dropped": [],
+    "decoy_types": 10
+   },
+   {
+    "world_index": 11,
+    "world_key": "Bd075355a",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Guerilla Warfare"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 5,
+    "recipes": 5,
+    "closure_items": 36,
+    "kept_share": 0.1389,
+    "promoted": [
+     "Iron Working",
+     "Invention",
+     "University",
+     "Democracy",
+     "Leadership",
+     "Communism"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 12,
+    "world_key": "Ba14c05f4",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Iron Working"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 1,
+    "recipes": 1,
+    "closure_items": 1,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 4
+   },
+   {
+    "world_index": 13,
+    "world_key": "B02ee1b08",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Medicine"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 4,
+    "recipes": 4,
+    "closure_items": 8,
+    "kept_share": 0.5,
+    "promoted": [
+     "Code of Laws",
+     "Mysticism",
+     "Trade"
+    ],
+    "dropped": [],
+    "decoy_types": 7
+   },
+   {
+    "world_index": 14,
+    "world_key": "Bd70965b8",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Metallurgy"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 6,
+    "recipes": 6,
+    "closure_items": 15,
+    "kept_share": 0.4,
+    "promoted": [
+     "The Wheel",
+     "Literacy",
+     "Iron Working",
+     "University"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 15,
+    "world_key": "B98da19eb",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Monarchy"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 2,
+    "recipes": 2,
+    "closure_items": 2,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 6
+   },
+   {
+    "world_index": 16,
+    "world_key": "B3375cc0f",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Plastics"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 7,
+    "recipes": 7,
+    "closure_items": 57,
+    "kept_share": 0.1228,
+    "promoted": [
+     "Electricity",
+     "Explosives",
+     "Electronics",
+     "Theory of Gravity",
+     "Machine Tools",
+     "Computers",
+     "Refining"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 17,
+    "world_key": "B3405419b",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Sanitation"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 5,
+    "recipes": 5,
+    "closure_items": 12,
+    "kept_share": 0.4167,
+    "promoted": [
+     "Code of Laws",
+     "Mysticism",
+     "Trade",
+     "Engineering"
+    ],
+    "dropped": [],
+    "decoy_types": 4
+   },
+   {
+    "world_index": 18,
+    "world_key": "B405f17a2",
+    "graph": "freeciv_classic",
+    "goals": [
+     "Superconductors"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 2,
+    "recipes": 2,
+    "closure_items": 46,
+    "kept_share": 0.0435,
+    "promoted": [
+     "Mass Production",
+     "Nuclear Power"
+    ],
+    "dropped": [],
+    "decoy_types": 7
+   },
+   {
+    "world_index": 19,
+    "world_key": "B5034b972",
+    "graph": "freeciv_classic",
+    "goals": [
+     "The Wheel"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 1,
+    "recipes": 1,
+    "closure_items": 1,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 5
+   }
+  ]
+ }
+}

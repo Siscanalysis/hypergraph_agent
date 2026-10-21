@@ -381,6 +381,7 @@ independent recomputation of the results).
 | [R2](studies/R2_boundary.md) | late-half `focused_sample` - `maximal`, goals of depth 3-5 in F1's generator, 50 worlds | +0.029 [-0.044, 0.098] | inconclusive: depth removes study R's advantage without reversing it; removing depth from F2 restores the advantage (-0.496 [-0.611, -0.377]); looser budgets do not change the late difference |
 | [P](studies/P_imperfect_skills.md) | late-half actions, `promote` - `remember`, skills with 30% initial per-press error, reuse depth 2 | -15.4 [-21.6, -9.7] | pass; the advantage shrinks with errors (exact skills: -22.5); no gain from an admission gate and no utility problem detected |
 | [U2](studies/U2_techtree_baselines.md) | actions to first success, each of four generic baselines - `pooled`, composites of length 3 | +94 to +269, ratios 2.6-5.7 | pass, every ratio within its predicted band; without reuse the remembering agent does not beat the best baseline |
+| [X](studies/X_open_source_baselines.md) | late cost ratio, `focused_sample` - best open-source learner (1M interactions), 50 F1 test worlds | -1.437 [-1.567, -1.312] | holds, but the learners stayed at random level (none beat the random agent); TechTree and five benchmark sets point the same way |
 
 Interactions (measurement only): R2 205,106 adaptive and 188,672 reporting;
 P 316,807 and 16,161; U2 622,550 and 216,249.

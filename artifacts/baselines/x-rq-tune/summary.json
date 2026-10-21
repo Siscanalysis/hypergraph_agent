@@ -1,0 +1,665 @@
+{
+ "name": "x-rq-tune",
+ "setting": "rq_f1",
+ "family": "recipequest",
+ "definition": {
+  "late_from": 8,
+  "unit": "test world",
+  "bootstrap": {
+   "resamples": 10000,
+   "seed": 20261008
+  }
+ },
+ "selection": {
+  "metric": "cost_ratio_late",
+  "split": "test",
+  "budget": 100000,
+  "scores": {
+   "mppo.ent@deterministic": 3.1426395391362703,
+   "mppo.ent@stochastic": 3.1253669843637146,
+   "mppo.wide@deterministic": 3.120738226058487,
+   "mppo.wide@stochastic": 3.135430544427275,
+   "mppo@deterministic": 3.1426395391362703,
+   "mppo@stochastic": 3.122418093914825,
+   "mppo_rnd.b01@deterministic": 3.139378669571053,
+   "mppo_rnd.b01@stochastic": 3.1278043743011055,
+   "mppo_rnd@deterministic": 3.1426395391362703,
+   "mppo_rnd@stochastic": 3.1106486119590073,
+   "ppo.ent@deterministic": 3.1426395391362703,
+   "ppo.ent@stochastic": 3.1426395391362703,
+   "ppo.wide@deterministic": 3.1426395391362703,
+   "ppo.wide@stochastic": 3.1426395391362703,
+   "ppo@deterministic": 3.1426395391362703,
+   "ppo@stochastic": 3.1426395391362703,
+   "rppo.ent@deterministic": 3.1426395391362703,
+   "rppo.ent@stochastic": 3.1426395391362703,
+   "rppo.long@deterministic": 3.1426395391362703,
+   "rppo.long@stochastic": 3.1426395391362703,
+   "rppo@deterministic": 3.1426395391362703,
+   "rppo@stochastic": 3.1426395391362703
+  },
+  "best_learner": "mppo_rnd@stochastic",
+  "note": null
+ },
+ "tuning": {
+  "metric": "cost_ratio_late",
+  "split": "test",
+  "budget": 100000,
+  "groups": {
+   "mppo": {
+    "learner": "mppo.wide",
+    "mode": "deterministic",
+    "score": 3.120738226058487,
+    "candidates": {
+     "mppo@deterministic": 3.1426395391362703,
+     "mppo@stochastic": 3.122418093914825,
+     "mppo.ent@deterministic": 3.1426395391362703,
+     "mppo.ent@stochastic": 3.1253669843637146,
+     "mppo.wide@deterministic": 3.120738226058487,
+     "mppo.wide@stochastic": 3.135430544427275
+    }
+   },
+   "ppo": {
+    "learner": "ppo",
+    "mode": "deterministic",
+    "score": 3.1426395391362703,
+    "candidates": {
+     "ppo@deterministic": 3.1426395391362703,
+     "ppo@stochastic": 3.1426395391362703,
+     "ppo.ent@deterministic": 3.1426395391362703,
+     "ppo.ent@stochastic": 3.1426395391362703,
+     "ppo.wide@deterministic": 3.1426395391362703,
+     "ppo.wide@stochastic": 3.1426395391362703
+    }
+   },
+   "rppo": {
+    "learner": "rppo",
+    "mode": "deterministic",
+    "score": 3.1426395391362703,
+    "candidates": {
+     "rppo@deterministic": 3.1426395391362703,
+     "rppo@stochastic": 3.1426395391362703,
+     "rppo.ent@deterministic": 3.1426395391362703,
+     "rppo.ent@stochastic": 3.1426395391362703,
+     "rppo.long@deterministic": 3.1426395391362703,
+     "rppo.long@stochastic": 3.1426395391362703
+    }
+   },
+   "mppo_rnd": {
+    "learner": "mppo_rnd",
+    "mode": "stochastic",
+    "score": 3.1106486119590073,
+    "candidates": {
+     "mppo_rnd@deterministic": 3.1426395391362703,
+     "mppo_rnd@stochastic": 3.1106486119590073,
+     "mppo_rnd.b01@deterministic": 3.139378669571053,
+     "mppo_rnd.b01@stochastic": 3.1278043743011055
+    }
+   }
+  },
+  "incomplete": {}
+ },
+ "tests": [],
+ "completeness": {
+  "planned": 33,
+  "missing": 0,
+  "complete": true
+ },
+ "learning_curves": {
+  "mppo.ent@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "mppo.ent@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.1253669843637146,
+    "success_late": 0.05,
+    "steps_late": 19.74375,
+    "first_success_steps": 259.3,
+    "units": 20
+   }
+  },
+  "mppo.wide@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.120738226058487,
+    "success_late": 0.01875,
+    "steps_late": 19.7125,
+    "first_success_steps": 279.9,
+    "units": 20
+   }
+  },
+  "mppo.wide@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.135430544427275,
+    "success_late": 0.0125,
+    "steps_late": 19.78125,
+    "first_success_steps": 237.15,
+    "units": 20
+   }
+  },
+  "mppo@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 298.0,
+    "units": 20
+   }
+  },
+  "mppo@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.122418093914825,
+    "success_late": 0.03125,
+    "steps_late": 19.70625,
+    "first_success_steps": 255.95,
+    "units": 20
+   }
+  },
+  "mppo_rnd.b01@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.139378669571053,
+    "success_late": 0.00625,
+    "steps_late": 19.8125,
+    "first_success_steps": 311.1,
+    "units": 20
+   }
+  },
+  "mppo_rnd.b01@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.1278043743011055,
+    "success_late": 0.0125,
+    "steps_late": 19.75625,
+    "first_success_steps": 276.3,
+    "units": 20
+   }
+  },
+  "mppo_rnd@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "mppo_rnd@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.1106486119590073,
+    "success_late": 0.04375,
+    "steps_late": 19.6375,
+    "first_success_steps": 250.5,
+    "units": 20
+   }
+  },
+  "ppo.ent@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "ppo.ent@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "ppo.wide@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "ppo.wide@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "ppo@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "ppo@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "rppo.ent@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "rppo.ent@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "rppo.long@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "rppo.long@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "rppo@deterministic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  },
+  "rppo@stochastic": {
+   "100000": {
+    "cost_ratio_late": 3.1426395391362703,
+    "success_late": 0.0,
+    "steps_late": 19.83125,
+    "first_success_steps": 314.6,
+    "units": 20
+   }
+  }
+ },
+ "validation_curves": {},
+ "cells": {
+  "ppo@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "ppo.ent@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "ppo@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "ppo.ent@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "mppo.ent@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "mppo@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "mppo.ent@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "mppo@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "rppo.ent@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "rppo@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "rppo.ent@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "rppo@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "ppo.wide@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "ppo.wide@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "mppo.wide@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "mppo.wide@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "mppo_rnd@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "mppo_rnd@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "mppo_rnd.b01@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "mppo_rnd.b01@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "rppo.long@deterministic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  },
+  "rppo.long@stochastic|100000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0"
+   ]
+  }
+ },
+ "bookkeeping": {
+  "runs_used": 33,
+  "ignored_repeats": [],
+  "incomplete_runs": [],
+  "costs": {
+   "training": [
+    {
+     "learner": "mppo",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 367.73,
+     "steps_per_second": 271.9,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 367.73
+      }
+     ]
+    },
+    {
+     "learner": "mppo.ent",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 366.77,
+     "steps_per_second": 272.7,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 366.77
+      }
+     ]
+    },
+    {
+     "learner": "mppo.wide",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 712.66,
+     "steps_per_second": 140.3,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 712.66
+      }
+     ]
+    },
+    {
+     "learner": "ppo",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 322.27,
+     "steps_per_second": 310.3,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 322.27
+      }
+     ]
+    },
+    {
+     "learner": "ppo.ent",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 326.18,
+     "steps_per_second": 306.6,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 326.18
+      }
+     ]
+    },
+    {
+     "learner": "ppo.wide",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 685.79,
+     "steps_per_second": 145.8,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 685.79
+      }
+     ]
+    },
+    {
+     "learner": "rppo",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 615.0,
+     "steps_per_second": 162.6,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 615.0
+      }
+     ]
+    },
+    {
+     "learner": "rppo.ent",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 603.05,
+     "steps_per_second": 165.8,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 603.05
+      }
+     ]
+    },
+    {
+     "learner": "rppo.long",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 458.77,
+     "steps_per_second": 218.0,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 458.77
+      }
+     ]
+    },
+    {
+     "learner": "mppo_rnd",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 375.09,
+     "steps_per_second": 266.6,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 375.09
+      }
+     ]
+    },
+    {
+     "learner": "mppo_rnd.b01",
+     "seed": 0,
+     "interactions": 100000,
+     "seconds": 351.4,
+     "steps_per_second": 284.6,
+     "checkpoints": [
+      {
+       "budget": 100000,
+       "interactions": 100000,
+       "path": "checkpoint_100000.zip",
+       "seconds": 351.4
+      }
+     ]
+    }
+   ],
+   "evaluation": {
+    "ppo": {
+     "interactions": 12584,
+     "seconds": 24.92
+    },
+    "ppo.ent": {
+     "interactions": 12584,
+     "seconds": 24.83
+    },
+    "mppo.ent": {
+     "interactions": 12560,
+     "seconds": 35.35
+    },
+    "mppo": {
+     "interactions": 12549,
+     "seconds": 34.480000000000004
+    },
+    "rppo.ent": {
+     "interactions": 12584,
+     "seconds": 38.599999999999994
+    },
+    "rppo": {
+     "interactions": 12584,
+     "seconds": 37.64
+    },
+    "ppo.wide": {
+     "interactions": 12584,
+     "seconds": 19.64
+    },
+    "mppo.wide": {
+     "interactions": 12528,
+     "seconds": 22.41
+    },
+    "mppo_rnd": {
+     "interactions": 12537,
+     "seconds": 17.89
+    },
+    "mppo_rnd.b01": {
+     "interactions": 12558,
+     "seconds": 14.29
+    },
+    "rppo.long": {
+     "interactions": 12584,
+     "seconds": 14.45
+    }
+   },
+   "agents": {}
+  }
+ },
+ "agent_interactions_per_world": {}
+}

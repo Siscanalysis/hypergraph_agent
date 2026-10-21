@@ -1,0 +1,1454 @@
+{
+ "name": "x-bench-little-alchemy-2",
+ "setting": "bench_little_alchemy_2",
+ "family": "recipequest",
+ "definition": {
+  "late_from": 8,
+  "unit": "test world",
+  "bootstrap": {
+   "resamples": 10000,
+   "seed": 20261008
+  }
+ },
+ "selection": {
+  "metric": "cost_ratio_late",
+  "split": "validation",
+  "budget": 1000000,
+  "scores": {
+   "mppo": 2.9033314865594435,
+   "mppo_rnd": 2.9095517995745532,
+   "ppo": 2.972171454958128,
+   "rppo": 2.972171454958128
+  },
+  "best_learner": "mppo",
+  "note": null,
+  "source": "x-rq-main"
+ },
+ "tuning": {
+  "metric": "cost_ratio_late",
+  "split": "validation",
+  "budget": 1000000,
+  "groups": {},
+  "incomplete": {
+   "maskable_ppo": [
+    "mppo@deterministic"
+   ],
+   "ppo": [
+    "ppo@deterministic"
+   ],
+   "recurrent_ppo": [
+    "rppo@deterministic"
+   ],
+   "maskable_ppo_rnd": [
+    "mppo_rnd@stochastic"
+   ]
+  }
+ },
+ "tests": [
+  {
+   "name": "XB little_alchemy_2: focused_sample - best learner, late cost ratio",
+   "role": "secondary",
+   "metric": "cost_ratio_late",
+   "a": "focused_sample",
+   "b": "best_learner",
+   "a_resolved": "focused_sample",
+   "b_resolved": "mppo",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 30,
+   "estimate": -1.8586780915841372,
+   "ci": [
+    -2.2723131711635696,
+    -1.467465131180317
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 30,
+    "positive": 0,
+    "zero": 0,
+    "p_two_sided": 1.862645149230957e-09
+   },
+   "mean_a": 1.4230692169488264,
+   "mean_b": 3.281747308532964,
+   "per_unit": {
+    "s0:B0c1c1353": -0.98,
+    "s0:B25243ba5": -0.4782608695652175,
+    "s0:B2abd4e97": -3.090909090909091,
+    "s0:B2e73897a": -2.833333333333333,
+    "s0:B39f47c4a": -0.42647058823529416,
+    "s0:B51947f4e": -1.4375,
+    "s0:B5c02c8c5": -2.78125,
+    "s0:B5dc7cf90": -2.114285714285714,
+    "s0:B61cf03a6": -3.0999999999999996,
+    "s0:B72700738": -4.166666666666666,
+    "s0:B74698055": -0.661290322580645,
+    "s0:B7c23e2c5": -0.4756097560975612,
+    "s0:B89030a92": -1.3720930232558142,
+    "s0:B93eea5fa": -2.8513513513513518,
+    "s0:Ba2327d47": -2.364864864864865,
+    "s0:Ba7245a89": -4.708333333333334,
+    "s0:Ba7e74d60": -0.9705882352941178,
+    "s0:Bb367717c": -2.0769230769230766,
+    "s0:Bb8163367": -0.7857142857142856,
+    "s0:Bba1a3f48": -0.8,
+    "s0:Bbac6d2c2": -2.4242424242424243,
+    "s0:Bbbcc5ef6": -1.0999999999999996,
+    "s0:Bbc2b474b": -0.7413793103448274,
+    "s0:Bc11108a5": -0.8977272727272725,
+    "s0:Bc2fe7575": -2.660714285714286,
+    "s0:Bc891d7d7": -0.9785714285714284,
+    "s0:Bcb9c6b62": -2.958333333333333,
+    "s0:Bda508845": -2.59375,
+    "s0:Be9f7ded7": -1.4166666666666667,
+    "s0:Bff9ce51c": -1.5135135135135132
+   },
+   "by_training_seed": {
+    "0": -1.8185557608174596,
+    "1": -1.8988004223508155
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XB little_alchemy_2: maximal - best learner, late cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late",
+   "a": "maximal",
+   "b": "best_learner",
+   "a_resolved": "maximal",
+   "b_resolved": "mppo",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "not_greater",
+   "n_units": 30,
+   "estimate": -1.2459269944161657,
+   "ci": [
+    -1.5296394476572752,
+    -0.9730876814640474
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 29,
+    "positive": 1,
+    "zero": 0,
+    "p_two_sided": 5.774199962615967e-08
+   },
+   "mean_a": 2.035820314116798,
+   "mean_b": 3.281747308532964,
+   "per_unit": {
+    "s0:B0c1c1353": -1.0999999999999999,
+    "s0:B25243ba5": -0.5072463768115942,
+    "s0:B2abd4e97": -2.090909090909091,
+    "s0:B2e73897a": -1.5999999999999996,
+    "s0:B39f47c4a": -0.4558823529411764,
+    "s0:B51947f4e": 0.22916666666666652,
+    "s0:B5c02c8c5": -1.78125,
+    "s0:B5dc7cf90": -1.7714285714285714,
+    "s0:B61cf03a6": -1.6599999999999997,
+    "s0:B72700738": -2.4999999999999996,
+    "s0:B74698055": -0.4999999999999998,
+    "s0:B7c23e2c5": -0.3902439024390245,
+    "s0:B89030a92": -0.8604651162790702,
+    "s0:B93eea5fa": -2.4189189189189197,
+    "s0:Ba2327d47": -1.4729729729729728,
+    "s0:Ba7245a89": -3.1250000000000004,
+    "s0:Ba7e74d60": -0.6470588235294119,
+    "s0:Bb367717c": -1.5128205128205128,
+    "s0:Bb8163367": -0.5612244897959182,
+    "s0:Bba1a3f48": -0.7,
+    "s0:Bbac6d2c2": -2.5151515151515156,
+    "s0:Bbbcc5ef6": -0.7727272727272725,
+    "s0:Bbc2b474b": -0.5,
+    "s0:Bc11108a5": -1.2386363636363633,
+    "s0:Bc2fe7575": -2.0178571428571432,
+    "s0:Bc891d7d7": -0.6214285714285712,
+    "s0:Bcb9c6b62": -1.2916666666666665,
+    "s0:Bda508845": -1.28125,
+    "s0:Be9f7ded7": -0.875,
+    "s0:Bff9ce51c": -0.8378378378378375
+   },
+   "by_training_seed": {
+    "0": -1.2058046636494875,
+    "1": -1.2860493251828438
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XB little_alchemy_2: focused_sample - maximal, late cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late",
+   "a": "focused_sample",
+   "b": "maximal",
+   "a_resolved": "focused_sample",
+   "b_resolved": "maximal",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 30,
+   "estimate": -0.6127510971679718,
+   "ci": [
+    -0.8242345337539991,
+    -0.40449848939576255
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 25,
+    "positive": 5,
+    "zero": 0,
+    "p_two_sided": 0.00032491423189640045
+   },
+   "mean_a": 1.4230692169488264,
+   "mean_b": 2.035820314116798,
+   "per_unit": {
+    "s0:B0c1c1353": 0.11999999999999988,
+    "s0:B25243ba5": 0.02898550724637672,
+    "s0:B2abd4e97": -1.0,
+    "s0:B2e73897a": -1.2333333333333334,
+    "s0:B39f47c4a": 0.02941176470588225,
+    "s0:B51947f4e": -1.6666666666666665,
+    "s0:B5c02c8c5": -1.0,
+    "s0:B5dc7cf90": -0.34285714285714275,
+    "s0:B61cf03a6": -1.44,
+    "s0:B72700738": -1.6666666666666665,
+    "s0:B74698055": -0.16129032258064524,
+    "s0:B7c23e2c5": -0.08536585365853666,
+    "s0:B89030a92": -0.511627906976744,
+    "s0:B93eea5fa": -0.43243243243243223,
+    "s0:Ba2327d47": -0.8918918918918919,
+    "s0:Ba7245a89": -1.5833333333333333,
+    "s0:Ba7e74d60": -0.32352941176470584,
+    "s0:Bb367717c": -0.5641025641025641,
+    "s0:Bb8163367": -0.22448979591836737,
+    "s0:Bba1a3f48": -0.10000000000000009,
+    "s0:Bbac6d2c2": 0.09090909090909127,
+    "s0:Bbbcc5ef6": -0.32727272727272716,
+    "s0:Bbc2b474b": -0.2413793103448274,
+    "s0:Bc11108a5": 0.34090909090909083,
+    "s0:Bc2fe7575": -0.6428571428571428,
+    "s0:Bc891d7d7": -0.3571428571428572,
+    "s0:Bcb9c6b62": -1.6666666666666665,
+    "s0:Bda508845": -1.3125,
+    "s0:Be9f7ded7": -0.5416666666666667,
+    "s0:Bff9ce51c": -0.6756756756756757
+   },
+   "verdict": "holds"
+  }
+ ],
+ "completeness": {
+  "planned": 12,
+  "missing": 0,
+  "complete": true
+ },
+ "learning_curves": {
+  "focused_sample": {
+   "agent": {
+    "cost_ratio_late": 1.4230692169488264,
+    "success_late": 0.925,
+    "steps_late": 7.970833333333333,
+    "first_success_steps": 24.133333333333333,
+    "units": 30
+   }
+  },
+  "maximal": {
+   "agent": {
+    "cost_ratio_late": 2.035820314116798,
+    "success_late": 1.0,
+    "steps_late": 10.454166666666667,
+    "first_success_steps": 10.233333333333333,
+    "units": 30
+   }
+  },
+  "mppo": {
+   "1000000": {
+    "cost_ratio_late": 3.281747308532964,
+    "success_late": 0.11041666666666666,
+    "steps_late": 16.252083333333335,
+    "first_success_steps": 166.73333333333332,
+    "units": 30
+   }
+  },
+  "mppo_rnd": {
+   "1000000": {
+    "cost_ratio_late": 3.2478831007745925,
+    "success_late": 0.20625,
+    "steps_late": 16.104166666666668,
+    "first_success_steps": 101.13333333333334,
+    "units": 30
+   }
+  },
+  "ppo": {
+   "1000000": {
+    "cost_ratio_late": 3.411235877195291,
+    "success_late": 0.0,
+    "steps_late": 16.725,
+    "first_success_steps": 269.96666666666664,
+    "units": 30
+   }
+  },
+  "random": {
+   "agent": {
+    "cost_ratio_late": 3.2293234831794537,
+    "success_late": 0.15,
+    "steps_late": 16.054166666666667,
+    "first_success_steps": 135.03333333333333,
+    "units": 30
+   }
+  },
+  "reference": {
+   "agent": {
+    "cost_ratio_late": 1.0,
+    "success_late": 1.0,
+    "steps_late": 5.458333333333333,
+    "first_success_steps": 5.3,
+    "units": 30
+   }
+  },
+  "rppo": {
+   "1000000": {
+    "cost_ratio_late": 3.411235877195291,
+    "success_late": 0.0,
+    "steps_late": 16.725,
+    "first_success_steps": 269.96666666666664,
+    "units": 30
+   }
+  }
+ },
+ "validation_curves": {},
+ "cells": {
+  "mppo|1000000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo_rnd|1000000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "ppo|1000000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "rppo|1000000|test": {
+   "units": 30,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "focused_sample|None|test": {
+   "units": 30,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "maximal|None|test": {
+   "units": 30,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "reference|None|test": {
+   "units": 30,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "random|None|test": {
+   "units": 30,
+   "training_seeds": [
+    "None"
+   ]
+  }
+ },
+ "bookkeeping": {
+  "runs_used": 12,
+  "ignored_repeats": [],
+  "incomplete_runs": [],
+  "costs": {
+   "training": [],
+   "evaluation": {
+    "mppo": {
+     "interactions": 15642,
+     "seconds": 59.25
+    },
+    "mppo_rnd": {
+     "interactions": 15545,
+     "seconds": 58.81
+    },
+    "ppo": {
+     "interactions": 16198,
+     "seconds": 42.83
+    },
+    "rppo": {
+     "interactions": 16198,
+     "seconds": 64.74000000000001
+    }
+   },
+   "agents": {
+    "focused_sample": {
+     "interactions": 4487,
+     "seconds": 18.94
+    },
+    "maximal": {
+     "interactions": 5058,
+     "seconds": 3.35
+    },
+    "reference": {
+     "interactions": 2637,
+     "seconds": 2.71
+    },
+    "random": {
+     "interactions": 7840,
+     "seconds": 2.44
+    }
+   }
+  }
+ },
+ "agent_interactions_per_world": {
+  "focused_sample": 149.56666666666666,
+  "maximal": 168.6,
+  "reference": 87.9,
+  "random": 261.3333333333333
+ },
+ "conversion": {
+  "summary": {
+   "worlds": 30,
+   "items_mean": 5.233333333333333,
+   "promoted_mean": 6.0,
+   "dropped_mean": 4.3,
+   "kept_share_mean": 0.14055,
+   "decoy_types_mean": 2.566666666666667
+  },
+  "worlds": [
+   {
+    "world_index": 0,
+    "world_key": "B5c02c8c5",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "archeologist"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 3,
+    "recipes": 6,
+    "closure_items": 34,
+    "kept_share": 0.0882,
+    "promoted": [
+     "house",
+     "family",
+     "human"
+    ],
+    "dropped": [
+     "ruins <- city+time: beyond max_alternatives",
+     "ruins <- skyscraper+time: beyond max_alternatives"
+    ],
+    "decoy_types": 6
+   },
+   {
+    "world_index": 1,
+    "world_key": "Bda508845",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "atmosphere"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 2,
+    "recipes": 3,
+    "closure_items": 14,
+    "kept_share": 0.1429,
+    "promoted": [
+     "ocean",
+     "continent"
+    ],
+    "dropped": [
+     "planet <- earth+solar system: would need planet to make planet",
+     "planet <- earth+sky: would need planet to make planet",
+     "atmosphere <- air+sky: would need atmosphere to make atmosphere"
+    ],
+    "decoy_types": 7
+   },
+   {
+    "world_index": 2,
+    "world_key": "Ba7e74d60",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "birdcage"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 6,
+    "recipes": 12,
+    "closure_items": 35,
+    "kept_share": 0.1714,
+    "promoted": [
+     "land",
+     "lake",
+     "lava",
+     "energy",
+     "volcano",
+     "mountain",
+     "sky",
+     "wall",
+     "safe"
+    ],
+    "dropped": [
+     "primordial soup <- planet+sea: beyond max_alternatives",
+     "animal <- beach+life: beyond max_alternatives",
+     "animal <- desert+life: beyond max_alternatives",
+     "animal <- life+mountain range: beyond max_alternatives",
+     "birdcage <- bird+container: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 3,
+    "world_key": "B0c1c1353",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "coral"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 7,
+    "recipes": 13,
+    "closure_items": 40,
+    "kept_share": 0.175,
+    "promoted": [
+     "land",
+     "stone",
+     "lava",
+     "energy",
+     "volcano",
+     "mountain",
+     "moon",
+     "corpse",
+     "sea"
+    ],
+    "dropped": [
+     "primordial soup <- planet+sea: beyond max_alternatives",
+     "animal <- beach+life: beyond max_alternatives",
+     "animal <- desert+life: beyond max_alternatives",
+     "animal <- life+mountain range: beyond max_alternatives",
+     "wolf <- animal+dog: would need wolf to make wolf",
+     "wolf <- blood+dog: would need wolf to make wolf",
+     "wolf <- dog+forest: would need wolf to make wolf",
+     "bone <- meat+wolf: beyond max_alternatives",
+     "coral <- sea+tree: beyond max_alternatives",
+     "coral <- bone+ocean: beyond max_alternatives",
+     "coral <- fossil+ocean: beyond max_alternatives",
+     "coral <- ocean+tree: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 4,
+    "world_key": "B25243ba5",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "cow"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 6,
+    "recipes": 12,
+    "closure_items": 55,
+    "kept_share": 0.1091,
+    "promoted": [
+     "land",
+     "lake",
+     "lava",
+     "energy",
+     "volcano",
+     "mountain",
+     "field",
+     "barn"
+    ],
+    "dropped": [
+     "primordial soup <- planet+sea: beyond max_alternatives",
+     "animal <- beach+life: beyond max_alternatives",
+     "animal <- desert+life: beyond max_alternatives",
+     "animal <- life+mountain range: beyond max_alternatives",
+     "cow <- farmer+livestock: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 5,
+    "world_key": "B2abd4e97",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "darkness"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 3,
+    "recipes": 6,
+    "closure_items": 21,
+    "kept_share": 0.1429,
+    "promoted": [
+     "moon",
+     "sky",
+     "day"
+    ],
+    "dropped": [],
+    "decoy_types": 8
+   },
+   {
+    "world_index": 6,
+    "world_key": "B72700738",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "desert"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 2,
+    "recipes": 4,
+    "closure_items": 14,
+    "kept_share": 0.1429,
+    "promoted": [
+     "stone",
+     "sand"
+    ],
+    "dropped": [],
+    "decoy_types": 10
+   },
+   {
+    "world_index": 7,
+    "world_key": "B5dc7cf90",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "electricity"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 9,
+    "recipes": 17,
+    "closure_items": 39,
+    "kept_share": 0.2308,
+    "promoted": [
+     "ocean",
+     "continent",
+     "stone",
+     "mist",
+     "energy",
+     "sun",
+     "boiler",
+     "tool",
+     "pressure"
+    ],
+    "dropped": [
+     "planet <- earth+solar system: would need planet to make planet",
+     "planet <- earth+sky: would need planet to make planet",
+     "atmosphere <- air+sky: would need atmosphere to make atmosphere",
+     "solar cell <- electricity+sun: would need solar cell to make solar cell",
+     "rain <- cloud+heat: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 8,
+    "world_key": "Ba7245a89",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "family"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 2,
+    "recipes": 4,
+    "closure_items": 31,
+    "kept_share": 0.0645,
+    "promoted": [
+     "wall",
+     "human"
+    ],
+    "dropped": [],
+    "decoy_types": 12
+   },
+   {
+    "world_index": 9,
+    "world_key": "Bbbcc5ef6",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "fireplace"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 6,
+    "recipes": 11,
+    "closure_items": 53,
+    "kept_share": 0.1132,
+    "promoted": [
+     "land",
+     "life",
+     "rain",
+     "sword",
+     "tool",
+     "brick"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 10,
+    "world_key": "B89030a92",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "firetruck"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 6,
+    "recipes": 12,
+    "closure_items": 46,
+    "kept_share": 0.1304,
+    "promoted": [
+     "land",
+     "pressure",
+     "car",
+     "life",
+     "rain",
+     "night"
+    ],
+    "dropped": [
+     "firetruck <- car+firefighter: would need firetruck to make firetruck",
+     "fire extinguisher <- carbon dioxide+metal: beyond max_alternatives",
+     "fire extinguisher <- boiler+carbon dioxide: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 11,
+    "world_key": "B51947f4e",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "forest"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 1,
+    "recipes": 2,
+    "closure_items": 28,
+    "kept_share": 0.0357,
+    "promoted": [
+     "land",
+     "tree"
+    ],
+    "dropped": [
+     "forest <- container+tree: beyond max_alternatives",
+     "forest <- plant+tree: beyond max_alternatives"
+    ],
+    "decoy_types": 6
+   },
+   {
+    "world_index": 12,
+    "world_key": "Bba1a3f48",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "fortune cookie"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 5,
+    "recipes": 10,
+    "closure_items": 83,
+    "kept_share": 0.0602,
+    "promoted": [
+     "puddle",
+     "stone",
+     "life",
+     "wheat",
+     "sugar",
+     "chocolate",
+     "magic",
+     "paper"
+    ],
+    "dropped": [
+     "flour <- wheat+wheel: beyond max_alternatives",
+     "flour <- wheat+windmill: beyond max_alternatives",
+     "flour <- rock+wheat: beyond max_alternatives",
+     "dough <- flour+rain: beyond max_alternatives",
+     "gingerbread man <- dough+story: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 13,
+    "world_key": "Bcb9c6b62",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "galaxy cluster"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 1,
+    "recipes": 2,
+    "closure_items": 22,
+    "kept_share": 0.0455,
+    "promoted": [
+     "galaxy"
+    ],
+    "dropped": [],
+    "decoy_types": 7
+   },
+   {
+    "world_index": 14,
+    "world_key": "B93eea5fa",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "ghost"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 13,
+    "recipes": 24,
+    "closure_items": 78,
+    "kept_share": 0.1667,
+    "promoted": [
+     "land",
+     "stone",
+     "blade",
+     "tool",
+     "explosion",
+     "excalibur",
+     "life",
+     "rain",
+     "sword",
+     "human",
+     "wall",
+     "night",
+     "field",
+     "wire",
+     "rope"
+    ],
+    "dropped": [
+     "death <- corpse+philosophy: would need death to make death",
+     "death <- grave+philosophy: would need death to make death",
+     "death <- graveyard+philosophy: would need death to make death",
+     "death <- philosophy+skeleton: would need death to make death",
+     "corpse <- bullet+human: beyond max_alternatives",
+     "corpse <- human+time: beyond max_alternatives",
+     "corpse <- death+human: beyond max_alternatives",
+     "monarch <- castle+human: would need monarch to make monarch",
+     "castle <- wall+warrior: beyond max_alternatives",
+     "castle <- house+monarch: beyond max_alternatives",
+     "castle <- house+warrior: beyond max_alternatives",
+     "castle <- container+monarch: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 15,
+    "world_key": "Bff9ce51c",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "hedgehog"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 4,
+    "recipes": 8,
+    "closure_items": 75,
+    "kept_share": 0.0533,
+    "promoted": [
+     "stone",
+     "animal",
+     "cotton",
+     "tool",
+     "rat"
+    ],
+    "dropped": [
+     "thread <- cotton+machine: beyond max_alternatives",
+     "thread <- cotton+tool: beyond max_alternatives",
+     "needle <- steel+thread: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 16,
+    "world_key": "B61cf03a6",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "hurricane"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 2,
+    "recipes": 4,
+    "closure_items": 9,
+    "kept_share": 0.2222,
+    "promoted": [
+     "ocean",
+     "lake",
+     "tornado"
+    ],
+    "dropped": [],
+    "decoy_types": 6
+   },
+   {
+    "world_index": 17,
+    "world_key": "Bc891d7d7",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "husky"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 7,
+    "recipes": 13,
+    "closure_items": 61,
+    "kept_share": 0.1148,
+    "promoted": [
+     "land",
+     "mountain",
+     "lake",
+     "lava",
+     "energy",
+     "volcano",
+     "field",
+     "moon",
+     "barn",
+     "snow",
+     "antarctica"
+    ],
+    "dropped": [
+     "primordial soup <- planet+sea: beyond max_alternatives",
+     "animal <- beach+life: beyond max_alternatives",
+     "animal <- desert+life: beyond max_alternatives",
+     "animal <- life+mountain range: beyond max_alternatives",
+     "wolf <- animal+dog: would need wolf to make wolf",
+     "wolf <- blood+dog: would need wolf to make wolf",
+     "wolf <- dog+forest: would need wolf to make wolf",
+     "dog <- farm+wolf: beyond max_alternatives",
+     "dog <- domestication+wolf: beyond max_alternatives",
+     "dog <- farmer+wolf: beyond max_alternatives",
+     "husky <- blizzard+dog: beyond max_alternatives",
+     "husky <- dog+glacier: beyond max_alternatives",
+     "husky <- arctic+dog: beyond max_alternatives",
+     "husky <- dog+ice: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 18,
+    "world_key": "B7c23e2c5",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "jar"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 6,
+    "recipes": 12,
+    "closure_items": 45,
+    "kept_share": 0.1333,
+    "promoted": [
+     "land",
+     "heat",
+     "rainbow",
+     "life",
+     "rain",
+     "double rainbow!",
+     "machine",
+     "glass"
+    ],
+    "dropped": [
+     "fruit <- flower+time: beyond max_alternatives",
+     "fruit <- farmer+tree: beyond max_alternatives",
+     "fruit <- flower+tree: beyond max_alternatives",
+     "jam <- juice+machine: beyond max_alternatives",
+     "jam <- fruit+juice: beyond max_alternatives",
+     "jar <- bottle+jam: beyond max_alternatives",
+     "jar <- bucket+jam: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 19,
+    "world_key": "Bc11108a5",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "lava lamp"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 13,
+    "recipes": 25,
+    "closure_items": 59,
+    "kept_share": 0.2203,
+    "promoted": [
+     "land",
+     "lava",
+     "mountain",
+     "clay",
+     "explosion",
+     "blade",
+     "light bulb",
+     "life",
+     "rain"
+    ],
+    "dropped": [
+     "animal <- beach+life: beyond max_alternatives",
+     "animal <- desert+life: beyond max_alternatives",
+     "animal <- life+mountain range: beyond max_alternatives",
+     "death <- corpse+philosophy: would need death to make death",
+     "death <- grave+philosophy: would need death to make death",
+     "death <- graveyard+philosophy: would need death to make death",
+     "death <- philosophy+skeleton: would need death to make death",
+     "corpse <- bullet+human: beyond max_alternatives",
+     "corpse <- human+time: beyond max_alternatives",
+     "corpse <- death+human: beyond max_alternatives",
+     "organic matter <- bacteria+death: beyond max_alternatives",
+     "lava lamp <- lamp+volcano: beyond max_alternatives",
+     "steel <- coal+metal: beyond max_alternatives",
+     "steel <- metal+mineral: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 20,
+    "world_key": "B74698055",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "livestock"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 5,
+    "recipes": 10,
+    "closure_items": 54,
+    "kept_share": 0.0926,
+    "promoted": [
+     "land",
+     "lake",
+     "lava",
+     "energy",
+     "volcano",
+     "mountain",
+     "field",
+     "barn"
+    ],
+    "dropped": [
+     "primordial soup <- planet+sea: beyond max_alternatives",
+     "animal <- beach+life: beyond max_alternatives",
+     "animal <- desert+life: beyond max_alternatives",
+     "animal <- life+mountain range: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 21,
+    "world_key": "Bbc2b474b",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "lumberjack"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 5,
+    "recipes": 10,
+    "closure_items": 51,
+    "kept_share": 0.098,
+    "promoted": [
+     "land",
+     "life",
+     "rain",
+     "human",
+     "sword",
+     "tool"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 22,
+    "world_key": "B2e73897a",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "mercury"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 2,
+    "recipes": 4,
+    "closure_items": 17,
+    "kept_share": 0.1176,
+    "promoted": [
+     "ocean",
+     "continent",
+     "heat"
+    ],
+    "dropped": [
+     "planet <- earth+solar system: would need planet to make planet",
+     "planet <- earth+sky: would need planet to make planet"
+    ],
+    "decoy_types": 6
+   },
+   {
+    "world_index": 23,
+    "world_key": "Ba2327d47",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "music"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 2,
+    "recipes": 4,
+    "closure_items": 71,
+    "kept_share": 0.0282,
+    "promoted": [
+     "human",
+     "drum",
+     "flute"
+    ],
+    "dropped": [
+     "music <- musician+pan flute: beyond max_alternatives"
+    ],
+    "decoy_types": 9
+   },
+   {
+    "world_index": 24,
+    "world_key": "Bc2fe7575",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "river"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 7,
+    "recipes": 13,
+    "closure_items": 18,
+    "kept_share": 0.3889,
+    "promoted": [
+     "ocean",
+     "pond",
+     "continent"
+    ],
+    "dropped": [
+     "planet <- earth+solar system: would need planet to make planet",
+     "planet <- earth+sky: would need planet to make planet",
+     "atmosphere <- air+sky: would need atmosphere to make atmosphere"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 25,
+    "world_key": "Bbac6d2c2",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "rivulet"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 9,
+    "recipes": 17,
+    "closure_items": 20,
+    "kept_share": 0.45,
+    "promoted": [
+     "ocean",
+     "puddle",
+     "pond",
+     "continent"
+    ],
+    "dropped": [
+     "planet <- earth+solar system: would need planet to make planet",
+     "planet <- earth+sky: would need planet to make planet",
+     "atmosphere <- air+sky: would need atmosphere to make atmosphere",
+     "stream <- big+rivulet: would need stream to make stream"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 26,
+    "world_key": "B39f47c4a",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "seal"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 7,
+    "recipes": 13,
+    "closure_items": 57,
+    "kept_share": 0.1228,
+    "promoted": [
+     "land",
+     "lake",
+     "lava",
+     "energy",
+     "volcano",
+     "mountain",
+     "field",
+     "moon",
+     "barn"
+    ],
+    "dropped": [
+     "primordial soup <- planet+sea: beyond max_alternatives",
+     "animal <- beach+life: beyond max_alternatives",
+     "animal <- desert+life: beyond max_alternatives",
+     "animal <- life+mountain range: beyond max_alternatives",
+     "wolf <- animal+dog: would need wolf to make wolf",
+     "wolf <- blood+dog: would need wolf to make wolf",
+     "wolf <- dog+forest: would need wolf to make wolf",
+     "dog <- farm+wolf: beyond max_alternatives",
+     "dog <- domestication+wolf: beyond max_alternatives",
+     "dog <- farmer+wolf: beyond max_alternatives",
+     "seal <- dog+sea: beyond max_alternatives",
+     "seal <- dog+ocean: beyond max_alternatives",
+     "seal <- arctic+dog: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 27,
+    "world_key": "Be9f7ded7",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "spoon"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 6,
+    "recipes": 10,
+    "closure_items": 61,
+    "kept_share": 0.0984,
+    "promoted": [
+     "land",
+     "life",
+     "rain",
+     "house",
+     "flower",
+     "human",
+     "farmer",
+     "tool"
+    ],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 28,
+    "world_key": "Bb8163367",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "water lily"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 4,
+    "recipes": 8,
+    "closure_items": 31,
+    "kept_share": 0.129,
+    "promoted": [
+     "land",
+     "puddle",
+     "pond",
+     "rainbow",
+     "life",
+     "rain",
+     "double rainbow!"
+    ],
+    "dropped": [
+     "water lily <- flower+lake: beyond max_alternatives",
+     "water lily <- flower+stream: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 29,
+    "world_key": "Bb367717c",
+    "graph": "little_alchemy_2",
+    "goals": [
+     "wax"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 6,
+    "recipes": 12,
+    "closure_items": 47,
+    "kept_share": 0.1277,
+    "promoted": [
+     "land",
+     "wall",
+     "life",
+     "rain",
+     "house",
+     "flower",
+     "animal",
+     "blade"
+    ],
+    "dropped": [
+     "beehive <- bee+container: beyond max_alternatives",
+     "beehive <- bee+tree: beyond max_alternatives",
+     "beehive <- bee+forest: beyond max_alternatives",
+     "beehive <- bee+wood: beyond max_alternatives",
+     "wax <- beehive+sword: beyond max_alternatives",
+     "wax <- beehive+tool: beyond max_alternatives",
+     "wax <- bee+beehive: beyond max_alternatives",
+     "wax <- beehive+beekeeper: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   }
+  ]
+ }
+}

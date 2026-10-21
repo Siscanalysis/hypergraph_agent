@@ -1,0 +1,843 @@
+{
+ "name": "x-bench-msgi-mining",
+ "setting": "bench_msgi_mining",
+ "family": "recipequest",
+ "definition": {
+  "late_from": 8,
+  "unit": "test world",
+  "bootstrap": {
+   "resamples": 10000,
+   "seed": 20261008
+  }
+ },
+ "selection": {
+  "metric": "cost_ratio_late",
+  "split": "validation",
+  "budget": 1000000,
+  "scores": {
+   "mppo": 2.9033314865594435,
+   "mppo_rnd": 2.9095517995745532,
+   "ppo": 2.972171454958128,
+   "rppo": 2.972171454958128
+  },
+  "best_learner": "mppo",
+  "note": null,
+  "source": "x-rq-main"
+ },
+ "tuning": {
+  "metric": "cost_ratio_late",
+  "split": "validation",
+  "budget": 1000000,
+  "groups": {},
+  "incomplete": {
+   "maskable_ppo": [
+    "mppo@deterministic"
+   ],
+   "ppo": [
+    "ppo@deterministic"
+   ],
+   "recurrent_ppo": [
+    "rppo@deterministic"
+   ],
+   "maskable_ppo_rnd": [
+    "mppo_rnd@stochastic"
+   ]
+  }
+ },
+ "tests": [
+  {
+   "name": "XB msgi_mining: focused_sample - best learner, late cost ratio",
+   "role": "secondary",
+   "metric": "cost_ratio_late",
+   "a": "focused_sample",
+   "b": "best_learner",
+   "a_resolved": "focused_sample",
+   "b_resolved": "mppo",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 20,
+   "estimate": -0.7536814840220603,
+   "ci": [
+    -0.889466326278967,
+    -0.6255280644808608
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 20,
+    "positive": 0,
+    "zero": 0,
+    "p_two_sided": 1.9073486328125e-06
+   },
+   "mean_a": 1.1742561526090554,
+   "mean_b": 1.9279376366311154,
+   "per_unit": {
+    "s0:B10c8b7d8": -0.7966101694915253,
+    "s0:B1c596b97": -0.625,
+    "s0:B32470ccd": -0.42352941176470593,
+    "s0:B3e1f9e2a": -0.75,
+    "s0:B56846f2b": -1.0,
+    "s0:B6eb1f1b0": -0.7717391304347827,
+    "s0:B723a5181": -0.8,
+    "s0:B735f9981": -0.4558823529411766,
+    "s0:B76d84144": -0.5080645161290323,
+    "s0:B79c9a24e": -0.6599999999999999,
+    "s0:B850afc07": -0.4722222222222221,
+    "s0:B8bdaed3f": -0.42307692307692313,
+    "s0:B93a62615": -1.067307692307692,
+    "s0:Ba4e39b3a": -1.03125,
+    "s0:Bb68c0172": -1.4736842105263157,
+    "s0:Bd4493c6a": -1.0,
+    "s0:Bda4b89cb": -0.2277227722772277,
+    "s0:Be5ac8d41": -0.5263157894736843,
+    "s0:Bf2160e7e": -1.0612244897959182,
+    "s0:Bfe2fc6bb": -1.0
+   },
+   "by_training_seed": {
+    "0": -0.7582682051729884,
+    "1": -0.7490947628711322
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XB msgi_mining: maximal - best learner, late cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late",
+   "a": "maximal",
+   "b": "best_learner",
+   "a_resolved": "maximal",
+   "b_resolved": "mppo",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "not_greater",
+   "n_units": 20,
+   "estimate": -0.43079938162025666,
+   "ci": [
+    -0.5046481858609683,
+    -0.3489645490518046
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 19,
+    "positive": 0,
+    "zero": 1,
+    "p_two_sided": 3.814697265625e-06
+   },
+   "mean_a": 1.497138255010859,
+   "mean_b": 1.9279376366311154,
+   "per_unit": {
+    "s0:B10c8b7d8": -0.44067796610169485,
+    "s0:B1c596b97": -0.46875,
+    "s0:B32470ccd": -0.3764705882352941,
+    "s0:B3e1f9e2a": -0.33333333333333326,
+    "s0:B56846f2b": -0.3999999999999999,
+    "s0:B6eb1f1b0": -0.6847826086956521,
+    "s0:B723a5181": -0.5818181818181818,
+    "s0:B735f9981": -0.36764705882352944,
+    "s0:B76d84144": -0.39516129032258074,
+    "s0:B79c9a24e": -0.48,
+    "s0:B850afc07": -0.4999999999999998,
+    "s0:B8bdaed3f": -0.42307692307692313,
+    "s0:B93a62615": -0.6826923076923073,
+    "s0:Ba4e39b3a": -0.03125,
+    "s0:Bb68c0172": -0.7368421052631577,
+    "s0:Bd4493c6a": 0.0,
+    "s0:Bda4b89cb": -0.3267326732673268,
+    "s0:Be5ac8d41": -0.45614035087719307,
+    "s0:Bf2160e7e": -0.5306122448979591,
+    "s0:Bfe2fc6bb": -0.3999999999999999
+   },
+   "by_training_seed": {
+    "0": -0.43538610277118484,
+    "1": -0.4262126604693285
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XB msgi_mining: focused_sample - maximal, late cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late",
+   "a": "focused_sample",
+   "b": "maximal",
+   "a_resolved": "focused_sample",
+   "b_resolved": "maximal",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 20,
+   "estimate": -0.32288210240180365,
+   "ci": [
+    -0.4707781889955321,
+    -0.18847803761337995
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 17,
+    "positive": 2,
+    "zero": 1,
+    "p_two_sided": 0.000728607177734375
+   },
+   "mean_a": 1.1742561526090554,
+   "mean_b": 1.497138255010859,
+   "per_unit": {
+    "s0:B10c8b7d8": -0.35593220338983045,
+    "s0:B1c596b97": -0.15625,
+    "s0:B32470ccd": -0.04705882352941182,
+    "s0:B3e1f9e2a": -0.41666666666666674,
+    "s0:B56846f2b": -0.6000000000000001,
+    "s0:B6eb1f1b0": -0.0869565217391306,
+    "s0:B723a5181": -0.21818181818181825,
+    "s0:B735f9981": -0.08823529411764719,
+    "s0:B76d84144": -0.11290322580645151,
+    "s0:B79c9a24e": -0.17999999999999994,
+    "s0:B850afc07": 0.02777777777777768,
+    "s0:B8bdaed3f": 0.0,
+    "s0:B93a62615": -0.3846153846153848,
+    "s0:Ba4e39b3a": -1.0,
+    "s0:Bb68c0172": -0.736842105263158,
+    "s0:Bd4493c6a": -1.0,
+    "s0:Bda4b89cb": 0.0990099009900991,
+    "s0:Be5ac8d41": -0.07017543859649122,
+    "s0:Bf2160e7e": -0.5306122448979591,
+    "s0:Bfe2fc6bb": -0.6000000000000001
+   },
+   "verdict": "holds"
+  }
+ ],
+ "completeness": {
+  "planned": 12,
+  "missing": 0,
+  "complete": true
+ },
+ "learning_curves": {
+  "focused_sample": {
+   "agent": {
+    "cost_ratio_late": 1.1742561526090554,
+    "success_late": 0.94375,
+    "steps_late": 8.46875,
+    "first_success_steps": 10.7,
+    "units": 20
+   }
+  },
+  "maximal": {
+   "agent": {
+    "cost_ratio_late": 1.497138255010859,
+    "success_late": 1.0,
+    "steps_late": 10.1625,
+    "first_success_steps": 9.7,
+    "units": 20
+   }
+  },
+  "mppo": {
+   "1000000": {
+    "cost_ratio_late": 1.9279376366311154,
+    "success_late": 0.1,
+    "steps_late": 13.234375,
+    "first_success_steps": 141.975,
+    "units": 20
+   }
+  },
+  "mppo_rnd": {
+   "1000000": {
+    "cost_ratio_late": 1.948968166974775,
+    "success_late": 0.175,
+    "steps_late": 13.3,
+    "first_success_steps": 122.55,
+    "units": 20
+   }
+  },
+  "ppo": {
+   "1000000": {
+    "cost_ratio_late": 1.9959218208876988,
+    "success_late": 0.0,
+    "steps_late": 13.5625,
+    "first_success_steps": 218.8,
+    "units": 20
+   }
+  },
+  "random": {
+   "agent": {
+    "cost_ratio_late": 1.960585696485785,
+    "success_late": 0.06875,
+    "steps_late": 13.39375,
+    "first_success_steps": 137.0,
+    "units": 20
+   }
+  },
+  "reference": {
+   "agent": {
+    "cost_ratio_late": 1.0,
+    "success_late": 1.0,
+    "steps_late": 7.05,
+    "first_success_steps": 6.55,
+    "units": 20
+   }
+  },
+  "rppo": {
+   "1000000": {
+    "cost_ratio_late": 1.9959218208876988,
+    "success_late": 0.0,
+    "steps_late": 13.5625,
+    "first_success_steps": 218.8,
+    "units": 20
+   }
+  }
+ },
+ "validation_curves": {},
+ "cells": {
+  "mppo|1000000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo_rnd|1000000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "ppo|1000000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "rppo|1000000|test": {
+   "units": 20,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "focused_sample|None|test": {
+   "units": 20,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "maximal|None|test": {
+   "units": 20,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "random|None|test": {
+   "units": 20,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "reference|None|test": {
+   "units": 20,
+   "training_seeds": [
+    "None"
+   ]
+  }
+ },
+ "bookkeeping": {
+  "runs_used": 12,
+  "ignored_repeats": [],
+  "incomplete_runs": [],
+  "costs": {
+   "training": [],
+   "evaluation": {
+    "mppo": {
+     "interactions": 8542,
+     "seconds": 28.08
+    },
+    "mppo_rnd": {
+     "interactions": 8591,
+     "seconds": 29.66
+    },
+    "ppo": {
+     "interactions": 8752,
+     "seconds": 17.07
+    },
+    "rppo": {
+     "interactions": 8752,
+     "seconds": 33.14
+    }
+   },
+   "agents": {
+    "focused_sample": {
+     "interactions": 3036,
+     "seconds": 12.24
+    },
+    "maximal": {
+     "interactions": 3287,
+     "seconds": 2.23
+    },
+    "random": {
+     "interactions": 4321,
+     "seconds": 1.95
+    },
+    "reference": {
+     "interactions": 2307,
+     "seconds": 1.36
+    }
+   }
+  }
+ },
+ "agent_interactions_per_world": {
+  "focused_sample": 151.8,
+  "maximal": 164.35,
+  "random": 216.05,
+  "reference": 115.35
+ },
+ "conversion": {
+  "summary": {
+   "worlds": 20,
+   "items_mean": 6.15,
+   "promoted_mean": 0.0,
+   "dropped_mean": 0.0,
+   "kept_share_mean": 1.0,
+   "decoy_types_mean": 1.15
+  },
+  "worlds": [
+   {
+    "world_index": 0,
+    "world_key": "B6eb1f1b0",
+    "graph": "msgi_mining",
+    "goals": [
+     "Bake pork"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 9,
+    "recipes": 10,
+    "closure_items": 9,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 1,
+    "world_key": "B32470ccd",
+    "graph": "msgi_mining",
+    "goals": [
+     "Craft silver diamond earrings"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 12,
+    "recipes": 13,
+    "closure_items": 12,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 2,
+    "world_key": "Bf2160e7e",
+    "graph": "msgi_mining",
+    "goals": [
+     "Get coal"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 3,
+    "recipes": 3,
+    "closure_items": 3,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 2
+   },
+   {
+    "world_index": 3,
+    "world_key": "B1c596b97",
+    "graph": "msgi_mining",
+    "goals": [
+     "Get diamond ore"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 9,
+    "recipes": 10,
+    "closure_items": 9,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 4,
+    "world_key": "B723a5181",
+    "graph": "msgi_mining",
+    "goals": [
+     "Get gold ore"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 9,
+    "recipes": 10,
+    "closure_items": 9,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 5,
+    "world_key": "B10c8b7d8",
+    "graph": "msgi_mining",
+    "goals": [
+     "Get iron ore"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 3,
+    "recipes": 3,
+    "closure_items": 3,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 3
+   },
+   {
+    "world_index": 6,
+    "world_key": "B3e1f9e2a",
+    "graph": "msgi_mining",
+    "goals": [
+     "Hit pig"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 3,
+    "recipes": 3,
+    "closure_items": 3,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 1
+   },
+   {
+    "world_index": 7,
+    "world_key": "B79c9a24e",
+    "graph": "msgi_mining",
+    "goals": [
+     "Light furnace"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 5,
+    "recipes": 6,
+    "closure_items": 5,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 8,
+    "world_key": "Bfe2fc6bb",
+    "graph": "msgi_mining",
+    "goals": [
+     "Make arrow"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 1,
+    "recipes": 1,
+    "closure_items": 1,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 3
+   },
+   {
+    "world_index": 9,
+    "world_key": "B56846f2b",
+    "graph": "msgi_mining",
+    "goals": [
+     "Make bow"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 1,
+    "recipes": 1,
+    "closure_items": 1,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 3
+   },
+   {
+    "world_index": 10,
+    "world_key": "Bda4b89cb",
+    "graph": "msgi_mining",
+    "goals": [
+     "Make electrum bracelet"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 13,
+    "recipes": 14,
+    "closure_items": 13,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 11,
+    "world_key": "Ba4e39b3a",
+    "graph": "msgi_mining",
+    "goals": [
+     "Make firewood"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 1,
+    "recipes": 1,
+    "closure_items": 1,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 4
+   },
+   {
+    "world_index": 12,
+    "world_key": "B8bdaed3f",
+    "graph": "msgi_mining",
+    "goals": [
+     "Make goldware"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 12,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 13,
+    "world_key": "B735f9981",
+    "graph": "msgi_mining",
+    "goals": [
+     "Make iron pickaxe"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 8,
+    "recipes": 9,
+    "closure_items": 8,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 14,
+    "world_key": "B76d84144",
+    "graph": "msgi_mining",
+    "goals": [
+     "Make silverware"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 8,
+    "recipes": 9,
+    "closure_items": 8,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 15,
+    "world_key": "Bd4493c6a",
+    "graph": "msgi_mining",
+    "goals": [
+     "Make stick"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 1,
+    "recipes": 1,
+    "closure_items": 1,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 4
+   },
+   {
+    "world_index": 16,
+    "world_key": "Bb68c0172",
+    "graph": "msgi_mining",
+    "goals": [
+     "Make stone pickaxe"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 2,
+    "recipes": 2,
+    "closure_items": 2,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 3
+   },
+   {
+    "world_index": 17,
+    "world_key": "B850afc07",
+    "graph": "msgi_mining",
+    "goals": [
+     "Smelt gold"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 10,
+    "recipes": 11,
+    "closure_items": 10,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 18,
+    "world_key": "B93a62615",
+    "graph": "msgi_mining",
+    "goals": [
+     "Smelt iron"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 7,
+    "recipes": 8,
+    "closure_items": 7,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 19,
+    "world_key": "Be5ac8d41",
+    "graph": "msgi_mining",
+    "goals": [
+     "Smelt silver"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 7,
+    "recipes": 8,
+    "closure_items": 7,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   }
+  ]
+ }
+}

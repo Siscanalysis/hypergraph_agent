@@ -1,8 +1,9 @@
 # Study X: the repository's agents against open-source reinforcement-learning baselines
 
 Status: protocol frozen on 2026-10-20 by the commit that freezes this file,
-before any tuning or measurement run; both run from a clean checkout of that
-commit, and the tuning choice is written into its configs mechanically. The development checks listed under Implementation used only the `dev`
+before any tuning or measurement run; both ran from a clean checkout of that
+commit, the tuning choice was written into its configs mechanically, and
+amendment XA1 records a mid-run fix. Results below. The development checks listed under Implementation used only the `dev`
 allocation of `runs/X-ledger.json` and namespaces ending in `_dev`; they are
 calibration, not results.
 
@@ -636,10 +637,61 @@ late episode, `random` 91-97). On the Crafter world no learner solved a
 task; `focused_sample` 1.50, `maximal` 1.66 and `random` 2.02 (late success
 0.25) in the late half. These numbers size the study; they are not results.
 
+## Amendments
+
+- XA1 (2026-10-21, after the main measurement, before the benchmark sets
+  completed). The unattended run stopped at the first benchmark set on a
+  Windows race in the ledger lock (`PermissionError` while the lock file was
+  being deleted). The snapshot's `training/budget.py` was patched identically to
+  repository commit 314de1e (the lock also waits on that error), the git-ignored
+  data of `little_alchemy` and `freeciv` were copied into the snapshot (checksums
+  verified with `fetch.py --check`), and the run was resumed; completed jobs
+  were skipped. The patch is behaviour-neutral (the rerun of the interrupted
+  evaluation reproduced its rows); 11 `bench_crafter` runs used the original
+  code, every other benchmark run the patched one. The tuning and measurement
+  configs were analysed again on each resume, with identical outputs.
+
 ## Results
 
-None: the protocol is a draft.
+All planned jobs completed exactly once (tuning 33/24/24; measurement 60, 50
+and 70 jobs; 12 per benchmark set); the interrupted evaluation was listed as
+incomplete and not used. Tuning followed the pre-registered rule on `_dev`
+namespaces and the tuning records verify. Interactions: tuning 2,910,132;
+measurement 20,696,095 (allocation `x_main`); reporting 1,980,699. Results were
+recomputed independently from the raw rows. Artifacts: `artifacts/baselines/`.
+
+| Test | Contrast | Estimate [95% CI] | Verdict |
+|---|---|---|---|
+| X1 (primary) | `focused_sample` - best learner (`mppo`), late cost ratio, 50 F1 test worlds | -1.437 [-1.567, -1.312] (1.517 against 2.953) | holds |
+| X1s | the same on late success | +0.887 | holds |
+| X2 | `maximal` - best learner | -1.067 | holds |
+| X3 | best learner - `random` | -0.021 [-0.051, 0.006] | does not hold |
+| X4 | best learner, late minus early cost ratio | +0.048 (includes 0) | does not hold |
+| XU1, XU2 | `pooled` - best learner (`mppo_rnd`), TechTree k3-off-ann | -700 actions to first success; -88.5 late actions | hold |
+| XU3, XU4 | best learner - `random`, TechTree | +543; +4.2 [0.04, 8.3] | do not hold |
+| XL1, XL2 | `promote`, `remember` - best learner, L2 depth 2 | -88.0; -76.5 | hold |
+| XL3 | best learner - `random`, L2 | +5.3 [2.6, 8.3] | does not hold |
+| XB (5 sets) | `focused_sample` - best learner, late cost ratio | Crafter -0.81, Craft world -0.65, MSGI Mining -0.75, Little Alchemy 2 -1.86, Freeciv -1.20 | hold in every set |
+
+The best learners were chosen on validation worlds only: `mppo` for RecipeQuest
+(2.903 against 2.910 for `mppo_rnd`), `mppo_rnd` in both TechTree settings. In
+the benchmark sets `focused_sample` was also cheaper than `maximal` in MSGI
+Mining (-0.32) and Little Alchemy 2 (-0.61), against the descriptive prediction.
 
 ## Verdict and limits
 
-None yet.
+The primary test holds: on fresh RecipeQuest worlds the sampling walker's
+late-episode cost is about half that of the best open-source learner after one
+million training interactions, and the TechTree and benchmark contrasts point
+the same way. This is a comparison with library learners that stayed at random
+level, not with competent ones: no learner beat the random agent in any
+setting (X3, XU3, XU4, XL3), and none improved within a world (X4). The masked
+learners did learn something (training success rising from about 2% to 11-16%
+on RecipeQuest, test cost improving with budget), but the sparse reward and a
+budget two steps above the brute-force bound leave little room. The unmasked
+learners (`ppo`, `rppo`) spent 59-64% of their training on invalid actions and
+never received a reward, so the recurrent learner, the only one able to carry
+memory across a world's episodes, was not really tested; the random agent also
+gets a structured prior the learners lack. Library defaults with a small
+tuning grid, two training seeds and one task family per environment limit
+the result further.

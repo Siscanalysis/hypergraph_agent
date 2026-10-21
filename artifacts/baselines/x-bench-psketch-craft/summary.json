@@ -1,0 +1,653 @@
+{
+ "name": "x-bench-psketch-craft",
+ "setting": "bench_psketch_craft",
+ "family": "recipequest",
+ "definition": {
+  "late_from": 8,
+  "unit": "test world",
+  "bootstrap": {
+   "resamples": 10000,
+   "seed": 20261008
+  }
+ },
+ "selection": {
+  "metric": "cost_ratio_late",
+  "split": "validation",
+  "budget": 1000000,
+  "scores": {
+   "mppo": 2.9033314865594435,
+   "mppo_rnd": 2.9095517995745532,
+   "ppo": 2.972171454958128,
+   "rppo": 2.972171454958128
+  },
+  "best_learner": "mppo",
+  "note": null,
+  "source": "x-rq-main"
+ },
+ "tuning": {
+  "metric": "cost_ratio_late",
+  "split": "validation",
+  "budget": 1000000,
+  "groups": {},
+  "incomplete": {
+   "maskable_ppo": [
+    "mppo@deterministic"
+   ],
+   "ppo": [
+    "ppo@deterministic"
+   ],
+   "recurrent_ppo": [
+    "rppo@deterministic"
+   ],
+   "maskable_ppo_rnd": [
+    "mppo_rnd@stochastic"
+   ]
+  }
+ },
+ "tests": [
+  {
+   "name": "XB psketch_craft: focused_sample - best learner, late cost ratio",
+   "role": "secondary",
+   "metric": "cost_ratio_late",
+   "a": "focused_sample",
+   "b": "best_learner",
+   "a_resolved": "focused_sample",
+   "b_resolved": "mppo",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 10,
+   "estimate": -0.6492661746142963,
+   "ci": [
+    -0.7484028344408995,
+    -0.546767437498449
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 10,
+    "positive": 0,
+    "zero": 0,
+    "p_two_sided": 0.001953125
+   },
+   "mean_a": 1.5371317043337678,
+   "mean_b": 2.186397878948064,
+   "per_unit": {
+    "s0:B0c0a4642": -0.5408163265306118,
+    "s0:B0c449888": -0.6200000000000001,
+    "s0:B107c735c": -0.3396226415094339,
+    "s0:B11af4679": -0.45833333333333326,
+    "s0:B1468a722": -0.7765957446808509,
+    "s0:B1cdc056f": -0.9021739130434785,
+    "s0:B6191d541": -0.7142857142857142,
+    "s0:B63953491": -0.6938775510204083,
+    "s0:B9199ed22": -0.6099999999999999,
+    "s0:Bc4d92251": -0.8369565217391306
+   },
+   "by_training_seed": {
+    "1": -0.6745128257052213,
+    "0": -0.6240195235233709
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XB psketch_craft: maximal - best learner, late cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late",
+   "a": "maximal",
+   "b": "best_learner",
+   "a_resolved": "maximal",
+   "b_resolved": "mppo",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "not_greater",
+   "n_units": 10,
+   "estimate": -0.5676329751316511,
+   "ci": [
+    -0.6068715475089203,
+    -0.525513556723459
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 10,
+    "positive": 0,
+    "zero": 0,
+    "p_two_sided": 0.001953125
+   },
+   "mean_a": 1.6187649038164131,
+   "mean_b": 2.186397878948064,
+   "per_unit": {
+    "s0:B0c0a4642": -0.5816326530612241,
+    "s0:B0c449888": -0.5800000000000001,
+    "s0:B107c735c": -0.4528301886792452,
+    "s0:B11af4679": -0.45833333333333326,
+    "s0:B1468a722": -0.6276595744680851,
+    "s0:B1cdc056f": -0.6413043478260871,
+    "s0:B6191d541": -0.551020408163265,
+    "s0:B63953491": -0.6122448979591837,
+    "s0:B9199ed22": -0.53,
+    "s0:Bc4d92251": -0.6413043478260871
+   },
+   "by_training_seed": {
+    "1": -0.5928796262225764,
+    "0": -0.5423863240407258
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XB psketch_craft: focused_sample - maximal, late cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late",
+   "a": "focused_sample",
+   "b": "maximal",
+   "a_resolved": "focused_sample",
+   "b_resolved": "maximal",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 10,
+   "estimate": -0.08163319948264507,
+   "ci": [
+    -0.147640366063169,
+    -0.01392787832113985
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 7,
+    "positive": 2,
+    "zero": 1,
+    "p_two_sided": 0.1796875
+   },
+   "mean_a": 1.5371317043337678,
+   "mean_b": 1.6187649038164131,
+   "per_unit": {
+    "s0:B0c0a4642": 0.04081632653061229,
+    "s0:B0c449888": -0.040000000000000036,
+    "s0:B107c735c": 0.1132075471698113,
+    "s0:B11af4679": 0.0,
+    "s0:B1468a722": -0.14893617021276584,
+    "s0:B1cdc056f": -0.26086956521739135,
+    "s0:B6191d541": -0.16326530612244916,
+    "s0:B63953491": -0.08163265306122458,
+    "s0:B9199ed22": -0.07999999999999985,
+    "s0:Bc4d92251": -0.19565217391304346
+   },
+   "verdict": "holds"
+  }
+ ],
+ "completeness": {
+  "planned": 12,
+  "missing": 0,
+  "complete": true
+ },
+ "learning_curves": {
+  "focused_sample": {
+   "agent": {
+    "cost_ratio_late": 1.5371317043337678,
+    "success_late": 0.9125,
+    "steps_late": 9.375,
+    "first_success_steps": 8.8,
+    "units": 10
+   }
+  },
+  "maximal": {
+   "agent": {
+    "cost_ratio_late": 1.6187649038164131,
+    "success_late": 1.0,
+    "steps_late": 9.85,
+    "first_success_steps": 8.4,
+    "units": 10
+   }
+  },
+  "mppo": {
+   "1000000": {
+    "cost_ratio_late": 2.186397878948064,
+    "success_late": 0.0875,
+    "steps_late": 13.29375,
+    "first_success_steps": 110.55,
+    "units": 10
+   }
+  },
+  "mppo_rnd": {
+   "1000000": {
+    "cost_ratio_late": 2.1881323278443032,
+    "success_late": 0.1625,
+    "steps_late": 13.30625,
+    "first_success_steps": 77.6,
+    "units": 10
+   }
+  },
+  "ppo": {
+   "1000000": {
+    "cost_ratio_late": 2.232975088164182,
+    "success_late": 0.0,
+    "steps_late": 13.575,
+    "first_success_steps": 214.8,
+    "units": 10
+   }
+  },
+  "random": {
+   "agent": {
+    "cost_ratio_late": 2.1931688178299615,
+    "success_late": 0.1125,
+    "steps_late": 13.3375,
+    "first_success_steps": 106.3,
+    "units": 10
+   }
+  },
+  "reference": {
+   "agent": {
+    "cost_ratio_late": 1.0,
+    "success_late": 1.0,
+    "steps_late": 6.0875,
+    "first_success_steps": 4.6,
+    "units": 10
+   }
+  },
+  "rppo": {
+   "1000000": {
+    "cost_ratio_late": 2.232975088164182,
+    "success_late": 0.0,
+    "steps_late": 13.575,
+    "first_success_steps": 214.8,
+    "units": 10
+   }
+  }
+ },
+ "validation_curves": {},
+ "cells": {
+  "mppo|1000000|test": {
+   "units": 10,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo_rnd|1000000|test": {
+   "units": 10,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "ppo|1000000|test": {
+   "units": 10,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "rppo|1000000|test": {
+   "units": 10,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "focused_sample|None|test": {
+   "units": 10,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "maximal|None|test": {
+   "units": 10,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "random|None|test": {
+   "units": 10,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "reference|None|test": {
+   "units": 10,
+   "training_seeds": [
+    "None"
+   ]
+  }
+ },
+ "bookkeeping": {
+  "runs_used": 12,
+  "ignored_repeats": [],
+  "incomplete_runs": [],
+  "costs": {
+   "training": [],
+   "evaluation": {
+    "mppo": {
+     "interactions": 4198,
+     "seconds": 13.4
+    },
+    "mppo_rnd": {
+     "interactions": 4212,
+     "seconds": 14.02
+    },
+    "ppo": {
+     "interactions": 4296,
+     "seconds": 9.02
+    },
+    "rppo": {
+     "interactions": 4296,
+     "seconds": 15.43
+    }
+   },
+   "agents": {
+    "focused_sample": {
+     "interactions": 1545,
+     "seconds": 4.98
+    },
+    "maximal": {
+     "interactions": 1535,
+     "seconds": 1.1
+    },
+    "random": {
+     "interactions": 2114,
+     "seconds": 0.74
+    },
+    "reference": {
+     "interactions": 935,
+     "seconds": 0.67
+    }
+   }
+  }
+ },
+ "agent_interactions_per_world": {
+  "focused_sample": 154.5,
+  "maximal": 153.5,
+  "random": 211.4,
+  "reference": 93.5
+ },
+ "conversion": {
+  "summary": {
+   "worlds": 10,
+   "items_mean": 11.0,
+   "promoted_mean": 0.0,
+   "dropped_mean": 0.0,
+   "kept_share_mean": 1.0,
+   "decoy_types_mean": 0.0
+  },
+  "worlds": [
+   {
+    "world_index": 0,
+    "world_key": "B0c449888",
+    "graph": "psketch_craft",
+    "goals": [
+     "bed",
+     "cloth",
+     "gem",
+     "gold",
+     "ladder",
+     "rope",
+     "shears"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 1,
+    "world_key": "B6191d541",
+    "graph": "psketch_craft",
+    "goals": [
+     "bed",
+     "cloth",
+     "gem",
+     "gold",
+     "ladder",
+     "rope",
+     "shears"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 1,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 2,
+    "world_key": "B107c735c",
+    "graph": "psketch_craft",
+    "goals": [
+     "bed",
+     "cloth",
+     "gem",
+     "gold",
+     "ladder",
+     "rope",
+     "shears"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 2,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 3,
+    "world_key": "B1468a722",
+    "graph": "psketch_craft",
+    "goals": [
+     "bed",
+     "cloth",
+     "gem",
+     "gold",
+     "ladder",
+     "rope",
+     "shears"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 3,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 4,
+    "world_key": "B1cdc056f",
+    "graph": "psketch_craft",
+    "goals": [
+     "bed",
+     "cloth",
+     "gem",
+     "gold",
+     "ladder",
+     "rope",
+     "shears"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 4,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 5,
+    "world_key": "B63953491",
+    "graph": "psketch_craft",
+    "goals": [
+     "bed",
+     "cloth",
+     "gem",
+     "gold",
+     "ladder",
+     "rope",
+     "shears"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 5,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 6,
+    "world_key": "B0c0a4642",
+    "graph": "psketch_craft",
+    "goals": [
+     "bed",
+     "cloth",
+     "gem",
+     "gold",
+     "ladder",
+     "rope",
+     "shears"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 6,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 7,
+    "world_key": "Bc4d92251",
+    "graph": "psketch_craft",
+    "goals": [
+     "bed",
+     "cloth",
+     "gem",
+     "gold",
+     "ladder",
+     "rope",
+     "shears"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 7,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 8,
+    "world_key": "B9199ed22",
+    "graph": "psketch_craft",
+    "goals": [
+     "bed",
+     "cloth",
+     "gem",
+     "gold",
+     "ladder",
+     "rope",
+     "shears"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 8,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 9,
+    "world_key": "B11af4679",
+    "graph": "psketch_craft",
+    "goals": [
+     "bed",
+     "cloth",
+     "gem",
+     "gold",
+     "ladder",
+     "rope",
+     "shears"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 9,
+     "unlocks": "as_base"
+    },
+    "items": 11,
+    "recipes": 11,
+    "closure_items": 11,
+    "kept_share": 1.0,
+    "promoted": [],
+    "dropped": [],
+    "decoy_types": 0
+   }
+  ]
+ }
+}

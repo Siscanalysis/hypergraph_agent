@@ -1,0 +1,735 @@
+{
+ "name": "x-bench-crafter",
+ "setting": "bench_crafter",
+ "family": "recipequest",
+ "definition": {
+  "late_from": 8,
+  "unit": "test world",
+  "bootstrap": {
+   "resamples": 10000,
+   "seed": 20261008
+  }
+ },
+ "selection": {
+  "metric": "cost_ratio_late",
+  "split": "validation",
+  "budget": 1000000,
+  "scores": {
+   "mppo": 2.9033314865594435,
+   "mppo_rnd": 2.9095517995745532,
+   "ppo": 2.972171454958128,
+   "rppo": 2.972171454958128
+  },
+  "best_learner": "mppo",
+  "note": null,
+  "source": "x-rq-main"
+ },
+ "tuning": {
+  "metric": "cost_ratio_late",
+  "split": "validation",
+  "budget": 1000000,
+  "groups": {},
+  "incomplete": {
+   "maskable_ppo": [
+    "mppo@deterministic"
+   ],
+   "ppo": [
+    "ppo@deterministic"
+   ],
+   "recurrent_ppo": [
+    "rppo@deterministic"
+   ],
+   "maskable_ppo_rnd": [
+    "mppo_rnd@stochastic"
+   ]
+  }
+ },
+ "tests": [
+  {
+   "name": "XB crafter: focused_sample - best learner, late cost ratio",
+   "role": "secondary",
+   "metric": "cost_ratio_late",
+   "a": "focused_sample",
+   "b": "best_learner",
+   "a_resolved": "focused_sample",
+   "b_resolved": "mppo",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 10,
+   "estimate": -0.8123085588599583,
+   "ci": [
+    -0.9113823451459921,
+    -0.7044853422729525
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 10,
+    "positive": 0,
+    "zero": 0,
+    "p_two_sided": 0.001953125
+   },
+   "mean_a": 1.426235959530371,
+   "mean_b": 2.23854451839033,
+   "per_unit": {
+    "s0:B1353b048": -0.9687500000000002,
+    "s0:B14d7abad": -0.8220338983050848,
+    "s0:B66ec281f": -0.8484848484848484,
+    "s0:B75defd6c": -0.9591836734693877,
+    "s0:B796987fc": -0.8454545454545457,
+    "s0:B85de135f": -0.8859649122807014,
+    "s0:B915c37fc": -0.6904761904761902,
+    "s0:Bad112471": -1.0434782608695654,
+    "s0:Bbe3af325": -0.55,
+    "s0:Be01b8f82": -0.5092592592592595
+   },
+   "by_training_seed": {
+    "0": -0.8166820166513833,
+    "1": -0.8079351010685333
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XB crafter: maximal - best learner, late cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late",
+   "a": "maximal",
+   "b": "best_learner",
+   "a_resolved": "maximal",
+   "b_resolved": "mppo",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "not_greater",
+   "n_units": 10,
+   "estimate": -0.5022519420350113,
+   "ci": [
+    -0.5661083022860729,
+    -0.43747974295008196
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 10,
+    "positive": 0,
+    "zero": 0,
+    "p_two_sided": 0.001953125
+   },
+   "mean_a": 1.7362925763553183,
+   "mean_b": 2.23854451839033,
+   "per_unit": {
+    "s0:B1353b048": -0.6770833333333335,
+    "s0:B14d7abad": -0.48305084745762716,
+    "s0:B66ec281f": -0.5303030303030303,
+    "s0:B75defd6c": -0.5714285714285714,
+    "s0:B796987fc": -0.5181818181818183,
+    "s0:B85de135f": -0.4999999999999998,
+    "s0:B915c37fc": -0.3888888888888886,
+    "s0:Bad112471": -0.6304347826086958,
+    "s0:Bbe3af325": -0.32499999999999996,
+    "s0:Be01b8f82": -0.39814814814814836
+   },
+   "by_training_seed": {
+    "0": -0.5066253998264363,
+    "1": -0.49787848424358644
+   },
+   "verdict": "holds"
+  },
+  {
+   "name": "XB crafter: focused_sample - maximal, late cost ratio",
+   "role": "descriptive",
+   "metric": "cost_ratio_late",
+   "a": "focused_sample",
+   "b": "maximal",
+   "a_resolved": "focused_sample",
+   "b_resolved": "maximal",
+   "budget": 1000000,
+   "split": "test",
+   "expect": "less",
+   "n_units": 10,
+   "estimate": -0.310056616824947,
+   "ci": [
+    -0.3569071146834713,
+    -0.2522849060913529
+   ],
+   "level": 0.95,
+   "sign_test": {
+    "negative": 10,
+    "positive": 0,
+    "zero": 0,
+    "p_two_sided": 0.001953125
+   },
+   "mean_a": 1.426235959530371,
+   "mean_b": 1.7362925763553183,
+   "per_unit": {
+    "s0:B1353b048": -0.29166666666666674,
+    "s0:B14d7abad": -0.3389830508474576,
+    "s0:B66ec281f": -0.3181818181818181,
+    "s0:B75defd6c": -0.3877551020408163,
+    "s0:B796987fc": -0.3272727272727274,
+    "s0:B85de135f": -0.3859649122807016,
+    "s0:B915c37fc": -0.3015873015873016,
+    "s0:Bad112471": -0.4130434782608696,
+    "s0:Bbe3af325": -0.2250000000000001,
+    "s0:Be01b8f82": -0.11111111111111116
+   },
+   "verdict": "holds"
+  }
+ ],
+ "completeness": {
+  "planned": 12,
+  "missing": 0,
+  "complete": true
+ },
+ "learning_curves": {
+  "focused_sample": {
+   "agent": {
+    "cost_ratio_late": 1.426235959530371,
+    "success_late": 0.975,
+    "steps_late": 10.1625,
+    "first_success_steps": 17.8,
+    "units": 10
+   }
+  },
+  "maximal": {
+   "agent": {
+    "cost_ratio_late": 1.7362925763553183,
+    "success_late": 1.0,
+    "steps_late": 12.3625,
+    "first_success_steps": 11.3,
+    "units": 10
+   }
+  },
+  "mppo": {
+   "1000000": {
+    "cost_ratio_late": 2.23854451839033,
+    "success_late": 0.1,
+    "steps_late": 15.8875,
+    "first_success_steps": 166.85,
+    "units": 10
+   }
+  },
+  "mppo_rnd": {
+   "1000000": {
+    "cost_ratio_late": 2.2585885784535433,
+    "success_late": 0.10625,
+    "steps_late": 16.0,
+    "first_success_steps": 142.25,
+    "units": 10
+   }
+  },
+  "ppo": {
+   "1000000": {
+    "cost_ratio_late": 2.304814574459156,
+    "success_late": 0.0,
+    "steps_late": 16.325,
+    "first_success_steps": 263.2,
+    "units": 10
+   }
+  },
+  "random": {
+   "agent": {
+    "cost_ratio_late": 2.251290203384122,
+    "success_late": 0.0875,
+    "steps_late": 15.975,
+    "first_success_steps": 123.2,
+    "units": 10
+   }
+  },
+  "reference": {
+   "agent": {
+    "cost_ratio_late": 1.0,
+    "success_late": 1.0,
+    "steps_late": 7.2125,
+    "first_success_steps": 6.2,
+    "units": 10
+   }
+  },
+  "rppo": {
+   "1000000": {
+    "cost_ratio_late": 2.304814574459156,
+    "success_late": 0.0,
+    "steps_late": 16.325,
+    "first_success_steps": 263.2,
+    "units": 10
+   }
+  }
+ },
+ "validation_curves": {},
+ "cells": {
+  "mppo|1000000|test": {
+   "units": 10,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "mppo_rnd|1000000|test": {
+   "units": 10,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "ppo|1000000|test": {
+   "units": 10,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "rppo|1000000|test": {
+   "units": 10,
+   "training_seeds": [
+    "0",
+    "1"
+   ]
+  },
+  "focused_sample|None|test": {
+   "units": 10,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "maximal|None|test": {
+   "units": 10,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "reference|None|test": {
+   "units": 10,
+   "training_seeds": [
+    "None"
+   ]
+  },
+  "random|None|test": {
+   "units": 10,
+   "training_seeds": [
+    "None"
+   ]
+  }
+ },
+ "bookkeeping": {
+  "runs_used": 12,
+  "ignored_repeats": [],
+  "incomplete_runs": [
+   "x-bench-crafter-eval-mppo_rnd-s0-b1000000-test-sto-20261021-004548"
+  ],
+  "costs": {
+   "training": [],
+   "evaluation": {
+    "mppo": {
+     "interactions": 5157,
+     "seconds": 15.129999999999999
+    },
+    "mppo_rnd": {
+     "interactions": 5155,
+     "seconds": 11.19
+    },
+    "ppo": {
+     "interactions": 5264,
+     "seconds": 9.969999999999999
+    },
+    "rppo": {
+     "interactions": 5264,
+     "seconds": 16.67
+    }
+   },
+   "agents": {
+    "focused_sample": {
+     "interactions": 1873,
+     "seconds": 7.67
+    },
+    "maximal": {
+     "interactions": 2007,
+     "seconds": 1.33
+    },
+    "reference": {
+     "interactions": 1205,
+     "seconds": 1.36
+    },
+    "random": {
+     "interactions": 2580,
+     "seconds": 0.74
+    }
+   }
+  }
+ },
+ "agent_interactions_per_world": {
+  "focused_sample": 187.3,
+  "maximal": 200.7,
+  "reference": 120.5,
+  "random": 258.0
+ },
+ "conversion": {
+  "summary": {
+   "worlds": 10,
+   "items_mean": 16.0,
+   "promoted_mean": 1.0,
+   "dropped_mean": 5.0,
+   "kept_share_mean": 0.9412,
+   "decoy_types_mean": 0.0
+  },
+  "worlds": [
+   {
+    "world_index": 0,
+    "world_key": "B66ec281f",
+    "graph": "crafter",
+    "goals": [
+     "diamond",
+     "drink",
+     "iron_sword",
+     "placed_stone",
+     "plant",
+     "stone_sword",
+     "wood_sword"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 0,
+     "unlocks": "as_base"
+    },
+    "items": 16,
+    "recipes": 19,
+    "closure_items": 17,
+    "kept_share": 0.9412,
+    "promoted": [
+     "wood"
+    ],
+    "dropped": [
+     "table <- mat:sand+wood: beyond max_alternatives",
+     "furnace <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:path+stone: beyond max_alternatives",
+     "placed_stone <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:water+stone: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 1,
+    "world_key": "Bbe3af325",
+    "graph": "crafter",
+    "goals": [
+     "diamond",
+     "drink",
+     "iron_sword",
+     "placed_stone",
+     "plant",
+     "stone_sword",
+     "wood_sword"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 1,
+     "unlocks": "as_base"
+    },
+    "items": 16,
+    "recipes": 19,
+    "closure_items": 17,
+    "kept_share": 0.9412,
+    "promoted": [
+     "wood"
+    ],
+    "dropped": [
+     "table <- mat:sand+wood: beyond max_alternatives",
+     "furnace <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:path+stone: beyond max_alternatives",
+     "placed_stone <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:water+stone: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 2,
+    "world_key": "Bad112471",
+    "graph": "crafter",
+    "goals": [
+     "diamond",
+     "drink",
+     "iron_sword",
+     "placed_stone",
+     "plant",
+     "stone_sword",
+     "wood_sword"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 2,
+     "unlocks": "as_base"
+    },
+    "items": 16,
+    "recipes": 19,
+    "closure_items": 17,
+    "kept_share": 0.9412,
+    "promoted": [
+     "wood"
+    ],
+    "dropped": [
+     "table <- mat:sand+wood: beyond max_alternatives",
+     "furnace <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:path+stone: beyond max_alternatives",
+     "placed_stone <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:water+stone: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 3,
+    "world_key": "B85de135f",
+    "graph": "crafter",
+    "goals": [
+     "diamond",
+     "drink",
+     "iron_sword",
+     "placed_stone",
+     "plant",
+     "stone_sword",
+     "wood_sword"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 3,
+     "unlocks": "as_base"
+    },
+    "items": 16,
+    "recipes": 19,
+    "closure_items": 17,
+    "kept_share": 0.9412,
+    "promoted": [
+     "wood"
+    ],
+    "dropped": [
+     "table <- mat:sand+wood: beyond max_alternatives",
+     "furnace <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:path+stone: beyond max_alternatives",
+     "placed_stone <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:water+stone: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 4,
+    "world_key": "B14d7abad",
+    "graph": "crafter",
+    "goals": [
+     "diamond",
+     "drink",
+     "iron_sword",
+     "placed_stone",
+     "plant",
+     "stone_sword",
+     "wood_sword"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 4,
+     "unlocks": "as_base"
+    },
+    "items": 16,
+    "recipes": 19,
+    "closure_items": 17,
+    "kept_share": 0.9412,
+    "promoted": [
+     "wood"
+    ],
+    "dropped": [
+     "table <- mat:sand+wood: beyond max_alternatives",
+     "furnace <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:path+stone: beyond max_alternatives",
+     "placed_stone <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:water+stone: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 5,
+    "world_key": "B915c37fc",
+    "graph": "crafter",
+    "goals": [
+     "diamond",
+     "drink",
+     "iron_sword",
+     "placed_stone",
+     "plant",
+     "stone_sword",
+     "wood_sword"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 5,
+     "unlocks": "as_base"
+    },
+    "items": 16,
+    "recipes": 19,
+    "closure_items": 17,
+    "kept_share": 0.9412,
+    "promoted": [
+     "wood"
+    ],
+    "dropped": [
+     "table <- mat:sand+wood: beyond max_alternatives",
+     "furnace <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:path+stone: beyond max_alternatives",
+     "placed_stone <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:water+stone: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 6,
+    "world_key": "B75defd6c",
+    "graph": "crafter",
+    "goals": [
+     "diamond",
+     "drink",
+     "iron_sword",
+     "placed_stone",
+     "plant",
+     "stone_sword",
+     "wood_sword"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 6,
+     "unlocks": "as_base"
+    },
+    "items": 16,
+    "recipes": 19,
+    "closure_items": 17,
+    "kept_share": 0.9412,
+    "promoted": [
+     "wood"
+    ],
+    "dropped": [
+     "table <- mat:sand+wood: beyond max_alternatives",
+     "furnace <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:path+stone: beyond max_alternatives",
+     "placed_stone <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:water+stone: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 7,
+    "world_key": "B796987fc",
+    "graph": "crafter",
+    "goals": [
+     "diamond",
+     "drink",
+     "iron_sword",
+     "placed_stone",
+     "plant",
+     "stone_sword",
+     "wood_sword"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 7,
+     "unlocks": "as_base"
+    },
+    "items": 16,
+    "recipes": 19,
+    "closure_items": 17,
+    "kept_share": 0.9412,
+    "promoted": [
+     "wood"
+    ],
+    "dropped": [
+     "table <- mat:sand+wood: beyond max_alternatives",
+     "furnace <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:path+stone: beyond max_alternatives",
+     "placed_stone <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:water+stone: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 8,
+    "world_key": "Be01b8f82",
+    "graph": "crafter",
+    "goals": [
+     "diamond",
+     "drink",
+     "iron_sword",
+     "placed_stone",
+     "plant",
+     "stone_sword",
+     "wood_sword"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 8,
+     "unlocks": "as_base"
+    },
+    "items": 16,
+    "recipes": 19,
+    "closure_items": 17,
+    "kept_share": 0.9412,
+    "promoted": [
+     "wood"
+    ],
+    "dropped": [
+     "table <- mat:sand+wood: beyond max_alternatives",
+     "furnace <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:path+stone: beyond max_alternatives",
+     "placed_stone <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:water+stone: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   },
+   {
+    "world_index": 9,
+    "world_key": "B1353b048",
+    "graph": "crafter",
+    "goals": [
+     "diamond",
+     "drink",
+     "iron_sword",
+     "placed_stone",
+     "plant",
+     "stone_sword",
+     "wood_sword"
+    ],
+    "params": {
+     "pool_size": 6,
+     "max_true": 3,
+     "max_alternatives": 2,
+     "seed": 9,
+     "unlocks": "as_base"
+    },
+    "items": 16,
+    "recipes": 19,
+    "closure_items": 17,
+    "kept_share": 0.9412,
+    "promoted": [
+     "wood"
+    ],
+    "dropped": [
+     "table <- mat:sand+wood: beyond max_alternatives",
+     "furnace <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:path+stone: beyond max_alternatives",
+     "placed_stone <- mat:sand+stone: beyond max_alternatives",
+     "placed_stone <- mat:water+stone: beyond max_alternatives"
+    ],
+    "decoy_types": 0
+   }
+  ]
+ }
+}
