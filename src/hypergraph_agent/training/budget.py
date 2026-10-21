@@ -61,7 +61,7 @@ class _FileLock:
             try:
                 self.fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
                 return self
-            except FileExistsError:
+            except (FileExistsError, PermissionError):  # Windows: the lock is being deleted
                 if time.time() - t0 > self.timeout:
                     raise TimeoutError(f"ledger lock {self.path} held too long")
                 time.sleep(0.05)
