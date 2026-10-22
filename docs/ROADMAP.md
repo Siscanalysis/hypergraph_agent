@@ -67,7 +67,11 @@ control and a cost estimate before it is built.
     partially observed problems). Candidates: TechTree held-set cells (the cells of
     the archive baseline), the walker's hypothesis nodes (amortizing the planner).
     Test against the model-based agents and the learning baselines, with the same
-    graph and uniform action distributions as the control.
+    graph and uniform action distributions as the control. Study PG
+    (docs/studies/PG_policy_graph.md) measured one declared node map per
+    environment: the learned distributions halve the late cost in TechTree's k3
+    cell and do nothing measurable where successes are rare; learned or goal-free
+    node maps that share counts across tasks remain open.
 
 ## Later extensions
 

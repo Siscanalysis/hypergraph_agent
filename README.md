@@ -76,6 +76,11 @@ their own frozen protocol, interaction ledger and verdict:
   fewer actions than generic exploration baselines (U2); open-source reinforcement
   learners (Stable-Baselines3) trained for a million interactions stayed at
   random level and were far costlier than the repository's agents (X).
+- **Third round** ([docs/RESULTS.md](docs/RESULTS.md), Section 4.7): a policy
+  graph, whose nodes are public states with action distributions learned from
+  the agent's own successes, halves the late cost of the same graph with uniform
+  distributions in TechTree, does nothing measurable where successes are rare,
+  and stays far costlier than the model-based agents (PG).
 
 ## The game
 

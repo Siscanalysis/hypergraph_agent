@@ -386,6 +386,17 @@ independent recomputation of the results).
 Interactions (measurement only): R2 205,106 adaptive and 188,672 reporting;
 P 316,807 and 16,161; U2 622,550 and 216,249.
 
+## 4.7 Third round of follow-up studies (2026-10-22)
+
+Same procedure as Section 4.5 (frozen protocol, clean-checkout runs,
+independent recomputation of the results).
+
+| Study | Primary test | Result | Verdict |
+|---|---|---|---|
+| [PG](studies/PG_policy_graph.md) | late actions per episode, `pg` - `pg_uniform` (the same policy graph with uniform action distributions), TechTree cell k3-off-ann, 30 worlds | -45.3 [-51.6, -38.6] | pass: the learned distributions halve the late cost (42 against 87 actions); where successes are rare (L2 at reuse depth 2, RecipeQuest F1) `pg` matches its control in all but one episode; the model-based agents stay far cheaper |
+
+Interactions (measurement only): PG 182,725 adaptive and 156,561 reporting.
+
 ## 5. What the session shows and does not show
 
 Shows: the mechanisms run end to end under one interaction ledger; public

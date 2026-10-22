@@ -252,6 +252,8 @@ allocation.
 | R2: where study R stops replicating | docs/studies/R2_boundary.md | 1816ad3 | `runs/R2-ledger.json` |
 | P: promotion with imperfect learned skills | docs/studies/P_imperfect_skills.md | b07ecf4 | `runs/P-ledger.json` |
 | U2: generic exploration baselines on TechTree | docs/studies/U2_techtree_baselines.md | 37f6f06 | `runs/U2-ledger.json` |
+| X: open-source reinforcement-learning baselines | docs/studies/X_open_source_baselines.md | 11a8c45 (amendment XA1) | `runs/X-ledger.json` |
+| PG: a policy graph with learned action distributions | docs/studies/PG_policy_graph.md | 01b1f8c | `runs/PG-ledger.json` |
 
 Every protocol was reviewed independently before its freeze. One review run
 touched tasks of study R's first measurement namespaces in memory; its outputs
