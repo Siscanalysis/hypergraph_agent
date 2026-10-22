@@ -1,7 +1,8 @@
 # Study PG: a policy graph (public states with learned action distributions)
 
 Status: protocol frozen on 2026-10-22 by the commit that freezes this file, before any
-measurement run; the measurement runs that commit from a clean snapshot. Development used only
+measurement run; the measurement ran that commit from a clean snapshot the same day. Results
+below. Development used only
 the `dev` allocation of `runs/PG-ledger.json` and namespaces ending in `_dev`; its outcomes were
 seen before the predictions below were written and are reported under Implementation as
 calibration, not results.
@@ -397,8 +398,145 @@ come from the earlier map.
 
 ## Results
 
-None yet: no measurement run exists.
+All 116 measurement runs (30 of `pg_u_main.yaml`, 56 of `pg_l_main.yaml`, 30 of
+`pg_rq_main.yaml`) executed the freeze commit 01b1f8c from a clean worktree on 2026-10-22
+(18:06-18:12, the three configs concurrently) and completed; none was rerun and the walker
+analysis lists no incomplete run. They used 182,725 adaptive interactions (`pg_tt` 127,694 of
+261,600; `pg_rq` 55,031 of 62,400) and 156,561 reporting interactions (ledger totals minus
+development); no cap was changed. The frozen analyses wrote `artifacts/techtree/pg-u-main/`,
+`artifacts/techtree/pg-l-main/` and `artifacts/policygraph/` (`pg_rq_summary.json`,
+`pg_x_summary.json`), with the sign test of every test; the two summaries were written again
+with a relative `--root` so that they record no local path, and only the path fields changed.
+An independent recomputation from the raw rows reproduced every estimate, interval and sign test
+exactly, and every analysis output regenerates byte for byte.
+
+### Primary: TechTree, study U's cell k3-off-ann (30 worlds)
+
+| Arm | Late actions per episode | Late success | Actions to the first success |
+|---|---|---|---|
+| `pg` | 42.1 | 0.93 | 260.5 |
+| `pg_uniform` | 87.4 | 0.32 | 260.5 |
+| `pg_greedy` | 14.1 | 0.99 | 260.5 |
+| `pooled` | 6.8 | 1.00 | 60.6 |
+| `random` | 88.3 | 0.31 | 361.7 |
+
+- PG1 holds: `pg` - `pg_uniform` -45.3 [-51.6, -38.6] late actions per episode, lower in all 30
+  worlds (sign test p = 1.9e-9). E1 does not hold (90% interval [-50.6, -39.8], margin 8.74) and
+  V1 holds (no violation in 360 episodes): the verdict is "pass".
+- S7 holds: late success +0.617 [0.511, 0.711].
+- S1 and S2 hold: the greedy replay is cheaper still, -73.3 [-77.6, -68.4] against `pg_uniform`
+  and -28.0 [-32.7, -23.5] against `pg`.
+- S3, S4 and S5 hold: the model-based `pooled` stays cheaper, -35.3 [-39.7, -31.2] late actions
+  against `pg`, -7.32 [-9.66, -5.42] against `pg_greedy`, and -200 [-279, -124] actions to the
+  first success against `pg` (sign test p = 0.043; 9 of 30 worlds go the other way). The three
+  policy-graph arms are identical in every world until its first success, so S4 compares
+  `pooled` with the uniform rule; the gap between `pg_uniform` and `random` there (261 against
+  362) is between independent random streams (-101 [-249, 41]).
+- S6 holds: `pg_uniform` is equivalent to `random` within 10% (-0.917, 90% interval
+  [-4.88, 2.80], margin 8.83).
+- Graph at the end of a world (`pg`): 46.6 nodes, 185 edges, 33.4 nodes with counts, 8.6
+  successes; 33% of the decisions were taken at a node with counts, and the loop-erased path of
+  an episode had 12.4 decisions. `pg_greedy`: 37.2 nodes and 105 edges.
+
+### L2 at reuse depth 2 (32 worlds)
+
+| Arm | Late actions per episode | Late success | Actions to the first success |
+|---|---|---|---|
+| `pg` | 93.7 | 0.14 | 640.0 |
+| `pg_uniform` | 93.9 | 0.13 | 640.0 |
+| `pg_greedy` | 82.2 | 0.30 | 640.0 |
+| `promote` | 10.7 | 1.00 | 29.6 |
+| `remember` | 32.7 | 0.78 | 203.6 |
+| `random` | 93.5 | 0.14 | 719.2 |
+
+In 5 worlds neither a policy-graph arm nor `random` succeeded; their actions to the first success
+are the stream total (censored).
+
+- SL1 does not hold: `pg` - `pg_uniform` -0.156 [-0.469, 0]; the upper end is 0, not below it
+  (31 of 32 worlds tie). The estimate is one episode of one world, in which `pg` succeeded in 70
+  actions where `pg_uniform` failed; the two arms diverged after the first success in 13 worlds,
+  and in the other 12 the diverging episodes ended with the same length and outcome. Successes
+  are rare (1.5 per world) and spread over about 980 nodes per world, and only 0.6% of `pg`'s
+  decisions were taken at a node with counts.
+- SL2 holds: `pg_greedy` - `pg_uniform` -11.6 [-16.9, -6.81].
+- SL3 and SL4 hold: `promote` -83.0 [-85.2, -80.8] and `remember` -61.0 [-68.5, -53.0] late
+  actions against `pg`.
+- SL5 holds: `pg_uniform` is equivalent to `random` within 10% (+0.318, 90% interval
+  [-2.34, 2.93], margin 9.35). V1 holds (no violation in 384 episodes).
+
+### RecipeQuest family F1, goal-only observation (50 worlds)
+
+| Arm | Late cost ratio | Late success | Actions to the first success |
+|---|---|---|---|
+| `pg` | 2.970 | 0.102 | 168.3 |
+| `pg_uniform` | 2.967 | 0.105 | 168.3 |
+| `pg_greedy` | 2.859 | 0.170 | 168.3 |
+| `focused_sample` | 1.536 | 0.993 | 18.1 |
+| `maximal` | 1.886 | 1.000 | 11.7 |
+
+In 16 worlds no policy-graph arm succeeded; their actions to the first success are the stream
+total (censored). The graph of `pg` ended a world with about 211 nodes, 295 edges and 12 nodes
+with counts, and 0.6% of its decisions were taken at a node with counts.
+
+- PR1 does not hold: +0.0023 [0.000, 0.0068]. The late cost ratios of `pg` and `pg_uniform` are
+  equal in 49 of the 50 worlds: the two arms diverged after the first success in 11 worlds, with
+  the same length and outcome in every diverging episode but one. In that episode, the last of
+  its world, `pg` used its whole budget of 15 actions and failed where `pg_uniform` succeeded
+  in 9.
+- PR2 holds: `pg_greedy` - `pg_uniform` -0.109 [-0.162, -0.062] (lower in 21 worlds, higher in
+  3, equal in 26).
+- PR3, PR4 and PR5 hold: `focused_sample` -1.43 [-1.57, -1.30] and `maximal` -1.08
+  [-1.17, -1.00] in late cost ratio against `pg`, and `focused_sample` -150 [-185, -117]
+  actions to the first success.
+
+### Against study X's best learners
+
+X's rows reproduce X's own tests XU2, XL1 and X1 with a largest per-world difference of 0, and
+each of X's task rows (720, 768 and 1,600: two training seeds) has the reference length of PG's
+row of the same world and episode.
+
+| Setting | X's best learner (late value) | `pg` - learner [95% CI] | `pg_greedy` - learner (descriptive) |
+|---|---|---|---|
+| U k3-off-ann | `mppo_rnd` (95.2 actions) | -53.1 [-58.0, -48.2]: XT-U holds | -81.1 [-84.0, -77.9] |
+| L2 depth 2 | `mppo_rnd` (98.5 actions) | -4.79 [-7.02, -2.66]: XT-L holds | -16.3 [-22.4, -10.8] |
+| F1 | `mppo` (2.953 cost ratio) | +0.016 [-0.010, 0.044]: XT-R does not hold | -0.094 [-0.148, -0.047] |
+
+### Predictions
+
+Every verdict matches the predictions written before the measurement (pass; PR1 and XT-R not
+holding; SL1 not holding where at most a narrow pass was predicted; every other secondary
+holding), and four values fall outside their stated ranges: `pooled`'s actions to the first
+success in U (60.6 against about 70), `remember`'s late actions in L2 (32.7 against 22-30), the
+late success of the uniform rule in F1 (0.105 against below 0.1) and the gain of `pg_greedy` in
+F1 (0.109 against 0.03-0.10; PR2 holds clearly rather than narrowly). PG's anchor arms are fresh
+runs whose random streams differ from study X's runs of the same agents on the same worlds;
+X's runs gave 70.9 and 22.0 for the first two.
 
 ## Verdict and limits
 
-Pending the measurement.
+PG passes. In TechTree's composite-discovery cell, a policy graph whose nodes are the public
+state and the last presses of the episode, with action distributions learned only from the
+agent's own successes in the world, halves the late cost of the same graph with uniform
+distributions (42 against 87 actions per episode; late success 0.93 against 0.32). The gain is
+the learned distributions': the control is equivalent to the random agent, and the three
+policy-graph arms act identically until a world's first success. Replaying the loop-erased path
+greedily is cheaper still (14 actions), but the model-based explorer `pooled` stays cheaper than
+every policy-graph arm (6.8 late actions, and 61 against 261 actions to the first success): the
+policy graph learns only from successes, and it reaches the first one no sooner than its
+uniform control.
+
+Limits:
+- Where successes are rare relative to the size of the graph, the learned distributions do
+  nothing measurable: in L2 at reuse depth 2 (about 980 nodes and 1.5 successes per world) and
+  in RecipeQuest F1 (late success of the uniform rule 0.1), `pg` differs from its control in a
+  single episode of a single world (SL1, PR1), and only the greedy replay gains a little (SL2,
+  PR2), far behind the model-based agents.
+- One node map per environment and one credit rule were measured, declared in advance and not
+  tuned. A node without the goal, or a shorter window, could share counts across tasks and
+  learn more in L2 and F1; that is untested.
+- Against study X's library learners, `pg` is cheaper in both TechTree settings and level in
+  RecipeQuest. X's learners were at random level, so these contrasts say more about them than
+  about the policy graph: in L2 `pg` is itself at random level (93.7 against 93.5), and XT-L
+  holds only because X's learner was worse than random there.
+- The worlds were study X's test worlds, whose results were public before this protocol, and
+  the development runs used an earlier L2 node map (Implementation).
