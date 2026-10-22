@@ -112,11 +112,21 @@ def stream_budget(cfg: dict, seed: int, variant: dict) -> int:
 
 
 def make_walker(strategy: str, wc: dict, seed_key, epsilon: float, policy=None):
-    """An ``agents.walker`` strategy, or else an ``agents.markov`` agent (study
-    M), whose module is imported only when one of its strategies is asked for."""
+    """An ``agents.walker`` strategy, or else an ``agents.policygraph`` agent (study
+    PG) or an ``agents.markov`` agent (study M), whose modules are imported only
+    when one of their strategies (or an unknown one) is asked for."""
     rng = np.random.default_rng(derive_seed("walker", *seed_key) % (2 ** 32))
     if strategy not in STRATEGIES:
+        from ..agents.policygraph import PG_STRATEGIES, make_policy_graph_agent
+        if set(PG_STRATEGIES) & set(STRATEGIES):
+            raise ValueError(f"policy-graph strategies shadow walker strategies: "
+                             f"{sorted(set(PG_STRATEGIES) & set(STRATEGIES))}")
+        if strategy in PG_STRATEGIES:
+            return make_policy_graph_agent(strategy, rng, epsilon)
         from ..agents.markov import MARKOV_STRATEGIES, make_markov_agent
+        if set(MARKOV_STRATEGIES) & set(PG_STRATEGIES):
+            raise ValueError(f"Markov strategies shadow policy-graph strategies: "
+                             f"{sorted(set(MARKOV_STRATEGIES) & set(PG_STRATEGIES))}")
         if set(MARKOV_STRATEGIES) & set(STRATEGIES):
             raise ValueError(f"Markov strategies shadow walker strategies: "
                              f"{sorted(set(MARKOV_STRATEGIES) & set(STRATEGIES))}")

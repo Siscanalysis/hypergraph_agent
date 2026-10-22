@@ -1,0 +1,52 @@
+# Study PG (docs/studies/PG_policy_graph.md), measurement config, TechTree cell k3-off-ann of
+# study U (4 base primitives, 3 extra slots, a key of 3 base primitives that activates one slot,
+# the goal an entry of 3 symbols using it; no signal; announced unlocks; budget 100; 12 episodes
+# per world). The worlds are study X's TechTree test stream (namespace x_tt_u_test, seeds 0-4,
+# 6 worlds each: 30 worlds), reused so that pg can be paired with X's learners world by world;
+# X finished with them and nothing of PG was tuned on them. pg, pg_uniform and pg_greedy act
+# identically in a world until its first success (common random numbers). Frozen with the protocol.
+run: {name: pg-u-main, study: PG, allocation: pg_tt, seeds: [0, 1, 2, 3, 4], ledger: runs/PG-ledger.json,
+      requires_flag: true}
+ledger:
+  allocations: {dev: 150000, pg_tt: 261600, pg_rq: 62400}
+  adaptive_cap: 474000
+  reporting_cap: 330000
+agent: {order: max_length_minus_1, alpha0: 1.0}
+world: {n_primitives: 4, n_slots: 3, n_unlocks: 1, unlock_level: 1, n_levels: 1, concepts_per_level: [2],
+        combo_length: 3}
+stream: {namespace: x_tt_u_test, n_worlds: 6, episodes_per_world: 12, goal_levels: [1], goal_rule: unlock,
+         episode_budget: 100, unlock_visibility: announced, signal: false}
+variants:
+  - {name: u-k3}
+arms: [pg, pg_uniform, pg_greedy, pooled, random, reference]
+analysis:
+  late_from: 6
+  tests:
+    # PG1 (primary): the learned distributions make late episodes cheaper than the same graph with
+    # uniform distributions (the arms coincide until a world's first success)
+    - {type: paired, role: primary, name: "PG1 pg - pg_uniform, late actions per episode, k3 off ann",
+       metric: steps_late, a: pg, b: pg_uniform, variant: u-k3, expect: less}
+    # E1 (falsification): pg equivalent to its uniform control within 10% of the control's mean
+    - {type: equivalence, role: falsification, name: "E1 pg equivalent to pg_uniform (+-10%), k3 off ann",
+       metric: steps_late, a: pg, b: pg_uniform, variant: u-k3, margin_rel: 0.10, level: 0.90}
+    - {type: all_success, role: validity, name: "V1 reference solves every task", arm: reference}
+    # secondaries (each with its own criterion, no multiplicity correction)
+    - {type: paired, role: secondary, name: "S1 pg_greedy - pg_uniform, late actions, k3 off ann",
+       metric: steps_late, a: pg_greedy, b: pg_uniform, variant: u-k3, expect: less}
+    - {type: paired, role: secondary, name: "S2 pg_greedy - pg, late actions, k3 off ann",
+       metric: steps_late, a: pg_greedy, b: pg, variant: u-k3, expect: less}
+    - {type: paired, role: secondary, name: "S3 pooled - pg, late actions, k3 off ann",
+       metric: steps_late, a: pooled, b: pg, variant: u-k3, expect: less}
+    - {type: paired, role: secondary, name: "S4 pooled - pg, actions to the first success, k3 off ann",
+       metric: first_success_steps, a: pooled, b: pg, variant: u-k3, expect: less}
+    - {type: paired, role: secondary, name: "S5 pooled - pg_greedy, late actions, k3 off ann",
+       metric: steps_late, a: pooled, b: pg_greedy, variant: u-k3, expect: less}
+    - {type: equivalence, role: secondary, name: "S6 pg_uniform equivalent to random (+-10%), k3 off ann",
+       metric: steps_late, a: pg_uniform, b: random, variant: u-k3, margin_rel: 0.10, level: 0.90}
+    - {type: paired, role: secondary, name: "S7 pg - pg_uniform, late success, k3 off ann",
+       metric: success_late, a: pg, b: pg_uniform, variant: u-k3, expect: greater}
+  verdict:
+    rule: precedence
+    primary: "PG1 pg - pg_uniform, late actions per episode, k3 off ann"
+    falsification: "E1 pg equivalent to pg_uniform (+-10%), k3 off ann"
+    validity: ["V1 reference solves every task"]

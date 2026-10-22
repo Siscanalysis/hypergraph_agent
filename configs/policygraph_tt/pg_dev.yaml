@@ -1,0 +1,30 @@
+# Study PG, development (allocation dev, namespaces ending in _dev, never used for measurement):
+# both TechTree settings of the study with every arm, on fresh development worlds, to check that
+# the arms run, measure runtime and size the measurement. Its outcomes are not study results.
+run: {name: pg-dev, study: PG, allocation: dev, seeds: [0, 1], ledger: runs/PG-ledger.json}
+ledger:
+  allocations: {dev: 150000, pg_tt: 261600, pg_rq: 62400}
+  adaptive_cap: 474000
+  reporting_cap: 330000
+agent: {order: max_length_minus_1, alpha0: 1.0}
+world: {n_primitives: 4, n_slots: 3, n_unlocks: 1, unlock_level: 1, n_levels: 1, concepts_per_level: [2],
+        combo_length: 3}
+stream: {namespace: pg_tt_u_dev, n_worlds: 4, episodes_per_world: 12, goal_levels: [1], goal_rule: unlock,
+         episode_budget: 100, unlock_visibility: announced, signal: false}
+variants:
+  - {name: u-k3, arms: [pg, pg_uniform, pg_greedy, pooled, random, reference]}
+  - {name: l2-d2,
+     world: {n_primitives: 3, n_slots: 0, n_unlocks: 0, n_levels: 3, concepts_per_level: [3, 3, 3],
+             combo_length: 2, reuse_depth: 2},
+     stream: {namespace: pg_tt_l_dev, goal_levels: [3], goal_rule: uniform},
+     arms: [pg, pg_uniform, pg_greedy, remember, promote, random, reference]}
+arms: [pg, pg_uniform, pg_greedy, pooled, remember, promote, random, reference]
+analysis:
+  late_from: 6
+  tests:
+    - {type: paired, name: "dev pg - pg_uniform, late actions, k3", metric: steps_late, a: pg, b: pg_uniform,
+       variant: u-k3, expect: less}
+    - {type: paired, name: "dev pg - pg_uniform, late actions, L2", metric: steps_late, a: pg, b: pg_uniform,
+       variant: l2-d2, expect: less}
+    - {type: all_success, name: "dev reference solves every task", arm: reference}
+  verdict: null

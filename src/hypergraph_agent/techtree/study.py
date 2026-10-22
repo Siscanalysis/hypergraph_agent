@@ -56,7 +56,8 @@ ORACLES = ("oracle", "oracle_library")
 # factory takes (arm, rng) or, when the study declares agent parameters, (arm, rng, params).
 # A module may list further non-adaptive arms in REPORTING_ARMS.
 STUDY_AGENTS = {"U": ("explorers", "make_explorer"), "L": ("layered", "make_layered"),
-                "U2": ("baselines", "make_baseline"), "P": ("skills", "make_skilled")}
+                "U2": ("baselines", "make_baseline"), "P": ("skills", "make_skilled"),
+                "PG": ("policygraph", "make_policygraph")}
 
 
 def _agent_module(study: str):

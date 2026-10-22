@@ -1,0 +1,39 @@
+# Study PG, RecipeQuest development (allocation dev, namespace pg_rq_dev, never used for
+# measurement): family F1 as in pg_rq_main.yaml with every arm, two seeds x 4 worlds x 16
+# episodes, to check that the arms run, measure runtime and size the measurement. Its outcomes
+# are not study results.
+run:
+  name: pg-rq-dev
+  phase: policygraph_rq_dev
+  allocation: dev
+  seeds: [0, 1]
+  ledger: runs/PG-ledger.json
+budget:
+  ledger_allocations: {dev: 150000, pg_tt: 261600, pg_rq: 62400}
+  ledger_adaptive_cap: 474000
+  ledger_reporting_cap: 330000
+train:
+  world_mode: pool
+  n_worlds: 8
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only}
+eval:
+  namespace: pg_rq_dev
+  base_seed: 10000
+  n_tasks: 64
+  track: inference
+  n_worlds: 4
+  episodes_per_world: 16
+walker:
+  per_run_cap: 1209  # the largest task-budget sum of the two seeds' streams
+  eval_world_offset_by_seed: true
+  consistent_moves: 50
+  eval_variants:
+    - {name: eps0, tasks: {failure_prob: 0.0}}
+arms:
+  - {id: pg, strategy: pg}
+  - {id: pg_uniform, strategy: pg_uniform}
+  - {id: pg_greedy, strategy: pg_greedy}
+  - {id: focused_sample, strategy: focused_sample}
+  - {id: maximal, strategy: maximal}
+  - {id: reference, strategy: reference}

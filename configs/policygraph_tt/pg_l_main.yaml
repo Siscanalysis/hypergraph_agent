@@ -1,0 +1,36 @@
+# Study PG (docs/studies/PG_policy_graph.md), measurement config, TechTree phase L2 of study L at
+# reuse depth 2 (3 base primitives, three levels of three concepts with lengths 2, 4 and 6, levels
+# 2 and 3 compositions of earlier concepts, goal a level-3 concept, nothing supplied; budget 100;
+# 12 episodes per world). The worlds are study X's TechTree test stream of that cell (namespace
+# x_tt_l_test, seeds 0-7, 4 worlds each: 32 worlds), reused so that pg can be paired with X's
+# learners world by world; X finished with them and nothing of PG was tuned on them. Secondary
+# setting of the study: no study verdict is read from this config. Frozen with the protocol.
+run: {name: pg-l-main, study: PG, allocation: pg_tt, seeds: [0, 1, 2, 3, 4, 5, 6, 7],
+      ledger: runs/PG-ledger.json, requires_flag: true}
+ledger:
+  allocations: {dev: 150000, pg_tt: 261600, pg_rq: 62400}
+  adaptive_cap: 474000
+  reporting_cap: 330000
+agent: {order: max_length_minus_1, alpha0: 1.0}
+world: {n_primitives: 3, n_levels: 3, concepts_per_level: [3, 3, 3], combo_length: 2, length_rule: linear,
+        reuse_depth: 2}
+stream: {namespace: x_tt_l_test, n_worlds: 4, episodes_per_world: 12, goal_levels: [3], goal_rule: uniform,
+         episode_budget: 100}
+variants:
+  - {name: l2-d2}
+arms: [pg, pg_uniform, pg_greedy, remember, promote, random, reference]
+analysis:
+  late_from: 6
+  tests:
+    - {type: paired, role: secondary, name: "SL1 pg - pg_uniform, late actions, L2 depth 2",
+       metric: steps_late, a: pg, b: pg_uniform, variant: l2-d2, expect: less}
+    - {type: paired, role: secondary, name: "SL2 pg_greedy - pg_uniform, late actions, L2 depth 2",
+       metric: steps_late, a: pg_greedy, b: pg_uniform, variant: l2-d2, expect: less}
+    - {type: paired, role: secondary, name: "SL3 promote - pg, late actions, L2 depth 2",
+       metric: steps_late, a: promote, b: pg, variant: l2-d2, expect: less}
+    - {type: paired, role: secondary, name: "SL4 remember - pg, late actions, L2 depth 2",
+       metric: steps_late, a: remember, b: pg, variant: l2-d2, expect: less}
+    - {type: equivalence, role: secondary, name: "SL5 pg_uniform equivalent to random (+-10%), L2 depth 2",
+       metric: steps_late, a: pg_uniform, b: random, variant: l2-d2, margin_rel: 0.10, level: 0.90}
+    - {type: all_success, role: validity, name: "V1 reference solves every task", arm: reference}
+  verdict: null

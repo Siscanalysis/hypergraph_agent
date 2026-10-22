@@ -11,7 +11,7 @@ from hypergraph_agent.train import plan
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 # configs with their own schema and tests: TechTree studies and the open-source baselines
-OWN_SCHEMA_DIRS = ("unlock", "layers", "unlock2", "skills", "baselines")
+OWN_SCHEMA_DIRS = ("unlock", "layers", "unlock2", "skills", "baselines", "policygraph_tt")
 CONFIGS = sorted(p for p in (ROOT / "configs").rglob("*.yaml")
                  if p.relative_to(ROOT / "configs").parts[0] not in OWN_SCHEMA_DIRS)
 

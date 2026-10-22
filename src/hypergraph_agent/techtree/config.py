@@ -43,7 +43,7 @@ DEFAULTS: dict = {
     "agent": {},
     "analysis": {"late_from": None, "n_boot": 10_000, "boot_seed": 20261008, "tests": [], "verdict": None},
 }
-STUDIES = ("U", "L", "U2", "P")
+STUDIES = ("U", "L", "U2", "P", "PG")
 VERDICT_KEYS = {"all": {"require"}, "precedence": {"primary", "falsification", "conditions", "validity"}}
 TEST_KEYS = {
     "paired": {"metric", "a", "b", "variant", "expect", "level"},

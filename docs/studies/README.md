@@ -15,6 +15,7 @@ allocation, and are reported as such.
 | [U2](U2_techtree_baselines.md) | How does the pooled explorer compare with generic exploration baselines (iterated width, flat macro expansion, an archive)? | TechTree | `runs/U2-ledger.json` | `configs/unlock2/` |
 | [P](P_imperfect_skills.md) | Does promotion still pay when discoveries are executed by imperfect learned skills, and does an admission gate help? | TechTree | `runs/P-ledger.json` | `configs/skills/` |
 | [X](X_open_source_baselines.md) | How do open-source reinforcement-learning learners compare with the repository's agents?  | RecipeQuest, TechTree, benchmarks | `runs/X-ledger.json` | `configs/baselines/` |
+| [PG](PG_policy_graph.md) | Does a policy graph (public states as nodes, each with an action distribution learned from the agent's own successes in a world) learn within a world, how much of that is the learned distributions rather than the graph, and how does it compare with the repository's agents and study X's learners on the same worlds? | TechTree, RecipeQuest | `runs/PG-ledger.json` | `configs/policygraph_tt/`, `configs/policygraph_rq/` |
 
 Each study file has the same sections: question and claim, relation to earlier
 work, protocol (frozen), implementation, results, verdict and limits. Studies
