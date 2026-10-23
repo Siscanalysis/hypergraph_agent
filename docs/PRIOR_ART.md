@@ -281,3 +281,40 @@ condition with `random` and `focused_sample` at the same slack. Shaping that kee
 policies can make the learner cheaper than `random`, but it cannot give a memoryless policy the
 evidence of earlier episodes of a world. Status: `established` for the invariance results; XS
 applies them and claims no contribution from them.
+
+## 10. Related work for study PG (checked 2026-10-23)
+
+Study PG (docs/studies/PG_policy_graph.md) maps the state to a node of a graph (the public
+observation and a window of the agent's own last actions), keeps in each node a Dirichlet
+distribution over actions learned from the agent's own successful episodes in a world, credits
+the loop-erased path of each successful episode, and draws every action from the node's posterior
+predictive. Entries were checked through search listings of the proceedings, the publishers and
+the authors' pages (depth `listing`). Identifiers start a new prefix: G (policy graph).
+
+| Id | Authors (as verified) | Title | Year, venue (as verified) | URL | Depth |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| G1 | E. A. Hansen | Solving POMDPs by Searching in Policy Space | 1998, UAI, pp. 211-219 | https://arxiv.org/abs/1301.7380 | `listing` |
+| G2 | N. Meuleau, L. Peshkin, K.-E. Kim, L. P. Kaelbling | Learning Finite-State Controllers for Partially Observable Environments | 1999, UAI, pp. 427-436 | https://arxiv.org/abs/1301.6721 | `listing` |
+| G3 | L. Li, T. J. Walsh, M. L. Littman | Towards a Unified Theory of State Abstraction for MDPs | 2006, ISAIM, pp. 531-539 | https://sfbtr8.spatial-cognition.de/aigaion/index.php/publications/show/1713.html | `listing` |
+| G4 | A. Ecoffet, J. Huizinga, J. Lehman, K. O. Stanley, J. Clune | First return, then explore (preprint: Go-Explore: a New Approach for Hard-Exploration Problems, arXiv 1901.10995, 2019) | 2021, Nature 590, pp. 580-586 | https://www.nature.com/articles/s41586-020-03157-9 | `listing` |
+| G5 | G. F. Lawler | A self-avoiding random walk | 1980, Duke Mathematical Journal (the journal and year verified; volume 47(3) and pages 655-693 as cited, not confirmed online) | none located | `listing` (author biography) |
+| G6 | D. B. Wilson | Generating random spanning trees more quickly than the cover time | 1996, STOC (pages 296-303 as cited, not confirmed online) | https://sites.math.rutgers.edu/~zeilberg/akherim/WilsonSpanningTree.pdf | `listing` (full text located) |
+
+Overlaps. A finite-state controller (G1, G2) is a policy for a partially observable problem whose
+nodes choose actions and whose transitions follow observations; G1 improves a deterministic
+controller by policy iteration, G2 learns a stochastic controller of fixed size by gradient
+descent. PG learns no controller memory: a node is a fixed function of the public observation and
+a window of the agent's own last actions, so only the node distributions are learned. A state
+abstraction (G3) merges states by what they preserve; PG's node map merges nothing beyond what the
+observation and the window fail to distinguish. Go-Explore (G4) keeps an archive of cells and
+returns to a promising cell before exploring; PG keeps a cell graph with a learned action
+distribution per cell instead of a return rule, and its greedy arm replays one successful
+loop-erased path. Loop erasure (G5) and Wilson's algorithm (G6) supply the credit rule: the
+loop-erased path of a successful walk credits at each node the action of the walk's last exit
+from it.
+
+Decisive test. Study PG compares the policy graph with the same graph and uniform action
+distributions (the control), with the repository's model-based agents and with study X's learners,
+world by world, in TechTree (study U's cell k3-off-ann, primary; study L's phase L2 at reuse depth
+2) and RecipeQuest family F1 (docs/RESULTS.md, Section 4.7). Status: `established` for the cited
+methods; PG claims no new method, only the measurement.
