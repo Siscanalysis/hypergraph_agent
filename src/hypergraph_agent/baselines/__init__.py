@@ -16,4 +16,9 @@ for RecipeQuest worlds converted from published recipe graphs
 config (``run.checkpoints_from``). Wrappers, learners, runner and analysis need
 no change as long as the tasks fit the fixed layouts
 (``encoders.RQLayout(max_variants)``, ``encoders.TTLayout``).
+
+Study XS (docs/studies/XS_learner_followup.md) extends the package without
+changing study X: ``shaping`` (potential-based reward shaping from public
+information, optional per learner) and ``xs`` (the combined analysis of member
+configs that differ in budget slack).
 """

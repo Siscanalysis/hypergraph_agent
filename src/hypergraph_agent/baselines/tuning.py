@@ -18,6 +18,12 @@ when any group lacks a valid candidate. No human decision enters.
 recomputes the choice from the frozen candidate scores and refuses when the
 config's learners differ from it. An evaluation-only config is checked through
 the config whose checkpoints it evaluates.
+
+Inherited tuning (study XS): a config with ``run.tuning_groups`` (learner id -> tuning group)
+instead of ``run.tuning_map`` carries an existing record of another config's tuning stage from the
+start; ``verify_tuning`` checks its digest, recomputes the choice and refuses unless every learner
+has exactly its group's chosen training keys and mode (keys such as ``shaping`` stay free).
+``apply-tuning`` does not take such a config.
 """
 
 from __future__ import annotations
@@ -44,7 +50,7 @@ def sha256(path: str | Path) -> str:
 
 def tuning_config(cfg: dict) -> dict:
     run = cfg["run"]
-    if not run["tuning_from"] or not run["tuning_map"]:
+    if not run["tuning_from"] or not (run["tuning_map"] or run.get("tuning_groups")):
         raise TuningError(f"{run['name']}: run.tuning_from and run.tuning_map are not declared")
     return load_config(config_path(cfg["_source"], run["tuning_from"]))
 
@@ -147,6 +153,8 @@ def verify_tuning(cfg: dict) -> dict:
     if tuning.get("incomplete"):
         raise TuningError(f"tuning record {path} is incomplete: {tuning['incomplete']}")
     choice = recompute_choice(tuning, tune_cfg)
+    if cfg["run"].get("tuning_groups"):
+        return _verify_inherited(cfg, tune_cfg, choice)
     want = chosen_learners(cfg, tune_cfg, choice)
     keys = (*TRAINING_KEYS, "modes")
     for got, exp in zip(cfg["learners"], want):
@@ -155,12 +163,31 @@ def verify_tuning(cfg: dict) -> dict:
     return {g: f"{c[0]}@{c[1]}" for g, c in choice.items()}
 
 
+def _verify_inherited(cfg: dict, tune_cfg: dict, choice: dict) -> dict:
+    """``run.tuning_groups``: every learner has its group's chosen training keys and mode."""
+    by_id = {ln["id"]: ln for ln in tune_cfg["learners"]}
+    for ln in cfg["learners"]:
+        group = cfg["run"]["tuning_groups"][ln["id"]]
+        if group not in choice:
+            raise TuningError(f"tuning group {group!r} (learner {ln['id']!r}) has no valid candidate")
+        cand_id, mode = choice[group]
+        cand = by_id[cand_id]
+        if {k: ln[k] for k in TRAINING_KEYS} != {k: cand[k] for k in TRAINING_KEYS} or ln["modes"] != [mode]:
+            raise TuningError(f"{cfg['run']['name']}: learner {ln['id']!r} differs from the choice "
+                              f"{cand_id}@{mode} of tuning group {group!r}")
+    groups = cfg["run"]["tuning_groups"]
+    return {ln["id"]: "{}@{}".format(*choice[groups[ln["id"]]]) for ln in cfg["learners"]}
+
+
 def apply_tuning(config: str | Path, artifacts: str | Path = "artifacts/baselines") -> dict:
     """Writes the tuning selection into the measurement config at ``config`` (see the module text)."""
     from .analysis import write_report
     cfg = load_config(config)
     if not cfg["run"]["requires_flag"] or cfg["run"]["checkpoints_from"]:
         raise TuningError("apply-tuning takes a measurement config that trains")
+    if cfg["run"].get("tuning_groups"):
+        raise TuningError("a config with run.tuning_groups carries an inherited record; apply-tuning "
+                          "does not take it")
     if cfg["run"]["tuning_record"]:  # already applied: check it and stop
         return {"config": str(config), "status": "already applied", "choice": verify_tuning(cfg)}
     tune_cfg = tuning_config(cfg)

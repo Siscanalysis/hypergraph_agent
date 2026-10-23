@@ -1,0 +1,30 @@
+# Study XS, development only (allocation dev, namespaces ending in _dev): plumbing and throughput of
+# member s2 of xs_rq.yaml (budget slack 2). The learners of the measurement member, training seeds
+# 0 and 1, checkpoints at 8,192 and 32,768 interactions, one seed of two test worlds and one of two
+# validation worlds; the repository's agents on the same worlds. Outcomes are not results.
+run: {name: xs-rq-s2-dev, study: XS, allocation: dev, ledger: runs/XS-ledger.json}
+ledger:
+  allocations: {dev: 600000, xs_main: 40100000}
+  adaptive_cap: 40700000
+  reporting_cap: 1000000
+setting:
+  name: rq_f1
+  family: recipequest
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only, budget_slack: 2}
+train: {namespace: xs_rq_train_dev, base_seed: 30000, seeds: [0, 1], budgets: [8192, 32768], n_envs: 8,
+        episodes_per_world: 16}
+test: {namespace: xs_rq_test_dev, base_seed: 10000, seeds: [0], n_worlds: 2, episodes_per_world: 16}
+validation: {namespace: xs_rq_val_dev, base_seed: 10000, seeds: [0], n_worlds: 2, episodes_per_world: 16}
+learners:
+  - {id: s2_sparse, group: s2_sparse, algo: maskable_ppo, params: {n_steps: 256, ent_coef: 0.01,
+     policy_kwargs: {net_arch: [256, 256]}}, modes: [deterministic]}
+  - {id: s2_shaped, group: s2_shaped, algo: maskable_ppo, params: {n_steps: 256, ent_coef: 0.01,
+     policy_kwargs: {net_arch: [256, 256]}}, shaping: {potential: rq_goal_closure}, modes: [deterministic]}
+agents: [focused_sample, maximal, reference, random]
+validation_agents: [random]
+agent_params: {consistent_moves: 50}
+analysis:
+  late_from: 8
+  select_metric: cost_ratio_late
+  tests: []

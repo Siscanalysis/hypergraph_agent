@@ -194,7 +194,8 @@ def rnd_vec_env(venv, seed: int, **kw):
 # ------------------------------------------------------------ callbacks
 def checkpoint_callback(budgets, save, log=None, log_every: int = 10_000):
     """Saves the acting policy at every budget (``save(budget, model, num_timesteps)``) and stops
-    training at the largest; ``log(record)`` receives training-task outcomes every ``log_every``."""
+    training at the largest; ``log(record)`` receives training-task outcomes every ``log_every``
+    (and, for a shaped learner, the sum of the shaping terms of the window)."""
     from stable_baselines3.common.callbacks import BaseCallback
 
     class CheckpointCallback(BaseCallback):
@@ -207,6 +208,8 @@ def checkpoint_callback(budgets, save, log=None, log_every: int = 10_000):
         def _on_step(self) -> bool:
             for info in self.locals.get("infos", ()):
                 self.window["invalid"] += int(bool(info.get("invalid")))
+                if "shaping" in info:  # study XS: the shaping term received in the window
+                    self.window["shaping"] = self.window.get("shaping", 0.0) + float(info["shaping"])
                 if info.get("task_end"):
                     self.window["tasks"] += 1
                     self.window["success"] += int(bool(info.get("task_success")))

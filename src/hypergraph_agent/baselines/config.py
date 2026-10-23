@@ -21,6 +21,13 @@ library defaults), ``trial`` (one learner episode per world block),
 shaping, default 0) and ``modes`` (action selection at evaluation,
 ``deterministic`` and/or ``stochastic``).
 
+Study XS keys (all optional; unset, they change neither behaviour nor any hash of study X):
+a learner's ``shaping`` (potential-based reward shaping during training, ``shaping.py``);
+``validation_agents`` (repository agents that also play the validation stream, for a selection
+measured against an agent); ``run.tuning_groups`` (learner id -> tuning group of
+``run.tuning_from``: several learners may carry one group's tuned settings, checked against an
+existing ``run.tuning_record`` by ``tuning.verify_tuning``).
+
 Evaluation-only configs: with ``run.checkpoints_from`` (the path of another
 config) a config trains nothing; it takes its learners and training block from
 that config and evaluates the checkpoints of that config's completed training
@@ -39,7 +46,7 @@ from pathlib import Path
 import yaml
 
 from ..envs.generator import stable_hash
-from . import benchmark_sets
+from . import benchmark_sets, shaping
 from .learners import ALGOS, RND_DEFAULTS
 
 DEV_ALLOCATIONS = ("dev", "x_tune")
@@ -56,7 +63,7 @@ DEFAULTS: dict = {
     # measurement config without a record that reproduces its learners refuses to run
     "run": {"name": "x-dev", "study": "X", "allocation": "dev", "ledger": "runs/X-ledger.json",
             "runs_dir": "runs", "requires_flag": False, "tuning_record": None, "checkpoints_from": None,
-            "tuning_from": None, "tuning_map": None},
+            "tuning_from": None, "tuning_map": None, "tuning_groups": None},
     # caps written into a NEW ledger file; an existing ledger keeps its own
     "ledger": {"allocations": {"dev": 300_000}, "adaptive_cap": 300_000, "reporting_cap": 300_000},
     # loader: "package.module:function" for an external benchmark (sources.py); max_variants: craft
@@ -71,12 +78,13 @@ DEFAULTS: dict = {
                    "episodes_per_world": 16},
     "learners": [],
     "agents": [],
+    "validation_agents": [],
     "agent_params": {},
     "analysis": {"late_from": 8, "n_boot": 10_000, "boot_seed": 20261008, "select_metric": "cost_ratio_late",
                  "select_split": "validation", "tests": []},
 }
 LEARNER_DEFAULTS = {"id": None, "group": None, "algo": None, "params": {}, "trial": False, "rnd": None,
-                    "step_penalty": 0.0, "modes": ["deterministic"]}
+                    "step_penalty": 0.0, "modes": ["deterministic"], "shaping": None}
 TEST_KEYS = {"name", "role", "a", "b", "metric", "expect", "budget", "split", "level"}
 # per-world metrics (analysis.world_metrics); lower is better except for the success rates
 METRICS = ("cost_ratio_late", "cost_ratio_early", "cost_ratio_all", "cost_ratio_late_minus_early",
@@ -114,6 +122,7 @@ def _learner(raw: dict) -> dict:
             raise KeyError(f"unknown rnd keys {sorted(bad)} in learner {ln['id']!r}")
     if not ln["modes"] or set(ln["modes"]) - set(MODES):
         raise ValueError(f"learner {ln['id']!r}: modes must be a nonempty subset of {MODES}")
+    ln["shaping"] = shaping.normalize(ln["shaping"])
     return ln
 
 
@@ -154,12 +163,16 @@ def load_config(path: str | Path) -> dict:
         cfg["learners"], cfg["train"] = copy.deepcopy(src["learners"]), copy.deepcopy(src["train"])
         cfg["_train_setting"], cfg["_source_name"] = src["setting"], src["run"]["name"]
         cfg["run"]["tuning_record"] = cfg["run"]["tuning_record"] or src["run"]["tuning_record"]
-    if bool(cfg["run"]["tuning_from"]) != bool(cfg["run"]["tuning_map"]):
-        raise ValueError("run.tuning_from and run.tuning_map go together")
-    tmap = cfg["run"]["tuning_map"]
+    tmap, tgroups = cfg["run"]["tuning_map"], cfg["run"]["tuning_groups"]
+    if tmap and tgroups:
+        raise ValueError("run.tuning_map and run.tuning_groups exclude each other")
+    if bool(cfg["run"]["tuning_from"]) != bool(tmap or tgroups):
+        raise ValueError("run.tuning_from and run.tuning_map (or run.tuning_groups) go together")
     if tmap and (len(set(tmap.values())) != len(tmap)
                  or set(tmap.values()) != {x["id"] for x in cfg["learners"]}):
         raise ValueError("run.tuning_map must map tuning groups one to one onto this config's learner ids")
+    if tgroups and (set(tgroups) != {x["id"] for x in cfg["learners"]} or not cfg["run"]["tuning_record"]):
+        raise ValueError("run.tuning_groups must name every learner id and needs run.tuning_record")
     if cfg["test"]["budgets"] is not None and not set(cfg["test"]["budgets"]) <= set(cfg["train"]["budgets"]):
         raise ValueError("test.budgets must be training budgets")
     if cfg["setting"]["loader"] == benchmark_sets.LOADER:
@@ -181,6 +194,13 @@ def load_config(path: str | Path) -> dict:
             raise ValueError(f"a TechTree setting needs agent_study in {sorted(TECHTREE_AGENTS)}")
         if set(cfg["agents"]) - set(TECHTREE_AGENTS[s["agent_study"]]):
             raise ValueError(f"study {s['agent_study']} agents are {TECHTREE_AGENTS[s['agent_study']]}")
+    if cfg["validation_agents"] and (set(cfg["validation_agents"]) - set(cfg["agents"])
+                                     or not cfg["validation"]["namespace"]):
+        raise ValueError("validation_agents must be agents of this config and need a validation stream")
+    for ln in cfg["learners"]:
+        if ln["shaping"] is not None and shaping.family(ln["shaping"]) != s["family"]:
+            raise ValueError(f"learner {ln['id']!r}: potential {ln['shaping']['potential']!r} does not fit "
+                             f"the {s['family']} family")
     budgets, n_envs = cfg["train"]["budgets"], cfg["train"]["n_envs"]
     if not budgets or any(b <= 0 or b % n_envs for b in budgets) or sorted(budgets) != budgets:
         raise ValueError("train.budgets must be increasing positive multiples of train.n_envs")
@@ -229,12 +249,19 @@ def setting_hash(cfg: dict) -> str:
 
 
 TRAINING_KEYS = ("algo", "params", "trial", "rnd", "step_penalty")
+LATER_TRAINING_KEYS = ("shaping",)  # hashed only when set, so every earlier training hash is unchanged
+
+
+def training_keys(learner: dict) -> dict:
+    out = {k: learner[k] for k in TRAINING_KEYS}
+    out.update({k: learner[k] for k in LATER_TRAINING_KEYS if learner.get(k) is not None})
+    return out
 
 
 def train_hash(cfg: dict, learner: dict, seed: int) -> str:
     """What determines a training run: setting, training stream, the learner's training keys, seed."""
     return stable_hash({"study": "X", "setting": setting_hash(cfg), "seed": seed,
-                        "learner": {k: learner[k] for k in TRAINING_KEYS}})
+                        "learner": training_keys(learner)})
 
 
 def eval_hash(cfg: dict, learner: dict, seed: int, budget: int, split: str, mode: str) -> str:

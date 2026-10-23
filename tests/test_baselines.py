@@ -24,7 +24,8 @@ from hypergraph_agent.training.budget import BudgetMeter, SessionLedger
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PKG = ROOT / "src" / "hypergraph_agent" / "baselines"
-CONFIGS = sorted((ROOT / "configs" / "baselines").glob("*.yaml"))
+# study X's configs; study XS (xs_*.yaml: its own ledger and study files) is tested in test_baselines_xs.py
+CONFIGS = sorted(p for p in (ROOT / "configs" / "baselines").glob("*.yaml") if not p.name.startswith("xs_"))
 F1_TASKS = {"profile": "unknown_prerequisites", "depth_min": 1, "depth_max": 3, "n_distractor_base": 0,
             "observe_items": "goal_only"}
 RQ_SETTING = {"name": "rq_unit", "family": "recipequest", "world": {}, "tasks": F1_TASKS, "stream": {},

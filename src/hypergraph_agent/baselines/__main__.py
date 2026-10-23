@@ -18,6 +18,13 @@ completed run, unless ``--resume``. ``analyze`` writes the endpoints to
 selection into a measurement config (``tuning.py``); a measurement run refuses
 unless its learners reproduce that record. ``run`` exits with status 1 when any
 job failed (the other jobs still run).
+
+Study XS: ``analyze --config configs/baselines/xs_rq.yaml`` (a study file with the
+single top-level key ``xs``) writes the combined analysis of its member configs
+(``xs.py``); each member config is run on its own with ``run``. ``check-budget``
+(a study file or a config) exits with status 1 unless the ledger still covers the
+caps of every planned job without a completed run (``xs.budget_check``); study
+XS's driver runs it before every launch or resume.
 """
 
 from __future__ import annotations
@@ -45,6 +52,8 @@ def main(argv=None) -> int:
     a.add_argument("--out", default=None)
     t = sub.add_parser("apply-tuning")
     t.add_argument("--config", required=True)
+    b = sub.add_parser("check-budget")
+    b.add_argument("--config", required=True)
     args = p.parse_args(argv)
 
     from ..training.run import process_source
@@ -56,6 +65,26 @@ def main(argv=None) -> int:
         except TuningError as exc:
             print(f"apply-tuning refused: {exc}", file=sys.stderr)
             return 1
+        return 0
+    if args.cmd == "check-budget":
+        from .xs import budget_check
+        res = budget_check(args.config)
+        print(json.dumps(res, indent=1))
+        if not res["ok"]:
+            print(f"check-budget refused: the ledger has {res['left']} left for allocation "
+                  f"{res['allocation']!r}, the jobs without a completed run need up to {res['need']}; "
+                  f"further budget only through a dated amendment", file=sys.stderr)
+            return 1
+        return 0
+    from .xs import is_study
+    if is_study(args.config):  # study XS: the combined analysis of member configs
+        if args.cmd != "analyze":
+            p.error("a study file is only analysed; run each of its member configs")
+        from .xs import write_study_report
+        summary = write_study_report(args.config, args.out)
+        print(json.dumps({"out": args.out or str(Path("artifacts") / "baselines" / summary["name"]),
+                          "best_learner": summary["selection"]["best_learner"],
+                          "tests": {t["name"]: t.get("verdict") for t in summary["tests"]}}, indent=1))
         return 0
     from .config import load_config
     cfg = load_config(args.config)

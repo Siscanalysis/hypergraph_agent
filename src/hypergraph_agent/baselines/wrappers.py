@@ -32,7 +32,11 @@ and one ledger interaction, as any no-op does, and ``info["invalid"]`` is set.
 No other penalty is added.
 
 Reward. The environment's reward (1 on successful submission, else 0) minus
-``step_penalty`` per step (default 0: no shaping).
+``step_penalty`` per step (default 0: no shaping). With ``shaping`` (a
+``shaping.Shaper``, study XS; default None) the potential-based term
+``gamma * Phi(s') - Phi(s)`` is added and reported as ``info["shaping"]``; the
+potential reads only the public spec and observation, and it is 0 when the
+learner episode ends.
 
 Ledger. Every primitive step is charged to ``meter`` (``BudgetMeter``) before it
 is executed; a run cannot exceed its cap. ``on_task_end(item, result)`` is the
@@ -61,9 +65,10 @@ class _BlockGym(gym.Env):
     metadata = {"render_modes": []}
 
     def __init__(self, source, *, trial: bool = False, step_penalty: float = 0.0, meter=None,
-                 purpose: str = "exploration", on_task_end=None):
+                 purpose: str = "exploration", on_task_end=None, shaping=None):
         self.source, self.trial, self.step_penalty = source, trial, float(step_penalty)
         self.meter, self.purpose, self.on_task_end = meter, purpose, on_task_end
+        self.shaping = shaping
         self._queue: deque = deque()
         self._item = None
         self._prev_success = False
@@ -103,7 +108,16 @@ class _BlockGym(gym.Env):
     def reset(self, *, seed: int | None = None, options: dict | None = None):
         super().reset(seed=seed)
         self._start(self._next_item(new_block=self.trial))
+        if self.shaping is not None:
+            self.shaping.reset(self.spec, self._obs)
         return self._observe(first=True), {}
+
+    def _shaped(self, reward: float, info: dict, end: bool) -> float:
+        """The reward with the shaping term (study XS); unchanged without shaping."""
+        if self.shaping is None:
+            return reward
+        info["shaping"] = self.shaping.step(self.spec, self._obs, end)
+        return reward + info["shaping"]
 
     def step(self, action):
         reward, terminated, info = self._act(int(action))
@@ -113,9 +127,10 @@ class _BlockGym(gym.Env):
             info = {**info, "task_end": True, "task_success": info["termination"] == "success"}
             if self.trial and self._queue:
                 self._start(self._next_item(new_block=False))
-                return self._observe(first=True), reward, False, False, info
-            return self._observe(first=False), reward, True, False, info
-        return self._observe(first=False), reward, False, False, {**info, "task_end": False}
+                return self._observe(first=True), self._shaped(reward, info, False), False, False, info
+            return self._observe(first=False), self._shaped(reward, info, True), True, False, info
+        info = {**info, "task_end": False}
+        return self._observe(first=False), self._shaped(reward, info, False), False, False, info
 
 
 class RecipeQuestGym(_BlockGym):

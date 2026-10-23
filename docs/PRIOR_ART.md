@@ -250,3 +250,34 @@ Decisive test. In the I3 family, set a reuse depth (composites that later serve 
 ### 8.5 Keeping the four claims separate
 
 I1 is the substrate: the other studies use its families, worlds as units and one pre-registered primary contrast each, with separate namespaces for selection and confirmation worlds. I2 is a claim about a ranking score given fixed evidence and is first run offline so that the sampling mechanism is held constant. I3 is a claim about discovery cost; I4 is a claim about how discoveries are represented and is first run with oracle discoveries. The outcomes of the four studies are summarized in docs/RESULTS.md, Section 4.5. A promoted composite is a macro or skill, the role of the P3 admission and validation gate and of the macro-control ablation (D16). Study L adds no admission gate because a TechTree discovery is exact (its firing reveals the sequence), so there is nothing to validate; with learned controllers the P3 gate would apply.
+
+## 9. Related work for study XS (checked 2026-10-22)
+
+Study XS (docs/studies/XS_learner_followup.md) asks whether the open-source learner of study X
+becomes competent when the conditions that X's verdict named as limiting are relaxed: a larger
+budget slack, a denser reward through potential-based shaping, and longer training. Entries were
+checked through search listings of the proceedings and of the authors' pages (depth `listing`).
+Identifiers start a new prefix: S (shaping).
+
+| Id | Authors (as verified) | Title | Year, venue (as verified) | URL | Depth |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| S1 | A. Y. Ng, D. Harada, S. Russell | Policy Invariance Under Reward Transformations: Theory and Application to Reward Shaping | 1999, ICML, pp. 278-287 | https://mlanthology.org/icml/1999/ng1999icml-policy/ | `listing` |
+| S2 | M. Grześ | Reward Shaping in Episodic Reinforcement Learning | 2017, AAMAS | https://www.cs.kent.ac.uk/people/staff/mg483/documents/grzes17goals-in-pbrs.pdf | `listing` |
+
+Overlaps. Adding F(s, s') = gamma Phi(s') - Phi(s) to every reward, for any real function Phi of
+the state, leaves the optimal policies unchanged, and without further assumptions about the task
+no other additive shaping has that guarantee (S1). In an episodic task the guarantee needs the
+potential of every terminal state to be 0; otherwise the potential at which an episode ends enters
+the return and can change the optimal policy (S2). With that convention the shaped discounted
+return of every episode is the environment's return minus the potential of its first state, so
+every policy's expected return moves by the same constant and the ranking of policies is
+unchanged, also for policies that see only observations and for a potential computed from them.
+Shaping can change how fast a learner finds a good policy, not which policy is best.
+
+Decisive test. Study XS shapes MaskablePPO with a potential built only from public fields (the
+share of the goal closure's candidate base facts observed held, and whether the goal is observed
+held; 0 at the end of every learner episode), crossed with budget slack 2 and 12, and compares each
+condition with `random` and `focused_sample` at the same slack. Shaping that keeps the ranking of
+policies can make the learner cheaper than `random`, but it cannot give a memoryless policy the
+evidence of earlier episodes of a world. Status: `established` for the invariance results; XS
+applies them and claims no contribution from them.

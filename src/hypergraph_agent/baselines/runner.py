@@ -15,7 +15,12 @@ Jobs
   whose state adapts within a world: ``adaptive``.
 - ``agent``: one repository agent and test seed on the same test stream
   (``agents``); adaptive agents are charged ``adaptive``, the others
-  ``reporting``.
+  ``reporting``. Agents named in ``validation_agents`` (study XS) also play every
+  seed of the validation stream.
+
+A learner with ``shaping`` (study XS) trains with the potential-based term of
+``shaping.py`` added to its rewards (one ``Shaper`` per environment, at the
+learner's discount); its evaluation runs are unchanged.
 
 Every run has a run directory (``training.run.RunContext``: manifest with
 provenance, config, ``eval.jsonl`` rows, ``events.jsonl``), is registered in the
@@ -50,6 +55,7 @@ from .encoders import RQLayout, TTLayout
 from .learners import (
     RECURRENT, Actor, build_model, checkpoint_callback, library_versions, load_model, rnd_vec_env,
 )
+from .shaping import learner_gamma, make_shaper
 from .sources import evaluation_source, reference, stream_budget, training_source, tt_world_config
 from .wrappers import SourceExhausted, make_gym
 
@@ -115,6 +121,13 @@ def jobs(cfg: dict, learners=None, seeds=None, agents=None) -> dict:
         for s in split_seeds(cfg, "test"):
             out["agent"].append({"agent": agent, "seed": s, "split": "test", "cap": sums[("test", s)],
                                  "hash": agent_hash(cfg, agent, s), "kind": agent_kind(agent)})
+    for agent in cfg.get("validation_agents") or ():
+        if agents is not None and agent not in agents:
+            continue
+        for s in split_seeds(cfg, "validation"):
+            out["agent"].append({"agent": agent, "seed": s, "split": "validation",
+                                 "cap": sums[("validation", s)],
+                                 "hash": agent_hash(cfg, agent, s, "validation"), "kind": agent_kind(agent)})
     return out
 
 
@@ -138,6 +151,23 @@ def plan(cfg: dict, **subset) -> dict:
                  "agent_total": sum(j["cap"] for j in js["agent"])},
         "ledger_on_creation": cfg["ledger"],
     }
+
+
+def missing_caps(cfg: dict) -> dict:
+    """Caps of the planned jobs that have no completed run, by ledger kind (``adaptive``, ``reporting``),
+    with the training jobs' share and the number of jobs (study XS's budget check before a launch)."""
+    done = completed(cfg["run"]["runs_dir"], cfg["run"]["name"])
+    out = {"adaptive": 0, "reporting": 0, "training": 0, "jobs": 0, "training_jobs": 0}
+    for kind_name, js in jobs(cfg).items():
+        for j in js:
+            if j["hash"] in done:
+                continue
+            out[j["kind"]] += j["cap"]
+            out["jobs"] += 1
+            if kind_name == "train":
+                out["training"] += j["cap"]
+                out["training_jobs"] += 1
+    return out
 
 
 def make_ledger(cfg: dict) -> SessionLedger:
@@ -203,8 +233,11 @@ def make_venv(cfg: dict, learner: dict, seed: int, meter):
         def build():
             src = training_source(fam, setting, tr["namespace"], tr["base_seed"], seed, rank, tr["n_envs"],
                                   tr["episodes_per_world"])
+            extra = {}
+            if learner.get("shaping") is not None:  # study XS: one shaper per environment
+                extra["shaping"] = make_shaper(learner["shaping"], learner_gamma(learner["params"]))
             return make_gym(fam, src, layout, trial=learner["trial"], step_penalty=learner["step_penalty"],
-                            meter=meter, purpose="exploration")
+                            meter=meter, purpose="exploration", **extra)
         return build
 
     venv = DummyVecEnv([factory(r) for r in range(tr["n_envs"])])

@@ -1,0 +1,36 @@
+# Study XS (docs/studies/XS_learner_followup.md), measurement config, member s2: RecipeQuest family
+# F1 with goal-only observation (setting rq_f1 of study X) at budget slack 2 (the public
+# brute-force bound + 2, as in X). Two MaskablePPO learners with X's tuned settings for rq_f1
+# (tuning group mppo of x-rq-tune: mppo.wide, deterministic; checked against X's frozen tuning
+# record): the sparse reward of X and potential-based shaping (shaping.py, rq_goal_closure).
+# Fresh namespaces; the repository's agents play the test stream at this slack, random also the
+# validation stream (the selection is measured against it). The tests are in xs_rq.yaml.
+run: {name: xs-rq-s2, study: XS, allocation: xs_main, ledger: runs/XS-ledger.json, requires_flag: true,
+      tuning_from: configs/baselines/tune_rq_f1.yaml, tuning_groups: {s2_sparse: mppo, s2_shaped: mppo},
+      tuning_record: {summary: "artifacts/baselines/x-rq-tune/tuning_summary.json",
+        sha256: "dd20417ac49dd88eada64025fa4ad180fd93cb308412c6099a40d1d05a7f6672"}}
+ledger:
+  allocations: {dev: 600000, xs_main: 40100000}
+  adaptive_cap: 40700000
+  reporting_cap: 1000000
+setting:
+  name: rq_f1
+  family: recipequest
+  tasks: {profile: unknown_prerequisites, depth_min: 1, depth_max: 3, n_distractor_base: 0,
+          observe_items: goal_only, budget_slack: 2}
+train: {namespace: xs_rq_train, base_seed: 30000, seeds: [0, 1], budgets: [300000, 1000000, 2500000],
+        n_envs: 8, episodes_per_world: 16}
+test: {namespace: xs_rq_test, base_seed: 10000, seeds: [0, 1, 2, 3, 4], n_worlds: 10, episodes_per_world: 16}
+validation: {namespace: xs_rq_val, base_seed: 10000, seeds: [0, 1], n_worlds: 10, episodes_per_world: 16}
+learners:
+  - {id: s2_sparse, group: s2_sparse, algo: maskable_ppo, params: {n_steps: 256, ent_coef: 0.01,
+     policy_kwargs: {net_arch: [256, 256]}}, modes: [deterministic]}
+  - {id: s2_shaped, group: s2_shaped, algo: maskable_ppo, params: {n_steps: 256, ent_coef: 0.01,
+     policy_kwargs: {net_arch: [256, 256]}}, shaping: {potential: rq_goal_closure}, modes: [deterministic]}
+agents: [focused_sample, maximal, reference, random]
+validation_agents: [random]
+agent_params: {consistent_moves: 50}
+analysis:
+  late_from: 8
+  select_metric: cost_ratio_late
+  tests: []

@@ -1,0 +1,48 @@
+# Study XS (docs/studies/XS_learner_followup.md): combined analysis of the RecipeQuest members
+# xs_rq_s2.yaml and xs_rq_s12.yaml (budget slack 2 and 12; sparse and shaped learners in each).
+#     python -m hypergraph_agent.baselines analyze --config configs/baselines/xs_rq.yaml
+# Arms: learner ids; agents as <agent>.<member> (<agent>.best: at the best learner's slack);
+# <learner>~random: minus random at the learner's slack, per world; <arm>#<budget>: another budget.
+# The best learner is selected on validation worlds only (xs.py); XS1 is the primary test.
+xs:
+  name: xs-rq
+  members: {s2: configs/baselines/xs_rq_s2.yaml, s12: configs/baselines/xs_rq_s12.yaml}
+  analysis:
+    late_from: 8
+    n_boot: 10000
+    boot_seed: 20261008
+    select_metric: cost_ratio_late
+    select_against: random
+    tests:
+      - {name: "XS1 best learner - random (its slack), late cost ratio", role: primary, a: best_learner,
+         b: random.best, metric: cost_ratio_late, expect: less}
+      - {name: "XS1s best learner - random (its slack), late success", role: secondary, a: best_learner,
+         b: random.best, metric: success_late, expect: greater}
+      - {name: "XS2 focused_sample (its slack) - best learner, late cost ratio", role: secondary,
+         a: focused_sample.best, b: best_learner, metric: cost_ratio_late, expect: less}
+      - {name: "XS3 best learner - maximal (its slack), late cost ratio", role: secondary, a: best_learner,
+         b: maximal.best, metric: cost_ratio_late, expect: less}
+      - {name: "XS4 best learner, late minus early cost ratio (within-world improvement)", role: secondary,
+         a: best_learner, metric: cost_ratio_late_minus_early, expect: less}
+      - {name: "XSF1 shaping at slack 2: shaped - sparse, late cost ratio", role: factor, a: s2_shaped,
+         b: s2_sparse, metric: cost_ratio_late, expect: less}
+      - {name: "XSF2 shaping at slack 12: shaped - sparse, late cost ratio", role: factor, a: s12_shaped,
+         b: s12_sparse, metric: cost_ratio_late, expect: less}
+      - {name: "XSF3 slack, sparse: (s12 - random s12) - (s2 - random s2), late cost ratio", role: factor,
+         a: s12_sparse~random, b: s2_sparse~random, metric: cost_ratio_late, expect: less}
+      - {name: "XSF4 slack, shaped: (s12 - random s12) - (s2 - random s2), late cost ratio", role: factor,
+         a: s12_shaped~random, b: s2_shaped~random, metric: cost_ratio_late, expect: less}
+      - {name: "XSF5 training length, best learner: largest - first budget, late cost ratio", role: factor,
+         a: best_learner, b: "best_learner#300000", metric: cost_ratio_late, expect: less}
+      - {name: "XSF6 training length, best learner: largest - middle budget, late cost ratio", role: factor,
+         a: best_learner, b: "best_learner#1000000", metric: cost_ratio_late, expect: less}
+      - {name: "XSD1 s2_sparse - random (slack 2)", role: descriptive, a: s2_sparse~random,
+         metric: cost_ratio_late, expect: less}
+      - {name: "XSD2 s2_shaped - random (slack 2)", role: descriptive, a: s2_shaped~random,
+         metric: cost_ratio_late, expect: less}
+      - {name: "XSD3 s12_sparse - random (slack 12)", role: descriptive, a: s12_sparse~random,
+         metric: cost_ratio_late, expect: less}
+      - {name: "XSD4 s12_shaped - random (slack 12)", role: descriptive, a: s12_shaped~random,
+         metric: cost_ratio_late, expect: less}
+      - {name: "XSD5 focused_sample (its slack), late minus early cost ratio", role: descriptive,
+         a: focused_sample.best, metric: cost_ratio_late_minus_early, expect: less}
