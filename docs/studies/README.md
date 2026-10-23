@@ -17,6 +17,7 @@ allocation, and are reported as such.
 | [X](X_open_source_baselines.md) | How do open-source reinforcement-learning learners compare with the repository's agents?  | RecipeQuest, TechTree, benchmarks | `runs/X-ledger.json` | `configs/baselines/` |
 | [PG](PG_policy_graph.md) | Does a policy graph (public states as nodes, each with an action distribution learned from the agent's own successes in a world) learn within a world, how much of that is the learned distributions rather than the graph, and how does it compare with the repository's agents and study X's learners on the same worlds? | TechTree, RecipeQuest | `runs/PG-ledger.json` | `configs/policygraph_tt/`, `configs/policygraph_rq/` |
 | [XS](XS_learner_followup.md) | Does a competent open-source learner change study X's picture when given more budget slack, a potential-based shaped reward built from public information, and longer training? | RecipeQuest | `runs/XS-ledger.json` | `configs/baselines/` (`xs_*`) |
+| [X2](X2_inference_baselines.md) | Does the repository's inference of hidden recipe requirements rank the true requirements better than open-source structure-inference methods (MSGI, macq's Observer and ARMS, SAM-style learning) on identical logs? | RecipeQuest, benchmarks | `runs/X2-ledger.json` | `configs/inference_baselines/` |
 
 Each study file has the same sections: question and claim, relation to earlier
 work, protocol (frozen), implementation, results, verdict and limits. Studies

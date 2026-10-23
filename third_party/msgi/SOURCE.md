@@ -9,11 +9,17 @@ ICLR 2020. arXiv:2001.00248.
 date 2020-07-16, retrieved 2026-10-08), the grid-world code base used for the
 Mining and Playground domains:
 
-| File here | File in the repository | Bytes | SHA-256 |
-|---|---|---|---|
-| `graph/ILP.py` | `grid-world/graph/ILP.py` | 20294 | `762f425014fd5b9be8dd90962ab24caaa911dc1c3ae32a1ef0ee6c010d5d70d2` |
-| `graph/graph_utils.py` | `grid-world/graph/graph_utils.py` | 1948 | `51ae8ebe73e52335abafca3851872c5471c8aaf200d101e20aded636e40b3736` |
-| `LICENSE` | `LICENSE` | 1068 | `7b0746fd903d431ba39707885557deed87e4214f71a337413ad4ff500b0edbc2` |
+| File here | File in the repository | Bytes |
+|---|---|---|
+| `graph/ILP.py` | `grid-world/graph/ILP.py` | 20294 |
+| `graph/graph_utils.py` | `grid-world/graph/graph_utils.py` | 1948 |
+| `LICENSE` | `LICENSE` | 1068 |
+
+SHA-256 of each file:
+
+- `graph/ILP.py`: `762f425014fd5b9be8dd90962ab24caaa911dc1c3ae32a1ef0ee6c010d5d70d2`
+- `graph/graph_utils.py`: `51ae8ebe73e52335abafca3851872c5471c8aaf200d101e20aded636e40b3736`
+- `LICENSE`: `7b0746fd903d431ba39707885557deed87e4214f71a337413ad4ff500b0edbc2`
 
 The checksums are of the bytes stored in the repository at that commit
 (`git show <commit>:<path> | sha256sum`); `.gitattributes` keeps the files

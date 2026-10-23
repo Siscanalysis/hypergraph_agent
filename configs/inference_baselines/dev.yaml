@@ -1,0 +1,24 @@
+# Study X2 development check (docs/studies/X2_inference_baselines.md): allocation dev, namespaces *_dev,
+# seed 0; two generated worlds per observation mode and small benchmark sets (other conversion and goal
+# seeds than the measurement), 16 episodes per world, every policy. Outcomes are not results.
+#   python -m hypergraph_agent.inference_baselines collect --config configs/inference_baselines/dev.yaml
+run: {name: x2-dev, phase: x2_dev, allocation: dev, ledger: runs/X2-ledger.json}
+ledger:
+  allocations: {dev: 10000, x2: 123700}
+  adaptive_cap: 133700
+  reporting_cap: 67100
+policies: [focused_sample, random_omit, maximal]
+walker: {consistent_moves: 50, omit_prob: 0.663}
+sets:
+  - {name: gen_obs, kind: generated, observe_items: all, namespace: x2_gen_dev, seeds: [0], n_worlds: 2,
+     episodes_per_world: 16}
+  - {name: gen_goal, kind: generated, observe_items: goal_only, namespace: x2_gen_dev, seeds: [0],
+     n_worlds: 2, episodes_per_world: 16}
+  - {name: bench_crafter, kind: benchmark, graph: crafter, worlds: whole, n_worlds: 1, conversion_seed: 100,
+     namespace: x2_bench_crafter_dev, seeds: [0], episodes_per_world: 16, observe_items: all}
+  - {name: bench_msgi_mining, kind: benchmark, graph: msgi_mining, worlds: per_goal, n_worlds: 2,
+     goal_sample_seed: 99, namespace: x2_bench_msgi_mining_dev, seeds: [0], episodes_per_world: 16,
+     observe_items: all}
+  - {name: bench_little_alchemy_2, kind: benchmark, graph: little_alchemy_2, worlds: per_goal, n_worlds: 1,
+     goal_sample_seed: 99, namespace: x2_bench_little_alchemy_2_dev, seeds: [0], episodes_per_world: 16,
+     observe_items: all}

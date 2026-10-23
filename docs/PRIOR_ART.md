@@ -318,3 +318,40 @@ distributions (the control), with the repository's model-based agents and with s
 world by world, in TechTree (study U's cell k3-off-ann, primary; study L's phase L2 at reuse depth
 2) and RecipeQuest family F1 (docs/RESULTS.md, Section 4.7). Status: `established` for the cited
 methods; PG claims no new method, only the measurement.
+
+## 11. Related work for study X2 (checked 2026-10-23)
+
+Study X2 (docs/studies/X2_inference_baselines.md) compares the repository's inference of hidden
+recipe requirements with open-source structure-inference methods on identical logs. Entries were
+checked through search listings and, where noted, the library source (depth `listing`).
+Identifiers start a new prefix: IB (inference baselines). R4 (MSGI) and A2 (SAM) are in Section 2;
+X2 runs MSGI's code from github.com/srsohn/msgi at e665861 (grid-world/graph/ILP.py, read).
+
+| Id | Authors (as verified) | Title | Year, venue (as verified) | URL | Depth |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| IB1 | E. Callanan, R. De Venezia, V. Armstrong, A. Paredes, T. Chakraborti, C. Muise | MACQ: A Holistic View of Model Acquisition Techniques | arXiv 2206.06530 (2022) | https://arxiv.org/abs/2206.06530 | `listing`; library source of macq 0.3.11 read (extract/observer.py, extract/arms.py, utils/pysat.py) |
+| IB2 | Q. Yang, K. Wu, Y. Jiang | Learning action models from plan examples using weighted MAX-SAT (ARMS) | 2007, Artificial Intelligence 171:107-143 | https://doi.org/10.1016/j.artint.2006.11.005 | `listing`; macq's implementation read |
+| IB3 | E. Amir, A. Chang | Learning Partially Observable Deterministic Action Models (SLAF) | 2008, JAIR 33:349-402 | https://doi.org/10.1613/jair.2575 | `listing` |
+| IB4 | S. N. Cresswell, T. L. McCluskey, M. M. West | Acquiring planning domain models using LOCM | 2013, Knowledge Engineering Review 28(2):195-213 | https://doi.org/10.1017/S0269888912000422 | `listing` |
+| IB5 | H. H. Zhuo, J. Peng, S. Kambhampati | Learning Action Models from Disordered and Noisy Plan Traces (AMDN; the PDF header reads "Learning Action Models from Plan Traces with Disordered Actions, Parallel Actions, Noisy States") | arXiv 1908.09800 (2019) | https://arxiv.org/abs/1908.09800 | `listing` |
+
+Overlaps. MSGI (R4) is the closest method: it fits each subtask's precondition to (completion
+vector, eligibility) pairs with a CART decoded into a sum of products, and needs every subtask's
+eligibility at every step; in RecipeQuest eligibility is seen only through an attempted craft, so
+its tree learner is applied to each recipe's attempts. SAM (A2) and macq's Observer (IB1) both
+intersect the states before successful executions, which is safe but ignores failures. ARMS (IB2)
+learns STRIPS models from plans with partial states through a weighted MAX-SAT over action,
+information and plan constraints. macq 0.3.11's ARMS pairs the weights with the clauses in a
+different order than its own step3 assigns them, and it loops when an action never reaches its
+upper bound. SLAF (IB3) is exact for deterministic, partially observable action models but works on
+one trace; LOCM (IB4) learns object-centred state machines from action parameters; AMDN (IB5)
+targets disordered and noisy traces. None of them keeps a posterior over a declared candidate pool
+with a prior over requirement sizes, as the repository's inference does; OHCAM (A3) is the closest
+Bayesian action-model learner, with no implementation located.
+
+Decisive test. On identical logs collected once with fixed policies (brute-force node, sampling
+walker, random omission), score every method's ranking of each recipe's candidates against the
+hidden requirement (AUROC), the F1 of its inferred set and the open-loop cost of acting on it.
+Primary: posterior minus the best open-source baseline (selected on held-out selection worlds) at
+16 episodes on generated worlds with items observable. Random-omission logs are the
+method-independent check, and brute-force logs the no-information control.

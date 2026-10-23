@@ -1,0 +1,30 @@
+# Study X2 measurement (docs/studies/X2_inference_baselines.md): trace collection with three fixed
+# policies on generated F1 worlds (items observable and goal-only: the same worlds and tasks, namespace
+# x2_gen, seeds 0-4, twelve worlds per seed, 16 episodes per world) and on worlds converted from five
+# published recipe graphs (items observable, seed 0). Little Alchemy 2 and Freeciv are read from the
+# locally fetched data (benchmarks/<name>/fetch.py); their data and element names are never committed.
+#   python -m hypergraph_agent.inference_baselines collect --config configs/inference_baselines/x2_main.yaml \
+#       --allow-measurement
+#   python -m hypergraph_agent.inference_baselines rank --prefix x2-main- --out artifacts/inference_baselines
+run: {name: x2-main, phase: x2_main, allocation: x2, ledger: runs/X2-ledger.json, requires_flag: true}
+ledger:
+  allocations: {dev: 10000, x2: 123700}
+  adaptive_cap: 133700
+  reporting_cap: 67100
+policies: [focused_sample, random_omit, maximal]
+walker: {consistent_moves: 50, omit_prob: 0.663}
+sets:
+  - {name: gen_obs, kind: generated, observe_items: all, namespace: x2_gen, seeds: [0, 1, 2, 3, 4],
+     n_worlds: 12, episodes_per_world: 16}
+  - {name: gen_goal, kind: generated, observe_items: goal_only, namespace: x2_gen, seeds: [0, 1, 2, 3, 4],
+     n_worlds: 12, episodes_per_world: 16}
+  - {name: bench_crafter, kind: benchmark, graph: crafter, worlds: whole, n_worlds: 10,
+     namespace: x2_bench_crafter, seeds: [0], episodes_per_world: 16, observe_items: all}
+  - {name: bench_psketch_craft, kind: benchmark, graph: psketch_craft, worlds: whole, n_worlds: 10,
+     namespace: x2_bench_psketch_craft, seeds: [0], episodes_per_world: 16, observe_items: all}
+  - {name: bench_msgi_mining, kind: benchmark, graph: msgi_mining, worlds: per_goal, n_worlds: 20,
+     namespace: x2_bench_msgi_mining, seeds: [0], episodes_per_world: 16, observe_items: all}
+  - {name: bench_little_alchemy_2, kind: benchmark, graph: little_alchemy_2, worlds: per_goal, n_worlds: 30,
+     namespace: x2_bench_little_alchemy_2, seeds: [0], episodes_per_world: 16, observe_items: all}
+  - {name: bench_freeciv_classic, kind: benchmark, graph: freeciv_classic, worlds: per_goal, n_worlds: 20,
+     namespace: x2_bench_freeciv_classic, seeds: [0], episodes_per_world: 16, observe_items: all}
