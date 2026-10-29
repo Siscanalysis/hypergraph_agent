@@ -80,7 +80,10 @@ their own frozen protocol, interaction ledger and verdict:
   graph, whose nodes are public states with action distributions learned from
   the agent's own successes, halves the late cost of the same graph with uniform
   distributions in TechTree, does nothing measurable where successes are rare,
-  and stays far costlier than the model-based agents (PG).
+  and stays far costlier than the model-based agents (PG). Given more budget
+  slack and longer training, the open-source learner beats the random agent
+  but stays far costlier than the repository's agents, and a shaped reward
+  does not help (XS).
 
 ## The game
 

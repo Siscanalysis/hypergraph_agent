@@ -254,6 +254,8 @@ allocation.
 | U2: generic exploration baselines on TechTree | docs/studies/U2_techtree_baselines.md | 37f6f06 | `runs/U2-ledger.json` |
 | X: open-source reinforcement-learning baselines | docs/studies/X_open_source_baselines.md | 11a8c45 (amendment XA1) | `runs/X-ledger.json` |
 | PG: a policy graph with learned action distributions | docs/studies/PG_policy_graph.md | 01b1f8c | `runs/PG-ledger.json` |
+| XS: the open-source learner with budget slack, a shaped reward and longer training | docs/studies/XS_learner_followup.md | 97ff3f8 | `runs/XS-ledger.json` |
+| X2: precondition inference against open-source structure-inference baselines | docs/studies/X2_inference_baselines.md | 12372ad | `runs/X2-ledger.json` |
 
 Every protocol was reviewed independently before its freeze. One review run
 touched tasks of study R's first measurement namespaces in memory; its outputs
