@@ -73,6 +73,18 @@ control and a cost estimate before it is built.
     cell and do nothing measurable where successes are rare; learned or goal-free
     node maps that share counts across tasks remain open.
 
+6i. **A rule builder over actions and graph objects.** Learn rules as formulas or
+    programs over actions (concatenations included) and over the objects the graphs
+    infer; feed them back to the graph agents as priors, run them as a parallel
+    module, or pass them between agents. The design, with each idea stated as a
+    falsifiable claim and the tools timed on this machine, is in
+    docs/studies/RB_rule_builder_design.md. Exact search for the smallest consistent
+    rule replaces symbolic regression, which fits numeric laws these worlds lack.
+    Studies in preparation: RL (smallest consistent rules against the posterior),
+    CA (atoms from compressing the agent's own traces against exact promotion), HP1
+    (a learned requirement-size prior, offline) and HP2 (lifted rules over item
+    classes and recipe families as priors).
+
 ## Later extensions
 
 6. **Learned proposals and termination.** Replace fragment mining and
