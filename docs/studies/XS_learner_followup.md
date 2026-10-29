@@ -1,8 +1,9 @@
 # Study XS: does a competent open-source learner change study X's picture?
 
 Status: protocol frozen on 2026-10-23 by the commit that freezes this file, before any
-measurement run; the measurement runs from a clean worktree of that commit (`XS_SNAPSHOT`, see
-Budget and runtime). The development checks listed under Implementation used only the `dev`
+measurement run; the measurement ran from a clean worktree of that commit (`XS_SNAPSHOT`, see
+Budget and runtime) on 2026-10-26/27. Results below. The development checks listed under
+Implementation used only the `dev`
 allocation of `runs/XS-ledger.json` and namespaces ending in `_dev`; they are calibration, not
 results.
 
@@ -418,8 +419,95 @@ None.
 
 ## Results
 
-None yet: no measurement run exists.
+All 84 planned jobs (8 training, 32 evaluation, 44 agent) executed the freeze commit 97ff3f8 from a
+clean worktree (2026-10-26 20:00 to 2026-10-27 02:30) and completed; none was rerun, and every
+training job reached its checkpoints at exactly 300,000, 1,000,000 and 2,500,000 interactions. The
+measurement used 20,017,601 adaptive interactions (worst case 20,038,782) and 569,231 reporting
+(658,660); development usage is unchanged and the ledger holds only the pre-freeze amendment. The
+frozen analyses wrote `artifacts/baselines/xs-rq-s2/`, `xs-rq-s12/` and `xs-rq/` (the study
+analysis). An independent recomputation from the raw rows reproduced every estimate, interval, sign
+test and per-seed value exactly, and every analysis output regenerates byte for byte. The member
+summaries reuse X's report format: their title reads "Study X" and their "best learner" is the
+member's own, not the study's selection, which is in `xs-rq/`.
+
+Selection (validation worlds; learner minus `random` at its slack): `s2_sparse` -0.00609,
+`s2_shaped` -0.0196, `s12_sparse` -0.376, `s12_shaped` -0.241. The best learner is `s12_sparse`.
+
+Test worlds (50), learners at 2,500,000 interactions; censored share in parentheses:
+
+| Arm | Slack | Late cost ratio | Late success | Actions to the first success |
+|---|---|---|---|---|
+| `s2_sparse` | 2 | 2.96 | 0.125 | 147 (26%) |
+| `s2_shaped` | 2 | 2.97 | 0.119 | 159 (31%) |
+| `s12_sparse` | 12 | 4.01 | 0.481 | 56.5 (0%) |
+| `s12_shaped` | 12 | 4.06 | 0.436 | 67.4 (1%) |
+| `random` | 2 / 12 | 2.98 / 4.34 | 0.080 / 0.203 | 189 (32%) / 129 (6%) |
+| `focused_sample` | 2 / 12 | 1.43 / 1.42 | 0.995 / 1.00 | 16.2 / 14.3 |
+| `maximal` | 2 / 12 | 1.91 / 1.91 | 1.00 / 1.00 | 11.7 / 11.7 |
+
+A late cost ratio is comparable only at one slack: if every late episode failed it would be 3.05 at
+slack 2 and 4.65 at slack 12.
+
+Tests (95% intervals; sign test as worlds lower / higher / equal):
+
+| Test | Contrast | Estimate [95% CI] | Sign test | Holds |
+|---|---|---|---|---|
+| XS1 | `s12_sparse` - `random` (slack 12) | -0.332 [-0.432, -0.231] | 45/5/0, p 4.2e-9 | yes |
+| XS1s | the same, late success | +0.279 [0.223, 0.335] | 4/45/1, p 8.2e-10 | yes |
+| XS2 | `focused_sample` - `s12_sparse` | -2.59 [-2.76, -2.42] | 50/0/0 | yes |
+| XS3 | `s12_sparse` - `maximal` | +2.10 [1.98, 2.22] | 0/50/0 | no |
+| XS4 | `s12_sparse`, late - early | +0.0175 [-0.0991, 0.129] | 23/27/0, p 0.67 | no |
+| XSF1 | `s2_shaped` - `s2_sparse` | +0.0120 [-0.0198, 0.0529] | 21/22/7, p 1.0 | no |
+| XSF2 | `s12_shaped` - `s12_sparse` | +0.0538 [-0.0229, 0.126] | 17/33/0, p 0.033 | no |
+| XSF3 | `s12_sparse~random` - `s2_sparse~random` | -0.311 [-0.420, -0.199] | 42/8/0 | yes |
+| XSF4 | `s12_shaped~random` - `s2_shaped~random` | -0.269 [-0.379, -0.164] | 40/9/1 | yes |
+| XSF5 | `s12_sparse`, 2,500,000 - 300,000 | -0.262 [-0.352, -0.176] | 41/9/0 | yes |
+| XSF6 | `s12_sparse`, 2,500,000 - 1,000,000 | -0.0676 [-0.137, 0.0056] | 33/17/0, p 0.033 | no |
+
+- Primary: XS1 holds in both training seeds (-0.297 and -0.367).
+- Descriptive, each condition minus `random` at its slack: `s2_sparse` -0.0214 [-0.0619, 0.0162],
+  `s2_shaped` -0.0094 [-0.0417, 0.0251], `s12_shaped` -0.278 [-0.377, -0.180]. At slack 2 (X's)
+  no condition beats `random` at any checkpoint. `focused_sample` improves within a world (late
+  minus early -0.606 [-0.671, -0.543]); no learner does.
+- Competence: scoring a failed late episode 0 and an optimal one 1, `s12_sparse` reaches 0.176
+  against 0.085 for `random`; it solves 0.929 of depth-1, 0.405 of depth-2 and 0.053 of depth-3
+  late goals (`random`: 0.485, 0.098, 0.009).
+- Shaping: no benefit at either slack. At slack 12 the sign test points against shaping (17 worlds
+  lower, 33 higher) and the shaped learner's late success is 0.045 below the sparse one's
+  [-0.088, -0.004]; that direction was not specified in advance and the criterion is the interval,
+  so the finding is "no benefit".
+- Training length: at slack 12, 74% of the gain from 300,000 to 2,500,000 interactions comes before
+  1,000,000. XSF6 misses narrowly (upper end +0.0056; both training seeds improve): a small effect,
+  not established.
+- XS2 is measured at slack 12; at slack 2 the same contrast is about -1.52. XS's test worlds are
+  not X's, so its numbers cannot be paired with X's.
+
+Predictions (written before the measurement): 8 met, 1 met on its point estimate only, 5 not met.
+Met: XS1 and XS1s hold; XS2 below -0.5; XS3 and XS4 do not hold; XSF3 and XSF4 hold, with more
+training tasks rewarded at slack 12 (0.24-0.46 against 0.056-0.124); XSF5 holds and XSF6 does
+not, most of the gain coming before 1,000,000; `s2_sparse` within 0.05 of `random` at every
+checkpoint. Point estimate only: the best learner at least 0.3 below `random` (0.332; the interval
+reaches -0.231). Not met: the best learner is `s12_sparse`, not `s12_shaped`; late success 0.481,
+not 0.5-0.9; `random` at slack 12 reaches 0.203, not about 0.06 (the development profile misjudged
+it by a factor of about 3); XSF1 and XSF2 do not hold; `s2_shaped` does not beat `random` at
+slack 2.
 
 ## Verdict and limits
 
-None yet.
+XS's primary holds: with 12 steps of budget slack instead of X's 2 and 2,500,000 training
+interactions, MaskablePPO beats the random agent on fresh test worlds (-0.332 [-0.432, -0.231],
+lower in 45 of 50 worlds). It does not change study X's picture. The learner stays far costlier
+than the repository's agents at the same slack (late cost ratio 4.01 against 1.42 for
+`focused_sample` and 1.91 for the brute-force plan), fails more than half of its late tasks, solves
+almost no depth-3 goal and does not improve within a world. The potential-based shaped reward gave
+no benefit at either slack, and at X's slack no condition beat the random agent at any checkpoint:
+the gain comes from the slack.
+
+Limits:
+- One library learner (MaskablePPO with X's tuning), one potential and two slacks. A memoryless
+  policy cannot use the evidence of earlier episodes of a world, which is what the repository's
+  agents exploit. Study X's recurrent learner was never rewarded at slack 2 and was not retrained
+  at slack 12.
+- Training success is measured with a stochastic policy and the tests with deterministic actions.
+- Actions to the first success are censored in 26-52% of the slack-2 worlds and are lower bounds.
+- The predictions followed a development profile that misjudged `random` at slack 12.
