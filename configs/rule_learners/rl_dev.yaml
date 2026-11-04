@@ -1,0 +1,19 @@
+# Study RL development check (docs/studies/RL_rule_learners.md): allocation dev, namespaces rl_*_dev,
+# seed 0, two generated worlds per variant, 16 episodes per world, X2's three policies. Outcomes are
+# calibration, not results. Run name rl-dev2: the out-of-class worlds have pools of eight since the
+# review (the first check, rl-dev, used pools of six).
+#   python -m hypergraph_agent.rules collect --config configs/rule_learners/rl_dev.yaml --dry-run
+#   python -m hypergraph_agent.rules collect --config configs/rule_learners/rl_dev.yaml
+#   python -m hypergraph_agent.rules rank --prefix rl-dev2- --x2-prefix x2-dev- --out ../scratch/rl_dev2 \
+#       --cache runs/rl_cache --expected-worlds 2 --x2-artifact ../scratch/x2_dev/x2_benchmark.json
+run: {name: rl-dev2, phase: rl_dev, allocation: dev, ledger: runs/RL-ledger.json}
+ledger:
+  allocations: {dev: 10000, rl: 82500}
+  adaptive_cap: 92500
+  reporting_cap: 48400
+policies: [focused_sample, random_omit, maximal]
+walker: {consistent_moves: 50, omit_prob: 0.663}
+sets:
+  - {name: slip, namespace: rl_slip_dev, seeds: [0], n_worlds: 2, episodes_per_world: 16, failure_prob: 0.1}
+  - {name: ooc, namespace: rl_ooc8_dev, seeds: [0], n_worlds: 2, episodes_per_world: 16, pool_size: 8,
+     max_true: 5, arity_weights: [0, 0, 0, 0.5, 0.5]}

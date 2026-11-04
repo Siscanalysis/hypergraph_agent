@@ -355,3 +355,56 @@ hidden requirement (AUROC), the F1 of its inferred set and the open-loop cost of
 Primary: posterior minus the best open-source baseline (selected on held-out selection worlds) at
 16 episodes on generated worlds with items observable. Random-omission logs are the
 method-independent check, and brute-force logs the no-information control.
+
+## 12. Related work for study RL (checked 2026-11-04)
+
+Study RL (docs/studies/RL_rule_learners.md, draft) compares exact search for the smallest rule
+consistent with every success and failure (monotone DNFs of at most two terms by answer-set
+programming, cross-checked by MaxSAT, and a soft version for slips) with the repository's exact
+posterior, on study X2's in-class logs and on new logs with slips and with requirements larger
+than the posterior's class; RIPPER, CART and FIGS are classical baselines and Boolean symbolic
+regression an exploratory arm. Entries were checked through search listings of the publishers,
+the proceedings, library catalogues and the authors' pages (depth `listing`). Identifiers start a
+new prefix: E (exact and classical rule learning).
+
+| Id | Authors (as verified) | Title | Year, venue (as verified) | URL | Depth |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| E1 | J. Yu, A. Ignatiev, P. J. Stuckey, P. Le Bodic | Learning Optimal Decision Sets and Lists with SAT | 2021, JAIR 72:1251-1279, doi:10.1613/jair.1.12719 | https://mlanthology.org/jair/2021/yu2021jair-learning | `listing` |
+| E2 | E. Angelino, N. Larus-Stone, D. Alabi, M. Seltzer, C. Rudin | Learning Certifiably Optimal Rule Lists for Categorical Data (CORELS) | 2018, JMLR 18(234):1-78 | https://jmlr.org/papers/v18/17-716.html | `listing` |
+| E3 | T. Wang, C. Rudin, F. Doshi-Velez, Y. Liu, E. Klampfl, P. MacNeille | A Bayesian Framework for Learning Rule Sets for Interpretable Classification | 2017, JMLR 18(70):1-37 | https://www.jmlr.org/papers/v18/16-003.html | `listing` |
+| E4 | W. W. Cohen | Fast Effective Rule Induction (RIPPER) | 1995, ICML, pp. 115-123 | https://mlanthology.org/icml/1995/cohen1995icml-fast | `listing` |
+| E5 | L. Breiman, J. H. Friedman, R. A. Olshen, C. J. Stone | Classification and Regression Trees | 1984, Wadsworth (book) | library catalogue records | `listing` |
+| E6 | Y. S. Tan, C. Singh, K. Nasseri, A. Agarwal, J. Duncan, O. Ronen, M. Epland, A. Kornblith, B. Yu | Fast Interpretable Greedy-Tree Sums (FIGS) | 2025, PNAS 122(7), doi:10.1073/pnas.2310151122; arXiv 2201.11931 | https://arxiv.org/abs/2201.11931 | `listing` |
+| E7 | M. Gebser, R. Kaminski, B. Kaufmann, T. Schaub | Multi-shot ASP solving with clingo | 2019, Theory and Practice of Logic Programming 19(1):27-82, doi:10.1017/S1471068418000054 | https://arxiv.org/abs/1705.09811 | `listing` |
+| E8 | A. Ignatiev, A. Morgado, J. Marques-Silva | RC2: an Efficient MaxSAT Solver | 2019, JSAT 11(1):53-64, doi:10.3233/SAT190116 | https://research.monash.edu/en/publications/rc2-an-efficient-maxsat-solver/ | `listing` |
+| E9 | A. Ignatiev, A. Morgado, J. Marques-Silva | PySAT: A Python Toolkit for Prototyping with SAT Oracles | 2018, SAT, LNCS 10929:428-437, doi:10.1007/978-3-319-94144-8_26 | https://github.com/pysathq/pysat | `listing` |
+| E10 | J. R. Koza | Genetic Programming: On the Programming of Computers by Means of Natural Selection | 1992, MIT Press (book) | library catalogue records | `listing` |
+| E11 | J. Rissanen | Modeling by shortest data description | 1978, Automatica 14(5):465-471, doi:10.1016/0005-1098(78)90005-5 | https://mlanthology.org/misc/1978/rissanen1978misc-modeling | `listing` |
+
+N6 (Section 8.1), read further for this study in its accepted version of 2019-10-01
+(https://eprints.whiterose.ac.uk/id/eprint/151615/): Section 2.2 defines the smallest satisfying
+set (SSS; a set is satisfying when every positive test contains one of its items and no negative
+test does; ties are broken arbitrarily) and motivates it by defectives being rare; Section 2.3
+defines COMP (an item is defective unless it appears in a negative test). Depth `methods` for these
+two sections.
+
+Overlaps. With items observed, inference for one recipe is group testing (N6): a set of candidates
+is satisfying when it meets the omitted candidates of every failed attempt and none of a successful
+one, and the smallest satisfying set (SSS, N6 Section 2.2) is the smallest consistent conjunction;
+it rests on defectives being rare and breaks ties arbitrarily. COMP (N6 Section 2.3) is study X2's
+Observer and SAM rule, which never misses a required candidate. E1 finds decision sets and lists
+with the fewest literals by SAT, the size RL's hard learner minimizes over monotone DNFs; E2
+certifies optimal rule lists by branch and bound, and E3 places a prior over rule sets and searches
+for the MAP set, the role of RL's description-length prior (E11) and slip likelihood in its soft
+learner. E4 (RIPPER), E5 (CART) and E6 (FIGS) are greedy rule and tree learners; E7 (clingo) and
+E8 (RC2, part of the PySAT toolkit E9) are the solvers; E10 underlies gplearn's Boolean symbolic
+regression. None of them is compared, on matched logs of one hidden-prerequisite task, with an
+exact posterior over a declared hypothesis class.
+
+Decisive test. On study X2's in-class logs and on new logs with slips (failure probability 0.1)
+and with requirements of 4 or 5 of 8 candidates, score every learner as X2 does (AUROC, F1 of the
+inferred set, open-loop acting cost). Primary: F1 of the smallest consistent DNF minus the
+posterior's, out of class, random-omission evidence, 16 episodes; the sampling walker's evidence is
+the replication, and the controls are a posterior over every subset of the pool and the full pool,
+which needs no inference. Status: `established` for the cited methods; RL claims no new method,
+only the measurement.

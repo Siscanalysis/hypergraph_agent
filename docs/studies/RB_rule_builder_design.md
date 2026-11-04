@@ -135,7 +135,7 @@ prior learned from the agent's own solved recipes is the simplest rule over grap
 | Tool | Licence | Status on Windows, Python 3.12 | Use here |
 |---|---|---|---|
 | clingo 5.8.2 | MIT | wheel, already in the repository's environment | smallest consistent DNF; lifted rules with class variables (RB-A, RB-C) |
-| python-sat 1.9.dev17 (RC2) | MIT | wheel, already in the environment | MaxSAT cross-check of the DNF learner (RB-A) |
+| python-sat 1.9.dev15 (RC2) | MIT | wheel, already in the environment | MaxSAT cross-check of the DNF learner (RB-A) |
 | scikit-learn 1.9.1 (CART) | BSD-3 | wheel | classifier baseline (RB-A) |
 | wittgenstein 0.3.5 (RIPPER) | MIT | pure Python | rule-list baseline (RB-A) |
 | imodels 3.0.4 (FIGS) | MIT | pure wheel; no CORELS class in this version | rule-based baseline (RB-A) |
