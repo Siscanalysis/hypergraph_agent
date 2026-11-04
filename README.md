@@ -83,7 +83,10 @@ their own frozen protocol, interaction ledger and verdict:
   and stays far costlier than the model-based agents (PG). Given more budget
   slack and longer training, the open-source learner beats the random agent
   but stays far costlier than the repository's agents, and a shaped reward
-  does not help (XS).
+  does not help (XS). On identical logs, the repository's posterior ranks
+  hidden requirements better than open-source structure-inference methods
+  (MSGI, macq's Observer and ARMS), though acting on the most conservative of
+  them is cheaper (X2).
 
 ## The game
 

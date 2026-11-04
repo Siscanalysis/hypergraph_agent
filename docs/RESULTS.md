@@ -395,9 +395,10 @@ independent recomputation of the results).
 |---|---|---|---|
 | [PG](studies/PG_policy_graph.md) | late actions per episode, `pg` - `pg_uniform` (the same policy graph with uniform action distributions), TechTree cell k3-off-ann, 30 worlds | -45.3 [-51.6, -38.6] | pass: the learned distributions halve the late cost (42 against 87 actions); where successes are rare (L2 at reuse depth 2, RecipeQuest F1) `pg` matches its control in all but one episode; the model-based agents stay far cheaper |
 | [XS](studies/XS_learner_followup.md) | late cost ratio, best open-source learner (MaskablePPO, 2.5M interactions, budget slack 12) - `random`, 50 RecipeQuest F1 test worlds | -0.332 [-0.432, -0.231] | holds, but the learner stays far costlier than the repository's agents (4.01 against 1.42 for `focused_sample` at the same slack); the shaped reward gave no benefit, and at study X's slack no condition beat `random` |
+| [X2](studies/X2_inference_baselines.md) | AUROC of the ranking of hidden requirements, posterior - best open-source structure-inference baseline (macq's Observer, selected on separate worlds), identical logs, 36 generated test worlds | +0.0972 [0.0823, 0.113] | posterior better, in all 36 worlds, with random-omission logs and on all five benchmark sets; Observer's conservative sets are cheaper to act on open-loop (S5 reversed) |
 
 Interactions (measurement only): PG 182,725 adaptive and 156,561 reporting; XS 20,017,601 and
-569,231.
+569,231; X2 78,618 and 39,342.
 
 ## 5. What the session shows and does not show
 
