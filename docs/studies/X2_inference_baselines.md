@@ -2,12 +2,11 @@
 
 Status: protocol frozen on 2026-10-23 by the commit that freezes this file, before any
 measurement run, after two independent reviews (their blockers, other findings and minor points
-fixed); the measurement runs from a clean worktree of that commit. The ledger caps were raised
-to the declaration below by a logged amendment before the freeze. The development
-checks listed under Implementation used only the allocation `dev` of
-`runs/X2-ledger.json` and namespaces ending in `_dev`; they are calibration,
-not results. The measurement namespaces (`x2_gen`, `x2_bench_<graph>`) have
-never been used.
+fixed); the measurement ran from a clean worktree of that commit on 2026-10-28. Results below.
+The ledger caps were raised to the declaration below by a logged amendment before the freeze.
+The development checks listed under Implementation used only the allocation `dev` of
+`runs/X2-ledger.json` and namespaces ending in `_dev`; they are calibration, not results. The
+measurement namespaces (`x2_gen`, `x2_bench_<graph>`) were first used by the measurement.
 
 ## Question and claim
 
@@ -643,9 +642,108 @@ None.
 
 ## Results
 
-None yet: no measurement run exists.
+All 45 collection runs executed the freeze commit 12372ad from a clean worktree on 2026-10-28
+(20:00-20:02; the task scheduled for 2026-10-23 had been refused before starting, so no run existed)
+and completed; none was rerun. They hold 630 world records of 16 logs each and used 78,618 adaptive
+and 39,342 reporting interactions (worst cases 116,118 and 58,059); development usage is unchanged.
+There is no protocol amendment; the ledger holds the one cap raise made before the freeze. The
+analysis (`rank`, 20:02-20:51) computed every row and ARMS result afresh (ARMS jobs: 1,767 ok, 33 at
+the step limit, none with an error, a timeout or a worker exit) and wrote
+`artifacts/inference_baselines/x2_benchmark.json`, `x2_benchmark.md` and the exploratory
+`x2_benchmark_arms_hash_seeds.json`.
+
+An independent recomputation from the per-world values reproduced every estimate and interval
+exactly. An independent exact posterior, SAM-style intersection, AUROC and F1, written from the raw
+logs, matched the artifact on 8 world checkpoints, and spot checks of MSGI, Observer and ARMS
+matched. Regenerating `rank` from a copy of its cache gave the markdown byte for byte and the JSON
+except four bookkeeping fields (run times and reuse counts). The recorded code hash is that of the
+commit's files with Windows line endings, as the snapshot checked them out; a checkout with LF
+endings computes another hash, and so another cache key.
+
+Selection (24 selection worlds, 16 episodes, mean AUROC): `focused_sample` evidence: Observer 0.829,
+MSGI 0.806, ARMS 0.567, so `observer`; `random_omit`: Observer 0.773, MSGI 0.767, ARMS 0.519, so
+`observer` (a near tie; MSGI would lead at 4 episodes); `maximal`, the no-information control: MSGI
+and Observer 0.500 (MSGI by the tie order), ARMS 0.495, used by no test.
+
+Primary cell (`gen_obs` test worlds, `focused_sample` evidence, 16 episodes, 36 worlds):
+
+| Method | AUROC | F1 | Acting cost ratio |
+|---|---|---|---|
+| `posterior` | 0.908 | 0.809 | 1.19 |
+| `pair_weight` | 0.906 | 0.794 | 1.29 |
+| `msgi` | 0.804 | 0.746 | 1.33 |
+| `observer` (equal to `sam` everywhere) | 0.811 | 0.777 | 1.09 |
+| `arms` (hash seed 0) | 0.571 | 0.471 | 1.72 |
+| `random` | 0.500 | 0.506 | 1.85 |
+
+Tests (95% intervals; 90% where stated):
+
+| Test | Estimate | Interval | Outcome |
+|---|---|---|---|
+| P1: `posterior` - `observer`, AUROC | +0.0972 | [0.0823, 0.113]; 90% [0.0846, 0.111] | posterior better |
+| S1: the same, `random_omit` | +0.0929 | [0.0795, 0.107] | holds |
+| S2: `maximal` | all 2,160 values of six methods 0.5 | `arms` - 0.5: [-0.0222, 0.0292] | holds |
+| S3: `observer` - `sam` | largest difference 0 (5,400 values) | | holds |
+| S4: `posterior` - `observer`, F1 | +0.0327 | [0.0101, 0.0565] | holds |
+| S5: the same, acting cost ratio | +0.0948 | [0.0398, 0.167] | does not hold (reversed) |
+| S6: `posterior` - `pair_weight`, `gen_obs` | +0.00136 | 90% [-0.00253, 0.00531] | equivalent: holds |
+| S7: the same, `gen_goal` | +0.0185 | [0.00406, 0.0332]; 90% [0.00633, 0.0308] | does not hold |
+| S8: Crafter (10 worlds) | +0.0717 | [0.0534, 0.0902] | holds |
+| S8: Craft (10) | +0.124 | [0.107, 0.140] | holds |
+| S8: MSGI Mining (20) | +0.150 | [0.121, 0.175] | holds |
+| S8: MSGI Mining without w5 and w10 (18) | +0.147 | [0.116, 0.173] | holds |
+| S8: Little Alchemy 2 (30) | +0.119 | [0.0985, 0.140] | holds |
+| S8: Freeciv (20) | +0.116 | [0.0735, 0.160] | holds |
+
+- Primary: the posterior is ahead in all 36 test worlds; the minimum detectable difference is
+  0.0227. Against MSGI, the near-tied runner-up, it is +0.103 [0.0837, 0.124].
+- S5 is reversed: the posterior ranks and selects better but acts worse open-loop. Observer's safe
+  sets never make a plan fail (plan success 1.00 in every world and checkpoint) at the price of
+  gathering decoys; plans from the posterior's most probable sets succeed in 0.769 of the cases
+  (`pair_weight` 0.656, MSGI 0.691, ARMS 0.526). Acting cost is open-loop and in-sample.
+- S7: the goal-only posterior is exact enumeration with a sampling fallback; the 9 sampled recipes
+  of this cell are all in one world, the one with the largest gap (+0.0988); without it the outcome
+  is the same (+0.0162 [0.0019, 0.0308]). Study M's M1 found "equivalent" (+0.009 [-0.004, 0.023])
+  on other worlds: both estimates are positive and the intervals overlap, a flip near the boundary.
+- Benchmark sets (descriptive): with `random_omit` evidence the posterior also leads (AUROC
+  posterior, MSGI, Observer, ARMS: Crafter 0.752, 0.633, 0.691, 0.498; Craft 0.810, 0.722, 0.677,
+  0.522; MSGI Mining 0.819, 0.762, 0.715, 0.527; Little Alchemy 2 0.911, 0.798, 0.817, 0.561;
+  Freeciv 0.908, 0.861, 0.822, 0.489). `pair_weight` has a higher F1 than the posterior on Crafter,
+  Little Alchemy 2 and Freeciv.
+- MSGI decoded at most one AND term and returned "no precondition" (all candidates tied) on 6,549
+  of 11,566 recipe cells.
+- Exploratory: ARMS is below Observer at hash seed 0 in every items-observable cell and checkpoint
+  except `maximal` (36 of 36 primary-cell worlds). Under hash seeds 1-4 the selected baseline and
+  "ARMS below Observer" are unchanged for `focused_sample` (ARMS 0.549-0.592) and `random_omit`
+  (0.519-0.537) evidence; only on `maximal` evidence would ARMS be selected, at seeds 2 and 3 (0.511,
+  0.517), which no test uses. On Freeciv's `maximal` evidence ARMS departs from chance (0.451
+  [0.410, 0.489]), as the limits anticipated for converted worlds.
+
+Predictions (written before the measurement): P1, S1-S4, S6 and S8 met (the selected baseline is
+Observer, where development had selected MSGI; S6 has the posterior slightly ahead, where
+development had the pairwise weights ahead); S5 not met, reversed; S7 not met (posterior better,
+not equivalent). Exploratory: ARMS below Observer at hash seed 0 and plan success 1 for Observer and
+SAM, both as expected.
 
 ## Verdict and limits
 
-None yet: written after the measurement, from the frozen analysis, against
-the predictions and limits above.
+X2's primary holds: on identical logs, the repository's posterior ranks the hidden requirements
+better than the best open-source structure-inference baseline (macq's Observer, selected on
+separate worlds), +0.0972 [0.0823, 0.113] AUROC and ahead in all 36 test worlds. The same holds
+with random-omission logs (+0.0929) and on all five benchmark sets (+0.07 to +0.15). The advantage
+is in ranking and in the inferred sets (F1 +0.0327), not in acting on them: Observer's conservative
+sets never make a plan fail, so acting on them is cheaper (S5 reversed). Study M's pairwise weights
+match the posterior on items-observable logs (S6) and trail it slightly on goal-only logs (S7).
+
+Limits:
+- The primary's evidence comes from the posterior's own sampler (`focused_sample`), adapted to its
+  hypothesis class; random-omission logs (S1) give almost the same gap. Only the posterior and the
+  pairwise weights use the class prior.
+- The baselines are weak in different ways: SAM is Observer's rule; MSGI decoded at most one AND
+  term and returned "no precondition" on 57% of the recipe cells; ARMS runs with step3's weights
+  correctly paired (macq 0.3.11 pairs them otherwise), a 50-step limit and one hash seed, and sits
+  near chance.
+- Acting cost is open-loop and in-sample; the benchmark sets are descriptive, and Crafter and Craft
+  are each one hidden structure.
+- "posterior" names two computations: exact and factorized on items-observable logs, enumeration
+  with a sampling fallback on goal-only logs.

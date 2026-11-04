@@ -1,0 +1,137 @@
+{
+ "checkpoint": 16,
+ "seeds": {
+  "1": {
+   "by_source": {
+    "focused_sample": {
+     "arms_mean": 0.5728138778659612,
+     "worlds": 24,
+     "selected_at_seed_0": "observer",
+     "selected": "observer",
+     "arms_below_observer": true
+    },
+    "maximal": {
+     "arms_mean": 0.48491236772486773,
+     "worlds": 24,
+     "selected_at_seed_0": "msgi",
+     "selected": "msgi",
+     "arms_below_observer": true
+    },
+    "random_omit": {
+     "arms_mean": 0.5191563326719577,
+     "worlds": 24,
+     "selected_at_seed_0": "observer",
+     "selected": "observer",
+     "arms_below_observer": true
+    }
+   },
+   "status": {
+    "ok": 71,
+    "iteration_cap": 1,
+    "error": 0,
+    "timeout": 0,
+    "worker_exit": 0,
+    "no_traces": 0
+   }
+  },
+  "2": {
+   "by_source": {
+    "focused_sample": {
+     "arms_mean": 0.5915100033068783,
+     "worlds": 24,
+     "selected_at_seed_0": "observer",
+     "selected": "observer",
+     "arms_below_observer": true
+    },
+    "maximal": {
+     "arms_mean": 0.5110019841269842,
+     "worlds": 24,
+     "selected_at_seed_0": "msgi",
+     "selected": "arms",
+     "arms_below_observer": false
+    },
+    "random_omit": {
+     "arms_mean": 0.5323583553791887,
+     "worlds": 24,
+     "selected_at_seed_0": "observer",
+     "selected": "observer",
+     "arms_below_observer": true
+    }
+   },
+   "status": {
+    "ok": 71,
+    "iteration_cap": 1,
+    "error": 0,
+    "timeout": 0,
+    "worker_exit": 0,
+    "no_traces": 0
+   }
+  },
+  "3": {
+   "by_source": {
+    "focused_sample": {
+     "arms_mean": 0.586747547398589,
+     "worlds": 24,
+     "selected_at_seed_0": "observer",
+     "selected": "observer",
+     "arms_below_observer": true
+    },
+    "maximal": {
+     "arms_mean": 0.5172486772486772,
+     "worlds": 24,
+     "selected_at_seed_0": "msgi",
+     "selected": "arms",
+     "arms_below_observer": false
+    },
+    "random_omit": {
+     "arms_mean": 0.5368058311287478,
+     "worlds": 24,
+     "selected_at_seed_0": "observer",
+     "selected": "observer",
+     "arms_below_observer": true
+    }
+   },
+   "status": {
+    "ok": 72,
+    "iteration_cap": 0,
+    "error": 0,
+    "timeout": 0,
+    "worker_exit": 0,
+    "no_traces": 0
+   }
+  },
+  "4": {
+   "by_source": {
+    "focused_sample": {
+     "arms_mean": 0.5491036981922398,
+     "worlds": 24,
+     "selected_at_seed_0": "observer",
+     "selected": "observer",
+     "arms_below_observer": true
+    },
+    "maximal": {
+     "arms_mean": 0.46399305555555553,
+     "worlds": 24,
+     "selected_at_seed_0": "msgi",
+     "selected": "msgi",
+     "arms_below_observer": true
+    },
+    "random_omit": {
+     "arms_mean": 0.5187093529541446,
+     "worlds": 24,
+     "selected_at_seed_0": "observer",
+     "selected": "observer",
+     "arms_below_observer": true
+    }
+   },
+   "status": {
+    "ok": 72,
+    "iteration_cap": 0,
+    "error": 0,
+    "timeout": 0,
+    "worker_exit": 0,
+    "no_traces": 0
+   }
+  }
+ }
+}
