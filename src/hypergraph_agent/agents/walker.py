@@ -52,6 +52,15 @@ instead of a uniform draw. Every walker's planning beliefs about unobserved
 items are their filtered probabilities under its node, thresholded at 0.5,
 and a visibly failed gather or activation triggers a replan. With
 ``epsilon == 0`` all of this reduces to the deterministic replay.
+
+Opt-in prior (study HP2)
+------------------------
+``Walker(..., prior=p)`` gives the sampling walkers a prior over each recipe's
+hypotheses instead of the uniform class prior: recipes without evidence are
+drawn from ``p.draw(w, signature, rng)`` and the consistent moves target the
+posterior, prior times likelihood (``mix_consistent(..., log_prior=...)`` with
+``p.log_prior(w, signature, hypothesis)``). With ``prior=None``, the default,
+every walker draws, moves and decides exactly as without the option.
 """
 
 from __future__ import annotations
@@ -396,7 +405,7 @@ def local_walk(start: dict, w: "WorldState", log, mode: str, rng: np.random.Gene
 
 
 def mix_consistent(node: dict, w: "WorldState", log, rng: np.random.Generator, max_size: int,
-                   moves: int) -> tuple[dict, dict]:
+                   moves: int, log_prior=None) -> tuple[dict, dict]:
     """Metropolis moves restricted to nodes consistent with every logged
     observation. Proposals are uniform over single edits of attempted recipes;
     a move from x to y is accepted with min(1, pi(y) |N(x)| / (pi(x) |N(y)|)),
@@ -405,7 +414,11 @@ def mix_consistent(node: dict, w: "WorldState", log, rng: np.random.Generator, m
     deterministic dynamics pi is uniform over the consistent nodes; under
     failure noise it is the posterior, uniform prior over the hypothesis class
     times the episode likelihood. A proposal with pi(y) = 0 is rejected without
-    a random draw."""
+    a random draw.
+
+    Opt-in ``log_prior(signature, hypothesis)`` (study HP2): pi becomes that
+    prior, a product over recipes, times the likelihood (deterministic: times
+    consistency). The default None leaves every draw and decision unchanged."""
     ev = w.evidence
     start = ev.evaluations
     noisy = ev.epsilon > 0
@@ -417,7 +430,8 @@ def mix_consistent(node: dict, w: "WorldState", log, rng: np.random.Generator, m
     for _ in range(moves):
         if not nb:
             break
-        nxt = apply_edit(cur, nb[int(rng.integers(len(nb)))])
+        edit = nb[int(rng.integers(len(nb)))]
+        nxt = apply_edit(cur, edit)
         if noisy:
             ll_next = ev.loglik(nxt, log)
             if ll_next == -math.inf:
@@ -426,7 +440,14 @@ def mix_consistent(node: dict, w: "WorldState", log, rng: np.random.Generator, m
             continue
         nb2 = neighbours(nxt, w.infos, attempted, max_size)
         ratio = len(nb) / max(len(nb2), 1)
-        accept = math.exp(min(0.0, ll_next - ll + math.log(ratio))) if noisy else min(1.0, ratio)
+        if log_prior is None:
+            accept = math.exp(min(0.0, ll_next - ll + math.log(ratio))) if noisy else min(1.0, ratio)
+        else:
+            sig = edit.signature
+            new, old = log_prior(sig, nxt[sig]), log_prior(sig, cur[sig])
+            gain = (0.0 if new == old else new - old) + math.log(ratio)  # equal priors cancel
+            gain += ll_next - ll if noisy else 0.0
+            accept = math.exp(min(0.0, gain)) if gain > -math.inf else 0.0
         if rng.random() < accept:
             cur, nb = nxt, nb2
             if noisy:
@@ -469,7 +490,8 @@ class Walker:
     def __init__(self, strategy: str, rng: np.random.Generator, *, epsilon: float = 0.0,
                  max_size: int = 3, max_evals: int = 400, temperature: float = 0.5,
                  restart_after: int = 80, exact_cap: int = 20_000, plan_cap: int = 4096,
-                 policy=None, consistent_moves: int = 50, omit_prob: float | None = None):
+                 policy=None, consistent_moves: int = 50, omit_prob: float | None = None,
+                 prior=None):
         if strategy not in STRATEGIES:
             raise ValueError(f"unknown strategy {strategy!r}")
         if strategy in ("learned", "learned_sample") and policy is None:
@@ -481,6 +503,7 @@ class Walker:
         self.max_size, self.max_evals, self.temperature = max_size, max_evals, temperature
         self.restart_after, self.exact_cap, self.plan_cap = restart_after, exact_cap, plan_cap
         self.policy = policy
+        self.prior = prior  # opt-in prior of the sampling walkers (study HP2); None: the uniform class prior
         self.worlds: dict[str, WorldState] = {}
         self._log_ids = 0
         self.label = f"walker:{strategy}"
@@ -547,12 +570,16 @@ class Walker:
         start = dict(w.node)
         for sig in w.hidden():  # recipes without evidence: a fresh draw from the prior
             if sig not in attempted:
-                hyps = w.hypotheses[sig]
-                start[sig] = hyps[int(self.rng.integers(len(hyps)))]
+                if self.prior is None:
+                    hyps = w.hypotheses[sig]
+                    start[sig] = hyps[int(self.rng.integers(len(hyps)))]
+                else:
+                    start[sig] = self.prior.draw(w, sig, self.rng)
         node, st = local_walk(start, w, log, mode, self.rng, self.max_size, self.max_evals,
                               self.temperature, self.restart_after, self.policy)
         if st["violations"] == 0:
-            node, mix = mix_consistent(node, w, log, self.rng, self.max_size, self.consistent_moves)
+            lp = None if self.prior is None else (lambda sig, h: self.prior.log_prior(w, sig, h))
+            node, mix = mix_consistent(node, w, log, self.rng, self.max_size, self.consistent_moves, lp)
             st = {**st, **mix, "evals": st["evals"] + mix["mix_evals"]}
         w.node = node
         return node, st

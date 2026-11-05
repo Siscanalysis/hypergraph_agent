@@ -12,6 +12,22 @@ AND within one). A level-l recipe consumes one item from level l-1 (a public
 input) plus a hidden nonempty subset (size at most ``max_true``) of a public
 pool of ``pool_size`` base facts. The pool is sampled before, and
 independently of, the hidden subset.
+
+Schema worlds (opt-in, study HP2)
+---------------------------------
+``SchemaWorldConfig`` (a ``WorldConfig`` with a ``schema``) switches on worlds
+whose requirements follow a hidden schema. Base facts belong to K classes and
+recipes to F families (the family of a recipe is that of its effect item). The
+schema gives every family the classes its requirement draws from, one fact per
+class: a family-f recipe requires, for each class of f, one pool fact of that
+class drawn uniformly. Pools are drawn uniformly among the pools that hold a
+fact of every class. Version 1 uses the declared public class table
+(``public_class``); version 2 (``hidden_classes``) draws a hidden balanced
+partition with the schema. Scope ``world`` draws a schema per world, ``stream``
+one per task stream (shared by its worlds), and ``none`` draws no schema: the
+classes are decoys and requirements follow the default rule. Every other
+config builds a plain ``WorldConfig`` and never reaches this code, so default
+worlds, tasks and streams are generated exactly as before.
 """
 
 from __future__ import annotations
@@ -91,6 +107,7 @@ class World:
     config: WorldConfig
     levels: tuple[tuple[int, int], ...]  # (item type, level)
     recipes: tuple[Recipe, ...]
+    schema: "WorldSchema | None" = None  # hidden; only schema worlds (study HP2) set it
 
     def level_of(self, item: int) -> int:
         return dict(self.levels)[item]
@@ -124,7 +141,10 @@ def _sample_recipe(rng, item, inputs, cfg, variant) -> Recipe:
     return Recipe(item, inputs, pool, true_base, variant)
 
 
-def make_world(seed: int, cfg: WorldConfig, world_key: str | None = None) -> World:
+def make_world(seed: int, cfg: WorldConfig, world_key: str | None = None,
+               schema: "WorldSchema | None" = None) -> World:
+    if isinstance(cfg, SchemaWorldConfig):  # opt-in schema worlds; ``schema``: a stream-level draw
+        return _make_schema_world(seed, cfg, world_key, schema)
     rng = np.random.default_rng(seed)
     n_items = cfg.n_levels * cfg.items_per_level
     items = [int(i) for i in rng.permutation(ITEM_TYPES)[:n_items]]
@@ -148,6 +168,148 @@ def make_world(seed: int, cfg: WorldConfig, world_key: str | None = None) -> Wor
                     break
     key = world_key or "W" + stable_hash(("world", seed))[:8]
     return World(key, seed, cfg, tuple(sorted(levels.items())), tuple(recipes))
+
+
+# ------------------------------------------------------------------ schema worlds (opt-in, study HP2)
+
+SCHEMA_SCOPES = ("world", "stream", "none")
+SCHEMA_TAG = 0x4850  # separates the schema draw of a world from its layout stream
+POOL_TRIES = 1000  # rejection sampling of a pool that holds every class (expected about 1.2 tries)
+
+
+def public_class(type_id: int, n_classes: int) -> int:
+    """Declared public class of a base type in version 1: type id modulo K."""
+    return type_id % n_classes
+
+
+def family_of(type_id: int, n_families: int) -> int:
+    """Public family of a recipe, from its effect item: item index modulo F."""
+    return (type_id - len(BASE_TYPES)) % n_families
+
+
+@dataclass(frozen=True)
+class SchemaConfig:
+    n_classes: int = 3
+    n_families: int = 4
+    scope: str = "world"
+    hidden_classes: bool = False  # version 2: a hidden balanced partition drawn with the schema
+
+    def __post_init__(self):
+        if self.scope not in SCHEMA_SCOPES:
+            raise ValueError(f"schema scope must be one of {SCHEMA_SCOPES}")
+        if self.n_classes < 1 or len(BASE_TYPES) % self.n_classes:
+            raise ValueError(f"n_classes must divide the {len(BASE_TYPES)} base types")
+        if self.n_families < 1:
+            raise ValueError("n_families must be at least 1")
+
+
+@dataclass(frozen=True)
+class SchemaWorldConfig(WorldConfig):
+    """A ``WorldConfig`` with the opt-in schema; only configs that declare
+    ``world.schema`` build one."""
+
+    schema: SchemaConfig = field(default_factory=SchemaConfig)
+
+    def __post_init__(self):
+        super().__post_init__()
+        if isinstance(self.schema, dict):
+            object.__setattr__(self, "schema", SchemaConfig(**self.schema))
+        if not isinstance(self.schema, SchemaConfig):
+            raise TypeError("schema must be a SchemaConfig or a mapping of its fields")
+        if self.schema.n_classes > self.pool_size:
+            raise ValueError("a pool must be able to hold a fact of every class")
+        if self.max_true > self.schema.n_classes:
+            raise ValueError("a requirement draws one fact per class: max_true <= n_classes")
+
+
+@dataclass(frozen=True)
+class WorldSchema:
+    """Hidden structure of a schema world (evaluator side)."""
+
+    classes: tuple[int, ...]  # class of every base type, indexed by type id
+    families: tuple[tuple[int, ...], ...]  # sorted classes of each family's requirement; () in scope none
+    hidden_classes: bool
+    scope: str
+
+
+def draw_schema(rng: np.random.Generator, cfg: SchemaWorldConfig) -> WorldSchema:
+    """Class partition (the public table, or a hidden balanced partition) and,
+    unless the scope is ``none``, each family's classes: a size drawn with
+    ``arity_weights``, then that many distinct classes uniformly."""
+    s = cfg.schema
+    if s.hidden_classes:
+        classes = [0] * len(BASE_TYPES)
+        for pos, t in enumerate(rng.permutation(BASE_TYPES)):
+            classes[int(t)] = pos % s.n_classes
+    else:
+        classes = [public_class(t, s.n_classes) for t in BASE_TYPES]
+    families: list[tuple[int, ...]] = []
+    if s.scope != "none":
+        weights = np.asarray(cfg.arity_weights, dtype=float)
+        for _ in range(s.n_families):
+            k = 1 + int(rng.choice(cfg.max_true, p=weights / weights.sum()))
+            families.append(tuple(sorted(int(c) for c in rng.choice(s.n_classes, k, replace=False))))
+    return WorldSchema(tuple(classes), tuple(families), s.hidden_classes, s.scope)
+
+
+def stream_schema_seed(base_seed: int, namespace: str) -> int:
+    return derive_seed("schema", base_seed, namespace)
+
+
+def _covering_pool(rng, cfg: SchemaWorldConfig, classes) -> tuple[int, ...]:
+    for _ in range(POOL_TRIES):
+        pool = tuple(sorted(int(b) for b in rng.choice(BASE_TYPES, cfg.pool_size, replace=False)))
+        if len({classes[b] for b in pool}) == cfg.schema.n_classes:
+            return pool
+    raise RuntimeError("no pool holding every class was drawn")
+
+
+def _sample_schema_recipe(rng, item, inputs, cfg: SchemaWorldConfig, variant, schema: WorldSchema) -> Recipe:
+    pool = _covering_pool(rng, cfg, schema.classes)
+    if schema.families:
+        wanted = schema.families[family_of(item, cfg.schema.n_families)]
+        picks = [int(rng.choice([b for b in pool if schema.classes[b] == c])) for c in wanted]
+        true_base = tuple(sorted(picks))
+    else:  # scope none: the default rule, classes are decoys
+        weights = np.asarray(cfg.arity_weights, dtype=float)
+        k = 1 + int(rng.choice(cfg.max_true, p=weights / weights.sum()))
+        true_base = tuple(sorted(int(b) for b in rng.choice(pool, k, replace=False)))
+    return Recipe(item, inputs, pool, true_base, variant)
+
+
+def _make_schema_world(seed: int, cfg: SchemaWorldConfig, world_key: str | None,
+                       schema: WorldSchema | None) -> World:
+    """``make_world`` for schema worlds: the same layout of levels, inputs and
+    alternative recipes, covering pools and schema requirements. Without a
+    stream-level ``schema`` the world draws its own from a separate stream."""
+    if schema is None:
+        if cfg.schema.scope == "stream":
+            raise ValueError("a stream-scope schema world needs the stream's schema")
+        schema = draw_schema(np.random.default_rng([seed, SCHEMA_TAG]), cfg)
+    rng = np.random.default_rng(seed)
+    n_items = cfg.n_levels * cfg.items_per_level
+    items = [int(i) for i in rng.permutation(ITEM_TYPES)[:n_items]]
+    levels = {items[i]: 1 + i // cfg.items_per_level for i in range(n_items)}
+    by_level: dict[int, list[int]] = {}
+    for it, lv in levels.items():
+        by_level.setdefault(lv, []).append(it)
+    for lv in by_level:
+        by_level[lv].sort()
+    recipes: list[Recipe] = []
+    for item in sorted(levels, key=lambda it: (levels[it], it)):
+        level = levels[item]
+        inputs = _sample_inputs(rng, by_level, level, cfg)
+        primary = _sample_schema_recipe(rng, item, inputs, cfg, 0, schema)
+        recipes.append(primary)
+        if rng.random() < cfg.p_alternative:
+            for _ in range(16):
+                inputs = _sample_inputs(rng, by_level, level, cfg)
+                alt = _sample_schema_recipe(rng, item, inputs, cfg, 1, schema)
+                if all(alt.signature(p) != primary.signature(p) for p in PROFILES):
+                    recipes.append(alt)
+                    break
+    key = world_key or "W" + stable_hash(("world", seed))[:8]
+    return World(key, seed, cfg, tuple(sorted(levels.items())), tuple(recipes), schema)
 
 
 @dataclass(frozen=True)
@@ -333,6 +495,18 @@ class TaskStream:
     def __init__(self, cfg: TaskStreamConfig):
         self.cfg = cfg
         self._worlds: dict[int, World] = {}
+        self._schema: WorldSchema | None = None
+
+    def stream_schema(self) -> WorldSchema | None:
+        """The schema shared by every world of the stream (scope ``stream`` of
+        the opt-in schema worlds); None for every other config."""
+        w = self.cfg.world
+        if not (isinstance(w, SchemaWorldConfig) and w.schema.scope == "stream"):
+            return None
+        if self._schema is None:
+            seed = stream_schema_seed(self.cfg.base_seed, self.cfg.namespace)
+            self._schema = draw_schema(np.random.default_rng(seed), w)
+        return self._schema
 
     def world_index(self, i: int) -> int:
         if self.cfg.world_mode == "per_task":
@@ -350,7 +524,7 @@ class TaskStream:
             else:
                 seed = derive_seed("world", c.base_seed, c.namespace, widx)
                 key = "W" + stable_hash(("world", c.base_seed, c.namespace, widx))[:8]
-            self._worlds[widx] = make_world(seed, c.world, key)
+            self._worlds[widx] = make_world(seed, c.world, key, self.stream_schema())
         return self._worlds[widx]
 
     def task(self, i: int) -> Task:

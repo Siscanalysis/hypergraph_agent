@@ -1,0 +1,59 @@
+# Study HP1 measurement (docs/studies/HP1_size_prior.md): the exact posterior with requirement-size
+# priors, offline, on recorded logs only (no interaction, no ledger). Reads study M's M1 collection
+# (namespace markov_sel) and study X2's generated sets (namespace x2_gen) read-only, as their own
+# run selection chooses them.
+#   python -m hypergraph_agent.evaluation.hybrid_priors hp1 \
+#       --config configs/hybrid_priors_offline/hp1_main.yaml --runs runs --out artifacts/hybrid_priors
+name: hp1-main
+sources:
+  - {name: m1_focused, study: m1, prefix: markov-m1-, strategy: focused_sample, namespace: markov_sel,
+     expected_worlds: 60}
+  - {name: m1_maximal, study: m1, prefix: markov-m1-, strategy: maximal, namespace: markov_sel,
+     expected_worlds: 60}
+  - {name: x2_goal_focused, study: x2, prefix: x2-main-, set: gen_goal, strategy: focused_sample,
+     namespace: x2_gen, expected_worlds: 60}
+  - {name: x2_goal_random, study: x2, prefix: x2-main-, set: gen_goal, strategy: random_omit,
+     namespace: x2_gen, expected_worlds: 60}
+  - {name: x2_goal_maximal, study: x2, prefix: x2-main-, set: gen_goal, strategy: maximal,
+     namespace: x2_gen, expected_worlds: 60}
+  - {name: x2_obs_focused, study: x2, prefix: x2-main-, set: gen_obs, strategy: focused_sample,
+     namespace: x2_gen, expected_worlds: 60}
+  - {name: x2_obs_random, study: x2, prefix: x2-main-, set: gen_obs, strategy: random_omit,
+     namespace: x2_gen, expected_worlds: 60}
+  - {name: x2_obs_maximal, study: x2, prefix: x2-main-, set: gen_obs, strategy: maximal,
+     namespace: x2_gen, expected_worlds: 60}
+checkpoints: [4, 8, 12, 16]
+priors: [uniform, oracle, learned_world, learned_stream, marginal_world, marginal_stream]
+hyperprior_strength: 2.0
+oracle_sizes: [0.2, 0.5, 0.3]
+posterior: {exact_work: 2000000, starts: 4, sweeps: 40, burn: 10, walk_evals: 4000}
+bootstrap: {resamples: 10000, seed: 20261008}
+m1_artifact: artifacts/markov/m1_ranking.json
+# the primary was switched from learned_stream to marginal_stream before the freeze (the pinned
+# recipes are a selected sample: docs/studies/HP1_size_prior.md); learned_stream is S1
+primary: {source: m1_focused, k: 4, a: marginal_stream, b: uniform, metric: brier, margin: 0.005}
+secondary:
+  - {name: "S1 learned_stream - uniform, Brier score (the design note's estimator)", source: m1_focused,
+     k: 4, a: learned_stream, b: uniform, metric: brier, holds: decision, margin: 0.005}
+  - {name: "S2 oracle - uniform, Brier score (the bound)", source: m1_focused, k: 4, a: oracle,
+     b: uniform, metric: brier, holds: below}
+  - {name: "S3 marginal_stream - learned_stream, Brier score", source: m1_focused, k: 4,
+     a: marginal_stream, b: learned_stream, metric: brier, holds: below}
+  - {name: "S4 learned_world - uniform, Brier score", source: m1_focused, k: 4, a: learned_world,
+     b: uniform, metric: brier, holds: equivalent, margin: 0.005}
+  - {name: "S5 learned_stream - uniform, AUROC", source: m1_focused, k: 4, a: learned_stream, b: uniform,
+     metric: auroc, holds: equivalent, margin: 0.01}
+  - {name: "S6 learned_stream - uniform, F1", source: m1_focused, k: 4, a: learned_stream, b: uniform,
+     metric: f1, holds: decision, margin: 0.03}
+  - {name: "S7 marginal_stream - uniform, F1", source: m1_focused, k: 4, a: marginal_stream, b: uniform,
+     metric: f1, holds: decision, margin: 0.03}
+  - {name: "S8 learned_stream - uniform, Brier score, 16 episodes", source: m1_focused, k: 16,
+     a: learned_stream, b: uniform, metric: brier, holds: decision, margin: 0.005}
+  - {name: "S9 learned_stream - uniform, Brier score, X2 goal-only", source: x2_goal_focused, k: 4,
+     a: learned_stream, b: uniform, metric: brier, holds: decision, margin: 0.005}
+  - {name: "S10 learned_stream - uniform, Brier score, X2 items observable", source: x2_obs_focused, k: 4,
+     a: learned_stream, b: uniform, metric: brier, holds: decision, margin: 0.005}
+  - {name: "S11 learned_stream - uniform, Brier score, X2 random omission", source: x2_goal_random, k: 4,
+     a: learned_stream, b: uniform, metric: brier, holds: decision, margin: 0.005}
+  - {name: "S12 marginal_stream - uniform, Brier score, X2 goal-only", source: x2_goal_focused, k: 4,
+     a: marginal_stream, b: uniform, metric: brier, holds: below}

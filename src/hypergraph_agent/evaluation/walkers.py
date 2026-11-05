@@ -113,8 +113,9 @@ def stream_budget(cfg: dict, seed: int, variant: dict) -> int:
 
 def make_walker(strategy: str, wc: dict, seed_key, epsilon: float, policy=None):
     """An ``agents.walker`` strategy, or else an ``agents.policygraph`` agent (study
-    PG) or an ``agents.markov`` agent (study M), whose modules are imported only
-    when one of their strategies (or an unknown one) is asked for."""
+    PG), an ``agents.hybrid`` agent (study HP2) or an ``agents.markov`` agent
+    (study M), whose modules are imported only when one of their strategies (or
+    an unknown one) is asked for."""
     rng = np.random.default_rng(derive_seed("walker", *seed_key) % (2 ** 32))
     if strategy not in STRATEGIES:
         from ..agents.policygraph import PG_STRATEGIES, make_policy_graph_agent
@@ -123,6 +124,16 @@ def make_walker(strategy: str, wc: dict, seed_key, epsilon: float, policy=None):
                              f"{sorted(set(PG_STRATEGIES) & set(STRATEGIES))}")
         if strategy in PG_STRATEGIES:
             return make_policy_graph_agent(strategy, rng, epsilon)
+        from ..agents.hybrid import HP_STRATEGIES
+        if set(HP_STRATEGIES) & (set(STRATEGIES) | set(PG_STRATEGIES)):
+            raise ValueError(f"HP2 strategies shadow walker or policy-graph strategies: "
+                             f"{sorted(set(HP_STRATEGIES) & (set(STRATEGIES) | set(PG_STRATEGIES)))}")
+        if strategy in HP_STRATEGIES:
+            if strategy == "oracle_schema":  # privileged: built on the evaluator side
+                from .hybrid_priors import make_oracle_agent
+                return make_oracle_agent(rng, wc, epsilon)
+            from ..agents.hybrid import make_hybrid_agent
+            return make_hybrid_agent(strategy, rng, wc, epsilon)
         from ..agents.markov import MARKOV_STRATEGIES, make_markov_agent
         if set(MARKOV_STRATEGIES) & set(PG_STRATEGIES):
             raise ValueError(f"Markov strategies shadow policy-graph strategies: "
@@ -130,6 +141,9 @@ def make_walker(strategy: str, wc: dict, seed_key, epsilon: float, policy=None):
         if set(MARKOV_STRATEGIES) & set(STRATEGIES):
             raise ValueError(f"Markov strategies shadow walker strategies: "
                              f"{sorted(set(MARKOV_STRATEGIES) & set(STRATEGIES))}")
+        if set(MARKOV_STRATEGIES) & set(HP_STRATEGIES):
+            raise ValueError(f"Markov strategies shadow HP2 strategies: "
+                             f"{sorted(set(MARKOV_STRATEGIES) & set(HP_STRATEGIES))}")
         return make_markov_agent(strategy, rng, wc, epsilon)
     return Walker(strategy, rng,
                   epsilon=epsilon, max_evals=wc["max_evals"], temperature=wc["temperature"],

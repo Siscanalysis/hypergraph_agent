@@ -408,3 +408,133 @@ posterior's, out of class, random-omission evidence, 16 episodes; the sampling w
 the replication, and the controls are a posterior over every subset of the pool and the full pool,
 which needs no inference. Status: `established` for the cited methods; RL claims no new method,
 only the measurement.
+
+## 13. Related work for studies HP1 and HP2 (checked 2026-11-05)
+
+Studies HP1 and HP2 (docs/studies/HP1_size_prior.md and docs/studies/HP2_schema_priors.md) are the
+two stages of experiment RB-C of docs/studies/RB_rule_builder_design.md (roadmap item 6i), the
+hybrid of idea I4 in which the graph supplies the objects and priors over them are learned from the
+agent's own evidence. HP1 replaces the uniform prior over each recipe's requirement size in the
+exact posterior by a size prior learned from that evidence (from the exact marginal likelihood of
+all of it in the primary arm, from the recipes already pinned down in the design note's empirical
+Bayes estimator), offline on the logs of studies M and X2. HP2 learns lifted rules over recipe
+families and fact classes (public in version 1, hidden in version 2), averages them against a
+no-schema model and gives the result to the sampling walker as its prior. Entries were checked
+against the DOI registry record (Crossref) or the publisher, proceedings or repository page and,
+where a copy of the paper could be opened, against its text (depth in the table). Project Euclid,
+dblp and the ACM Digital Library refused automated requests, so B3, B5, B6 and B10 were checked
+against the proceedings' own PDFs or scans, the authors' corrected copy and Crossref records.
+Identifiers start a new prefix: B (Bayesian hierarchical priors). R4 (MSGI), A2 (SAM) and A3 (OHCAM)
+are in Section 2, W1 and W5 in Section 7, N4 and N6 in Section 8.1, and E3, E7 and E11 in
+Section 12.
+
+| Id | Authors (as verified) | Title | Year, venue (as verified) | URL | Depth |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| B1 | C. Kemp, N. D. Goodman, J. B. Tenenbaum | Learning to Learn Causal Models | 2010, Cognitive Science 34(7):1185-1243 | https://doi.org/10.1111/j.1551-6709.2010.01128.x | `methods` (abstract, Sections 4 and 8 and the prior of Appendix A read in part; experiments not read) |
+| B2 | C. Kemp, A. Perfors, J. B. Tenenbaum | Learning overhypotheses with hierarchical Bayesian models | 2007, Developmental Science 10(3):307-321 | https://doi.org/10.1111/j.1467-7687.2007.00585.x | `methods` (introduction and the feature-variability model read; the model of ontological kinds not read) |
+| B3 | C. Kemp, J. B. Tenenbaum, T. L. Griffiths, T. Yamada, N. Ueda | Learning Systems of Concepts with an Infinite Relational Model (IRM) | 2006, AAAI, pp. 381-388 (Proc. Twenty-First National Conference on Artificial Intelligence, AAAI Press) | https://cdn.aaai.org/AAAI/2006/AAAI06-061.pdf | `methods` (model and inference read; the four applications not read) |
+| B5 | C. Diuk, A. Cohen, M. L. Littman | An Object-Oriented Representation for Efficient Reinforcement Learning | 2008, ICML, pp. 240-247 | https://doi.org/10.1145/1390156.1390187 | `methods` (Sections 1 to 5, the OO-MDP and the learner DOORMAX; experiments not read) |
+| B6 | H. Robbins | An Empirical Bayes Approach to Statistics | 1956, Proceedings of the Third Berkeley Symposium on Mathematical Statistics and Probability, vol. 1 (Contributions to the Theory of Statistics, ed. J. Neyman), pp. 157-163, University of California Press | https://doi.org/10.1525/9780520313880-015 (reissue of the volume) | `methods` (pages 157 to 160 read, the rest skimmed, in an OCR of a scan of the proceedings) |
+| B7 | D. B. Rubin | Inference and missing data | 1976, Biometrika 63(3):581-592 | https://doi.org/10.1093/biomet/63.3.581 | `abstract` (summary on the publisher's page; the full text is behind a subscription, so the definitions were taken from B8, Sections 8.2 and 8.9) |
+| B8 | A. Gelman, J. B. Carlin, H. S. Stern, D. B. Dunson, A. Vehtari, D. B. Rubin | Bayesian Data Analysis | 2013, Chapman and Hall/CRC (CRC Press), third edition (book), 675 pp. | https://doi.org/10.1201/b16018; electronic edition of the same edition, errors fixed as of 2025-02-20: https://sites.stat.columbia.edu/gelman/book/BDA3.pdf | `methods` (Sections 3.4, 5.1 to 5.3, 7.4, 8.2 and 8.4 read in the electronic edition) |
+| B9 | R. E. Kass, A. E. Raftery | Bayes Factors | 1995, JASA 90(430):773-795 | https://doi.org/10.1080/01621459.1995.10476572 | `abstract` (abstract and Section 1 of the published PDF read) |
+| B10 | J. A. Hoeting, D. Madigan, A. E. Raftery, C. T. Volinsky | Bayesian Model Averaging: A Tutorial (with comments by M. Clyde, D. Draper and E. I. George, and a rejoinder by the authors) | 1999, Statistical Science 14(4):382-417 (the tutorial is 382-401); correction: 2000, Statistical Science 15(3):193-195, doi:10.1214/ss/1009212814 | https://doi.org/10.1214/ss/1009212519 | `methods` (abstract and Sections 1, 3.1 and 5 of the authors' corrected version read; the correction notice itself not opened) |
+
+B4 (Section 5, item 8: Sohn et al., MTSGI, UAI 2022; screened there from its abstract and not
+registered) is not duplicated here. For this study its proceedings page (PMLR 180:1857-1865,
+https://proceedings.mlr.press/v180/sohn22a.html) confirms the venue that item 8 took from the arXiv
+comments, and its Sections 1, 4 and 6.6 were read (the appendix was not): depth `methods`.
+
+B6 is cited as 1955 (the year of the symposium, which met in December 1954 and in July and August
+1955; B8's bibliography gives 1955 and pages 157-164) and as 1956 (the imprint of the volume); its
+pages are 157-163 in the proceedings and 157-164 in the University of California Press reissue
+record. A correction to B10 was published, and its authors ask that the corrected version
+(http://www.stat.washington.edu/www/research/online/hoeting1999.pdf) be cited with the article; what
+the correction changes was not read.
+
+Overlaps. HP1. A size prior learned across recipes and worlds is an overhypothesis in the sense of
+B2, a constraint on the hypotheses of every unit that is itself learned from many units: in B2's
+bags-of-marbles model each bag's color distribution is drawn from a Dirichlet distribution whose
+parameters alpha (how uniform a bag is) and beta (the distribution of colors across the collection
+of bags) are learned, and HP1's size vector is the counterpart of beta, with none for alpha because
+a recipe has one requirement (both studies cite B2; B1 carries the same idea to causal schemata). B6
+is the empirical Bayes problem in its original form: the same decision recurs with parameters drawn
+independently from a fixed but unknown distribution, and that distribution is estimated from the
+earlier units, from their parameters when all of them are known (HP1's pinned-recipe arms, where the
+known recipes are in fact a subset chosen by their size) and otherwise from their observations
+through the marginal distribution (HP1's marginal-likelihood arms, its primary); its estimators are
+nonparametric, HP1's a Dirichlet hyperprior over three sizes. B8 supplies the parts: the
+Dirichlet-multinomial conjugate update (Section 3.4, the form of HP1's pinned-recipe estimate) and
+hyperpriors in hierarchical models (Sections 5.1 to 5.3, worked on a beta-binomial example;
+Chapter 5 does not use the Dirichlet distribution, so their combination is not worked there), and it
+says (p. 104) that using the data to estimate the prior parameters, sometimes called empirical
+Bayes, approximates the complete hierarchical analysis. B7 gives the conditions under which the
+process that produced the evidence can be ignored by likelihood and Bayesian inference (missing at
+random, and parameters of that process distinct from those of the data model), and B8 restates them
+(Section 8.2) and adds that a sequential design is ignorable given the earlier outcomes it uses
+(Section 8.4); HP1 relies on this for the fixed evidence policies of studies M and X2 when it uses
+the likelihood of all the evidence (its primary arm), whereas the pinned-recipe arms condition on a
+subset selected by the recipes' own sizes. N6's smallest satisfying set (which rests on defectives
+being rare), A3's simplicity prior and the description-length prior that study RL takes from E11 are
+declared in advance; HP1 measures a learned prior in their place.
+
+HP2, learned rules. B1 is the source of the idea HP2 tests: a schema learned across objects that
+groups them into categories (under a prior on partitions that favours few categories), holds
+category-level causal models and laws for how categories interact, and lets the models of later
+objects be learned faster. HP2 takes families and classes as the types and the rule "a family-f
+recipe requires one fact of each class in C_f" as the law between them, with K = 3 and F = 4 fixed
+and, in version 1, public labels, so what is learned is each family's class set (seven candidates),
+not the categories. B3 infers classes of entities from the relations they take part in, with a
+Chinese restaurant process prior that leaves the number of classes open and a hill-climbing search
+(B1 cites it as one of the two models of categorization that its schema learning builds on); HP2's
+version 2 asks the same question of the facts that the evidence shows to be required, with K = 3 and
+exact enumeration by clingo (E7) up to a cap of 50,000 models. B4 (Section 5, item 8), the design
+note's closest work in reinforcement learning, stores the subtask graphs inferred on its training
+tasks, retrieves the one most similar to a new task (Equations 8 to 11) and combines a policy built
+on that graph with the policy built on the graph inferred from the new task's own trajectory by the
+maximum-likelihood tree fit of MSGI (R4; Equations 3, 4 and 13); its prior is a retrieved graph, not
+a distribution that is multiplied into a posterior and averaged against an alternative as in HP2
+(the appendix derivation of its ensemble was not read). Its comparison with MSGI (R4) is the same
+inference with and without the stored prior, on hidden subtask graphs; no true-prior reference or
+harm check appears in its Section 6 (the appendix was not read). B5 states dynamics at the class
+level (the classes, attributes and the relations that define its terms are part of the OO-MDP
+specification) and learns the conjunctive condition of each effect in deterministic worlds by
+intersecting the conditions in which the effect was seen and keeping failure conditions, with a
+polynomial KWIK sample bound (a worst-case bound without its uniqueness assumption comes from a
+variant of SLF-Rmax, N4); the intersection is also SAM's rule (A2). HP2's version 1 also states its
+rule over supplied classes, but as a posterior over class sets that feeds a sampler, and version 2
+infers the classes.
+
+HP2, model averaging. B9 reviews the Bayes factor, the posterior odds of one hypothesis when the
+prior probabilities are equal, describes how Bayes factors become weights on models for a composite
+prediction and discusses their dependence on the priors within each model (its Section 5); HP2's
+schema weight w, with model prior 0.5 and the two marginal likelihoods, is that weight for two
+models, so a wrong schema loses weight only as fast as the Bayes factor separates the models (HP2's
+H1). B8 (Section 7.4) cautions that the marginal likelihood is highly sensitive to aspects of the
+model that are typically assigned arbitrarily, which HP2 lists among its limits (the uniform prior
+over class sets, the independent class labels of version 2). B10 is the tutorial on averaging over
+models with weights equal to posterior model probabilities (its equations 1 to 3), treats equal
+prior model probabilities as the neutral choice (Section 5) and approximates large sums by Markov
+chain Monte Carlo model composition, a chain over models that it attributes to Madigan and York
+(1995), the work registered as W1 in Section 7, which B10 cites with pages 215-232; HP2's average
+has two models, so its sum is exact. The walker is posterior sampling in the sense of W5, and HP2
+changes only the prior it samples under; E3 places a prior over rule sets and searches for its MAP
+set, and A3 keeps a Bayesian posterior over action models with a simplicity prior, whereas HP2's
+prior is learned from the other recipes and can be overruled by the posterior's consistency check.
+
+Decisive test (as in the protocols of 2026-11-05). HP1 (offline, on the logs of study M's M1
+collection and study X2's generated sets) scores the exact posterior's candidate marginals against
+the hidden requirements under the uniform class prior, the generator's own size weights (privileged,
+the bound in expectation over worlds), a Dirichlet size prior learned from the recipes already
+pinned down (within a world and across the worlds of a stream) and the same hyperprior updated by
+the exact likelihood of all the evidence. Primary: Brier score of the stream-level
+marginal-likelihood prior minus that of the uniform prior at 4 episodes on the 60 worlds of study
+M's focused-sampling logs, falsified by equivalence within 0.005 or by the uniform prior winning
+(the pinned-recipe prior is the first secondary test); AUROC is nearly insensitive to size priors by
+construction. HP2 (online, on a new opt-in generator of schema worlds) compares the sampling walker
+under the learned lifted prior with the same walker under its uniform prior, with the true schema as
+a privileged reference, the rules alone without the consistency check, and worlds without a schema
+as the harm check. Primary: late cost ratio (episodes 9 to 16) over 50 worlds with public labels,
+falsified by equivalence within 10% of the posterior's mean; hidden classes (version 2) and schemas
+shared across a stream are secondary tests. Status: `established` for the cited methods; HP1 and HP2
+claim no new method, only the measurement.

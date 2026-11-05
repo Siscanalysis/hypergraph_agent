@@ -1,0 +1,42 @@
+# Study HP1 development (docs/studies/HP1_size_prior.md): the measurement analysis on development
+# logs only (study M's namespace markov_dev and study X2's x2_gen_dev, two worlds per policy),
+# read-only, to check the pipeline and its runtime. Outcomes are calibration, not results.
+#   python -m hypergraph_agent.evaluation.hybrid_priors hp1 \
+#       --config configs/hybrid_priors_offline/hp1_dev.yaml --runs runs --out ../scratch/hp1_dev
+name: hp1-dev
+sources:
+  - {name: m1_focused, study: m1, prefix: markov-dev-m1-, strategy: focused_sample, namespace: markov_dev,
+     expected_worlds: 2}
+  - {name: m1_maximal, study: m1, prefix: markov-dev-m1-, strategy: maximal, namespace: markov_dev,
+     expected_worlds: 2}
+  - {name: x2_goal_focused, study: x2, prefix: x2-dev-, set: gen_goal, strategy: focused_sample,
+     namespace: x2_gen_dev, expected_worlds: 2}
+  - {name: x2_goal_random, study: x2, prefix: x2-dev-, set: gen_goal, strategy: random_omit,
+     namespace: x2_gen_dev, expected_worlds: 2}
+  - {name: x2_goal_maximal, study: x2, prefix: x2-dev-, set: gen_goal, strategy: maximal,
+     namespace: x2_gen_dev, expected_worlds: 2}
+  - {name: x2_obs_focused, study: x2, prefix: x2-dev-, set: gen_obs, strategy: focused_sample,
+     namespace: x2_gen_dev, expected_worlds: 2}
+  - {name: x2_obs_random, study: x2, prefix: x2-dev-, set: gen_obs, strategy: random_omit,
+     namespace: x2_gen_dev, expected_worlds: 2}
+  - {name: x2_obs_maximal, study: x2, prefix: x2-dev-, set: gen_obs, strategy: maximal,
+     namespace: x2_gen_dev, expected_worlds: 2}
+checkpoints: [4, 8, 12, 16]
+priors: [uniform, oracle, learned_world, learned_stream, marginal_world, marginal_stream]
+hyperprior_strength: 2.0
+oracle_sizes: [0.2, 0.5, 0.3]
+posterior: {exact_work: 2000000, starts: 4, sweeps: 40, burn: 10, walk_evals: 4000}
+bootstrap: {resamples: 10000, seed: 20261008}
+m1_artifact: null
+primary: {source: m1_focused, k: 4, a: marginal_stream, b: uniform, metric: brier, margin: 0.005}
+secondary:
+  - {name: "S1 learned_stream - uniform, Brier score (the design note's estimator)", source: m1_focused,
+     k: 4, a: learned_stream, b: uniform, metric: brier, holds: decision, margin: 0.005}
+  - {name: "S2 oracle - uniform, Brier score (the bound)", source: m1_focused, k: 4, a: oracle,
+     b: uniform, metric: brier, holds: below}
+  - {name: "S5 learned_stream - uniform, AUROC", source: m1_focused, k: 4, a: learned_stream, b: uniform,
+     metric: auroc, holds: equivalent, margin: 0.01}
+  - {name: "S6 learned_stream - uniform, F1", source: m1_focused, k: 4, a: learned_stream, b: uniform,
+     metric: f1, holds: decision, margin: 0.03}
+  - {name: "S9 learned_stream - uniform, Brier score, X2 goal-only", source: x2_goal_focused, k: 4,
+     a: learned_stream, b: uniform, metric: brier, holds: decision, margin: 0.005}

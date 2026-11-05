@@ -10,7 +10,7 @@ from pathlib import Path
 
 import yaml
 
-from .envs.generator import TaskConfig, TaskStreamConfig, WorldConfig
+from .envs.generator import SchemaWorldConfig, TaskConfig, TaskStreamConfig, WorldConfig
 from .training.ppo import PPOConfig
 
 DEFAULTS: dict = {
@@ -71,6 +71,11 @@ DEFAULTS: dict = {
               "use_posterior": True}],
 }
 
+# opt-in keys of study HP2, accepted only where a config declares them and absent from DEFAULTS, so
+# every other config loads to the same dictionary as before: the schema of generator schema worlds
+# (validated by ``envs.generator.SchemaConfig``) and the parameters of ``agents.hybrid``
+OPTIONAL_KEYS = {"world": ("schema",), "walker": ("hybrid",)}
+
 ARM_DEFAULTS = {"encoder": "gated", "graph_mode": "known", "topology": "none",
                 "use_posterior": True,
                 # P3 only: library growth after the fork, dependency/contract revision
@@ -82,6 +87,9 @@ ARM_DEFAULTS = {"encoder": "gated", "graph_mode": "known", "topology": "none",
 def _merge(base: dict, over: dict, path: str = "") -> dict:
     out = copy.deepcopy(base)
     for k, v in over.items():
+        if k in OPTIONAL_KEYS.get(path, ()) and k not in base:
+            out[k] = copy.deepcopy(v)
+            continue
         if k not in base and path not in ("eval.tasks", "skills", "walker.eval_variants", "walker.markov"):
             raise KeyError(f"unknown config key {path + '.' + k if path else k}")
         if isinstance(v, dict) and isinstance(base.get(k), dict):
@@ -109,6 +117,9 @@ def load_config(path: str | Path) -> dict:
 def world_config(cfg: dict) -> WorldConfig:
     w = dict(cfg["world"])
     w["arity_weights"] = tuple(w["arity_weights"])
+    if w.get("schema") is not None:  # opt-in schema worlds (study HP2)
+        return SchemaWorldConfig(**w)
+    w.pop("schema", None)
     return WorldConfig(**w)
 
 

@@ -17,7 +17,7 @@ from hypergraph_agent.topology.snapshot import TopologyManager
 from helpers import CHAIN_FACTS, T, chain_world, recipe, task, world
 
 SRC = pathlib.Path(__file__).resolve().parents[1] / "src" / "hypergraph_agent"
-LEARNING_PACKAGES = ("agents", "representations", "topology", "skills", "training")
+LEARNING_PACKAGES = ("agents", "representations", "topology", "skills", "training", "priors")
 
 
 def canary_pair():

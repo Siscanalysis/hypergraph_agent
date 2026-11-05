@@ -150,7 +150,7 @@ Not usable here without Linux or WSL: Popper (needs SWI-Prolog), DreamCoder, bab
 dlplan, flexfringe (MSYS2 build), the differentiable ILP systems (Python 2.7 era), pyoperon (no
 Windows build). LILO and WorldCoder need a language-model API.
 
-## 4. Closest prior work (records verified; see docs/PRIOR_ART.md once a study is frozen)
+## 4. Closest prior work (records verified; see docs/PRIOR_ART.md, Sections 12 and 13)
 
 - I2: Yu, Ignatiev, Stuckey and Le Bodic, optimal decision sets and lists with SAT (JAIR 72, 2021);
   Angelino et al., CORELS (JMLR 18, 2018); Wang et al., Bayesian rule sets (JMLR 18, 2017); Cohen,

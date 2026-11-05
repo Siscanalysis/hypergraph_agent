@@ -7,6 +7,12 @@ of candidate base facts. The hidden base requirement B is assumed to be a
 nonempty subset of the pool with at most ``max_size`` elements (41 hypotheses
 for a pool of six and ``max_size`` three). The prior is uniform over that class.
 
+Opt-in priors (study HP1): ``DependencyModel(..., log_prior=f)`` starts every
+recipe from ``f(pool, hypotheses)`` instead of the uniform prior, and
+``size_log_prior`` builds such a prior from requirement-size probabilities
+(each size's probability spread uniformly over the hypotheses of that size).
+Without them nothing changes.
+
 Likelihood (monotone, single-effect, known noise ``epsilon``)
 -------------------------------------------------------------
 Evidence is ``(public facts before, attempted recipe, effect appeared?)`` and is
@@ -43,9 +49,32 @@ def enumerate_hypotheses(pool_size: int, max_size: int) -> tuple[tuple[int, ...]
     return tuple(hyps)
 
 
-def prior_marginal(pool_size: int, max_size: int) -> float:
+def prior_marginal(pool_size: int, max_size: int, size_weights=None) -> float:
+    """Prior probability that one candidate is required: under the uniform class
+    prior, or (opt-in) under requirement-size probabilities ``size_weights``
+    (sizes 1..max_size), where it is the expected size over the pool size."""
     hyps = enumerate_hypotheses(pool_size, max_size)
-    return sum(1 for h in hyps if 0 in h) / len(hyps)
+    if size_weights is None:
+        return sum(1 for h in hyps if 0 in h) / len(hyps)
+    w = np.asarray(size_weights, dtype=float)[: max_size]
+    return float(sum((k + 1) * p for k, p in enumerate(w / w.sum())) / pool_size)
+
+
+def size_log_prior(size_weights, hypotheses) -> np.ndarray:
+    """Log prior over ``hypotheses`` (tuples of pool positions) whose size k has
+    probability ``size_weights[k - 1]``, spread uniformly over the hypotheses
+    of size k; sizes without a hypothesis are dropped and the rest renormalized.
+    A size of probability 0 gives -inf."""
+    w = np.asarray(size_weights, dtype=float)
+    sizes = np.array([len(h) for h in hypotheses])
+    present = sorted(set(sizes.tolist()))
+    total = sum(w[k - 1] for k in present)
+    if total <= 0:
+        raise ValueError("size weights give no mass to the hypothesis class")
+    with np.errstate(divide="ignore"):
+        per_size = {k: math.log(w[k - 1] / total) - math.log(int((sizes == k).sum())) if w[k - 1] > 0
+                    else -math.inf for k in present}
+    return np.array([per_size[k] for k in sizes])
 
 
 @dataclass(frozen=True)
@@ -118,16 +147,21 @@ def _logsumexp(v: np.ndarray) -> float:
 class DependencyModel:
     """Beliefs for one scope (a world, a task, or a training prior)."""
 
-    def __init__(self, scope_key: str, epsilon: float, max_size: int = 3):
+    def __init__(self, scope_key: str, epsilon: float, max_size: int = 3, log_prior=None):
         if not 0.0 <= epsilon < 1.0:
             raise ValueError("epsilon must be in [0, 1)")
         self.scope_key = scope_key
         self.epsilon = epsilon
         self.max_size = max_size
         self.rules: dict[str, RuleBelief] = {}
+        # opt-in prior: f(pool, hypotheses) -> log prior per hypothesis; None is the uniform prior
+        self.log_prior = log_prior
 
     def config(self) -> dict:
-        return {"epsilon": self.epsilon, "max_size": self.max_size, "prior": "uniform"}
+        if self.log_prior is None:
+            return {"epsilon": self.epsilon, "max_size": self.max_size, "prior": "uniform"}
+        return {"epsilon": self.epsilon, "max_size": self.max_size,
+                "prior": getattr(self.log_prior, "label", "custom")}
 
     def config_hash(self) -> str:
         return stable_hash(self.config())
@@ -137,8 +171,12 @@ class DependencyModel:
             return self.rules[signature]
         pool = tuple(sorted(pool))
         hyps = enumerate_hypotheses(len(pool), min(self.max_size, len(pool)))
-        belief = RuleBelief(signature, tuple(sorted(item_inputs)), pool, hyps,
-                            np.full(len(hyps), -math.log(len(hyps))))
+        if self.log_prior is None:
+            start = np.full(len(hyps), -math.log(len(hyps)))
+        else:
+            lp = np.asarray(self.log_prior(pool, hyps), dtype=float)
+            start = lp - _logsumexp(lp)
+        belief = RuleBelief(signature, tuple(sorted(item_inputs)), pool, hyps, start)
         self.rules[signature] = belief
         return belief
 
