@@ -1,7 +1,8 @@
 # Rule builder: design of a research path (draft, not a protocol)
 
-Status: design, 2026-10-29; RB-A, RB-B and RB-C (both stages) chosen and in preparation as studies RL,
-CA, HP1 and HP2. Nothing here is frozen and nothing has been run. Each
+Status: design, 2026-10-29; RB-A frozen as study RL (7dacf57), RB-C stages 1 and 2 frozen as studies
+HP1 and HP2 (ec5b442), RB-B frozen as study CA (2026-11-05, by the commit that freezes its protocol).
+This note itself is not a protocol and nothing in it has been run. Each
 experiment below becomes its own study (protocol, ledger, independent review, freeze, clean-checkout
 measurement, independent results check) only once it is chosen. Tools were installed and timed on
 this machine (Windows, Python 3.12) on small synthetic tasks shaped like these worlds; the timings
@@ -139,7 +140,7 @@ prior learned from the agent's own solved recipes is the simplest rule over grap
 | scikit-learn 1.9.1 (CART) | BSD-3 | wheel | classifier baseline (RB-A) |
 | wittgenstein 0.3.5 (RIPPER) | MIT | pure Python | rule-list baseline (RB-A) |
 | imodels 3.0.4 (FIGS) | MIT | pure wheel; no CORELS class in this version | rule-based baseline (RB-A) |
-| stitch-core 0.1.29 | MIT | wheel | compression-based atoms (RB-B) |
+| stitch-core 0.1.29 | MIT (upstream Stitch; the PyPI package declares none) | wheel | compression-based atoms (RB-B) |
 | byte-pair encoding | none | 20 lines in the repository | compression-based atoms (RB-B) |
 | AALpy 2.0.0 | MIT | pure wheel | automaton baseline for sequence rules (later) |
 | scarlet-ltl 0.0.4 | MIT (ltlf2dfa: LGPL-3.0) | pure wheel | temporal-logic baseline (later) |
@@ -150,7 +151,10 @@ Not usable here without Linux or WSL: Popper (needs SWI-Prolog), DreamCoder, bab
 dlplan, flexfringe (MSYS2 build), the differentiable ILP systems (Python 2.7 era), pyoperon (no
 Windows build). LILO and WorldCoder need a language-model API.
 
-## 4. Closest prior work (records verified; see docs/PRIOR_ART.md, Sections 12 and 13)
+## 4. Closest prior work
+
+The records of RB-A, RB-B and RB-C are registered and verified in docs/PRIOR_ART.md, Sections 12 to
+14; the entries for the other ideas (I1, I5, I6) are not yet registered.
 
 - I2: Yu, Ignatiev, Stuckey and Le Bodic, optimal decision sets and lists with SAT (JAIR 72, 2021);
   Angelino et al., CORELS (JMLR 18, 2018); Wang et al., Bayesian rule sets (JMLR 18, 2017); Cohen,

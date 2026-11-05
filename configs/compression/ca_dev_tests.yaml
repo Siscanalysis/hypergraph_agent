@@ -1,0 +1,22 @@
+# Study CA, development only (allocation dev, namespace ca_dev): the second development pass, the
+# three arms whose actions depend on the corpus (promote_stitch, promote_bpe, enum_frag) with the
+# measurement's corpus `tests`, on the worlds, seeds and agent seeds of ca_dev.yaml; every other arm
+# ignores the corpus, so its ca_dev.yaml runs serve as the anchors of this pass. Calibration, not
+# study results.
+run: {name: ca-dev-tests, study: CA, allocation: dev, seeds: [0, 1], ledger: runs/CA-ledger.json}
+ledger:
+  allocations: {dev: 300000, ca_main: 1190400}
+  adaptive_cap: 1490400
+  reporting_cap: 700000
+agent: {corpus: tests, stitch_iterations: 50, bpe_merges: 50}
+world: {n_primitives: 3, n_levels: 3, concepts_per_level: [3, 3, 3], combo_length: 2, length_rule: linear}
+stream: {namespace: ca_dev, n_worlds: 4, episodes_per_world: 12, goal_levels: [3], episode_budget: 100,
+         reveal_levels: []}
+variants:
+  - {name: d0, world: {reuse_depth: 0}}
+  - {name: d1, world: {reuse_depth: 1}}
+  - {name: d2, world: {reuse_depth: 2}}
+  - {name: latent_d1, world: {reuse_depth: 1, latent: 2}}
+  - {name: latent_d2, world: {reuse_depth: 2, latent: 2}}
+arms: [promote_stitch, promote_bpe, enum_frag]
+analysis: {late_from: 6, tests: [], verdict: null}

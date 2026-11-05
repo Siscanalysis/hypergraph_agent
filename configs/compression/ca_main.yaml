@@ -1,0 +1,88 @@
+# Study CA, measurement (docs/studies/CA_compression_atoms.md): whether atoms proposed by
+# compressing the agent's own press sequences (Stitch, byte-pair encoding) can replace the exact
+# discovery events that study L's promote uses as atoms, on worlds whose higher concepts share hidden
+# fragments (latent) and on study L's worlds; and the layer factor (an enumerating learner over
+# primitives, over primitives and discovered atoms, and with compressed fragments added).
+# Study L's layers (3 primitives, three levels of three concepts, lengths 2, 4 and 6) at reuse depth
+# 0, 1 and 2, and latent worlds (two hidden fragments) at depth 1 and 2; one fresh namespace, so the
+# five settings share keys, parents, orders and level-1 combos world by world (coupled worlds).
+# Nothing is supplied (study L's phase L2). 8 seeds x 4 worlds = 32 worlds per setting, 12 episodes
+# per world.
+run: {name: ca-main, study: CA, allocation: ca_main, seeds: [0, 1, 2, 3, 4, 5, 6, 7],
+      ledger: runs/CA-ledger.json, requires_flag: true}
+ledger:
+  allocations: {dev: 300000, ca_main: 1190400}
+  adaptive_cap: 1490400
+  reporting_cap: 700000
+agent: {corpus: tests, stitch_iterations: 50, bpe_merges: 50}
+world: {n_primitives: 3, n_levels: 3, concepts_per_level: [3, 3, 3], combo_length: 2, length_rule: linear}
+stream: {namespace: techtree_ca, n_worlds: 4, episodes_per_world: 12, goal_levels: [3], episode_budget: 100,
+         reveal_levels: []}
+variants:
+  - {name: d0, world: {reuse_depth: 0},
+     arms: [remember, promote, promote_stitch, promote_bpe, enum_atoms, enum_frag, oracle_library, reference]}
+  - {name: d1, world: {reuse_depth: 1},
+     arms: [remember, promote, promote_stitch, promote_bpe, enum_atoms, enum_frag, oracle_library, reference]}
+  - {name: d2, world: {reuse_depth: 2},
+     arms: [remember, promote, promote_stitch, promote_bpe, enum_atoms, enum_frag, random, oracle_library,
+            reference]}
+  - {name: latent_d1, world: {reuse_depth: 1, latent: 2},
+     arms: [remember, promote, promote_stitch, promote_bpe, enum_atoms, enum_frag, oracle_library, reference]}
+  - {name: latent_d2, world: {reuse_depth: 2, latent: 2}}
+arms: [remember, promote, promote_stitch, promote_bpe, sham_promote, enum_atoms, enum_frag, random,
+       oracle_library, reference]
+analysis:
+  late_from: 6
+  tests:
+    - {type: paired, role: primary, name: "CA1 promote_stitch - promote, latent depth 2", metric: steps_late,
+       a: promote_stitch, b: promote, variant: latent_d2, expect: less}
+    - {type: equivalence, role: falsification,
+       name: "F1 promote_stitch equivalent to promote at latent depth 2 (+-10%)", metric: steps_late,
+       a: promote_stitch, b: promote, variant: latent_d2, margin_rel: 0.10, level: 0.90}
+    - {type: paired, role: condition, name: "C1 promote_stitch - remember, latent depth 2",
+       metric: steps_late, a: promote_stitch, b: remember, variant: latent_d2, expect: less}
+    - {type: within_margin, role: condition,
+       name: "H1 harm check: promote_stitch within 10% of promote, depth 2", metric: steps_late,
+       a: promote_stitch, others: [promote], variants: [d2], margin_rel: 0.10}
+    - {type: paired, role: secondary, name: "S1 promote_bpe - promote, latent depth 2", metric: steps_late,
+       a: promote_bpe, b: promote, variant: latent_d2, expect: less}
+    # S2 is two-sided: it holds when the 95% interval excludes 0, in either direction (S2a or S2b)
+    - {type: paired, role: secondary, name: "S2a promote_stitch - promote_bpe below 0, latent depth 2",
+       metric: steps_late, a: promote_stitch, b: promote_bpe, variant: latent_d2, expect: less}
+    - {type: paired, role: secondary, name: "S2b promote_stitch - promote_bpe above 0, latent depth 2",
+       metric: steps_late, a: promote_stitch, b: promote_bpe, variant: latent_d2, expect: greater}
+    - {type: within_margin, role: secondary,
+       name: "S3 harm check: promote_bpe within 10% of promote, depth 2", metric: steps_late,
+       a: promote_bpe, others: [promote], variants: [d2], margin_rel: 0.10}
+    - {type: paired, role: secondary, name: "S4 promote_stitch - sham_promote, latent depth 2",
+       metric: steps_late, a: promote_stitch, b: sham_promote, variant: latent_d2, expect: less}
+    - {type: paired, role: secondary, name: "S5 promote_stitch - promote, depth 0 (no benefit)",
+       metric: steps_late, a: promote_stitch, b: promote, variant: d0, expect: not_less}
+    - {type: paired, role: secondary, name: "S6 promote_stitch - promote, latent depth 1",
+       metric: steps_late, a: promote_stitch, b: promote, variant: latent_d1, expect: less}
+    - {type: interaction, role: secondary, name: "S7 benefit larger on latent than on plain worlds, depth 2",
+       metric: steps_late, a: promote_stitch, b: promote, variant_hi: latent_d2, variant_lo: d2, expect: less}
+    - {type: paired, role: secondary, name: "S8 primary contrast on the whole stream", metric: steps_all,
+       a: promote_stitch, b: promote, variant: latent_d2, expect: less}
+    - {type: paired, role: secondary, name: "LF1 enum_atoms - remember, depth 2", metric: steps_late,
+       a: enum_atoms, b: remember, variant: d2, expect: less}
+    - {type: paired, role: secondary, name: "LF2 enum_atoms - remember, latent depth 2", metric: steps_late,
+       a: enum_atoms, b: remember, variant: latent_d2, expect: less}
+    - {type: paired, role: secondary, name: "LF3 enum_frag - enum_atoms, latent depth 2", metric: steps_late,
+       a: enum_frag, b: enum_atoms, variant: latent_d2, expect: less}
+    - {type: within_margin, role: secondary, name: "LF4 enum_frag within 10% of enum_atoms, depth 2",
+       metric: steps_late, a: enum_frag, others: [enum_atoms], variants: [d2], margin_rel: 0.10}
+    - {type: paired, role: secondary, name: "LF5 enum_atoms - remember, depth 0 (no benefit)",
+       metric: steps_late, a: enum_atoms, b: remember, variant: d0, expect: not_less}
+    - {type: all_success, role: validity, name: "V1 reference solves every task", arm: reference}
+    - {type: all_success, role: validity, name: "V2 oracle library solves every task", arm: oracle_library}
+    - {type: at_least_reference, role: validity, name: "V3 oracle library never shorter than the reference",
+       arm: oracle_library}
+  verdict:
+    rule: precedence
+    primary: "CA1 promote_stitch - promote, latent depth 2"
+    falsification: "F1 promote_stitch equivalent to promote at latent depth 2 (+-10%)"
+    conditions: ["C1 promote_stitch - remember, latent depth 2",
+                 "H1 harm check: promote_stitch within 10% of promote, depth 2"]
+    validity: ["V1 reference solves every task", "V2 oracle library solves every task",
+               "V3 oracle library never shorter than the reference"]

@@ -57,7 +57,7 @@ ORACLES = ("oracle", "oracle_library")
 # A module may list further non-adaptive arms in REPORTING_ARMS.
 STUDY_AGENTS = {"U": ("explorers", "make_explorer"), "L": ("layered", "make_layered"),
                 "U2": ("baselines", "make_baseline"), "P": ("skills", "make_skilled"),
-                "PG": ("policygraph", "make_policygraph")}
+                "PG": ("policygraph", "make_policygraph"), "CA": ("compression", "make_compression")}
 
 
 def _agent_module(study: str):

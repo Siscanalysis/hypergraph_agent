@@ -39,6 +39,29 @@ combos and unlock choices are drawn from streams that do not depend on d, and
 every flat sequence from its own per-concept stream, so worlds with the same
 seed differ across d only in the sequences of their levels above 1.
 
+Latent fragments (opt-in)
+-------------------------
+With ``latent = m > 0`` (study CA; ``0``, the default, generates every world
+exactly as before) the world also holds m hidden fragments: distinct base
+sequences of length ``combo_length`` that are not level-1 combos, so no
+concept's sequence equals one and no firing can reveal one as a concept. A
+compositional concept then keeps the sequence of one parent (at level l >= 3
+the parent at level l-1, the reused discovery; at level 2, where both parents
+are at level 1, one drawn uniformly) and a fragment takes the place of the
+other parent's sequence in the hidden concatenation order. Gating is
+unchanged: both parents must be held. The fragments, the kept positions and the
+assignment of fragments to concepts come from their own stream and are drawn
+for every concept of levels 2 and above whatever the reuse depth, every
+fragment for at least two of those concepts (so the higher concepts share
+them), and redrawn until every level's hypothetical latent compositions are
+distinct; worlds with the same seed therefore differ across reuse depths only
+as worlds without fragments do, and share keys, parents, orders and level-1
+combos with the world drawn without fragments. Flat concepts of a latent world
+also avoid the concatenation of a concept and a fragment (rule (ii) extended),
+so that only compositions are spelled by two such pieces. The option needs the
+linear length rule, no unlocks and reuse depth >= 1 (at depth 0 it would change
+nothing).
+
 Co-firing is allowed: typing one concept's sequence may also fire another
 concept whose sequence is a suffix of the trace and whose parents are held.
 Every firing still reveals exactly its own sequence (the trace suffix of its
@@ -83,6 +106,7 @@ class TechWorldConfig:
     combo_length: int = 2
     length_rule: str = "linear"
     reuse_depth: int = 0
+    latent: int = 0  # hidden fragments shared by compositions (study CA); 0: off
 
     def __post_init__(self):
         if self.length_rule not in LENGTH_RULES:
@@ -112,6 +136,18 @@ class TechWorldConfig:
         symbols = self.n_primitives + self.n_slots
         if symbols ** self.length(self.n_levels) > MAX_WINDOW_SPACE:
             raise ValueError("the deepest window space is too large for the elimination agents")
+        if self.latent:
+            self._check_latent()
+
+    def _check_latent(self):
+        if isinstance(self.latent, bool) or not isinstance(self.latent, int) or self.latent < 0:
+            raise ValueError("latent must be an integer >= 0")
+        if self.length_rule != "linear" or self.n_unlocks or self.n_levels < 2 or self.reuse_depth < 1:
+            raise ValueError("latent fragments need the linear rule, no unlocks and reuse_depth >= 1")
+        if self.n_primitives ** self.combo_length - self.concepts_per_level[0] < self.latent:
+            raise ValueError("not enough base sequences for the latent fragments")
+        if 2 * self.latent > sum(self.concepts_per_level[1:]):
+            raise ValueError("every latent fragment needs two concepts of levels >= 2 to share it")
 
     def length(self, level: int) -> int:
         return self.combo_length * (level if self.length_rule == "linear" else 2 ** (level - 1))
@@ -135,6 +171,8 @@ class TechWorld:
     unlocks: tuple[tuple[int, int], ...]  # hidden: (key concept, unlocked slot symbol)
     entries: tuple[int, ...]  # hidden: concepts drawn with an unlocked slot
     attempt: int = 0
+    fragments: tuple[tuple[int, ...], ...] = ()  # hidden latent fragments (empty unless ``latent``)
+    fragment_of: tuple[int, ...] = ()  # hidden: per concept, the fragment it contains, -1 none
 
     def at(self, level: int) -> list[int]:
         return [c for c, lv in enumerate(self.levels) if lv == level]
@@ -244,28 +282,82 @@ def _attempt(seed: int, cfg: TechWorldConfig, key: str, attempt: int) -> TechWor
             return None
 
     comp = [2 <= levels[x] <= cfg.reuse_depth + 1 and x not in entries for x in range(n)]
+    latent = _latent(seed, attempt, cfg, at, parents, seqs) if cfg.latent else None
+    if cfg.latent and latent is None:
+        return None
     for lv in range(2, cfg.n_levels + 1):
         for x in at[lv]:
             if comp[x]:
-                seqs[x] = seqs[parents[x][0]] + seqs[parents[x][1]]
+                seqs[x] = latent.compose(x, parents[x], seqs) if latent \
+                    else seqs[parents[x][0]] + seqs[parents[x][1]]
         for x in at[lv]:
             if seqs[x] is None:
-                s = _flat(seed, attempt, x, cfg.length(lv), P, seqs)
+                s = _flat(seed, attempt, x, cfg.length(lv), P, seqs, latent.fragments if latent else ())
                 if s is None:
                     return None
                 seqs[x] = s
     for lv in at:
         if len({seqs[x] for x in at[lv]}) < len(at[lv]):
             return None
+    if latent:
+        return TechWorld(key, seed, cfg, keys, tuple(levels), tuple(seqs), tuple(parents), tuple(comp),
+                         tuple(unlocks), tuple(entries), attempt, latent.fragments,
+                         tuple(latent.assign[x] if comp[x] else -1 for x in range(n)))
     return TechWorld(key, seed, cfg, keys, tuple(levels), tuple(seqs), tuple(parents), tuple(comp),
                      tuple(unlocks), tuple(entries), attempt)
 
 
-def _flat(seed, attempt, x, length, P, seqs) -> tuple[int, ...] | None:
+@dataclass(frozen=True)
+class LatentDraw:
+    """Fragments of a latent world; per concept of levels >= 2 the position, in its concatenation
+    order, of the parent whose sequence it keeps and the index of the fragment that replaces the
+    other parent's sequence."""
+
+    fragments: tuple[tuple[int, ...], ...]
+    keep: dict
+    assign: dict
+
+    def compose(self, x: int, parents: tuple[int, ...], seqs) -> tuple[int, ...]:
+        kept, frag = seqs[parents[self.keep[x]]], self.fragments[self.assign[x]]
+        return kept + frag if self.keep[x] == 0 else frag + kept
+
+
+def _latent(seed, attempt, cfg, at, parents, seqs) -> LatentDraw | None:
+    """The latent draw of one attempt (see "Latent fragments" above): independent of reuse_depth,
+    redrawn from its own stream until every level's hypothetical latent compositions are distinct."""
+    P, k, m = cfg.n_primitives, cfg.combo_length, cfg.latent
+    combos = {seqs[c] for c in at[1]}
+    pool = [s for s in (_digits(code, k, P) for code in range(P ** k)) if s not in combos]
+    higher = [x for lv in range(2, cfg.n_levels + 1) for x in at[lv]]
+    r = _rng(seed, attempt, "latent")
+    for _ in range(200):
+        fragments = tuple(pool[int(i)] for i in r.choice(len(pool), size=m, replace=False))
+        keep = {}
+        for lv in range(2, cfg.n_levels + 1):
+            for x in at[lv]:
+                keep[x] = int(r.integers(2)) if lv == 2 else int(parents[x][0] not in at[lv - 1])
+        uses = [i for i in range(m) for _ in range(2)]
+        uses += [int(v) for v in r.integers(0, m, len(higher) - 2 * m)]
+        draw = LatentDraw(fragments, keep, dict(zip(higher, (int(v) for v in r.permutation(uses)))))
+        full = list(seqs)
+        for lv in range(2, cfg.n_levels + 1):
+            for x in at[lv]:
+                full[x] = draw.compose(x, parents[x], full)
+            if len({full[x] for x in at[lv]}) < len(at[lv]):
+                break
+        else:
+            return draw
+    return None
+
+
+def _flat(seed, attempt, x, length, P, seqs, extra=()) -> tuple[int, ...] | None:
+    """A flat sequence (rule (ii)); ``extra`` (a latent world's fragments) joins the concepts as
+    pieces whose two-piece concatenations are forbidden."""
     assigned = [s for s in seqs if s is not None]
     forbidden = {s for s in assigned if len(s) == length}
-    for i, a in enumerate(assigned):
-        for j, b in enumerate(assigned):
+    pieces = assigned + list(extra)
+    for i, a in enumerate(pieces):
+        for j, b in enumerate(pieces):
             if i != j and len(a) + len(b) == length:
                 forbidden.add(a + b)
     r = _rng(seed, attempt, "flat", x)
@@ -464,4 +556,7 @@ def debug_view(world: TechWorld) -> str:
         lines.append(f"  L{lv} {world.keys[c]} {kind:5s} parents[{par}] seq {world.sequences[c]}")
     for key, slot in world.unlocks:
         lines.append(f"  unlock: {world.keys[key]} activates slot {slot}")
+    for i, frag in enumerate(world.fragments):
+        users = [world.keys[c] for c, j in enumerate(world.fragment_of) if j == i]
+        lines.append(f"  latent fragment {i} {frag} in {', '.join(users) or '(none at this depth)'}")
     return "\n".join(lines)

@@ -3,7 +3,9 @@
 Files are merged onto ``DEFAULTS``; unknown keys raise. Variants override
 ``world`` and ``stream`` keys of the base config and may run a subset of its
 ``arms``, nothing else. Their schema
-is this one, not the RecipeQuest schema of ``hypergraph_agent.config``.
+is this one, not the RecipeQuest schema of ``hypergraph_agent.config``. The
+world keys in ``OPTIONAL_WORLD_KEYS`` (study CA's ``latent``) are accepted
+although ``DEFAULTS`` lacks them and stay absent unless a config gives them.
 
 Namespace rule: the ``dev`` allocation may only use namespaces ending in
 ``_dev``, and any other combination (a measurement namespace, or a ``_dev``
@@ -43,7 +45,10 @@ DEFAULTS: dict = {
     "agent": {},
     "analysis": {"late_from": None, "n_boot": 10_000, "boot_seed": 20261008, "tests": [], "verdict": None},
 }
-STUDIES = ("U", "L", "U2", "P", "PG")
+STUDIES = ("U", "L", "U2", "P", "PG", "CA")
+# world keys added after earlier studies were frozen (study CA: ``latent``): accepted when a config
+# gives them and absent otherwise, so the merged world, and with it every earlier run hash, is unchanged
+OPTIONAL_WORLD_KEYS = ("latent",)
 VERDICT_KEYS = {"all": {"require"}, "precedence": {"primary", "falsification", "conditions", "validity"}}
 TEST_KEYS = {
     "paired": {"metric", "a", "b", "variant", "expect", "level"},
@@ -62,7 +67,8 @@ def _merge(base: dict, over: dict, path: str = "") -> dict:
     out = copy.deepcopy(base)
     for k, v in over.items():
         where = f"{path}.{k}" if path else k
-        if k not in base and path not in ("ledger.allocations", "agent"):
+        if k not in base and path not in ("ledger.allocations", "agent") \
+                and not (path == "world" and k in OPTIONAL_WORLD_KEYS):
             raise KeyError(f"unknown config key {where}")
         if isinstance(v, dict) and isinstance(base.get(k), dict):
             out[k] = _merge(base[k], v, where)

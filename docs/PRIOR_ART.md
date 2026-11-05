@@ -538,3 +538,149 @@ as the harm check. Primary: late cost ratio (episodes 9 to 16) over 50 worlds wi
 falsified by equivalence within 10% of the posterior's mean; hidden classes (version 2) and schemas
 shared across a stream are secondary tests. Status: `established` for the cited methods; HP1 and HP2
 claim no new method, only the measurement.
+
+## 14. Related work for study CA (checked 2026-11-05)
+
+Study CA (docs/studies/CA_compression_atoms.md) is experiment RB-B of
+docs/studies/RB_rule_builder_design.md (roadmap item 6i; idea I3 of that note, not the I3 of Section
+8) and a follow-up of study L (docs/studies/L_layered_discovery.md). It asks whether atoms proposed
+by compressing the agent's own press sequences, successful and failed, can replace the exact
+discovery events that study L's `promote` uses as atoms of new hypotheses: `promote_stitch` and
+`promote_bpe` take the fragments that Stitch (LC1) or byte-pair encoding (LC5, in the form of LC6)
+finds in those sequences, recompressed between episodes, on study L's worlds and on opt-in `latent`
+worlds whose higher concepts share hidden fragments that are never concepts. A second question is
+whether an enumerating rule learner's cost follows the description length of the hidden composites
+at its layer (primitives; primitives and discovered atoms; atoms and compressed fragments). Entries
+were checked against the DOI registry record (Crossref) or the publisher, proceedings, journal or
+repository page and, where a copy of the paper could be opened, against its text (depth in the
+table). The ACM Digital Library and dblp refused automated requests, so LC1 was checked against
+Crossref and arXiv (its DOI resolves to the ACM record) and LC5, a magazine article without a DOI,
+against the magazine's archived table of contents and text. Identifiers start a new prefix: LC
+(library learning and sequence compression). K6, K8, K11 and K12 are in Section 8.4 and E11 in
+Section 12; their records agree with the Crossref and arXiv records read for this section.
+
+| Id | Authors (as verified) | Title | Year, venue (as verified) | URL | Depth |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| LC1 | M. Bowers, T. X. Olausson, L. Wong, G. Grand, J. B. Tenenbaum, K. Ellis, A. Solar-Lezama | Top-Down Synthesis for Library Learning (Stitch) | 2023, Proc. ACM Program. Lang. 7(POPL), article 41, pp. 1182-1213 (POPL 2023), doi:10.1145/3571234; arXiv 2211.16605 (v1 Nov 2022, v2 Jan 2023; Comments: Published at POPL 2023) | https://doi.org/10.1145/3571234 | `methods` (arXiv v2 copy: abstract, Sections 1 to 4.2, 6.1, 6.3, 7 and 8 and Appendix A read; Sections 4.3 to 5, the results of 6.2, 6.4 and 6.5 not read; tool documentation and source also read, see the note below) |
+| LC2 | D. Yunis, J. Jung, F. Z. Dai, M. R. Walter | Subwords as Skills: Tokenization for Sparse-Reward Reinforcement Learning (SaS) | 2024, NeurIPS 37 (Main Conference Track), pp. 67663-67688, doi:10.52202/079017-2161; arXiv 2309.04459 (v1 Sep 2023, v2 Oct 2024; Comments: Accepted to NeurIPS 2024) | https://proceedings.neurips.cc/paper_files/paper/2024/hash/7d0c7a899224cd178b2e0cbecf39b5a5-Abstract-Conference.html | `methods` (arXiv v2 copy, the camera-ready: abstract, Sections 1 to 3 and the task description of Section 4.1 read; the results, ablations and appendices not read) |
+| LC3 | R. Zheng, C.-A. Cheng, H. Daumé III, F. Huang, A. Kolobov | PRISE: LLM-Style Sequence Compression for Learning Temporal Action Abstractions in Control | 2024, ICML (Proc. 41st International Conference on Machine Learning), PMLR 235:61267-61286; arXiv 2402.10450 (v1 Feb 2024, v3 Jun 2024; Comments: Accepted at ICML 2024); no DOI on the PMLR page | https://proceedings.mlr.press/v235/zheng24b.html | `methods` (arXiv v3 copy: abstract, Sections 1, 2 and 4, the Pretraining II part of Section 3, the discussion of vocabulary size and Appendix A read; policy learning, experiments and the other appendices not read) |
+| LC4 | C. G. Nevill-Manning, I. H. Witten | Identifying Hierarchical Structure in Sequences: A linear-time algorithm (Sequitur) | 1997, JAIR 7:67-82, doi:10.1613/jair.374 (submitted May, published Sep 1997); arXiv cs/9709102 | https://www.jair.org/index.php/jair/article/view/10192 | `methods` (the JAIR copy on arXiv: abstract and Sections 1 to 3 read; the implementation, the linear-time proof and the later sections not read) |
+| LC5 | P. Gage | A New Algorithm for Data Compression | 1994, The C Users Journal 12(2), February, pp. 23-38 (start page from the Utah bibliography, key Gage:1994:NAD; end page as cited by LC2, LC3 and LC6); no DOI | https://jacobfilipp.com/DrDobbs/articles/CUJ/1994/9402/gage/gage.htm (archive copy) | `methods` (full text of the archive copy read; the C listings not opened; the ACM record refused automated access) |
+| LC6 | R. Sennrich, B. Haddow, A. Birch | Neural Machine Translation of Rare Words with Subword Units | 2016, ACL (Proc. 54th Annual Meeting of the Association for Computational Linguistics, Volume 1: Long Papers, Berlin), pp. 1715-1725, doi:10.18653/v1/P16-1162; arXiv 1508.07909 (v1 Aug 2015, v5 Jun 2016; Comments: accepted at ACL 2016) | https://aclanthology.org/P16-1162/ | `methods` (ACL Anthology PDF: abstract, Section 1 in part and Section 3.2 read; the experiments of Sections 4 and 5 not read) |
+| LC7 | R. T. Lange, A. Faisal | Action Grammars: A Cognitive Model for Learning Temporal Abstractions (retitled in arXiv v2: Semantic RL with Action Grammars: Data-Efficient Learning of Hierarchical Task Abstractions) | 2019, 2019 Conference on Cognitive Computational Neuroscience (CCN), Berlin, 13-16 September, paper 1258, pp. 76-79, doi:10.32470/ccn.2019.1258-0; arXiv 1907.12477 (v1 29 Jul 2019, the CCN text; v2 23 Sep 2019, 11 pages, retitled, marked Preprint. Work in progress.) | https://arxiv.org/abs/1907.12477; CCN paper: https://2019.ccneuro.org/proceedings/0000076.pdf | `methods` (arXiv v2 copy: abstract, Sections 1 to 4, the setup of Section 5 and the conclusion read, the experiments in part; the CCN PDF and arXiv v1 carry the same text) |
+
+For LC1 the documentation of the bindings (stitch-core 0.1.29) and the Rust source of revision
+0ef5ec7, the revision that the bindings repository pins for that version, were also read for the
+options CA uses. The flags `--no-curried-metavars` and `--no-curried-bodies` exist there (they
+forbid a metavariable, or an abstraction body, on the left of an application), although the
+documentation's keyword listing omits them, and the default of one task per program with
+`allow_single_task` off prunes an abstraction whose matches all lie in one task. Run on small
+corpora with the installed package, the default finds no abstraction for a fragment repeated three
+times in one sequence and finds one that occurs once in each of three sequences, or whole in two
+identical sequences.
+
+LC1: the DOI resolves to the ACM Digital Library, which refused an automated request (HTTP 403), so
+the volume, article number and pages are those of the Crossref record and of the journal reference
+on the arXiv page. The arXiv copy read (v2, 15 January 2023) has 42 pages, with the appendix from
+page 33, whereas the published range 1182-1213 spans 32; statements about LC1 rest on the arXiv
+copy. LC2: Crossref and the page that its DOI resolves to (proceedings.com) give the pages
+67663-67688; the paper and the NeurIPS proceedings page print the middle initials of F. Z. Dai and
+M. R. Walter, which Crossref and arXiv omit. The arXiv v1 (8 September 2023) predates the
+proceedings; the copy read is v2 (30 October 2024), whose footer names NeurIPS 2024. LC4: the
+journal prints the subtitle as "A linear-time algorithm"; the paper's own name for the method is
+SEQUITUR.
+
+LC5 has no DOI and no Crossref record. Its issue (Volume 12, Number 2, February 1994) is that of the
+magazine's archived table of contents, and the archive copy of the text carries no page numbers. The
+Utah bibliography of the magazine (cccuj.bib) gives the start page 23 and no end page, so the end
+page 38 rests on the citations in LC2, LC3 and LC6, which agree. The ACM Digital Library record of
+the article was not opened (HTTP 403).
+
+LC7 has a peer-reviewed version under the title of arXiv v1: the paper in the proceedings of CCN
+2019, which the conference's list of accepted papers (paper 1258) and the Crossref record confirm.
+The conference's author kit says that papers of at most 4 pages are reviewed by experts selected by
+the conference committee and that accepted papers are assigned a DOI. The CCN PDF and arXiv v1 carry
+the same text (4 pages); v2 is a longer version under a new title, so the statements about the
+method rest on v2. The page that the DOI resolves to returned HTTP 404, Crossref gives no pages
+(76-79 are the page numbers printed in the PDF) and the arXiv page names no journal reference; no
+later journal or conference version of the same paper was found. The v2 copy prints the second
+author as A. Aldo Faisal. The follow-up arXiv 1910.02876 (Petros Christodoulou, Robert Tjarko Lange,
+Ali Shafti and A. Aldo Faisal, Reinforcement Learning with Structured Hierarchical Grammar
+Representations of Actions) is a different paper whose arXiv page names no venue; it is not
+registered.
+
+Overlaps. LC1 searches top-down, by branch and bound, for the abstraction that most reduces the size
+of a corpus of lambda-calculus programs once they are rewritten with it, net of the abstraction's
+own size (its Equation 8), and builds a library one abstraction at a time, rewriting the corpus
+after each; the paper compares it with the library learning of K6 on that system's five domains and
+runs it on corpora of 250 drawing or tower-planning programs each, where it reports that K6's
+algorithm found no abstraction. `promote_stitch` writes each press sequence as a chain of
+applications and runs Stitch (stitch-core 0.1.29) with arity at most 1 and no metavariable or body
+on the left of an application, so that an abstraction is a contiguous fragment; the fragments
+replace the discovered concepts as the atoms of study L's `promote`, and the tool's default, with
+one task per sequence, drops an abstraction that occurs in one sequence only. LC2 discretizes the
+continuous actions of demonstrations (k-means on the actions alone, without observations or
+rewards), applies byte-pair encoding, prunes the merged vocabulary to a small set of skills of a
+chosen maximum length, because redundant subwords are redundant actions for the learner, and uses
+the skills as the action space of online reinforcement learning on sparse-reward tasks. Its
+demonstrations are other subtask sequences, other levels or other start-goal pairs, gathered before
+and apart from the learner, whereas CA compresses the agent's own successful and failed press
+sequences within one world, between its episodes, as atoms of a search and not as actions of a
+policy, and keeps every merged token of length 2 to 6. LC3 quantizes the state-dependent action into
+discrete codes, applies byte-pair encoding to the code sequences of a multitask offline dataset and
+uses the skill tokens in behavior cloning on unseen tasks, which is imitation without reward and not
+reinforcement learning. It states that data of arbitrary quality holds many patterns unlikely to be
+useful that may not easily aggregate into common sequences, and that a large vocabulary picks up
+rarer, longer patterns that may never be used downstream; CA's corpus includes every failed test,
+and its cap of 50 merges is a declared vocabulary size.
+
+LC4 infers a hierarchy from one sequence by replacing every repeated pair of adjacent symbols with a
+rule, enforcing digram uniqueness and rule utility (every rule is used more than once),
+incrementally and in linear time; its rules reproduce only the input, so the paper does not call the
+result strictly a grammar. Rule utility is a recurrence requirement like Stitch's default and the
+floor of two occurrences in CA's byte-pair rule; CA has no Sequitur arm and recompresses the whole
+corpus between episodes, whereas Sequitur works symbol by symbol. LC5 replaces the most frequent
+pair of adjacent bytes by an unused byte and repeats until no pair is frequent enough (a threshold,
+changed from 3 to 10 in its speed test) or no unused byte is left; pair codes may nest, so long
+strings form from short ones. CA's `bpe_fragments` repeats this merge on press sequences, with its
+floor of two occurrences, and keeps the merged tokens, not the compressed text. LC6 adapts it to
+segmentation: the merges themselves are the vocabulary, no pair crosses a word boundary and the
+number of merges is the only hyperparameter; CA follows this form (no pair crosses the boundary of a
+sequence, and 50 merges act as the vocabulary size). LC7 infers a context-free grammar (Sequitur,
+k-Sequitur or G-Lexis) from the learning agent's own rollouts, in its online version from episodes
+that end in success, and flattens the production rules into macro-actions for a value-learning
+agent, whereas CA compresses the tested press windows, successful and failed, with Stitch or
+byte-pair encoding into atoms of hypotheses, and its unmeasured `episodes` corpus (whole-episode
+press sequences) is the nearest to LC7's input.
+
+Against study L and the registered works. Study L's exact promotion takes an atom only from a
+discovery event, so every atom is a concept, whereas the compressors propose any fragment that
+recurs enough to compress: they can reach structure that no event reveals (CA's latent fragments)
+and can also propose fragments that are neither concepts nor shared parts, the cost that K11 names
+as the utility problem and that CA measures with its harm check and `sham_promote`. LC1 is an
+alternative to the library-learning step of K6 (Section 8.4), and its rewrite-and-repeat loop
+resembles the repeated passes that K12 makes over a graph; K8 is the registered work closest to LC2
+and LC3, learning skills for multi-task reinforcement learning from pre-collected experience with a
+penalty on the description length of the skills. The description length of CA's layer factor, the
+fewest tokens of a given alphabet that spell a composite, takes from E11 the idea of the shortest
+description only: E11 measures it in the digits needed to write the data, which depends on the
+assumed model and its parameters, and the token count charges nothing for the alphabet, whereas
+Stitch's utility (LC1) charges for the size of the abstraction. In the parts read, none of LC1 to
+LC7 compares atoms compressed from an agent's own experience with atoms taken from exact discovery
+events, and LC7 is the only one whose input is the agent's own experience, so what CA adds is that
+comparison and not the compression of the agent's own sequences.
+
+Decisive test. Study CA plays study L's `promote` (atoms from discovery events), `promote_stitch`
+and `promote_bpe` (atoms from the fragments that Stitch or byte-pair encoding finds in the agent's
+own successful and failed press sequences, recompressed between episodes), `sham_promote`,
+`remember` and `random`, with the privileged `oracle_library` and `reference`, on study L's worlds
+at reuse depths 0, 1 and 2 and on `latent` worlds at depths 1 and 2, 32 worlds per setting over 12
+episodes. Primary: `promote_stitch` minus `promote`, actions per episode over episodes 6 to 11,
+`latent` depth 2, paired by world, falsified by equivalence within 10% of `promote`'s mean; a pass
+also needs `promote_stitch` below `remember` there (C1) and no worse than `promote` by more than 10%
+on study L's worlds at depth 2 (H1, the harm check). A gain on `latent` worlds is expected by
+construction, so the informative parts are the harm check, the comparison of the two compressors,
+the controls, and a layer factor: the same enumerating learner over primitives, over primitives and
+discovered atoms, and with the compressed fragments added, next to each world's description length
+of its composites at each layer. Status: `established` for the cited methods; CA claims no new
+method, only the measurement.
